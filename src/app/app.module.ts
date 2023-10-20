@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared';
 import { ComponentsModule } from './components/components.module';
+import { FormsModule } from '@angular/forms';
+import { MaterialStylesModule } from 'src/material-styles/material-styles.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,13 @@ import { ComponentsModule } from './components/components.module';
     AppRoutingModule,
     SharedModule,
     HttpClientModule,
-    ComponentsModule
+    ComponentsModule,
+    FormsModule,
+    MaterialStylesModule
+  ],
+  exports: [
+    FormsModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

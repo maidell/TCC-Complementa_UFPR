@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RectCardComponent } from './rect-card/rect-card.component';
 import { SquareCardComponent } from './square-card/square-card.component';
 
-
-
 @NgModule({
   declarations: [
     RectCardComponent,
@@ -12,6 +10,10 @@ import { SquareCardComponent } from './square-card/square-card.component';
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    RectCardComponent,
+    SquareCardComponent
   ]
 })
 export class CardsModule { }
