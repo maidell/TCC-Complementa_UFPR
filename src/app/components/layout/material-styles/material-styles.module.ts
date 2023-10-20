@@ -7,8 +7,6 @@ import { MatCheckboxModule} from '@angular/material/checkbox'
 import {MatIconModule} from '@angular/material/icon';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-
-
 @NgModule({
   declarations: [],
   imports: [
