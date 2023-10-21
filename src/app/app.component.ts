@@ -9,7 +9,6 @@ import { Usuario } from './shared';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'bantads';
 
   constructor(
     private router: Router,
@@ -25,4 +24,5 @@ export class AppComponent {
     this.loginService.logout();
     this.router.navigate(['/login']);
   }
+
 }

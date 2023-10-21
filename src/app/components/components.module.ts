@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { LayoutModule } from './layout/layout.module';
 import { PagesModule } from './pages/pages.module';
 import { UsuarioModule } from './usuario/usuario.module';
+import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,9 @@ import { UsuarioModule } from './usuario/usuario.module';
     CardsModule,
     LayoutModule,
     PagesModule,
-    UsuarioModule
-  ]
+    UsuarioModule,
+    MaterialStylesModule
+  ],
+
 })
 export class ComponentsModule { }
