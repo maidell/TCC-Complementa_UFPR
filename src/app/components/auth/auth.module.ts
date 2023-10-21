@@ -15,7 +15,7 @@ import { MaterialStylesModule } from 'src/material-styles/material-styles.module
     FormsModule,
     RouterModule,
     LayoutModule,
-    MaterialStylesModule
+    MaterialStylesModule,
     
   ]
 })

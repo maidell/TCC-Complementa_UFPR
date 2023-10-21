@@ -5,6 +5,7 @@ import { Login, Usuario} from 'src/app/shared';
 import { LoginService } from '../services/login.service';
 import { AutocadastroComponent } from '../../aluno/autocadastro/autocadastro.component';
 import { MatDialog } from '@angular/material/dialog';
+import { HeaderComponent } from '../../layout/header/header.component';
 
 
 
@@ -15,12 +16,13 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class LoginComponent implements OnInit {
   @ViewChild('formLogin') formLogin!: NgForm;
+  @ViewChild('headerComponent') headerComponent!: Component;
   login: Login = new Login();
   loading: boolean = false;
   message!: string;
   leftColumn: number=0;
   rightColumn: number=0;
-  fullHeight: number= window.innerHeight;
+  fullHeight: number= (window.innerHeight)-32;
 
   constructor(
     private loginService: LoginService,
