@@ -5,8 +5,6 @@ import { Login, Usuario} from 'src/app/shared';
 import { LoginService } from '../services/login.service';
 import { AutocadastroComponent } from '../../aluno/autocadastro/autocadastro.component';
 import { MatDialog } from '@angular/material/dialog';
-import { HeaderComponent } from '../../layout/header/header.component';
-
 
 
 @Component({

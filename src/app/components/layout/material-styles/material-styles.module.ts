@@ -11,7 +11,7 @@ import { MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
-
+import { FlexLayoutModule } from '@angular/flex-layout'
 
 @NgModule({
   declarations: [],
@@ -27,7 +27,8 @@ import {MatCardModule} from '@angular/material/card';
     MatDialogModule,
     MatInputModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    FlexLayoutModule
   ],
   exports: [
     ReactiveFormsModule,
@@ -40,7 +41,8 @@ import {MatCardModule} from '@angular/material/card';
     MatDialogModule,
     MatInputModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    FlexLayoutModule
   ]
 })
 export class MaterialStylesModule { }
