@@ -28,10 +28,23 @@
             <mat-label>GRR</mat-label>
             <input matInput type="text" >
           </mat-form-field> 
-          <mat-form-field class="half-input-field">
+          <mat-form-field class="half-input-field" id="right-input-field">
             <mat-label>Telefone</mat-label>
             <input matInput type="email" >
           </mat-form-field> 
+
+          <mat-form-field class="full-input-field">
+            <mat-label>Senha</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+         </mat-form-field>
+
+         <mat-form-field class="full-input-field">
+            <mat-label>Confirme sua senha</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-hint>Enter your password</mat-hint>
+         </mat-form-field>
 
   
       </form>

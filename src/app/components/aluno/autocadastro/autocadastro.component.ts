@@ -41,6 +41,7 @@ export class AutocadastroComponent implements OnInit {
   ];
   selectedValue: string = '';
   filteredOptions!: Observable<string[]>;
+  hide: boolean=true;
 
 
 
