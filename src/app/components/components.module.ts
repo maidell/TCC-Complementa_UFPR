@@ -24,7 +24,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     LayoutModule,
     PagesModule,
     UsuarioModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MaterialStylesModule
   ],
 
 })
