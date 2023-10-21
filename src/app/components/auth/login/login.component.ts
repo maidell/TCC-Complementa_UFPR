@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   leftColumn: number=0;
   rightColumn: number=0;
   fullHeight: number= (window.innerHeight)-32;
+  hide: boolean=true;
 
   constructor(
     private loginService: LoginService,
