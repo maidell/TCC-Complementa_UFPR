@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit {
   message!: string;
   leftColumn: number=0;
   rightColumn: number=0;
-  fullHeight: number= (window.innerHeight)-32;
+  brasilBarHeight:number =32;
+  fullHeight: number= (window.innerHeight)-this.brasilBarHeight;
   hide: boolean=true;
 
   constructor(

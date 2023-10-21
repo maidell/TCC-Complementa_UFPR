@@ -1,4 +1,5 @@
 <app-header id="header"></app-header>
+
 <mat-grid-list cols="12" [rowHeight]="fullHeight" class="full-page">
     <mat-grid-tile [colspan]="leftColumn" (window:resize)="handleResize()" class="left-side">
         <div class="login-side">
@@ -16,7 +17,7 @@
                 <mat-label>Senha</mat-label>
                 <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                <!--<mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> TODO -->
+                <!--<mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> TODO-->
              </mat-form-field>
               <button mat-button type="submit" id="submit-button">
                 Fazer login

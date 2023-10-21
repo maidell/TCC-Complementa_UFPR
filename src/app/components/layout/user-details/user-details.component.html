@@ -1,4 +1,13 @@
-<mat-card>
-    <p>teste</p>
-    <mat-icon>notifications</mat-icon>
-</mat-card>
+<button mat-button [matMenuTriggerFor]="menu" class="user-card-out">
+    <mat-card class="user-card">
+        <mat-card-content>
+            <h2>Nome Completo do Usuário</h2>
+            <p>GRR20231234</p>
+            <mat-icon matSuffix>notifications</mat-icon>
+        </mat-card-content>
+      </mat-card>
+</button>
+<mat-menu #menu="matMenu">
+    <button mat-menu-item>Editar Perfil</button>
+    <button mat-menu-item>Sair</button>
+</mat-menu>
