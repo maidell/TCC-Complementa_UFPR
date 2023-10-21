@@ -8,7 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { LayoutModule } from './layout/layout.module';
 import { PagesModule } from './pages/pages.module';
 import { UsuarioModule } from './usuario/usuario.module';
-import { MaterialStylesModule } from 'src/material-styles/material-styles.module';
+import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 
@@ -25,9 +25,7 @@ import { MatCardModule } from '@angular/material/card';
     LayoutModule,
     PagesModule,
     UsuarioModule,
-    FlexLayoutModule,
-    MaterialStylesModule,
-    MatCardModule
+    MaterialStylesModule
   ],
 
 })
