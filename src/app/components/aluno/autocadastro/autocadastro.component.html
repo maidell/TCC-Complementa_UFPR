@@ -1,10 +1,9 @@
-<div class="dialog">
     <h2 mat-dialog-title>Autocadastro</h2>
     <mat-dialog-content class="mat-typography">
       <form>
         <mat-form-field class="full-input-field">
           <mat-label>Nome</mat-label>
-          <input matInput type="text">
+          <input matInput type="email">
         </mat-form-field>  
         <mat-form-field class="full-input-field">
           <mat-label>Email UFPR</mat-label>
@@ -13,9 +12,8 @@
   
   
         <mat-form-field class="full-input-field">
-          <mat-label>Number</mat-label>
+          <mat-label>Curso</mat-label>
           <input type="text"
-                 placeholder="Curso"
                  matInput
                  [formControl]="myControl"
                  [matAutocomplete]="auto">
@@ -25,24 +23,21 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-  
-        <!--
-        <mat-form-field>
-          <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of options" [value]="option">
-              {{option}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      -->
-  
+
+        <mat-form-field class="half-input-field">
+            <mat-label>GRR</mat-label>
+            <input matInput type="text" >
+          </mat-form-field> 
+          <mat-form-field class="half-input-field">
+            <mat-label>Telefone</mat-label>
+            <input matInput type="email" >
+          </mat-form-field> 
+
   
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close class="btn btn-danger">Cancelar</button>
-      <button mat-button class="btn btn-primary" [mat-dialog-close]="true" cdkFocusInitial>Cadastrar</button>
+      <button mat-raised-button mat-dialog-close color="warn">Cancelar</button>
+      <button mat-button  [mat-dialog-close]="true" cdkFocusInitial>Cadastrar</button>
     </mat-dialog-actions>
-  </div>
   

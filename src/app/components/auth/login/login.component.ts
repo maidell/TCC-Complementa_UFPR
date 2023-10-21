@@ -79,12 +79,21 @@ export class LoginComponent implements OnInit {
 
 
   openDialog() {
-    const dialogRef = this.dialog.open(AutocadastroComponent, {data: {}});
+    const dialogRef = this.dialog.open(AutocadastroComponent, {
+      maxWidth: this.dialogWidth()
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
 
+  dialogWidth(){
+    if (window.innerWidth<=768){
+      return "100vw";
+    } else  {
+      return "80vw";
+    } 
+  }
 
 }
