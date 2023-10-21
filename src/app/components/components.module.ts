@@ -9,7 +9,6 @@ import { LayoutModule } from './layout/layout.module';
 import { PagesModule } from './pages/pages.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { MaterialStylesModule } from 'src/material-styles/material-styles.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     LayoutModule,
     PagesModule,
     UsuarioModule,
-    FlexLayoutModule,
     MaterialStylesModule
   ],
 
