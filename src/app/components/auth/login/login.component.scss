@@ -1,0 +1,80 @@
+.full-page {
+    background-color: #eef5f9;
+}
+
+@media (max-width: 576px) {
+    .small-image {
+        max-width: 80%;
+        margin-bottom: 20%;
+    }
+
+    .right-side {
+        display: none;
+    }
+}
+
+@media (min-width: 577px) {
+    .small-image {
+        display: none;
+    }
+}
+
+.login-side {
+    text-align: center;
+    padding: 0 5%;
+    margin: auto 0;
+}
+
+.left-side {
+    background-color: white;
+}
+
+.login-field {
+    width: 90%;
+}
+
+#submit-button {
+    width:200px;
+    min-height: 5vh;
+    border-radius: 50px;
+    margin: 3vh auto;
+    color: white;
+    background-image: linear-gradient(#318b35,#297e42);
+    border: 0px;
+}
+
+#dialog-button {
+    width: 150px;
+    min-height: 5vh;
+    border-radius: 50px;
+    background-image: linear-gradient(#46c8e4,#48a2e7);
+    color: white;
+}
+
+.forgot-password {
+    text-decoration: underline;
+    font-weight: lighter;
+    color: #a6a6a6;
+    font-size: 12px;
+    padding: 0.25rem 0;
+    margin-left: .5vw;
+}
+
+.no-account {
+    padding: 0 auto;
+}
+
+#register {
+    border-radius: 50px;
+    background-color: #559958;
+    border: 0px;
+}
+
+
+
+.large-logo img {
+    max-width: 80%;
+    margin: auto 10%;
+}
+
+

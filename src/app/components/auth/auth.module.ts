@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { LayoutModule } from '../layout/layout.module';
+import { MaterialStylesModule } from 'src/material-styles/material-styles.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { LayoutModule } from '../layout/layout.module';
     CommonModule,
     FormsModule,
     RouterModule,
-    LayoutModule
+    LayoutModule,
+    MaterialStylesModule
     
   ]
 })
