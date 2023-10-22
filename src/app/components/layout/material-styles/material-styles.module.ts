@@ -12,6 +12,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatList, MatListModule} from '@angular/material/list';
+
 
 @NgModule({
   declarations: [],
@@ -28,7 +31,9 @@ import {MatMenuModule} from '@angular/material/menu';
     MatInputModule,
     MatGridListModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSidenavModule,
+    MatListModule
   ],
   exports: [
     ReactiveFormsModule,
@@ -42,7 +47,9 @@ import {MatMenuModule} from '@angular/material/menu';
     MatInputModule,
     MatGridListModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSidenavModule,
+    MatListModule
   ]
 })
 export class MaterialStylesModule { }

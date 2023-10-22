@@ -7,6 +7,8 @@ import { SharedModule } from './shared';
 import { ComponentsModule } from './components/components.module';
 import { FormsModule } from '@angular/forms';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
+import { AuthModule } from './components/auth/auth.module';
+import { LayoutModule } from './components/layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
     HttpClientModule,
     ComponentsModule,
     FormsModule,
-    MaterialStylesModule
+    MaterialStylesModule,
+    AuthModule,
+    LayoutModule
   ],
   exports: [
     FormsModule,

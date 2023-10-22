@@ -1,0 +1,27 @@
+
+@media (max-width: 576px){
+
+    mat-sidenav {
+        width: 50% !important;
+    }
+}
+
+@media (min-width: 577px) and ( max-width: 768px){
+
+    mat-sidenav {
+        width: 25% !important;
+      }
+}
+@media (min-width: 769px) and (max-width:1024px){
+    mat-sidenav {
+        width: 18%;
+      }
+}
+
+
+@media (min-width: 1025px) {
+
+    mat-sidenav {
+        width: 15% !important;
+      }
+}
