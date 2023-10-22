@@ -1,101 +1,29 @@
+<div class="navbar">
+    <img src="assets/plugins/images/logo_complementa.svg" alt="homepage" routerLink="" class="navbar-logo"> 
 
-
-    <div class="navbar-header" data-logobg="skin6">
-        <a class="navbar-brand" href="#">
-            <span class="logo-text mx-3 mt-4">
-                <img src="assets/plugins/images/logo_complementa.svg" alt="homepage" width="179" height="54" />
-            </span>
+    <a routerLink="/dashboard" href="#" class="list-group-item list-group-item-action">
+        <mat-icon>home</mat-icon><span> Página Inicial</span>
+    </a>
+    <ng-container *ngIf="checkRole('Administrador')" >
+        <a routerLink="/graduacoes" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>school</mat-icon><span> Graduações</span>
         </a>
-        <a class="nav-toggler waves-effect waves-light text-dark d-block d-md-none" href="javascript:void(0)"><i
-                class="ti-menu ti-close"></i></a>
-    </div>
-    <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-        <ul class="navbar-nav ms-auto d-flex align-items-center"></ul>
-    </div>
-
-    <div class="list-group list-group-flush mx-3 mt-4">
-        <a routerLink="/dashboard" href="#" class="list-group-item list-group-item-action py-2 ripple">
-            <mat-icon>home</mat-icon><span> Página Inicial</span>
+        <a routerLink="/competencias" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>account_balance</mat-icon><span> Competências</span>
         </a>
-        <ng-container *ngIf="checkRole('Administrador')">
-            <a routerLink="/graduacoes" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>school</mat-icon><span> Graduações</span>
-            </a>
-            <a routerLink="/competencias" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>account_balance</mat-icon><span> Competências</span>
-            </a>
-            <a routerLink="/complexidades" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>account_tree</mat-icon><span> Complexidades</span>
-            </a>
-            <a routerLink="/contestacoes" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>warning</mat-icon><span> Contestações</span>
-            </a>
-            <a routerLink="/usuarios" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>people</mat-icon><span> Usuários</span>
-            </a>
-        </ng-container>
-
-        <ng-container *ngIf="checkRole('profOrientador')">
-            <a routerLink="/projetos" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>hub</mat-icon><span> Projetos</span>
-            </a>
-            <a routerLink="/atividades" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>article</mat-icon><span> Atividades</span>
-            </a>
-            <a routerLink="/contestacoes" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>warning</mat-icon><span> Contestações</span>
-            </a>
-            <a routerLink="/meu-perfil" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>person</mat-icon><span> Meu Perfil</span>
-            </a>
-        </ng-container>
-
-        <ng-container *ngIf="checkRole('coordenadorOrientador')">
-            <a routerLink="/projetos" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>hub</mat-icon><span> Projetos</span>
-            </a>
-            <a routerLink="/atividades" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>article</mat-icon><span> Atividades</span>
-            </a>
-            <a routerLink="/graduacoes" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>school</mat-icon><span> Graduações</span>
-            </a>
-            <a routerLink="/competencias" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>account_balance</mat-icon><span> Competências</span>
-            </a>
-            <a routerLink="/complexidades" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>account_tree</mat-icon><span> Complexidades</span>
-            </a>
-            <a routerLink="/contestacoes" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>warning</mat-icon><span> Contestações</span>
-            </a>
-            <a routerLink="/servidores" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>people</mat-icon><span> Servidores</span>
-            </a>
-            <a routerLink="/meu-perfil" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>person</mat-icon><span> Meu Perfil</span>
-            </a>
-        </ng-container>
-
-        <ng-container *ngIf="checkRole('aluno')">
-            <a routerLink="/projetos" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>hub</mat-icon><span> Projetos</span>
-            </a>
-            <a routerLink="/atividades" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>article</mat-icon><span> Atividades</span>
-            </a>
-            <a routerLink="/monitoria" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>school</mat-icon><span> Monitoria</span>
-            </a>
-            <a routerLink="/contestacoes" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>warning</mat-icon><span> Contestações</span>
-            </a>
-            <a routerLink="/meu-perfil" href="#" class="list-group-item list-group-item-action py-2 ripple">
-                <mat-icon>person</mat-icon><span> Meu Perfil</span>
-            </a>
-        </ng-container>
-
-        <a (click)="logout()" routerLink="login" class="list-group-item list-group-item-action py-2 ripple">
-            <mat-icon>exit_to_app</mat-icon><span> Sair</span>
+        <a routerLink="/complexidades" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>account_tree</mat-icon><span> Complexidades</span>
         </a>
-    </div>
+        <a routerLink="/contestacoes" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>warning</mat-icon><span> Contestações</span>
+        </a>
+        <a routerLink="/usuarios" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>people</mat-icon><span> Usuários</span>
+        </a>
+
+    </ng-container>
+
+    <a (click)="logout()" routerLink="login" class="list-group-item list-group-item" id="sair">
+        <mat-icon>exit_to_app</mat-icon><span> Sair</span>
+    </a>
+</div>

@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 })
 // type UserRole = 
 export class NavbarComponent {
-  userRole: string = 'profOrientador'; // Altere para o perfil do usuário logado:
+  userRole: string = 'Administrador'; // Altere para o perfil do usuário logado:
                               // 'aluno' | 'coordenadorOrientador' | 'profOrientador' | 'Administrador';
 
   checkRole(role: string): boolean {
