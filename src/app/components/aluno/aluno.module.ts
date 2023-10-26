@@ -4,7 +4,7 @@ import { AutocadastroComponent } from './autocadastro/autocadastro.component';
 import { EditarAlunoComponent } from './editar-aluno/editar-aluno.component';
 import { HomeAlunoComponent } from './home-aluno/home-aluno.component';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
-
+import { LayoutModule } from '../layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
   ],
   imports: [
     CommonModule,
-    MaterialStylesModule
+    MaterialStylesModule,
+    LayoutModule
   ]
 })
 export class AlunoModule { }

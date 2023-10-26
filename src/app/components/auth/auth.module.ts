@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { LayoutModule } from '../layout/layout.module';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 
+
 @NgModule({
   declarations: [
     LoginComponent
@@ -17,6 +18,9 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
     LayoutModule,
     MaterialStylesModule,
     
+  ],
+  exports: [
+    LoginComponent
   ]
 })
 export class AuthModule { }

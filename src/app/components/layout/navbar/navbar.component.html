@@ -1,0 +1,29 @@
+<div class="navbar">
+    <img src="assets/plugins/images/logo_complementa.svg" alt="homepage" routerLink="" class="navbar-logo"> 
+
+    <a routerLink="/dashboard" href="#" class="list-group-item list-group-item-action">
+        <mat-icon>home</mat-icon><span> Página Inicial</span>
+    </a>
+    <ng-container *ngIf="checkRole('Administrador')" >
+        <a routerLink="/graduacoes" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>school</mat-icon><span> Graduações</span>
+        </a>
+        <a routerLink="/competencias" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>account_balance</mat-icon><span> Competências</span>
+        </a>
+        <a routerLink="/complexidades" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>account_tree</mat-icon><span> Complexidades</span>
+        </a>
+        <a routerLink="/contestacoes" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>warning</mat-icon><span> Contestações</span>
+        </a>
+        <a routerLink="/usuarios" href="#" class="list-group-item list-group-item-action">
+            <mat-icon>people</mat-icon><span> Usuários</span>
+        </a>
+
+    </ng-container>
+
+    <a (click)="logout()" routerLink="login" class="list-group-item list-group-item" id="sair">
+        <mat-icon>exit_to_app</mat-icon><span> Sair</span>
+    </a>
+</div>

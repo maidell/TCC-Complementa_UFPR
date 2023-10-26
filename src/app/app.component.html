@@ -1,1 +1,26 @@
-<router-outlet></router-outlet>
+<div *ngIf="usuarioLogado; else loginPage">
+        <mat-sidenav-container>
+
+            <mat-sidenav
+              #snav
+              [mode]="handleSize().mode"
+              [fixedInViewport]="true"
+              [opened]="handleSize().opened"
+              >
+            <app-navbar></app-navbar>
+            </mat-sidenav>
+        
+            <mat-sidenav-content>
+              <button mat-icon-button (click)="snav.toggle()" class="sidenav-button">
+                <mat-icon>menu</mat-icon>
+              </button>
+              <router-outlet></router-outlet>
+            </mat-sidenav-content>
+          </mat-sidenav-container>
+
+</div>
+
+<ng-template #loginPage>
+    <app-login></app-login>
+</ng-template>
+
