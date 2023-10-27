@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import {MediaMatcher} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-home-aluno',
@@ -6,25 +7,29 @@ import { Component } from '@angular/core';
   styleUrls: ['./home-aluno.component.scss']
 })
 export class HomeAlunoComponent {
+  mobileQuery: MediaQueryList;
 
-  navBar=0;
-  content=0;
+  fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
 
+  fillerContent = Array.from(
+    {length: 50},
+    () =>
+      `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+       labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+       laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+       voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+       cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+  );
 
-  ngOnInit() {
-    this.handleResize();
+  private _mobileQueryListener: () => void;
+
+  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-
-  handleResize(){
-    if (window.innerWidth<=576){
-
-    } else if (window.innerWidth<=768) {
-
-    } else if (window.innerWidth<=1200) {
-
-    } else {
-
-    }
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 }

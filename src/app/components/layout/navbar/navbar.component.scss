@@ -1,0 +1,32 @@
+.navbar-logo {
+    max-width: 80%;
+    margin: 10% 0 10% 2%;
+    padding-left: 5%;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item mat-icon {
+    margin-right: 10px;
+}
+
+.list-group-item span {
+    flex: 1;
+}
+
+.navbar {
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #262626;
+    padding-left: 5% ;
+}
+
+a:hover {
+    background-color: #dbdbdb;
+}

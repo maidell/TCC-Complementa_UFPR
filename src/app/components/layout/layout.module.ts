@@ -4,6 +4,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 
@@ -11,7 +12,8 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
   declarations: [
     FooterComponent,
     HeaderComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    NavbarComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
   ],
   exports: [
     HeaderComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    NavbarComponent
   ]
 })
 export class LayoutModule { }
