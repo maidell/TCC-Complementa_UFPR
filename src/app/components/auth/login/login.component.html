@@ -11,13 +11,23 @@
             <form>
               <mat-form-field class="login-field">
                 <mat-label>Email</mat-label>
-                <input type="email" matInput>
+                <input type="email" matInput id="usuario" name="usuario" [(ngModel)]="login.email"
+                #usuario="ngModel" required >
+                <div *ngIf="usuario.errors && (usuario.dirty || usuario.touched)" class="alert alert-danger">
+                  <div [hidden]="!usuario?.errors?.['required']">
+                    Digite o usuário
+                  </div>
+                </div>
               </mat-form-field>
+              
               <mat-form-field class="login-field">
                 <mat-label>Senha</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required id="senha" name="senha" [(ngModel)]="login.senha">
                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 <!--<mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> TODO-->
+                <!-- <div *ngIf="senha.errors && (senha.dirty || senha.touched)" class="alert alert-danger">
+                  <div [hidden]="!senha?.errors?.['required']">Digite a senha.</div>
+                </div> -->
              </mat-form-field>
               <button mat-button type="submit" id="submit-button">
                 Fazer login

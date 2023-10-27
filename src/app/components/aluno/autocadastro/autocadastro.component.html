@@ -1,56 +1,97 @@
-    <h2 mat-dialog-title>Autocadastro</h2>
-    <mat-dialog-content class="mat-typography">
-      <form>
-        <mat-form-field class="full-input-field">
-          <mat-label>Nome</mat-label>
-          <input matInput type="email">
-        </mat-form-field>  
-        <mat-form-field class="full-input-field">
-          <mat-label>Email UFPR</mat-label>
-          <input matInput type="email" >
-        </mat-form-field> 
-  
-  
-        <mat-form-field class="full-input-field">
-          <mat-label>Curso</mat-label>
-          <input type="text"
-                 matInput
-                 [formControl]="myControl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-              {{option}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+<h2 mat-dialog-title>Autocadastro</h2>
+<mat-dialog-content class="mat-typography">
+  <form>
+    <mat-form-field class="full-input-field">
+      <mat-label>Nome</mat-label>
+      <input matInput type="text" id="nome" name="nome" minlength="2" [(ngModel)]="aluno.nome" #nome="ngModel"
+        minlength="2" placeholder="Nome Completo" required>
+    </mat-form-field>
+    <div *ngIf="nome.errors && (nome.dirty || nome.touched)" class="alert alert-danger">
+      <div [hidden]="!nome?.errors?.['required']">
+        Digite o nome completo!
+      </div>
+      <div [hidden]="!nome?.errors?.['minlenght']">
+        O nome deve conter ao menos 2 caracteres!
+      </div>
+    </div>
+    <mat-form-field class="full-input-field">
+      <mat-label>Email UFPR</mat-label>
+      <input matInput type="email" id="email" name="email" [(ngModel)]="aluno.email" #email="ngModel" minlength="2"
+        placeholder="ex. nome.aluno@ufpr.br" required email pattern="^[a-zA-Z0-9._%+-]+@ufpr\.br$">
+    </mat-form-field>
+    <div *ngIf="email.errors && (email.dirty || email.touched)" class="alert alert-danger">
+      <div [hidden]="!email?.errors?.['required']">
+        Digite o email do aluno.
+      </div>
+      <div [hidden]="!email?.errors?.['minlength']">
+        O email deve conter pelo menos 2 caracteres.
+      </div>
+      <div [hidden]="!email?.errors?.['pattern']">
+        O email deve pertencer ao domínio "@ufpr.br".
+      </div>
+    </div>
 
-        <mat-form-field class="half-input-field">
-            <mat-label>GRR</mat-label>
-            <input matInput type="text" >
-          </mat-form-field> 
-          <mat-form-field class="half-input-field" id="right-input-field">
-            <mat-label>Telefone</mat-label>
-            <input matInput type="email" >
-          </mat-form-field> 
+    <mat-form-field class="full-input-field">
+      <mat-label>Curso</mat-label>
+      <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-          <mat-form-field class="full-input-field">
-            <mat-label>Senha</mat-label>
-            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
-            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-            <!--<mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> TODO -->
-         </mat-form-field>
+    <mat-form-field class="half-input-field">
+      <mat-label>GRR</mat-label>
+      <input matInput type="text" id="grr" name="grr" [(ngModel)]="aluno.grr" required numerico mask="00000000"
+        placeholder="ex. 20100000" (input)="validarGRR()">
 
-         <mat-form-field class="full-input-field">
-            <mat-label>Confirme sua senha</mat-label>
-            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
-            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-         </mat-form-field>
+    </mat-form-field>
+    <div *ngIf="!grrValido && aluno.grr" class="alert alert-danger">
+      O GRR deve conter apenas números.
+    </div>
 
-  
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-raised-button mat-dialog-close color="warn">Cancelar</button>
-      <button mat-button  [mat-dialog-close]="true" cdkFocusInitial>Cadastrar</button>
-    </mat-dialog-actions>
-  
+    <mat-form-field class="half-input-field" id="right-input-field">
+      <mat-label>Celular</mat-label>
+      <input matInput type="text" id="telefone" name="telefone" placeholder="ex. (41)99999-9999"
+        [(ngModel)]="aluno.telefone" #telefone="ngModel" minlength="11" mask="(00)00000-0000">
+    </mat-form-field>
+    <div *ngIf="telefone.errors && (telefone.dirty || telefone.touched)" class="alert alert-danger">
+      <div [hidden]="!telefone?.errors?.['required']">
+        Digite o número do celular.
+      </div>
+      <div [hidden]="!telefone?.errors?.['minlength']">
+        O número do celular deve conter 11 dígitos.
+      </div>
+    </div>
+
+    <mat-form-field class="full-input-field">
+      <mat-label>Senha</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required id="senha" name="senha"
+        [(ngModel)]="senha" required minlength="8" (input)="verificarSenha()">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <!--<mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> TODO -->
+    </mat-form-field>
+    <div *ngIf="!senhaValida && senha !== '' && confirmarSenha !== ''" class="alert alert-danger">
+      • Deve conter pelo menos 8 caracteres. <br>
+      • Deve conter pelo menos um caractere especial (!@#$%^&*()]).<br>
+      • Deve conter pelo menos um caractere numérico. <br>
+      • Deve conter pelo menos uma letra maiúscula. <br>
+      • Deve conter pelo menos uma letra minúscula. <br>
+    </div>
+
+    <mat-form-field class="full-input-field">
+      <mat-label>Confirme sua senha</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" id="confirmarSenha"
+        name="confirmarSenha" [(ngModel)]="confirmarSenha" required minlength="8" (input)="verificarSenha()">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </mat-form-field>
+
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close color="warn">Cancelar</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="autocadastrar()"
+    [disabled]="!formAluno.form.valid">Cadastrar</button>
+</mat-dialog-actions>

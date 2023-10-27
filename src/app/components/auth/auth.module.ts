@@ -13,11 +13,10 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
   ],
   imports: [
     CommonModule,
-    FormsModule,
     RouterModule,
     LayoutModule,
     MaterialStylesModule,
-    
+    FormsModule
   ],
   exports: [
     LoginComponent
