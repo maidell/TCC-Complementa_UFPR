@@ -1,35 +1,21 @@
-<div class="container">
-    <div class="row">
-        <div class="rectangle">
-            <mat-card class="square-card">
-                <mat-card-header class="bg-primary text-white">
-                    <div class="row">
-                        <div class="col-6">
-                            <h4>TÍTULO <span class="subtitle">subtitulo</span></h4>
-                        </div>
-                        
-                    </div>
-                </mat-card-header>
-                <mat-card-content>
-                    <div class="row">
-                        <div class="col-3">
-                            <p>Atividade_criada_em</p>
-                            <p>dd/mm/aaaa</p>
-                        </div>
-                        <div class="col-3">
-                            <p>Solicitante</p>
-                            <p>autor</p>
-                        </div>
-                        <div class="col-3">
-                            <p>Executor</p>
-                            <p>quem-executa</p>
-                        </div>
-                        <div class="col-3">
-                            <button mat-button color="primary" size="small">Detalhes</button>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
+<section class="main-container">
+    <header class="title">{{ Title }}</header>
+    <div class="info-container">
+        <div class="info-item">
+            <div class="label">{{ firstLabel }}</div>
+            <div class="value">{{ firstValue }}</div>
         </div>
+        <div class="info-item">
+            <div class="label">{{ secondLabel }}</div>
+            <div class="value">{{ secondValue }}</div>
+        </div>
+        <div class="info-item">
+            <div class="label">{{ thirdLabel }}</div>
+            <div class="value">{{ thirdValue }}</div>
+        </div>
+        <button mat-raised-button class="button custom-button">
+            Detalhes!
+        </button>
+
     </div>
-</div>
+</section>

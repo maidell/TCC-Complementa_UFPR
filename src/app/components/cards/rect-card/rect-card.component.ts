@@ -6,11 +6,13 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./rect-card.component.scss']
 })
 export class RectCardComponent {
-  @Input() title: string = '';
-  @Input() description: string = '';
-  @Input() subtitle: string = '';
-  @Input() date: string = '';
-  @Input() author: string = '';
-  @Input() executor: string = '';
+  @Input() Title: string = 'Nome do servidor';
+  @Input() firstLabel: string = 'Data de nasc.';
+  @Input() firstValue: string = 'dd/mm/aaaa';
+  @Input() secondLabel: string = 'Email';
+  @Input() secondValue: string = 'emaildoservidor@ufpr.br';
+  @Input() thirdLabel: string = 'Papel';
+  @Input() thirdValue: string = 'Titulo do papel';
+
 
 }
