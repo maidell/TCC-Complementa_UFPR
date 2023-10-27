@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-rect-card',
@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./rect-card.component.scss']
 })
 export class RectCardComponent {
+  @Input() title: string = '';
+  @Input() description: string = '';
+  @Input() subtitle: string = '';
+  @Input() date: string = '';
+  @Input() author: string = '';
+  @Input() executor: string = '';
 
 }

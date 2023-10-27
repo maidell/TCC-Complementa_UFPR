@@ -38,7 +38,7 @@ const routes: Routes = [
     component: HomeUsuarioComponent
   },
   {
-    path: 'dashAdmin', component: DashAdminComponent
+    path: 'dash-admin', component: DashAdminComponent
   },
   ...LoginRoutes
 ];

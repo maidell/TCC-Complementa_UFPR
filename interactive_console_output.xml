@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.10.12 on linux)" generated="20231022 18:50:59.269" rpa="false" schemaversion="4">
+<suite id="s1" name="Robot Interactive Console" source="/home/mateus/.vscode/extensions/robocorp.robotframework-lsp-1.11.0/src/robotframework_ls/vendored/robotframework_interactive/robot_interactive_console.robot">
+<test id="s1-t1" name="Default Task/Test" line="5">
+<kw name="Interpreter Main Loop" library="MainLoop">
+<kw name="Log" library="BuiltIn">
+<arg>Olá, Mundo!</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" starttime="20231022 18:51:02.593" endtime="20231022 18:51:02.594"/>
+</kw>
+<status status="PASS" starttime="20231022 18:50:59.360" endtime="20231022 18:51:16.170"/>
+</kw>
+<status status="PASS" starttime="20231022 18:50:59.358" endtime="20231022 18:51:16.171"/>
+</test>
+<status status="PASS" starttime="20231022 18:50:59.272" endtime="20231022 18:51:16.174"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Robot Interactive Console">Robot Interactive Console</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
