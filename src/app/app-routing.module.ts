@@ -10,7 +10,7 @@ import { DashAdminComponent } from './components/admin/dash-admin/dash-admin.com
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'aluno/home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {

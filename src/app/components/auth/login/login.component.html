@@ -19,7 +19,7 @@
                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 <!--<mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> TODO-->
              </mat-form-field>
-              <button mat-button type="submit" id="submit-button">
+              <button routerLink="/aluno/home" mat-button type="submit" id="submit-button">
                 Fazer login
               </button>
             </form>
