@@ -6,11 +6,12 @@ import { HomeUsuarioComponent } from './components/usuario/home-usuario/home-usu
 import { EditarAlunoComponent } from './components/aluno/editar-aluno/editar-aluno.component';
 import { LoginRoutes } from './components/auth/auth-routing.module';
 import { DashAdminComponent } from './components/admin/dash-admin/dash-admin.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
   },
   {
     path: 'dash-admin', component: DashAdminComponent
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent
   },
   ...LoginRoutes
 ];

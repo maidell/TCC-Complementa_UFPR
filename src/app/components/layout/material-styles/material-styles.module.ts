@@ -14,6 +14,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatList, MatListModule} from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 
 @NgModule({
@@ -33,8 +34,9 @@ import {MatList, MatListModule} from '@angular/material/list';
     MatCardModule,
     MatMenuModule,
     MatSidenavModule,
-    MatListModule
-  ],
+    MatListModule,
+    MatToolbarModule,
+    ],
   exports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -49,7 +51,8 @@ import {MatList, MatListModule} from '@angular/material/list';
     MatCardModule,
     MatMenuModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatToolbarModule,
   ]
 })
 export class MaterialStylesModule { }
