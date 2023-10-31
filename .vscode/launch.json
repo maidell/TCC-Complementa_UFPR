@@ -3,6 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "ComplementaUfprApplication",
+      "request": "launch",
+      "mainClass": "br.ufpr.ComplementaUfprApplication",
+      "projectName": "complementa-ufpr"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

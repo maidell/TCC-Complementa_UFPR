@@ -26,7 +26,7 @@ import { LayoutModule } from './components/layout/layout.module';
     LayoutModule
   ],
   exports: [
-    FormsModule,
+    FormsModule
     
   ],
   providers: [],

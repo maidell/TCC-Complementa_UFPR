@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Aluno } from 'src/app/shared';
+import { Aluno, Graduacao } from 'src/app/shared';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -53,5 +53,9 @@ export class AlunoService {
 
   removerAluno(id: number): Observable<Aluno> {
     return this.httpClient.delete<Aluno>(this.BASE_URL + 'alunos/' + id, this.httpOptions);
+  }
+
+  listarTodosCursos(): Observable<Graduacao[]> {
+    return this.httpClient.get<Graduacao[]>(this.BASE_URL + 'graduacoes/', this.httpOptions);
   }
 }

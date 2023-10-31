@@ -5,6 +5,7 @@ import { EditarAlunoComponent } from './editar-aluno/editar-aluno.component';
 import { HomeAlunoComponent } from './home-aluno/home-aluno.component';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 import { LayoutModule } from '../layout/layout.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { LayoutModule } from '../layout/layout.module';
   imports: [
     CommonModule,
     MaterialStylesModule,
-    LayoutModule
+    LayoutModule,
+    FormsModule
   ]
 })
 export class AlunoModule { }
