@@ -1,15 +1,12 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { NgForm, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors} from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Aluno, Graduacao } from 'src/app/shared';
+import { Aluno, Graduacao, senhaValidator } from 'src/app/shared';
 import { AlunoService } from '../services/aluno.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, map, startWith } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
-
-
-
 
 @Component({
   selector: 'app-autocadastro',
@@ -18,10 +15,11 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 })
 export class AutocadastroComponent implements OnInit {
 
-  @ViewChild('formAluno', { read: MatAutocompleteTrigger}) formAluno!: NgForm;
+  @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
 
   aluno!: Aluno;
-  
+
+  formAluno!: FormGroup;
   senha: string = '';
   confirmarSenha: string = '';
   senhaValida: boolean = false;
@@ -29,50 +27,49 @@ export class AutocadastroComponent implements OnInit {
   mostrarConfirmarSenha: boolean = false;
   grrValido: boolean = true;
   myControl = new FormControl();
-  options: string[]=[
-    'Administração','Agronomia','Arquitetura e Urbanismo','Artes Visuais','Biomedicina','Ciências Biológicas','Ciências Contábeis','Ciências da Computação',
-    'Ciências Econômicas','Ciências Sociais','Design de Produto','Design Gráfico','Direito','Educação Física','Enfermagem','Engenharia Ambiental','Engenharia Cartográfica e de Agrimensura',
-    'Engenharia Civil','Engenharia de Bioprocessos e Biotecnologia','Engenharia de Produção','Engenharia Elétrica','Engenharia Florestal','Engenharia Industrial Madereira',
-    'Engenharia Mecânica','Engenharia Química','Estatística','Expressão Gráfica','Fármacia','Filosofia','Física','Fisioterapia','Geografia','Geologia','Gestão da Informação',
-    'História','História Memória e Imagem','Informática Biomédica','Jornalismo','Letras','Letras Libras','Matemática','Matemática Industrial','Medicina','Medicina Veterinária',
-    'Música','Nutrição','Odontologia','Pedagogia','Psicologia','Publicidade e Propaganda','Química','Relações Públicas','Tecnologia em Análise e Desenvolvimento de Sistemas',
-    'Tecnologia em Comunicação Institucional','Tecnologia em Gestão da Qualidade','Tecnologia em Gestão Pública','Tecnologia em Luteria','Tecnologia em Negócios Imobiliários',
-    'Tecnologia em Produção Cênica','Tecnologia em Secretariado','Terapia Ocupacional','Turismo','Zootecnia'
-  ];
+  options!: Graduacao[];
   selectedValue: string = '';
-  filteredOptions!: Observable<string[]>;
+  filteredOptions!: Observable<Graduacao[]>;
   hide: boolean=true;
-
-
 
   constructor(
     private router: Router,
     private alunoService: AlunoService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {
+    this.formAluno = new FormGroup({
+      nome: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      email: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z0-9._%+-]+@ufpr\.br$')]),
+      curso: new FormControl('', Validators.required),
+      grr: new FormControl(''),
+      telefone: new FormControl('', [Validators.required, Validators.minLength(11)]),
+      senha: new FormControl('', [Validators.required, Validators.minLength(8), senhaValidator]),
+      confirmarSenha: new FormControl('', Validators.required),
+    }, { validators: this.verificarSenha.bind(this) });
   }  
 
   ngOnInit(): void {
     this.aluno = new Aluno();
+    this.listarCursos();
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: string): Graduacao[] {
     const filterValue = value.toLowerCase();
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option.nome.toLowerCase().includes(filterValue));
   }
 
 
   autocadastrar(): void {
-    if (this.formAluno.form.valid) {
+    if (this.formAluno.valid) {
       this.aluno.senha = this.senha;
       this.aluno.papel = "aluno";
       this.alunoService.autocadastrarAluno(this.aluno).subscribe(
-        (response) => {
+        (response: any) => {
           alert(`Um e-mail de confirmação foi enviado para ${response.email}`);
           this.router.navigate([""]);
         },
@@ -83,18 +80,29 @@ export class AutocadastroComponent implements OnInit {
     }
   }
 
-  verificarSenha() {
-    // Verificar se a senha atende às condições específicas
-    const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
+  listarCursos(): void {
+    this.alunoService.listarTodosCursos().subscribe(
+      (response) => {
+        this.options = response;
+      },
+      (error) => {
+        console.error("Erro ao listar Cursos:", error);
+      }
+    );
+  }
 
-    if (
-      senhaRegex.test(this.senha) &&
-      this.senha === this.confirmarSenha
-    ) {
-      this.senhaValida = true;
-    } else {
-      this.senhaValida = false;
+  verificarSenha(control: AbstractControl): ValidationErrors | null {
+    const senhaControl = control.get('senha');
+    const confirmarSenhaControl = control.get('confirmarSenha');
+  
+    if (!senhaControl || !confirmarSenhaControl) {
+      return { senhasNaoIguais: true }
     }
+  
+    const senha = senhaControl.value;
+    const confirmarSenha = confirmarSenhaControl.value;
+  
+    return senha === confirmarSenha ? null : { senhasNaoIguais: true };
   }
 
   validarGRR() {
@@ -102,6 +110,8 @@ export class AutocadastroComponent implements OnInit {
     this.grrValido = regex.test(this.aluno.grr);
   }
 
-
+  displayFn(graduacao: Graduacao): string {
+    return graduacao && graduacao.nome ? graduacao.nome : '';
+}
 
 }

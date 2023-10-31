@@ -154,4 +154,25 @@ app.delete('/alunos', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+console.log(`Configurando rotas de graduacao`)
+app.post('/graduacoes', verifyJWT, (req, res, next) => {
+  console.log(`Roteando POST de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+  servicesProxy(req, res, next);
+})
+
+app.get('/graduacoes', verifyJWT, (req, res, next) => {
+  console.log(`Roteando GET de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+  servicesProxy(req, res, next);
+})
+
+app.put('/graduacoes', verifyJWT, (req, res, next) => {
+  console.log(`Roteando PUT de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+  servicesProxy(req, res, next);
+})
+
+app.delete('/graduacoes', verifyJWT, (req, res, next) => {
+  console.log(`Roteando DELETE de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+  servicesProxy(req, res, next);
+})
+
 app.listen(PORT, () => console.log(`Gateway online on http://localhost:${PORT}`));
