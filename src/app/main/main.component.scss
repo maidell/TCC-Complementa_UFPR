@@ -9,50 +9,19 @@
 
 .mat-toolbar{
   max-width: 100%;
+  background-color: transparent;
 
 }
 
-.sidenav .mat-toolbar {
-  background-color: #404649;
+.profileBox{
+  display:flex;
+  flex-direction: row;
+  justify-content: end;
+  width: 100%;
 }
 
-.navbar-logo {
-    max-width: 100%;
-    padding-bottom: 2px;
-}
-
-
-
-.list-group-item {
-  display: flex;
-  align-items: center;
-}
-
-.list-group-item mat-icon {
-  margin-right: 10px;
-  margin-left: 5px;
-}
-
-.list-group-item span {
-  flex: 1;
-}
-
-
-a {
-  text-decoration: none;
-  color:#f8f8f8;
-  padding-bottom: 5%;
-  padding-left: 5%;
-}
-
-a:hover {
-  background-color: #dbdbdb;
-}
-
-
-
-
-
-a:hover {
-    background-color: #525c61;
+.meuPerfil{
+  padding: 0px 5px 0px 5px ;
+  border-radius: 8px;
+  background-color: #4377a4;
 }

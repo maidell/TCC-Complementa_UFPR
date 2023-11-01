@@ -1,7 +1,10 @@
+.mat-toolbar {
+    background-color: #404649;
+}
+
 .navbar-logo {
-    max-width: 80%;
-    margin: 10% 0 10% 2%;
-    padding-left: 5%;
+    max-width: 100%;
+    padding-bottom: 2px;
 }
 
 .list-group-item {
@@ -11,22 +14,20 @@
 
 .list-group-item mat-icon {
     margin-right: 10px;
+    margin-left: 5px;
 }
 
 .list-group-item span {
     flex: 1;
 }
 
-.navbar {
-    height: 100%;
-}
-
 a {
     text-decoration: none;
-    color: #262626;
-    padding-left: 5% ;
+    color: #f8f8f8;
+    padding-bottom: 5%;
+    padding-left: 5%;
 }
 
 a:hover {
-    background-color: #dbdbdb;
+    background-color: #525c61;
 }
