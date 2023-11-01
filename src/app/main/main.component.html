@@ -1,46 +1,46 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
+<mat-sidenav-container class="sidenav-container" class="colorbrand">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>
+      <img src="\assets\plugins\images\logo_complementa_light.svg" alt="homepage" routerLink="" class="navbar-logo"> 
+
+    </mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard">
+      <a routerLink="/dashboard" href="#" class="list-group-item list-group-item-action">
         <mat-icon>home</mat-icon><span> Página Inicial</span>
     </a>
     <ng-container *ngIf="checkRole('Administrador')" >
-        <a mat-list-item routerLink="/graduacoes">
+        <a routerLink="/graduacoes" href="#" class="list-group-item list-group-item-action">
             <mat-icon>school</mat-icon><span> Graduações</span>
         </a>
-        <a mat-list-item routerLink="/competencias">
+        <a routerLink="/competencias" href="#" class="list-group-item list-group-item-action">
             <mat-icon>account_balance</mat-icon><span> Competências</span>
         </a>
-        <a mat-list-item routerLink="/complexidades">
+        <a routerLink="/complexidades" href="#" class="list-group-item list-group-item-action">
             <mat-icon>account_tree</mat-icon><span> Complexidades</span>
         </a>
-        <a mat-list-item routerLink="/contestacoes">
+        <a routerLink="/contestacoes" href="#" class="list-group-item list-group-item-action">
             <mat-icon>warning</mat-icon><span> Contestações</span>
         </a>
-        <a mat-list-item routerLink="/usuarios">
+        <a routerLink="/usuarios" href="#" class="list-group-item list-group-item-action">
             <mat-icon>people</mat-icon><span> Usuários</span>
         </a>
-      </ng-container>
-      </mat-nav-list>
-      
-    <a (click)="logout()" mat-list-item routerLink="login" class="list-group-item list-group-item" id="sair">
-      <mat-icon>exit_to_app</mat-icon><span> Sair</span>
-  </a>
 
-    
+        <a (click)="logout()" routerLink="login" class="list-group-item list-group-item" id="sair">
+            <mat-icon>exit_to_app</mat-icon><span> Sair</span>
+        </a>
+    </ng-container>
+
+    </mat-nav-list>
+
+
+
   </mat-sidenav>
+  
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
+
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
@@ -48,4 +48,5 @@
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
+
 </mat-sidenav-container>
