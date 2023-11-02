@@ -13,15 +13,10 @@
 
 }
 
-.profileBox{
+.profile-box{
   display:flex;
   flex-direction: row;
   justify-content: end;
   width: 100%;
-}
-
-.meuPerfil{
-  padding: 0px 5px 0px 5px ;
-  border-radius: 8px;
-  background-color: #4377a4;
+  margin-top: 3%;
 }

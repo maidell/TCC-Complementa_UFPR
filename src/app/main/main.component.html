@@ -11,8 +11,8 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <div class="profileBox">
-        <span class="meuPerfil">trocar pelo component</span>
+      <div class="profile-box">
+        <app-user-details class="meu-perfil"></app-user-details>
       </div>
     </mat-toolbar>
     <router-outlet></router-outlet>

@@ -23,7 +23,7 @@ const routes: Routes = [
     component: HomeAlunoComponent
   },
   {
-    path: 'aluno/editar/:id',
+    path: 'aluno/editar', //removi o :id
     component: EditarAlunoComponent
   },
   {

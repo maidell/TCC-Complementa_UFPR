@@ -5,6 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 import { NavbarComponent } from './navbar/navbar.component';
+import { Router, RouterModule } from '@angular/router';
 
 
 
@@ -17,7 +18,8 @@ import { NavbarComponent } from './navbar/navbar.component';
   ],
   imports: [
     CommonModule,
-    MaterialStylesModule
+    MaterialStylesModule,
+    RouterModule
   ],
   exports: [
     HeaderComponent,

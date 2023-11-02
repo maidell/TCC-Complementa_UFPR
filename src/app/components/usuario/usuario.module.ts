@@ -6,7 +6,7 @@ import { HomeUsuarioComponent } from './home-usuario/home-usuario.component';
 
 @NgModule({
   declarations: [
-    HomeUsuarioComponent
+    HomeUsuarioComponent,
   ],
   imports: [
     CommonModule
