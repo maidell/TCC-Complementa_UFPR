@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { Aluno, Graduacao, senhaValidator } from 'src/app/shared';
 import { AlunoService } from '../services/aluno.service';
+import { AtividadeComponent } from '../../atividade/atividade/atividade.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-editar-aluno',
@@ -30,6 +32,7 @@ export class EditarAlunoComponent {
   constructor(
     private router: Router,
     private alunoService: AlunoService,
+    public dialog: MatDialog //APAGAR APAGAR APAGAR
   ) {
     this.formAluno = new FormGroup({
       nome: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -106,6 +109,29 @@ export class EditarAlunoComponent {
 
   displayFn(graduacao: Graduacao): string {
     return graduacao && graduacao.nome ? graduacao.nome : '';
+}
+
+
+
+/* CÓDIGO PRA TESTAR O COMPONENTE DE ATIVIDADE. EXCLUIR DAQUI PRA BAIXO QUANDO FOR PRA PRD*/
+
+openDialog() {
+  const dialogRef = this.dialog.open(AtividadeComponent, {
+    maxWidth: this.dialogWidth()
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    console.log(`Dialog result: ${result}`);
+  });
+}
+
+
+dialogWidth(){
+  if (window.innerWidth<=768){
+    return "100vw";
+  } else  {
+    return "80vw";
+  } 
 }
 
 }

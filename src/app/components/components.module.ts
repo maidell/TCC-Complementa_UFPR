@@ -9,11 +9,14 @@ import { LayoutModule } from './layout/layout.module';
 import { PagesModule } from './pages/pages.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
+import { AtividadeComponent } from './atividade/atividade/atividade.component';
 
 
 @NgModule({
   declarations: [
     
+  
+    AtividadeComponent
   ],
   imports: [
     CommonModule,
