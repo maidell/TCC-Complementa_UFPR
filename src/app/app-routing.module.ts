@@ -6,7 +6,7 @@ import { HomeUsuarioComponent } from './components/usuario/home-usuario/home-usu
 import { EditarAlunoComponent } from './components/aluno/editar-aluno/editar-aluno.component';
 import { LoginRoutes } from './components/auth/auth-routing.module';
 import { DashAdminComponent } from './components/admin/dash-admin/dash-admin.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './components/layout/dashboard/dashboard.component';
 
 const routes: Routes = [
   {

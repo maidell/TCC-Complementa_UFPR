@@ -1,18 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashAdminComponent } from './admin/dash-admin/dash-admin.component';
-import { CardsModule } from './cards/cards.module';
+import { CardsModule } from './layout/cards/cards.module';
 import { AdminModule } from './admin/admin.module';
 import { AlunoModule } from './aluno/aluno.module';
 import { AuthModule } from './auth/auth.module';
 import { LayoutModule } from './layout/layout.module';
-import { PagesModule } from './pages/pages.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 
 @NgModule({
   declarations: [
-    
+
   ],
   imports: [
     CommonModule,
@@ -21,9 +20,9 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
     AuthModule,
     CardsModule,
     LayoutModule,
-    PagesModule,
     UsuarioModule,
-    MaterialStylesModule
+    MaterialStylesModule,
+
   ],
 
 })
