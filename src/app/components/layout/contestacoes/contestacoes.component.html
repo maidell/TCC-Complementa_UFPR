@@ -1,0 +1,5 @@
+<!-- colocar um ngIf para verificar se o usuario tem contestações -->
+<ng-container *ngIf="hasObjections()">
+<app-warning [Description]="'nenhuma contestação'"></app-warning>
+</ng-container>
+

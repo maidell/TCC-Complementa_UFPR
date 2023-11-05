@@ -1,0 +1,5 @@
+<!-- colocar um ngIf para verificar se o usuario tem atividades -->
+
+<ng-container *ngIf="hasActivities()">
+	<app-warning [Description]="'nenhuma atividade'"></app-warning>
+</ng-container>

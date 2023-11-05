@@ -6,9 +6,9 @@ import { Component } from '@angular/core';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-// type UserRole = 
+// type UserRole =
 export class NavbarComponent {
-  userRole: string = 'Administrador'; // Altere para o perfil do usuário logado:
+  userRole: string = 'coordenadorOrientador'; // Altere para o perfil do usuário logado:
                               // 'aluno' | 'coordenadorOrientador' | 'profOrientador' | 'Administrador';
 
   checkRole(role: string): boolean {

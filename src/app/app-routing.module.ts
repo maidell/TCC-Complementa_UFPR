@@ -7,6 +7,9 @@ import { EditarAlunoComponent } from './components/aluno/editar-aluno/editar-alu
 import { LoginRoutes } from './components/auth/auth-routing.module';
 import { DashAdminComponent } from './components/admin/dash-admin/dash-admin.component';
 import { DashboardComponent } from './components/layout/dashboard/dashboard.component';
+import { ProjetosComponent } from './components/layout/projetos/projetos.component';
+import { AtividadesComponent } from './components/layout/atividades/atividades.component';
+import { ContestacoesComponent } from './components/layout/contestacoes/contestacoes.component';
 
 const routes: Routes = [
   {
@@ -44,6 +47,18 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent
+  },
+  {
+    path: 'projetos',
+    component: ProjetosComponent
+  },
+  {
+    path: 'atividades',
+    component: AtividadesComponent
+  },
+  {
+    path: 'contestacoes',
+    component: ContestacoesComponent
   },
   ...LoginRoutes
 ];
