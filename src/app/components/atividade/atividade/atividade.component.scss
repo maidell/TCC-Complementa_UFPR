@@ -13,8 +13,29 @@
     display:flex;
     flex-direction: row;
 }
-
-.test{
+.activity-content{
+    background-color: #EEF5F9;
+    display: flex;
+    flex-direction: row;
     width: 100%;
+    padding-top: 1%;
+  }
+
+.activity-form{
+    width:65%;
+    padding-right:1%;
 }
 
+.description{
+    width:100%
+}
+
+.description-field{
+    width:100%;
+}
+
+
+.comments-form{
+    background-color: #DCE6EC;
+    max-width: 35%;
+}

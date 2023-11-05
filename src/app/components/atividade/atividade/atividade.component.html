@@ -1,6 +1,6 @@
 <div class="activity-dialog">
 
-    <div mat-dialog-title class="test">
+    <div mat-dialog-title>
         <div class="activity-header">
             <div class="left-items">
                 <div class="status">
@@ -18,6 +18,64 @@
                 <button mat-button>Editar</button>
                 <button mat-button>Fechar</button>
             </div>
+        </div>
+    </div>
+    <div mat-dialog-content class="activity-content">
+        <div class="activity-form">
+            <form>
+                <div >
+                    <mat-form-field class="description">
+                        <mat-label>Descrição da Atividade</mat-label>
+                        <textarea matInput class="description-field" rows="10"></textarea> 
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Competências</mat-label>
+                        <input matInput> <!-- TODO: get das competencias-->
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Complexidade</mat-label>
+                        <mat-select>
+                            <mat-option value="Simples">Simples</mat-option>
+                            <mat-option value="Média">Média</mat-option>
+                            <mat-option value="Complexa">Complexa</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Data Limite para Candidatura</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Data Limite para Entrega</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Data de Contestação</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <mat-form-field>
+                    <mat-label>Solicitante</mat-label>
+                    <input matInput>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Executor</mat-label>
+                    <input matInput>
+                </mat-form-field>
+
+            </form>
+        </div>
+        <div class="comments-form">
+            <p>Comentario 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper neque sagittis commodo tristique. Suspendisse vulputate dignissim sapien, ac tempus urna sollicitudin id. Suspendisse nisl nisi, facilisis sed leo non, pulvinar viverra diam. Nunc laoreet ultrices leo. In quis dapibus purus. Cras vel justo nec massa rutrum tempus eget ut ante. Donec aliquam, justo sed efficitur volutpat, nibh quam maximus odio, vel congue quam leo eget turpis. Sed fringilla interdum purus et pellentesque.</p>
         </div>
     </div>
     
