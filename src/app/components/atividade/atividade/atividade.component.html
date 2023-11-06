@@ -1,5 +1,4 @@
 <div class="activity-dialog">
-
     <div mat-dialog-title>
         <div class="activity-header">
             <div class="left-items">
@@ -29,12 +28,12 @@
                         <textarea matInput class="description-field" rows="10"></textarea> 
                     </mat-form-field>
                 </div>
-                <div>
-                    <mat-form-field>
+                <div class="second-line">
+                    <mat-form-field class="competences">
                         <mat-label>Competências</mat-label>
-                        <input matInput> <!-- TODO: get das competencias-->
+                        <input matInput>    <!-- TODO: get das competencias-->
                     </mat-form-field>
-                    <mat-form-field>
+                    <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
                         <mat-select>
                             <mat-option value="Simples">Simples</mat-option>
@@ -43,34 +42,38 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div>
-                    <mat-form-field>
-                        <mat-label>Data Limite para Candidatura</mat-label>
-                        <input matInput [matDatepicker]="picker">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
+                <div class="dates">
+                        <mat-form-field class="date-picker" id="first">
+                            <mat-label>Data Limite Candidatura</mat-label>
+                            <input matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field class="date-picker" id="second">
+                            <mat-label>Data Limite para Entrega</mat-label>
+                            <input matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="date-picker">
+                            <mat-label>Data de Contestação</mat-label>
+                            <input matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                </div>
+                <div class="students-data">
+                    <mat-form-field class="requester">
+                        <mat-label>Solicitante</mat-label>
+                        <input matInput>
                     </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Data Limite para Entrega</mat-label>
-                        <input matInput [matDatepicker]="picker">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Data de Contestação</mat-label>
-                        <input matInput [matDatepicker]="picker">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
+                    <mat-form-field class="executor">
+                        <mat-label>Executor</mat-label>
+                        <input matInput>
                     </mat-form-field>
                 </div>
-                <mat-form-field>
-                    <mat-label>Solicitante</mat-label>
-                    <input matInput>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Executor</mat-label>
-                    <input matInput>
-                </mat-form-field>
+
 
             </form>
         </div>

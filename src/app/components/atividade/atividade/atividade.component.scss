@@ -1,3 +1,4 @@
+
 .activity-dialog {
     min-width: 80vw;
 }
@@ -7,6 +8,14 @@
     display:flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.status-button {
+    background-color: green;
+    border-radius: 12px;
+    text-align: center;
+    height: 70%;
+    margin-right: 2%;
 }
 
 .left-items{
@@ -19,12 +28,16 @@
     flex-direction: row;
     width: 100%;
     padding-top: 1%;
-  }
+    }
+
+
 
 .activity-form{
-    width:65%;
+    width:65% !important;
     padding-right:1%;
 }
+
+
 
 .description{
     width:100%
@@ -32,8 +45,56 @@
 
 .description-field{
     width:100%;
+    //overflow: auto;
+    resize: none;
 }
 
+.second-line {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.competences {
+    width: 66% !important;
+    padding-right: 2%;
+}
+
+.complexities {
+    width: 32% !important;
+}
+
+.dates {
+    width: 100%;
+    justify-content: space-between;
+}
+
+
+.date-picker {
+    width: 32% !important;
+    
+}
+
+#first {
+    padding-right: 2%;
+}
+
+#second {
+    padding-right: 2%;
+}
+
+.students-data {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.requester {
+    width: 66% !important;
+    padding-right: 2%;
+}
+
+.executor {
+    width: 32%;
+}
 
 .comments-form{
     background-color: #DCE6EC;

@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./atividade.component.scss']
 })
 export class AtividadeComponent {
+  estado: string ='';
+
+
 
 }
