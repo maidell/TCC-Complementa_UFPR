@@ -19,6 +19,8 @@ export class AtividadesComponent implements OnInit {
     return this.atividades.length > 0;
   }
 
+  nameButtonRect:string = "Detalhes!"
+
   TitleWarning: string = "Aviso";
   Description: string = "Verificar texto para apresentar de acordo com a role, no figma!";
   Button: string = "Saiba mais";

@@ -15,4 +15,5 @@ export class RectCardComponent {
   @Input() thirdLabel!: string;
   @Input() thirdValue!: string;
   @Input() Texto!: string;
+  @Input() nameButtonRect!: string;
 }
