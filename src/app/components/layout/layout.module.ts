@@ -12,6 +12,8 @@ import { AtividadesComponent } from './atividades/atividades.component';
 import { Router, RouterModule } from '@angular/router';
 import { WarningComponent } from './warning/warning.component';
 import { ContestacoesComponent } from './contestacoes/contestacoes.component';
+import { TitleComponent } from './title/title.component';
+import { ConsultasModule } from './consultas/consultas.module';
 
 @NgModule({
   declarations: [
@@ -24,18 +26,21 @@ import { ContestacoesComponent } from './contestacoes/contestacoes.component';
     AtividadesComponent,
     WarningComponent,
     ContestacoesComponent,
+    TitleComponent
   ],
   imports: [
     CommonModule,
     MaterialStylesModule,
     CardsModule,
-    RouterModule
+    RouterModule,
+    ConsultasModule
   ],
   exports: [
     HeaderComponent,
     UserDetailsComponent,
     NavbarComponent,
-    DashboardComponent
+    DashboardComponent,
+    TitleComponent
   ]
 })
 export class LayoutModule { }
