@@ -14,7 +14,7 @@ import { ContestacoesComponent } from './components/layout/contestacoes/contesta
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
