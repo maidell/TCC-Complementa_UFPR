@@ -2,14 +2,26 @@
     <div mat-dialog-title>
         <div class="activity-header">
             <div class="left-items">
+               
                 <div class="status">
-                    <p class="status-button">Aberta</p>
-                    <h6>Criada em dd/MM/yyyy hh:mm</h6>
+                    <button mat-flat-button class="status-button">{{estado}}</button>
+                        <h6>Criada em</h6>
+                        <h6>dd/MM/yyy hh:mm</h6>
                 </div>
+
         
                 <div class="activity-data">
-                    <h5>Nome do Projeto</h5>
-                    <h2>Nome da Atividade</h2>
+                    <div *ngIf="estado!='Nova' ; else newActivity">
+                        <h5>Nome do Projeto</h5>
+                        <h2>Nome da Atividade</h2>
+                    </div>
+                    <ng-template #newActivity>
+                        <h5>Nome do Projeto</h5>
+                        <mat-form-field class="activity-field">
+                            <mat-label>Nome da Atividade</mat-label>
+                            <input matInput class="activity-field-inner">
+                        </mat-form-field>
+                    </ng-template>
                 </div>
             </div>
             <div class="buttons">

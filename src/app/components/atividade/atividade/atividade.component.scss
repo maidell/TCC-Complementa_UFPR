@@ -10,15 +10,34 @@
     justify-content: space-between;
 }
 
-.status-button {
-    background-color: green;
-    border-radius: 12px;
-    text-align: center;
-    height: 70%;
-    margin-right: 2%;
+.activity-data {
+    width: 100% !important;
+    margin-left: 2%;
 }
 
+.activity-field{
+    width: 100%;
+}
+
+.activity-field-inner {
+    width:100%;
+}
+
+.status {
+    width: 20%;
+    height: 100%;
+}
+
+.status-button {
+    height:70%;
+    background-color: green;
+    color: white;
+}
+
+
+
 .left-items{
+    width:66%;
     display:flex;
     flex-direction: row;
 }
@@ -28,7 +47,7 @@
     flex-direction: row;
     width: 100%;
     padding-top: 1%;
-    }
+}
 
 
 
