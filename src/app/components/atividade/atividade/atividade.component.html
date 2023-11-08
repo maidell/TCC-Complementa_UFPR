@@ -3,10 +3,9 @@
         <div class="activity-header">
             <div class="left-items">
                
-                <div class="status">
-                    <button mat-flat-button class="status-button">{{estado}}</button>
-                        <h6>Criada em</h6>
-                        <h6>dd/MM/yyy hh:mm</h6>
+                <div class="status" *ngIf="estado!='Nova'">
+                    <button mat-flat-button class="status-button" [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
+                        <h6 [ngStyle]="{'display': newActivityDisplay}">Criada em dd/MM/yyy hh:mm</h6>
                 </div>
 
         
@@ -25,9 +24,9 @@
                 </div>
             </div>
             <div class="buttons">
-                <button mat-button>Visualizar Candidaturas</button>
-                <button mat-button>Editar</button>
-                <button mat-button>Fechar</button>
+                <button mat-flat-button class="header-button" [ngStyle]="{'display': newActivityDisplay, 'background-image': firstButtonColor}">{{firstHeaderButton}}</button>
+                <button mat-flat-button class="header-button" [ngStyle]="{'background-image': secondButtonColor}">{{secondHeaderButton}}</button>
+                <button mat-flat-button class="header-button" [ngStyle]="{'background-image': thirdButtonColor}">{{thirdHeaderButton}}</button>
             </div>
         </div>
     </div>
@@ -89,9 +88,9 @@
 
             </form>
         </div>
-        <div class="comments-form">
+       <!--<div class="comments-form">
             <p>Comentario 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper neque sagittis commodo tristique. Suspendisse vulputate dignissim sapien, ac tempus urna sollicitudin id. Suspendisse nisl nisi, facilisis sed leo non, pulvinar viverra diam. Nunc laoreet ultrices leo. In quis dapibus purus. Cras vel justo nec massa rutrum tempus eget ut ante. Donec aliquam, justo sed efficitur volutpat, nibh quam maximus odio, vel congue quam leo eget turpis. Sed fringilla interdum purus et pellentesque.</p>
-        </div>
+        </div>-->
     </div>
     
 </div>
