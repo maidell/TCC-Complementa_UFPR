@@ -1,7 +1,19 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 
+// body {
+//     margin:0 !important;
+//     background-color: #eef5f9;
+//     height: 100%;
+// }
+
+html,
+body,
+.fullHeight {
+    height: 100%;
+}
+
 body {
-    margin:0 !important;
-    background-color: #ededed;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }

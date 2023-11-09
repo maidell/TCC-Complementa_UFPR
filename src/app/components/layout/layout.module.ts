@@ -6,25 +6,27 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { Router, RouterModule } from '@angular/router';
-
-
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CardsModule } from './cards/cards.module';
 
 @NgModule({
   declarations: [
     FooterComponent,
     HeaderComponent,
     UserDetailsComponent,
-    NavbarComponent
+    NavbarComponent,
+    DashboardComponent,
+
   ],
   imports: [
     CommonModule,
-    MaterialStylesModule,
-    RouterModule
+    MaterialStylesModule
   ],
   exports: [
     HeaderComponent,
     UserDetailsComponent,
-    NavbarComponent
+    NavbarComponent,
+    DashboardComponent
   ]
 })
 export class LayoutModule { }
