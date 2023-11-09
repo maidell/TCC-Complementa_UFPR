@@ -160,7 +160,7 @@ app.post('/graduacoes', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
-app.get('/graduacoes', verifyJWT, (req, res, next) => {
+app.get('/graduacoes', (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
   servicesProxy(req, res, next);
 })
