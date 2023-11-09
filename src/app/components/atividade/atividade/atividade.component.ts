@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./atividade.component.scss']
 })
 export class AtividadeComponent {
-  estado: string ='Carga Horária Contestada'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+  estado: string ='Aberta'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
   
   canEdit=true; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
   hasReport=true; // se possui relatorio de conclusão ou não
@@ -24,7 +24,7 @@ export class AtividadeComponent {
   displaySecondHeaderButton = '';
 
 
-  newActivityDisplay = '';
+  displayTimestamp = '';
   
 
   ngOnInit(){
@@ -109,7 +109,7 @@ export class AtividadeComponent {
       case 'Finalizada':
         this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondHeaderButton='Gerar Certificado';
-        this.newActivityDisplay='none';
+        this.displayTimestamp='none';
         this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondButtonColor='linear-gradient(#559958, #418856)';
         break;

@@ -7,13 +7,13 @@
         <div class="activity-header">
             <div class="left-items">
 
-                
+
 
 
 
                 <div class="status" *ngIf="estado!='Nova'">
                     <button mat-flat-button class="status-button" [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
-                        <h6 [ngStyle]="{'display': newActivityDisplay}">Criada em dd/MM/yyy</h6>
+                        <h6 [ngStyle]="{'display': displayTimestamp}">Criada em dd/MM/yyy</h6>
                 </div>
 
         
