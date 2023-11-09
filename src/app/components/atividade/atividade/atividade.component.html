@@ -1,11 +1,17 @@
 <div class="activity-dialog">
+    <div class="close">
+        <button mat-dialog-close class="close-button"><mat-icon class="close-button-icon">close</mat-icon></button>
+    </div>
+
     <div mat-dialog-title>
         <div class="activity-header">
             <div class="left-items">
-               
+
+
+
                 <div class="status" *ngIf="estado!='Nova'">
                     <button mat-flat-button class="status-button" [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
-                        <h6 [ngStyle]="{'display': newActivityDisplay}">Criada em dd/MM/yyy hh:mm</h6>
+                        <h6 [ngStyle]="{'display': newActivityDisplay}">Criada em dd/MM/yyy</h6>
                 </div>
 
         
@@ -24,9 +30,8 @@
                 </div>
             </div>
             <div class="buttons">
-                <button mat-flat-button class="header-button" [ngStyle]="{'display': newActivityDisplay, 'background-image': firstButtonColor}">{{firstHeaderButton}}</button>
-                <button mat-flat-button class="header-button" [ngStyle]="{'background-image': secondButtonColor}">{{secondHeaderButton}}</button>
-                <button mat-flat-button class="header-button" [ngStyle]="{'background-image': thirdButtonColor}">{{thirdHeaderButton}}</button>
+                <button mat-flat-button class="header-button" [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}">{{firstHeaderButton}}</button>
+                <button mat-flat-button class="header-button" id="second-header-button" [ngStyle]="{'background-image': secondButtonColor, 'display': displaySecondHeaderButton}">{{secondHeaderButton}}</button>
             </div>
         </div>
     </div>

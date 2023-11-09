@@ -6,17 +6,23 @@ import { Component } from '@angular/core';
   styleUrls: ['./atividade.component.scss']
 })
 export class AtividadeComponent {
-  estado: string ='Finalizada'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+  estado: string ='Carga Horária Contestada'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+  
+  canEdit=true; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
+  hasReport=true; // se possui relatorio de conclusão ou não
+  canApproveContest=true;
+
   statusButtonColor='';
 
   firstButtonColor='';
   firstHeaderButton = '';
+  firstButtonWidth='';
+  displayFirstHeaderButton='';
   
   secondButtonColor='';
   secondHeaderButton = '';
+  displaySecondHeaderButton = '';
 
-  thirdButtonColor='';
-  thirdHeaderButton = '';
 
   newActivityDisplay = '';
   
@@ -28,42 +34,84 @@ export class AtividadeComponent {
   setHeaderButtons(){
     switch (this.estado){
       case 'Nova':  // tela de criação de atividades
-        this.secondHeaderButton='Salvar';
-        this.thirdHeaderButton='Cancelar';
-        this.newActivityDisplay='none';
         this.statusButtonColor='linear-gradient(#3473a3,#5b7ba5)';
-        this.secondButtonColor='linear-gradient(#559958, #418856)';
-        this.thirdButtonColor='linear-gradient(#C7433F, #C7241F)';
-        break;
-      case 'Aberta':  // para aluno solicitante. Tratar possibilidades pro aluno executor
-        this.firstHeaderButton='Visualizar Candidaturas';
-        this.secondHeaderButton='Editar';
-        this.thirdHeaderButton='Fechar';
-        this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
-        this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
-        this.thirdButtonColor='linear-gradient(#C7433F, #C7241F)';
-        break;
-      case 'Em Execução': //visão do solicitante quando o relatorio de conclusão tiver sido preenchido. tratar quando não tiver sido preenchido ainda
-        this.firstHeaderButton='Finalizar';
-        this.secondHeaderButton='Contestar';
-        this.thirdHeaderButton='Fechar';
-        this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
-        this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
-        this.thirdButtonColor='linear-gradient(#C7433F, #C7241F)';
-        break;
-      case 'Carga Horária Contestada':
+
+        this.firstHeaderButton='Salvar';
+        this.firstButtonColor='linear-gradient(#559958, #418856)';
+        this.displaySecondHeaderButton='none';
+        this.firstButtonWidth='100%';
         
         break;
-      case 'Execução Contestada':
+      case 'Aberta': 
+        this.statusButtonColor='linear-gradient(#3473A3, #5B7BA5';
+
+        if(this.canEdit){
+          this.firstHeaderButton='Visualizar Candidaturas';
+          this.secondHeaderButton='Editar';
+          this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
+        } else {
+          this.firstHeaderButton='Candidatar-se';
+          this.firstButtonWidth='100%';
+          this.displaySecondHeaderButton='none';
+        }
+
+        this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
+        
+        break;
+      case 'Em Execução': //visão do solicitante quando o relatorio de conclusão tiver sido preenchido. tratar quando não tiver sido preenchido ainda
+        this.statusButtonColor='linear-gradient(#DEB345, #C99614)';
+
+        if(this.canEdit){
+
+          if(this.hasReport){
+            this.firstHeaderButton='Finalizar';
+            this.secondHeaderButton='Contestar';
+            this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
+            this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
+        
+          } else {
+            this.displayFirstHeaderButton='none';
+            this.displaySecondHeaderButton='none';
+          }
+        } else {
+
+          if(this.hasReport){
+            this.displayFirstHeaderButton='none';
+            this.displaySecondHeaderButton='none';
+
+          } else {
+            this.firstHeaderButton='Concluir';
+            this.firstButtonWidth='100%';
+            this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
+            this.displaySecondHeaderButton='none';
+          }
+
+        }
+
+        break;
+      case 'Carga Horária Contestada': case 'Execução Contestada':
+        this.statusButtonColor='linear-gradient(#CC6E00, #D95409)';
+        if (this.canApproveContest){
+          this.firstHeaderButton='Aprovar';
+          this.firstButtonColor='linear-gradient(#318B35, #297E42)';
+
+          this.secondHeaderButton='Recusar';
+          this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
+
+        } else {
+          this.displayFirstHeaderButton='none';
+          this.displaySecondHeaderButton='none';
+        }
+
+
 
         break;
       case 'Finalizada':
+        this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondHeaderButton='Gerar Certificado';
-        this.thirdHeaderButton='Fechar';
         this.newActivityDisplay='none';
         this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondButtonColor='linear-gradient(#559958, #418856)';
-        this.thirdButtonColor='linear-gradient(#C7433F, #C7241F)';
         break;
     }
   }
