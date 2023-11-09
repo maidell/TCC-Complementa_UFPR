@@ -20,7 +20,8 @@ import { CardsModule } from './cards/cards.module';
   ],
   imports: [
     CommonModule,
-    MaterialStylesModule
+    MaterialStylesModule,
+    CardsModule
   ],
   exports: [
     HeaderComponent,
