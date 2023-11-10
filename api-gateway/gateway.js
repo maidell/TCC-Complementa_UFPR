@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser')
 const helmet = require('helmet');
 
-//setting up your port
+//Configuração da porta
 const PORT = process.env.PORT;
 const app = express();
 
@@ -32,7 +32,6 @@ function verifyJWT(req, res, next) {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
     if (err)
       return res.status(500).json({ auth: false, message: 'Falha ao autenticar o token.' });
-    // se tudo estiver ok, salva no request para uso posterior
     req.userId = decoded.id;
     next();
   });
@@ -160,7 +159,7 @@ app.post('/graduacoes', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
-app.get('/graduacoes', verifyJWT, (req, res, next) => {
+app.get('/graduacoes', (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
   servicesProxy(req, res, next);
 })

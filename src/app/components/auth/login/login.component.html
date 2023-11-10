@@ -8,28 +8,27 @@
               src="./assets/plugins/images/logo_complementa.svg"
               class="small-image"
               alt="Login Image"/>
-            <form>
+            <form [formGroup]="formLogin">
               <mat-form-field class="login-field">
                 <mat-label>Email</mat-label>
-                <input type="email" matInput id="usuario" name="usuario" [(ngModel)]="login.email"
-                #usuario="ngModel" required >
-                <div *ngIf="usuario.errors && (usuario.dirty || usuario.touched)" class="alert alert-danger">
-                  <div [hidden]="!usuario?.errors?.['required']">
-                    Digite o usuário
-                  </div>
-                </div>
+                <input type="email" matInput id="usuario" name="usuario" formControlName="usuario" required >
+                <mat-error *ngIf="formLogin.get('usuario')?.errors?.['required']">
+                  Digite o usuário
+                </mat-error>
+                <mat-error *ngIf="formLogin.get('usuario')?.errors?.['pattern']">
+                  O e-mail deve pertencer ao domínio ufpr.br
+                </mat-error>
               </mat-form-field>
               
               <mat-form-field class="login-field">
                 <mat-label>Senha</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required id="senha" name="senha" [(ngModel)]="login.senha">
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" id="senha" name="senha" required>
                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                <!--<mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> TODO-->
-                <!-- <div *ngIf="senha.errors && (senha.dirty || senha.touched)" class="alert alert-danger">
-                  <div [hidden]="!senha?.errors?.['required']">Digite a senha.</div>
-                </div> -->
+                <mat-error *ngIf="formLogin.get('senha')?.errors?.['required']">
+                  Digite sua senha
+                </mat-error>
              </mat-form-field>
-              <button routerLink="/aluno/home" mat-button type="submit" id="submit-button">
+              <button routerLink="/aluno/home" mat-button type="submit" id="submit-button" (click)="logar()">
                 Fazer login
               </button>
             </form>
