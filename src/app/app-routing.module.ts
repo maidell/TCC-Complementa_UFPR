@@ -11,7 +11,7 @@ import { DashboardComponent } from './components/layout/dashboard/dashboard.comp
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -31,8 +31,12 @@ const routes: Routes = [
     component: AutocadastroComponent
   },
   {
+    path: 'ADMIN',
+    redirectTo: 'admin/home'
+  },
+  {
     path: 'admin',
-    component: HomeUsuarioComponent
+    redirectTo: 'admin/home'
   },
   {
     path: 'admin/home',

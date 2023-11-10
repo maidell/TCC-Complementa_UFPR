@@ -12,10 +12,10 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  // @ViewChild('formLogin') formLogin!: NgForm;
-  formLogin: FormGroup;
+  @ViewChild('formLogin') formLogin!: NgForm;
   @ViewChild('headerComponent') headerComponent!: Component;
   login: Login = new Login();
+  emailPattern = '^[a-zA-Z0-9._%+-]+@ufpr.br$';
   loading: boolean = false;
   message!: string;
   leftColumn: number=0;
@@ -25,17 +25,11 @@ export class LoginComponent implements OnInit {
   hide: boolean=true;
 
   constructor(
-    private fb: FormBuilder,
     private loginService: LoginService,
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog
   ) {
-
-    this.formLogin = this.fb.group({
-      email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@ufpr.br$')]],
-      senha: ['', Validators.required]
-    });
 
     if (this.loginService.usuarioLogado) {
       this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
@@ -68,24 +62,24 @@ export class LoginComponent implements OnInit {
   }
   
   logar(): void {
+    this.loading = true;
     if (this.formLogin.valid) {
-      this.loading = true;
-      const loginData = this.formLogin.value; // Usando os valores do formulário
-      this.loginService.login(loginData).subscribe({
-        next: (usuario: Usuario) => {
-          this.loginService.usuarioLogado = usuario;
-          this.router.navigate([usuario.papel]);
-        },
-        error: (error) => {
-          this.loading = false;
-          console.error('Erro ao fazer login:', error);
-        },
-        complete: () => {
-          this.loading = false;
-        }
-      });
+      this.loginService.login(this.login).subscribe(
+        (response: Usuario) => {
+          if (response != null) {
+            let usu = response;
+            alert([`${usu.id}\n${usu.nome}\n${usu.email}\n${usu.telefone}\n${usu.papel}`]);
+            this.loginService.usuarioLogado = usu;
+            this.loading = false;
+            this.router.navigate([`${usu.papel.toLowerCase}`]);
+          } else {
+            this.message = 'Usuário/Senha inválidos.';
+          }
+        });
     }
+    this.loading = false;
   }
+
 
   openDialog() {
     const dialogRef = this.dialog.open(AutocadastroComponent, {

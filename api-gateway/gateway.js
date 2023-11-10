@@ -77,6 +77,7 @@ const authServiceProxy = httpProxy('http://localhost:5000', {
           telefone: objBody.telefone,
           papel: objBody.papel
         };
+        console.log(objRet.email);
         return (
           userRes
             .status(200)
@@ -88,7 +89,7 @@ const authServiceProxy = httpProxy('http://localhost:5000', {
       }
     } catch (error) {
       console.log(`Erro Autenticação: ${error}`);
-      return userRes.status(401).json({ message: "Login inválido!" });
+      return userRes.status(500).json({ message: "Erro ao processar a autenticação." });
     }
   }
 });
