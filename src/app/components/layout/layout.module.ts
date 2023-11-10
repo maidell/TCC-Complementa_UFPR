@@ -8,6 +8,13 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { Router, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CardsModule } from './cards/cards.module';
+import { ProjetosComponent } from './projetos/projetos.component';
+import { AtividadesComponent } from './atividades/atividades.component';
+import { Router, RouterModule } from '@angular/router';
+import { WarningComponent } from './warning/warning.component';
+import { ContestacoesComponent } from './contestacoes/contestacoes.component';
+import { TitleComponent } from './title/title.component';
+import { ConsultasModule } from './consultas/consultas.module';
 
 @NgModule({
   declarations: [
@@ -16,18 +23,25 @@ import { CardsModule } from './cards/cards.module';
     UserDetailsComponent,
     NavbarComponent,
     DashboardComponent,
-
+    ProjetosComponent,
+    AtividadesComponent,
+    WarningComponent,
+    ContestacoesComponent,
+    TitleComponent
   ],
   imports: [
     CommonModule,
     MaterialStylesModule,
-    CardsModule
+    CardsModule,
+    RouterModule,
+    ConsultasModule
   ],
   exports: [
     HeaderComponent,
     UserDetailsComponent,
     NavbarComponent,
-    DashboardComponent
+    DashboardComponent,
+    TitleComponent
   ]
 })
 export class LayoutModule { }

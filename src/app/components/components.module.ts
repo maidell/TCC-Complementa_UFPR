@@ -14,7 +14,6 @@ import { AtividadeModule } from './atividade/atividade.module';
 
 @NgModule({
   declarations: [
-
   ],
   imports: [
     CommonModule,

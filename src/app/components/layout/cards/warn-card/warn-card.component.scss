@@ -1,0 +1,28 @@
+
+.title-container {
+	background-color: #c9d4db;
+	padding: 14px 20px 14px 16px;
+	font-weight: 600;
+	font-size: 24px;
+	border-radius: 12px 12px 0px 0px;
+	text-align: center;
+}
+
+.info-container {
+	text-align: center;
+	gap: 20px;
+	padding: 18px 24px 18px 20px;
+	background-color: #dce6ec;
+	border-radius: 0px 0px 12px 12px;
+}
+
+.custom-button {
+	background: linear-gradient(180deg, #CC6E00, #D95409) !important;
+	color: white !important;
+	border-radius: 20px;
+}
+
+.custom-button:hover {
+	background: linear-gradient(90deg, #D95409, #CC6E00);
+	color: white;
+}

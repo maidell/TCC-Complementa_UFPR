@@ -1,0 +1,57 @@
+<!-- colocar um ngIf para verificar se o usuario tem atividades -->
+
+<ng-container *ngIf="!hasActivities()">
+	<app-warning [Description]="'nenhuma atividade'"></app-warning>
+</ng-container>
+<div class="cards-atvs">
+
+	<!-- <ng-container *ngFor="let activity of activities">
+		<app-card-rect [activity]="activity"></app-card-rect>
+	</ng-container> -->
+	<div class="let-of-cards">
+		<app-rect-card [Title]="Title" [Subtitle]="Subtitle" [firstLabel]="firstLabel" [firstValue]="firstValue"
+			[secondLabel]="secondLabel" [secondValue]="secondValue" [thirdLabel]="thirdLabel"
+			[thirdValue]="thirdValue" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleOne" [Subtitle]="SubtitleOne" [firstLabel]="firstLabelOne"
+			[firstValue]="firstValueOne" [secondLabel]="secondLabelOne" [secondValue]="secondValueOne"
+			[thirdLabel]="thirdLabelOne" [thirdValue]="thirdValueOne" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleTwo" [Subtitle]="SubtitleTwo" [firstLabel]="firstLabelTwo"
+			[firstValue]="firstValueTwo" [secondLabel]="secondLabelTwo" [secondValue]="secondValueTwo"
+			[thirdLabel]="thirdLabelTwo" [thirdValue]="thirdValueTwo" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleThree" [Subtitle]="SubtitleThree" [firstLabel]="firstLabelThree"
+			[firstValue]="firstValueThree" [secondLabel]="secondLabelThree" [secondValue]="secondValueThree"
+			[thirdLabel]="thirdLabelThree" [thirdValue]="thirdValueThree" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFour" [Subtitle]="SubtitleFour" [firstLabel]="firstLabelFour"
+			[firstValue]="firstValueFour" [secondLabel]="secondLabelFour" [secondValue]="secondValueFour"
+			[thirdLabel]="thirdLabelFour" [thirdValue]="thirdValueFour" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+		<app-rect-card [Title]="TitleFive" [Subtitle]="SubtitleFive" [firstLabel]="firstLabelFive"
+			[firstValue]="firstValueFive" [secondLabel]="secondLabelFive" [secondValue]="secondValueFive"
+			[thirdLabel]="thirdLabelFive" [thirdValue]="thirdValueFive" [nameButtonRect]="nameButtonRect"></app-rect-card>
+
+	</div>
+
+	<div class="card-square">
+		<app-warn-card [TitleWarning]="TitleWarning" [Description]="Description" [Button]="Button"></app-warn-card>
+	</div>
+</div>
