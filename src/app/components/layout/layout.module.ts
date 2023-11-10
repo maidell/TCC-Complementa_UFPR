@@ -10,7 +10,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CardsModule } from './cards/cards.module';
 import { ProjetosComponent } from './projetos/projetos.component';
 import { AtividadesComponent } from './atividades/atividades.component';
-import { Router, RouterModule } from '@angular/router';
 import { WarningComponent } from './warning/warning.component';
 import { ContestacoesComponent } from './contestacoes/contestacoes.component';
 import { TitleComponent } from './title/title.component';
