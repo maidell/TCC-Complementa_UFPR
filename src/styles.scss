@@ -1,6 +1,6 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 // body {
 //     margin:0 !important;
 //     background-color: #eef5f9;
@@ -11,9 +11,10 @@ html,
 body,
 .fullHeight {
     height: 100%;
+    background-color: #ededed;
 }
 
 body {
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: Poppins, sans-serif!important;
 }

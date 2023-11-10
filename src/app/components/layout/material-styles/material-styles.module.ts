@@ -36,6 +36,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatSidenavModule,
     MatListModule,
     MatToolbarModule,
+    MatFormFieldModule,
+    
+
     ],
   exports: [
     ReactiveFormsModule,

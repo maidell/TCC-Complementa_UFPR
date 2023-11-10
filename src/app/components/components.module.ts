@@ -11,7 +11,6 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
 
 @NgModule({
   declarations: [
-
   ],
   imports: [
     CommonModule,
