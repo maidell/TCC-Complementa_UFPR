@@ -1,10 +1,23 @@
 .user-card-out{
     margin-top: 3%;
+    text-align: left !important;
+    height: 56px;
+    min-width: 250px;
+    padding: 8px 13px;
+    border-radius: 12px;
+    background-image: linear-gradient(#3473A3,#5B7BA5);
 }
 
-.user-card{
-    text-align: left;
-    background-image: linear-gradient(#3473a3,#5b7ba5);
-    border-radius: 25px;
+p {
+    margin-bottom: 0;
 }
+
+.user-name {
+    size: 14px !important;
+}
+
+.grr {
+    size: 10px !important;
+}
+
 
