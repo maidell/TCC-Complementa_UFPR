@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-atividade',
@@ -6,13 +7,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./atividade.component.scss']
 })
 export class AtividadeComponent {
+
   estado: string ='Aberta'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
   
-  canEdit=true; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
-  hasReport=true; // se possui relatorio de conclusão ou não
+  canEdit=false; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
+  hasReport=false; // se possui relatorio de conclusão ou não
   canApproveContest=true;
 
+  editable=false;
+
   statusButtonColor='';
+
+  buttonsMarginTop='1%';
 
   firstButtonColor='';
   firstHeaderButton = '';
@@ -23,19 +29,22 @@ export class AtividadeComponent {
   secondHeaderButton = '';
   displaySecondHeaderButton = '';
 
-
   displayTimestamp = '';
   
 
+  activityFormWidth='100%';
+
   ngOnInit(){
-    this.setHeaderButtons();
+    this.setHeaderContent();
+    this.setContent();
   }
 
-  setHeaderButtons(){
+  setHeaderContent(){
     switch (this.estado){
       case 'Nova':  // tela de criação de atividades
         this.statusButtonColor='linear-gradient(#3473a3,#5b7ba5)';
 
+        this.buttonsMarginTop='3%';
         this.firstHeaderButton='Salvar';
         this.firstButtonColor='linear-gradient(#559958, #418856)';
         this.displaySecondHeaderButton='none';
@@ -113,6 +122,29 @@ export class AtividadeComponent {
         this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondButtonColor='linear-gradient(#559958, #418856)';
         break;
+    }
+  }
+
+  setContent(){
+    switch(this.estado){
+      case 'Aberta':
+        break;
+      case 'Em Execução':
+        this.activityFormWidth='65%';
+        break;
+      case 'Carga Horária Contestada':
+        break;
+      case 'Execução Contestada':
+        break;
+      case 'Finalizada':
+        break;
+    }
+
+  }
+
+  editActivity(){
+    if (this.canEdit){
+      this.editable=true;
     }
   }
 

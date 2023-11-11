@@ -77,6 +77,25 @@
         width: 100% !important;
     }
 
+    .date-picker {
+        width: 100%;
+    }
+
+    .competences {
+        width: 100%;
+    }
+    
+    .complexities {
+        width: 100%;
+    }
+
+    .requester {
+        width: 100%;
+    }
+    
+    .executor {
+        width: 100%;
+    }
 }
 
 @media (min-width: 1024px){
@@ -120,6 +139,34 @@
         justify-content: end;
     }
 
+    .dates {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    
+    .date-picker {
+        width: 32% !important;
+        
+    }
+
+    .competences {
+        width: 66% !important;
+        padding-right: 2%;
+    }
+    
+    .complexities {
+        width: 32% !important;
+    }
+
+    .requester {
+        width: 66% !important;
+        padding-right: 2%;
+    }
+    
+    .executor {
+        width: 32%;
+    }
 
 }
 
@@ -154,8 +201,8 @@
 
 
 .activity-form{
-    width:65% !important;
     padding-right:1%;
+    width: 100%;
 }
 
 
@@ -175,25 +222,9 @@
     justify-content: space-between;
 }
 
-.competences {
-    width: 66% !important;
-    padding-right: 2%;
-}
-
-.complexities {
-    width: 32% !important;
-}
-
-.dates {
-    width: 100%;
-    justify-content: space-between;
-}
 
 
-.date-picker {
-    width: 32% !important;
-    
-}
+
 
 #first {
     padding-right: 2%;
@@ -208,14 +239,7 @@
     justify-content: space-between;
 }
 
-.requester {
-    width: 66% !important;
-    padding-right: 2%;
-}
 
-.executor {
-    width: 32%;
-}
 
 .comments-form{
     background-color: #DCE6EC;

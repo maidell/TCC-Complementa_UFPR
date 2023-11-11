@@ -31,16 +31,17 @@
                     </ng-template>
                 </div>
             </div>
-            <div class="buttons">
-                <button mat-flat-button class="header-button" [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}">{{firstHeaderButton}}</button>
+            <div class="buttons" [ngStyle]="{'margin-top': buttonsMarginTop}">
+                <button mat-flat-button class="header-button" [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}" >{{firstHeaderButton}}</button>
                 <button mat-flat-button class="header-button" id="second-header-button" [ngStyle]="{'background-image': secondButtonColor, 'display': displaySecondHeaderButton}">{{secondHeaderButton}}</button>
             </div>
         </div>
     </div>
+
     <div mat-dialog-content class="activity-content">
-        <div class="activity-form">
+        <div class="activity-form" *ngIf="estado==='Nova' || editable; else activityData">
             <form>
-                <div >
+                <div>
                     <mat-form-field class="description">
                         <mat-label>Descrição da Atividade</mat-label>
                         <textarea matInput class="description-field" rows="10"></textarea> 
@@ -63,22 +64,22 @@
                 <div class="dates">
                         <mat-form-field class="date-picker" id="first">
                             <mat-label>Data Limite Candidatura</mat-label>
-                            <input matInput [matDatepicker]="picker">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                            <input matInput [matDatepicker]="picker1">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
                         </mat-form-field>
                         <mat-form-field class="date-picker" id="second">
                             <mat-label>Data Limite para Entrega</mat-label>
-                            <input matInput [matDatepicker]="picker">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                            <input matInput [matDatepicker]="picker2">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
                         </mat-form-field>
 
                         <mat-form-field class="date-picker">
                             <mat-label>Data de Contestação</mat-label>
-                            <input matInput [matDatepicker]="picker">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                            <input matInput [matDatepicker]="picker3">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                            <mat-datepicker #picker3></mat-datepicker>
                         </mat-form-field>
                 </div>
                 <div class="students-data">
@@ -95,6 +96,10 @@
 
             </form>
         </div>
+
+        <ng-template #activityData>
+            <p>dados da atividade</p>
+        </ng-template>
        <!--<div class="comments-form">
             <p>Comentario 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper neque sagittis commodo tristique. Suspendisse vulputate dignissim sapien, ac tempus urna sollicitudin id. Suspendisse nisl nisi, facilisis sed leo non, pulvinar viverra diam. Nunc laoreet ultrices leo. In quis dapibus purus. Cras vel justo nec massa rutrum tempus eget ut ante. Donec aliquam, justo sed efficitur volutpat, nibh quam maximus odio, vel congue quam leo eget turpis. Sed fringilla interdum purus et pellentesque.</p>
         </div>-->
