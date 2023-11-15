@@ -42,17 +42,18 @@ public class GraduacaoREST {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK)
-                .body(lista.stream().map(e -> mapper.map(e, GraduacaoDTO.class)).collect(Collectors.toList()));
+        		.body(lista.stream().map(e -> mapper.map(e, GraduacaoDTO.class)).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GraduacaoDTO> buscaPorId(@PathVariable String id) {
+    public ResponseEntity<GraduacaoDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<Graduacao> graduacao = repo.findById(id);
         if (graduacao.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(graduacao.get(), GraduacaoDTO.class));
+        	Graduacao grad = graduacao.get();
+        	return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad, GraduacaoDTO.class));
         }
     }
 
@@ -61,7 +62,7 @@ public class GraduacaoREST {
 
         try {
             Graduacao grad = repo.save(graduacao);
-            Optional<Graduacao> gradOpt = repo.findById(grad.getId().toString());
+            Optional<Graduacao> gradOpt = repo.findById(grad.getId());
             if (!gradOpt.isPresent()) {
                 throw new Exception("Criação da graduação não foi realizada com sucesso");
             }
@@ -72,13 +73,13 @@ public class GraduacaoREST {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GraduacaoDTO> alterarGraduacao(@PathVariable("id") String id, @RequestBody Graduacao graduacao) {
+    public ResponseEntity<GraduacaoDTO> alterarGraduacao(@PathVariable("id") Long id, @RequestBody Graduacao graduacao) {
         Optional<Graduacao> grad = repo.findById(id);
 
         if (grad.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
-            graduacao.setId(Long.parseLong(id));
+            graduacao.setId(id);
             repo.save(graduacao);
             grad = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad.get(), GraduacaoDTO.class));
@@ -86,7 +87,7 @@ public class GraduacaoREST {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerGraduacao(@PathVariable("id") String id) {
+    public ResponseEntity<?> removerGraduacao(@PathVariable("id") Long id) {
 
         Optional<Graduacao> graduacao = repo.findById(id);
         if (graduacao.isEmpty()) {
@@ -96,4 +97,5 @@ public class GraduacaoREST {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
     }
+    
 }
