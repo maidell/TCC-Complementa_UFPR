@@ -42,6 +42,12 @@ public class Atividade implements Serializable {
 
     @Column(nullable = false)
     private Date dataConclusao;
+    
+//    private Projeto projeto;
+//    
+//    private Usuario autor;
+//   
+//    private Aluno executor;
 
     @ManyToOne
     @JoinColumn(name = "competencia_id", nullable = false)
