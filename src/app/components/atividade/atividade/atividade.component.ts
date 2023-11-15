@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-atividade',
@@ -10,7 +12,7 @@ export class AtividadeComponent {
 
   estado: string ='Aberta'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
   
-  canEdit=false; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
+  canEdit=true; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
   hasReport=false; // se possui relatorio de conclusão ou não
   canApproveContest=true;
 
@@ -24,15 +26,43 @@ export class AtividadeComponent {
   firstHeaderButton = '';
   firstButtonWidth='';
   displayFirstHeaderButton='';
-  
+
+
   secondButtonColor='';
   secondHeaderButton = '';
   displaySecondHeaderButton = '';
 
   displayTimestamp = '';
-  
+  isDisabled=true;
+
+  displaySuffix='';
 
   activityFormWidth='100%';
+
+
+  data={
+    description:"",
+    competences:[""],
+    complexity:"",
+    candidatureLimitDate:"",
+    submitLimitDate:"",
+    contestDate:""
+  };
+
+  complexities=['Simples','Média','Complexa'];
+
+  constructor(public dialogRef: MatDialogRef<AtividadeComponent>) {}
+
+  
+  
+  dialogWidth(){
+    if (window.innerWidth<=768){
+      return "100vw";
+    } else  {
+      return "80vw";
+    } 
+  }
+
 
   ngOnInit(){
     this.setHeaderContent();
@@ -58,11 +88,13 @@ export class AtividadeComponent {
           this.firstHeaderButton='Visualizar Candidaturas';
           this.secondHeaderButton='Editar';
           this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
+
         } else {
           this.firstHeaderButton='Candidatar-se';
           this.firstButtonWidth='100%';
           this.displaySecondHeaderButton='none';
         }
+
 
         this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
         
@@ -128,6 +160,16 @@ export class AtividadeComponent {
   setContent(){
     switch(this.estado){
       case 'Aberta':
+        this.data={
+          description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
+          competences:["Competência 1", "Competência 2", "Competência 3"],
+          complexity:"Complexa",
+          candidatureLimitDate:"13/11/2023",
+          submitLimitDate:"03/12/2023",
+          contestDate:""
+        }
+        this.displaySuffix='none';
+
         break;
       case 'Em Execução':
         this.activityFormWidth='65%';
@@ -142,11 +184,61 @@ export class AtividadeComponent {
 
   }
 
+
+  firstButtonFunction(){
+
+
+  }
+
+
+  secondButtonFunction(){
+    if(!this.editable){
+      switch (this.estado){
+        case 'Aberta':
+          this.editActivity();
+          break;
+
+      }
+  } else {
+      this.editable=false;
+      this.isDisabled=true;
+      this.setHeaderContent();
+  }
+
+
+  }
+  onNoClick(): void {
+    console.log("entrou na função de fechar");
+    this.dialogRef.close();
+  }
+
   editActivity(){
     if (this.canEdit){
       this.editable=true;
+      this.isDisabled=false;
+      this.data={
+        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
+        competences:["Competência 1", "Competência 2", "Competência 3"],
+        complexity:"Média",
+        candidatureLimitDate:"13/11/2023",
+        submitLimitDate:"03/12/2023",
+        contestDate:""
+      }
+
+      this.firstHeaderButton='Salvar';
+      this.firstButtonColor='linear-gradient(#559958, #418856)';
+      this.secondHeaderButton="Cancelar";
+      this.secondButtonColor='linear-gradient(#C7433F, #C7241F)';
     }
+
+
   }
 
+  parseDate(date: string){
+    var dateParts=date.split("/");
+
+    var dateParsed= new FormControl(new Date(+dateParts[2], +dateParts[1]-1, +dateParts[0]));
+    return dateParsed;
+  }
 
 }

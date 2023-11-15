@@ -1,6 +1,6 @@
 <div class="activity-dialog">
     <div class="close">
-        <button mat-dialog-close class="close-button"><mat-icon class="close-button-icon">close</mat-icon></button>
+        <button mat-dialog-close class="close-button" (click)="onNoClick()"><mat-icon class="close-button-icon">close</mat-icon></button>
     </div>
 
     <div mat-dialog-title>
@@ -17,7 +17,7 @@
                 </div>
 
         
-                <div class="activity-data">
+                <div class="activity-header-data">
                     <div *ngIf="estado!='Nova' ; else newActivity">
                         <h5>Nome do Projeto</h5>
                         <h2>Nome da Atividade</h2>
@@ -32,77 +32,58 @@
                 </div>
             </div>
             <div class="buttons" [ngStyle]="{'margin-top': buttonsMarginTop}">
-                <button mat-flat-button class="header-button" [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}" >{{firstHeaderButton}}</button>
-                <button mat-flat-button class="header-button" id="second-header-button" [ngStyle]="{'background-image': secondButtonColor, 'display': displaySecondHeaderButton}">{{secondHeaderButton}}</button>
+                <button mat-flat-button class="header-button" [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}" (click)="firstButtonFunction()">{{firstHeaderButton}}</button>
+                <button mat-flat-button class="header-button" id="second-header-button" [ngStyle]="{'background-image': secondButtonColor, 'display': displaySecondHeaderButton}" (click)="secondButtonFunction()">{{secondHeaderButton}}</button>
             </div>
         </div>
     </div>
 
     <div mat-dialog-content class="activity-content">
-        <div class="activity-form" *ngIf="estado==='Nova' || editable; else activityData">
+        <div class="activity-form">
             <form>
-                <div>
-                    <mat-form-field class="description">
-                        <mat-label>Descrição da Atividade</mat-label>
-                        <textarea matInput class="description-field" rows="10"></textarea> 
-                    </mat-form-field>
-                </div>
-                <div class="second-line">
-                    <mat-form-field class="competences">
-                        <mat-label>Competências</mat-label>
-                        <input matInput>    <!-- TODO: get das competencias-->
-                    </mat-form-field>
-                    <mat-form-field class="complexities">
-                        <mat-label>Complexidade</mat-label>
-                        <mat-select>
-                            <mat-option value="Simples">Simples</mat-option>
-                            <mat-option value="Média">Média</mat-option>
-                            <mat-option value="Complexa">Complexa</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="dates">
-                        <mat-form-field class="date-picker" id="first">
-                            <mat-label>Data Limite Candidatura</mat-label>
-                            <input matInput [matDatepicker]="picker1">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-                            <mat-datepicker #picker1></mat-datepicker>
+                    <div>
+                        <mat-form-field class="description">
+                            <mat-label>Descrição da Atividade</mat-label>
+                            <textarea matInput class="description-field" rows="10" [disabled]="isDisabled">{{data.description}}</textarea> 
                         </mat-form-field>
-                        <mat-form-field class="date-picker" id="second">
-                            <mat-label>Data Limite para Entrega</mat-label>
-                            <input matInput [matDatepicker]="picker2">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-                            <mat-datepicker #picker2></mat-datepicker>
+                    </div>
+                    <div class="second-line">
+                        <mat-form-field class="competences">
+                            <mat-label>Competências</mat-label>
+                            <input matInput value="{{data.competences}}" [disabled]="isDisabled">   <!-- TODO: get das competencias-->
                         </mat-form-field>
-
-                        <mat-form-field class="date-picker">
-                            <mat-label>Data de Contestação</mat-label>
-                            <input matInput [matDatepicker]="picker3">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
-                            <mat-datepicker #picker3></mat-datepicker>
+                        <mat-form-field class="complexities">
+                            <mat-label>Complexidade</mat-label>
+                            <mat-select value="{{data.complexity}}" [disabled]="isDisabled">
+                                <mat-option *ngFor="let c of complexities" [value]="c">{{c}}</mat-option>
+                            </mat-select>
                         </mat-form-field>
-                </div>
-                <div class="students-data">
-                    <mat-form-field class="requester">
-                        <mat-label>Solicitante</mat-label>
-                        <input matInput>
-                    </mat-form-field>
-                    <mat-form-field class="executor">
-                        <mat-label>Executor</mat-label>
-                        <input matInput>
-                    </mat-form-field>
-                </div>
-
-
+                    </div>
+                    <div class="dates">
+                            <mat-form-field class="date-picker" id="first">
+                                <mat-label>Data Limite Candidatura</mat-label>
+                                <input matInput [matDatepicker]="picker1" [formControl]="parseDate(data.candidatureLimitDate)" [disabled]="isDisabled">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker1" [disabled]="isDisabled"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field class="date-picker" id="second">
+                                <mat-label>Data Limite para Entrega</mat-label>
+                                <input matInput [matDatepicker]="picker2" [formControl]="parseDate(data.submitLimitDate)" [disabled]="isDisabled">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+    
+                            <mat-form-field class="date-picker">
+                                <mat-label>Data de Contestação</mat-label>
+                                <input matInput [matDatepicker]="picker3" [formControl]="parseDate(data.contestDate)" [disabled]="isDisabled">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker3" [disabled]="isDisabled"></mat-datepicker-toggle>
+                                <mat-datepicker #picker3></mat-datepicker>
+                            </mat-form-field>
+                    </div> 
+                
             </form>
         </div>
 
-        <ng-template #activityData>
-            <p>dados da atividade</p>
-        </ng-template>
-       <!--<div class="comments-form">
-            <p>Comentario 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper neque sagittis commodo tristique. Suspendisse vulputate dignissim sapien, ac tempus urna sollicitudin id. Suspendisse nisl nisi, facilisis sed leo non, pulvinar viverra diam. Nunc laoreet ultrices leo. In quis dapibus purus. Cras vel justo nec massa rutrum tempus eget ut ante. Donec aliquam, justo sed efficitur volutpat, nibh quam maximus odio, vel congue quam leo eget turpis. Sed fringilla interdum purus et pellentesque.</p>
-        </div>-->
     </div>
     
 </div>

@@ -1,4 +1,10 @@
+fieldset {
+    border: none;
+}
 
+::ng-deep.mat-form-field-disabled{
+    color:black;
+}
 
 .activity-dialog {
     min-width: 80vw;
@@ -73,7 +79,7 @@
         margin-bottom: 4%;
     }
 
-    .activity-data {
+    .activity-header-data {
         width: 100% !important;
     }
 
@@ -89,13 +95,6 @@
         width: 100%;
     }
 
-    .requester {
-        width: 100%;
-    }
-    
-    .executor {
-        width: 100%;
-    }
 }
 
 @media (min-width: 1024px){
@@ -120,7 +119,7 @@
         margin-bottom: 4%;
     }
 
-    .activity-data {
+    .activity-header-data {
         width: 100% !important;
         margin-left: 2%;
     }
@@ -157,15 +156,6 @@
     
     .complexities {
         width: 32% !important;
-    }
-
-    .requester {
-        width: 66% !important;
-        padding-right: 2%;
-    }
-    
-    .executor {
-        width: 32%;
     }
 
 }
@@ -232,11 +222,6 @@
 
 #second {
     padding-right: 2%;
-}
-
-.students-data {
-    width: 100%;
-    justify-content: space-between;
 }
 
 
