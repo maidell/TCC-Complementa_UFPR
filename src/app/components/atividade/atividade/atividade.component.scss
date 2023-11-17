@@ -1,10 +1,10 @@
 fieldset {
     border: none;
+    margin: 0;
+    padding: 0;
 }
 
-::ng-deep.mat-form-field-disabled{
-    color:black;
-}
+
 
 .activity-dialog {
     min-width: 80vw;
@@ -12,7 +12,6 @@ fieldset {
 
 .header-button {
     color: white !important;
-    
     height: 48px;
 }
 
@@ -25,7 +24,6 @@ fieldset {
     display: flex;
     flex-direction: row;
     justify-content: end;
-    margin-bottom:-3%;
 }
 
 .close-button{
@@ -38,8 +36,58 @@ fieldset {
     font-weight: bold;
 }
 
+.comments {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-scroll {
+    height: 100%;
+    max-height: 100% !important;
+    overflow-y: auto;
+    resize: none;
+}
+
+.comment-panel{
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: auto;
+    resize: none;
+}
 
 
+.comment-content{
+    width:100%;
+
+}
+
+.comment{
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    margin:3% 2%;
+}
+
+.comment-text{
+    background-color: #DCE6EC;
+    border-radius: 12px;
+    padding: 1% 2%;
+}
+
+
+.comment-form .comment-form-field{
+    width:100%;
+    background-color: #EEF5F9;
+}
+
+
+.project-name {
+    font-size: 12px;
+}
+.activity-name {
+    font-size: 18px;
+}
 
 
 @media (max-width: 1023px) {
@@ -71,12 +119,11 @@ fieldset {
     }
 
     .status-button {
-        height: 64px;
-        width: 100%;
+        height: 32px;
+        width: 80%;
         padding: 13px 31px;
         color: white;
-        margin-right: 4%;
-        margin-bottom: 4%;
+        margin: auto;
     }
 
     .activity-header-data {
@@ -94,6 +141,16 @@ fieldset {
     .complexities {
         width: 100%;
     }
+
+    .activity-content{
+        background-color: #EEF5F9;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding-top: 1%;
+        
+    }
+    
 
 }
 
@@ -158,6 +215,16 @@ fieldset {
         width: 32% !important;
     }
 
+    .activity-content{
+        background-color: #EEF5F9;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100% !important;
+        padding-top: 1%;
+    }
+    
+
 }
 
 
@@ -180,19 +247,15 @@ fieldset {
 
 
 
-.activity-content{
-    background-color: #EEF5F9;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    padding-top: 1%;
-}
 
 
 
 .activity-form{
     padding-right:1%;
     width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 
@@ -203,7 +266,6 @@ fieldset {
 
 .description-field{
     width:100%;
-    //overflow: auto;
     resize: none;
 }
 
@@ -225,8 +287,3 @@ fieldset {
 }
 
 
-
-.comments-form{
-    background-color: #DCE6EC;
-    max-width: 35%;
-}

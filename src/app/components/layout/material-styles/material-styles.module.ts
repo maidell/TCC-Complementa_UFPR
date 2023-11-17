@@ -19,6 +19,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 
+
 @NgModule({
   declarations: [],
   imports: [
@@ -40,7 +41,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatToolbarModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
     ],
   exports: [
     ReactiveFormsModule,
@@ -60,7 +61,8 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatToolbarModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatList
   ]
 })
 export class MaterialStylesModule { }

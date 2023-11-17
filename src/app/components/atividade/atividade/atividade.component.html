@@ -7,20 +7,15 @@
         <div class="activity-header">
             <div class="left-items">
 
-
-
-
-
                 <div class="status" *ngIf="estado!='Nova'">
                     <button mat-flat-button class="status-button" [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
                         <h6 [ngStyle]="{'display': displayTimestamp}">Criada em dd/MM/yyy</h6>
                 </div>
 
-        
                 <div class="activity-header-data">
                     <div *ngIf="estado!='Nova' ; else newActivity">
-                        <h5>Nome do Projeto</h5>
-                        <h2>Nome da Atividade</h2>
+                        <div class="project-name">Nome do Projeto</div>
+                        <div class="activity-name">Nome da Atividade</div>
                     </div>
                     <ng-template #newActivity>
                         <h5>Nome do Projeto</h5>
@@ -40,11 +35,11 @@
 
     <div mat-dialog-content class="activity-content">
         <div class="activity-form">
-            <form>
+             <form>
                     <div>
                         <mat-form-field class="description">
                             <mat-label>Descrição da Atividade</mat-label>
-                            <textarea matInput class="description-field" rows="10" [disabled]="isDisabled">{{data.description}}</textarea> 
+                            <textarea matInput class="description-field" rows="15" [disabled]="isDisabled">{{data.description}}</textarea> 
                         </mat-form-field>
                     </div>
                     <div class="second-line">
@@ -67,7 +62,7 @@
                                 <mat-datepicker #picker1></mat-datepicker>
                             </mat-form-field>
                             <mat-form-field class="date-picker" id="second">
-                                <mat-label>Data Limite para Entrega</mat-label>
+                                <mat-label>Data da Entrega</mat-label>
                                 <input matInput [matDatepicker]="picker2" [formControl]="parseDate(data.submitLimitDate)" [disabled]="isDisabled">
                                 <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
                                 <mat-datepicker #picker2></mat-datepicker>
@@ -77,11 +72,35 @@
                                 <mat-label>Data de Contestação</mat-label>
                                 <input matInput [matDatepicker]="picker3" [formControl]="parseDate(data.contestDate)" [disabled]="isDisabled">
                                 <mat-datepicker-toggle matIconSuffix [for]="picker3" [disabled]="isDisabled"></mat-datepicker-toggle>
-                                <mat-datepicker #picker3></mat-datepicker>
+                                <mat-datepicker #picker3 [disabled]="isDisabled"></mat-datepicker>
                             </mat-form-field>
                     </div> 
                 
             </form>
+
+           
+        </div>
+
+        <div class="comments" [ngStyle]="{'display': displayComments}">
+                <div class="comment-panel">
+                    <div *ngFor="let c of comments" class="comment">
+                        <div class="comment-content">
+                            <div class="commentor">{{c.name}}</div>
+                            <div class="comment-text">{{c.content}}</div>
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div>
+                <form class="comment-form" #f="ngForm">
+                    <mat-form-field class="comment-form-field">
+                        <input matInput ngModel placeholder="Escreva um comentário" name="commentInput" (keydown.enter)="addComment(f)" [(ngModel)]="commentValue">
+                        <mat-icon matSuffix (click)="addComment(f)">send</mat-icon>
+                    </mat-form-field>
+                </form>
+            </div>
+
         </div>
 
     </div>
