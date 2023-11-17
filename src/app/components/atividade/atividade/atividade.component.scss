@@ -4,8 +4,6 @@ fieldset {
     padding: 0;
 }
 
-
-
 .activity-dialog {
     min-width: 80vw;
 }
@@ -16,17 +14,17 @@ fieldset {
 }
 
 #second-header-button {
-    margin-left:2%;
+    margin-left: 2%;
 }
 
 .close {
-    width:100%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: end;
 }
 
-.close-button{
+.close-button {
     border: none;
     background-color: white;
 }
@@ -40,7 +38,7 @@ fieldset {
     background-color: white;
     display: flex;
     flex-direction: column;
-    height: 35.59rem;  
+    height: 35.59rem;
 }
 
 .comment-scroll {
@@ -50,46 +48,43 @@ fieldset {
     resize: none;
 }
 
-.comment-panel{
+.comment-panel {
     height: 100% !important;
     max-height: 100% !important;
     overflow-y: auto;
     resize: none;
 }
 
-
-.comment-content{
-    width:100%;
+.comment-content {
+    width: 100%;
 
 }
 
-.comment{
+.comment {
     display: flex;
     flex-direction: row;
     justify-content: baseline;
-    margin:3% 2%;
+    margin: 3% 2%;
 }
 
-.comment-text{
+.comment-text {
     background-color: #DCE6EC;
     border-radius: 12px;
     padding: 1% 2%;
 }
 
-
-.comment-form .comment-form-field{
-    width:100%;
+.comment-form .comment-form-field {
+    width: 100%;
     background-color: #EEF5F9;
 }
-
 
 .project-name {
     font-size: 12px;
 }
+
 .activity-name {
     font-size: 18px;
 }
-
 
 @media (max-width: 1023px) {
 
@@ -99,9 +94,9 @@ fieldset {
         flex-direction: column;
     }
 
-    .left-items{
-        width:100%;
-        display:flex;
+    .left-items {
+        width: 100%;
+        display: flex;
         flex-direction: column;
     }
 
@@ -111,11 +106,12 @@ fieldset {
         flex-direction: row;
         justify-content: space-around;
     }
+
     .status {
         margin-top: -10%;
         width: 100%;
         display: flex;
-        flex-direction:column-reverse;
+        flex-direction: column-reverse;
         justify-content: end;
     }
 
@@ -138,40 +134,38 @@ fieldset {
     .competences {
         width: 100%;
     }
-    
+
     .complexities {
         width: 100%;
     }
 
-    .activity-content{
+    .activity-content {
         background-color: #EEF5F9;
         display: flex;
         flex-direction: column;
         width: 100%;
         padding-top: 1%;
-        
-    }
-    
 
+    }
 }
 
-@media (min-width: 1024px){
-    .activity-header{
-        width:100%;
-        display:flex;
+@media (min-width: 1024px) {
+    .activity-header {
+        width: 100%;
+        display: flex;
         flex-direction: row;
         justify-content: space-between;
     }
 
-    .left-items{
-        width:66%;
-        display:flex;
+    .left-items {
+        width: 66%;
+        display: flex;
         flex-direction: row;
     }
 
     .status-button {
-        width:100%;
-        height:70%;
+        width: 100%;
+        height: 70%;
         background-color: green;
         color: white;
         margin-bottom: 4%;
@@ -186,11 +180,11 @@ fieldset {
         padding-left: 2%;
         width: 50%;
         height: 70%;
-        margin:1%;
+        margin: 1%;
     }
-    
+
     .buttons {
-        margin:1%;
+        margin: 1%;
         width: 33%;
         display: flex;
         flex-direction: row;
@@ -202,23 +196,23 @@ fieldset {
         width: 100%;
         justify-content: space-between;
     }
-    
-    
+
+
     .date-picker {
         width: 32% !important;
-        
+
     }
 
     .competences {
         width: 66% !important;
         padding-right: 2%;
     }
-    
+
     .complexities {
         width: 32% !important;
     }
 
-    .activity-content{
+    .activity-content {
         background-color: #EEF5F9;
         display: flex;
         flex-direction: row;
@@ -226,49 +220,34 @@ fieldset {
         height: 100% !important;
         padding-top: 1%;
     }
-    
-
 }
 
-
-
-.activity-field{
+.activity-field {
     width: 100%;
 }
 
 .activity-field-inner {
-    width:100%;
+    width: 100%;
 }
-
-
 
 .status h6 {
     text-align: center;
 }
 
-
-
-
-
-
-
-
-.activity-form{
-    padding-right:1%;
+.activity-form {
+    padding-right: 1%;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: space-between;
+    
+    
 }
 
-
-
-.description{
-    width:100%
+.description {
+    width: 100%
 }
 
-.description-field{
-    width:100%;
+.description-field {
+    width: 100%;
     resize: none;
 }
 
@@ -277,10 +256,6 @@ fieldset {
     justify-content: space-between;
 }
 
-
-
-
-
 #first {
     padding-right: 2%;
 }
@@ -288,5 +263,3 @@ fieldset {
 #second {
     padding-right: 2%;
 }
-
-
