@@ -40,6 +40,7 @@ fieldset {
     background-color: white;
     display: flex;
     flex-direction: column;
+    height: 35.59rem;  
 }
 
 .comment-scroll {
@@ -182,17 +183,19 @@ fieldset {
     }
 
     .status {
-
+        padding-left: 2%;
         width: 50%;
         height: 70%;
+        margin:1%;
     }
     
     .buttons {
-        margin-top:1%;
+        margin:1%;
         width: 33%;
         display: flex;
         flex-direction: row;
         justify-content: end;
+        padding-right: 1%;
     }
 
     .dates {

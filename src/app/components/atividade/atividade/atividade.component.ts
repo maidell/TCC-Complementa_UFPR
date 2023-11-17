@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -265,8 +265,18 @@ export class AtividadeComponent {
     return dateParsed;
   }
 
+  @ViewChild('commentPanel') commentPanel!: ElementRef;
+  scrollParaUltimoComentario() {
+    try {
+      const commentPanel = this.commentPanel.nativeElement;
+      commentPanel.scrollTop = commentPanel.scrollHeight;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   addComment(f: NgForm){
+    
     var commentContent: string =f.value.commentInput;
     if(commentContent!= ''){
       var newComment={name:"Teste 1", content:commentContent}
@@ -274,6 +284,5 @@ export class AtividadeComponent {
       this.comments.push(newComment);
       this.commentValue='';
     }
-
   }
 }
