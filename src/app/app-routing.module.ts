@@ -26,7 +26,7 @@ const routes: Routes = [
     component: HomeAlunoComponent
   },
   {
-    path: 'aluno/editar/:id',
+    path: 'aluno/editar', //removi o :id
     component: EditarAlunoComponent
   },
   {
@@ -34,8 +34,12 @@ const routes: Routes = [
     component: AutocadastroComponent
   },
   {
+    path: 'ADMIN',
+    redirectTo: 'admin/home'
+  },
+  {
     path: 'admin',
-    component: HomeUsuarioComponent
+    redirectTo: 'admin/home'
   },
   {
     path: 'admin/home',

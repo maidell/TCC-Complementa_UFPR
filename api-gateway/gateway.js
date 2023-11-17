@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser')
 const helmet = require('helmet');
 
-//setting up your port
+//Configuração da porta
 const PORT = process.env.PORT;
 const app = express();
 
@@ -32,7 +32,6 @@ function verifyJWT(req, res, next) {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
     if (err)
       return res.status(500).json({ auth: false, message: 'Falha ao autenticar o token.' });
-    // se tudo estiver ok, salva no request para uso posterior
     req.userId = decoded.id;
     next();
   });
@@ -78,6 +77,7 @@ const authServiceProxy = httpProxy('http://localhost:5000', {
           telefone: objBody.telefone,
           papel: objBody.papel
         };
+        console.log(objRet.email);
         return (
           userRes
             .status(200)
@@ -89,7 +89,7 @@ const authServiceProxy = httpProxy('http://localhost:5000', {
       }
     } catch (error) {
       console.log(`Erro Autenticação: ${error}`);
-      return userRes.status(401).json({ message: "Login inválido!" });
+      return userRes.status(500).json({ message: "Erro ao processar a autenticação." });
     }
   }
 });

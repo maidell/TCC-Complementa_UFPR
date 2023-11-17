@@ -3,7 +3,7 @@ import { Usuario } from "./usuario.model";
 
 export class Aluno extends Usuario {
   public grr: string = "";
-  //public graduacao!: Graduacao;
+  public graduacao!: Graduacao;
 
   constructor(
     id?: number,
@@ -12,12 +12,12 @@ export class Aluno extends Usuario {
     telefone?: string,
     senha?: string,
     papel?: string,
-    grr?: string//,
-    //graduacao?: Graduacao
+    grr?: string,
+    graduacao?: Graduacao
   ) {
     super(id, nome, email, telefone, senha, papel);
     if (grr) this.grr = grr;
-    //if (graduacao) this.graduacao = graduacao;
+    if (graduacao) this.graduacao = graduacao;
   }
   
 }

@@ -12,7 +12,8 @@ public enum Papel {
     MONITOR(2),
     ORIENTADOR(3),
     COORDENADOR(4),
-    SERVIDOR_COORDENADOR(5);
+    SERVIDOR_COORDENADOR(5),
+	ADMIN(6);
 
     @Id
     private int valor;

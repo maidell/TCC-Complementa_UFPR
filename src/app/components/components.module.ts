@@ -8,6 +8,9 @@ import { AuthModule } from './auth/auth.module';
 import { LayoutModule } from './layout/layout.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
+import { AtividadeComponent } from './atividade/atividade/atividade.component';
+import { AtividadeModule } from './atividade/atividade.module';
+
 
 @NgModule({
   declarations: [
@@ -21,6 +24,7 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
     LayoutModule,
     UsuarioModule,
     MaterialStylesModule,
+    AtividadeModule
 
   ],
 

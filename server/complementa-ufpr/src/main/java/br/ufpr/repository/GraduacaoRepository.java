@@ -8,7 +8,7 @@ import br.ufpr.model.Graduacao;
 
 public interface GraduacaoRepository extends JpaRepository<Graduacao, Long> {
 	
-	Optional<Graduacao> findById(String id);
+	Optional<Graduacao> findById(Long id);
 	
     public long count();
     

@@ -1,0 +1,223 @@
+
+
+.activity-dialog {
+    min-width: 80vw;
+}
+
+.header-button {
+    color: white !important;
+    
+    height: 48px;
+}
+
+#second-header-button {
+    margin-left:2%;
+}
+
+.close {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin-bottom:-3%;
+}
+
+.close-button{
+    border: none;
+    background-color: white;
+}
+
+.close-button-icon {
+    color: red;
+    font-weight: bold;
+}
+
+
+
+
+
+@media (max-width: 1023px) {
+
+    .activity-header {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .left-items{
+        width:100%;
+        display:flex;
+        flex-direction: column;
+    }
+
+
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .status {
+        margin-top: -10%;
+        width: 100%;
+        display: flex;
+        flex-direction:column-reverse;
+        justify-content: end;
+    }
+
+    .status-button {
+        height: 64px;
+        width: 100%;
+        padding: 13px 31px;
+        color: white;
+        margin-right: 4%;
+        margin-bottom: 4%;
+    }
+
+    .activity-data {
+        width: 100% !important;
+    }
+
+}
+
+@media (min-width: 1024px){
+    .activity-header{
+        width:100%;
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .left-items{
+        width:66%;
+        display:flex;
+        flex-direction: row;
+    }
+
+    .status-button {
+        width:100%;
+        height:70%;
+        background-color: green;
+        color: white;
+        margin-bottom: 4%;
+    }
+
+    .activity-data {
+        width: 100% !important;
+        margin-left: 2%;
+    }
+
+    .status {
+
+        width: 50%;
+        height: 70%;
+    }
+    
+    .buttons {
+        margin-top:1%;
+        width: 33%;
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+    }
+
+
+}
+
+
+
+.activity-field{
+    width: 100%;
+}
+
+.activity-field-inner {
+    width:100%;
+}
+
+
+
+.status h6 {
+    text-align: center;
+}
+
+
+
+
+
+.activity-content{
+    background-color: #EEF5F9;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-top: 1%;
+}
+
+
+
+.activity-form{
+    width:65% !important;
+    padding-right:1%;
+}
+
+
+
+.description{
+    width:100%
+}
+
+.description-field{
+    width:100%;
+    //overflow: auto;
+    resize: none;
+}
+
+.second-line {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.competences {
+    width: 66% !important;
+    padding-right: 2%;
+}
+
+.complexities {
+    width: 32% !important;
+}
+
+.dates {
+    width: 100%;
+    justify-content: space-between;
+}
+
+
+.date-picker {
+    width: 32% !important;
+    
+}
+
+#first {
+    padding-right: 2%;
+}
+
+#second {
+    padding-right: 2%;
+}
+
+.students-data {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.requester {
+    width: 66% !important;
+    padding-right: 2%;
+}
+
+.executor {
+    width: 32%;
+}
+
+.comments-form{
+    background-color: #DCE6EC;
+    max-width: 35%;
+}

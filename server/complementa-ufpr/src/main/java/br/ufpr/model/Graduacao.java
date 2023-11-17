@@ -39,11 +39,15 @@ public class Graduacao implements Serializable{
     public Graduacao() {
     }
 
-    public Graduacao(String nome, Coordenador coordenador, List<Competencia> competencias) {
-        this.nome = nome;
-        this.coordenador = coordenador;
-        this.competencias = competencias;
-    }
+	public Graduacao(Long id, String nome, Coordenador coordenador, List<ServidorCoordenador> servidoresCoordenadores,
+			List<Competencia> competencias) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.coordenador = coordenador;
+		this.servidoresCoordenadores = servidoresCoordenadores;
+		this.competencias = competencias;
+	}
 
 	public Long getId() {
 		return id;
@@ -88,5 +92,11 @@ public class Graduacao implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+    @Override
+    public String toString() {
+        return "Graduacao [id=" + getId() + ", nome=" + getNome() + ", coordenador=" + getCoordenador() +
+        		", servidoresCoordenadores=" + getServidoresCoordenadores() + ", competencias=" + getCompetencias() + "]";
+    }
 
 }
