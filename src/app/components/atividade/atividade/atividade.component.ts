@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-atividade',
@@ -10,9 +10,12 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class AtividadeComponent {
 
-  estado: string ='Em Execução'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+
   
-  canEdit=false; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
+
+  estado: string ='Nova'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+  
+  canEdit=true; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
   hasReport=false; // se possui relatorio de conclusão ou não
   canApproveContest=true; // pode ou não aprovar a contestação
 
@@ -35,7 +38,7 @@ export class AtividadeComponent {
   displayTimestamp = '';
   isDisabled=true;
 
-  displayComments='';
+  displayComments='none';
 
   comments=[
     {name:'Leonardo Hortmann', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper.'},
@@ -62,8 +65,17 @@ export class AtividadeComponent {
 
   commentValue='';
 
+  activityForm = new FormGroup({
+    description: new FormControl,
+    competences: new FormControl,
+    complexities: new FormControl,
+    candidatureDate: new FormControl,
+    submitDate: new FormControl,
+    contestDate: new FormControl
+  });
 
-  constructor(public dialogRef: MatDialogRef<AtividadeComponent>) {}
+
+  constructor() {}
 
   
   
@@ -172,6 +184,7 @@ export class AtividadeComponent {
   setContent(){
     switch(this.estado){
       case 'Nova':
+        this.activityForm.enabled;
         this.isDisabled=false;
         break;
       case 'Aberta':
@@ -184,18 +197,34 @@ export class AtividadeComponent {
           contestDate:""
         }
         this.displayComments='none';
+        this.activityForm.disable();
 
         break;
       case 'Em Execução':
         this.activityFormWidth='65%';
         this.commentsFormWidth='35%';
+        this.activityForm.setValue({
+          description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
+          competences:["Competência 1", "Competência 2", "Competência 3"],
+          complexities:"Média",
+          candidatureDate:"13/11/2023",
+          submitDate:"03/12/2023",
+          contestDate:"15/11/2023"
+        });
         this.data={
           description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
           competences:["Competência 1", "Competência 2", "Competência 3"],
           complexity:"Média",
           candidatureLimitDate:"13/11/2023",
           submitLimitDate:"03/12/2023",
-          contestDate:""
+          contestDate:"15/11/2023"
+        };
+        this.activityForm.disable();
+
+        if (!this.canEdit){
+          this.displaySecondHeaderButton='';
+          this.secondHeaderButton='Contestar Complexidade';
+          this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
         }
         break;
       case 'Carga Horária Contestada':
@@ -231,10 +260,6 @@ export class AtividadeComponent {
 
 
   }
-  onNoClick(): void {
-    console.log("entrou na função de fechar");
-    this.dialogRef.close();
-  }
 
   editActivity(){
     if (this.canEdit){
@@ -257,12 +282,11 @@ export class AtividadeComponent {
 
 
   }
-
   parseDate(date: string){
-    var dateParts=date.split("/");
+      var dateParts=date.split("/");
 
-    var dateParsed= new FormControl(new Date(+dateParts[2], +dateParts[1]-1, +dateParts[0]));
-    return dateParsed;
+      var dateParsed= new FormControl(new Date(+dateParts[2], +dateParts[1]-1, +dateParts[0]));
+      return dateParsed;
   }
 
   @ViewChild('commentPanel') commentPanel!: ElementRef;

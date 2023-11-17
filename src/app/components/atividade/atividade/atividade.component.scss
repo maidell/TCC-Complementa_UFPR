@@ -105,10 +105,10 @@ fieldset {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+        padding:1% 2%;
     }
 
     .status {
-        margin-top: -10%;
         width: 100%;
         display: flex;
         flex-direction: column-reverse;
@@ -125,6 +125,7 @@ fieldset {
 
     .activity-header-data {
         width: 100% !important;
+        margin: 5% 2%;
     }
 
     .date-picker {

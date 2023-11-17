@@ -1,11 +1,10 @@
 <div class="activity-dialog">
     <div class="close">
-        <button mat-dialog-close class="close-button" (click)="onNoClick()"><mat-icon
+        <button mat-dialog-close class="close-button"><mat-icon
                 class="close-button-icon">close</mat-icon></button>
     </div>
-
-
     <div class="activity-header">
+
         <div class="left-items">
 
             <div class="status" *ngIf="estado!='Nova'">
@@ -40,23 +39,23 @@
 
     <div mat-dialog-content class="activity-content">
         <div class="activity-form">
-            <form>
+            <form [formGroup]="activityForm">
                 <div>
                     <mat-form-field class="description">
                         <mat-label>Descrição da Atividade</mat-label>
                         <textarea matInput class="description-field" rows="15"
-                            [disabled]="isDisabled">{{data.description}}</textarea>
+                            formControlName="description">{{data.description}}</textarea>
                     </mat-form-field>
                 </div>
                 <div class="second-line">
                     <mat-form-field class="competences">
                         <mat-label>Competências</mat-label>
-                        <input matInput value="{{data.competences}}" [disabled]="isDisabled">
+                        <input matInput value="{{data.competences}}" formControlName="competences">
                         <!-- TODO: get das competencias-->
                     </mat-form-field>
                     <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
-                        <mat-select value="{{data.complexity}}" [disabled]="isDisabled">
+                        <mat-select value="{{data.complexity}}" formControlName="complexities">
                             <mat-option *ngFor="let c of complexities" [value]="c">{{c}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -64,25 +63,20 @@
                 <div class="dates">
                     <mat-form-field class="date-picker" id="first">
                         <mat-label>Data Limite Candidatura</mat-label>
-                        <input matInput [matDatepicker]="picker1" [formControl]="parseDate(data.candidatureLimitDate)"
-                            [disabled]="isDisabled">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker1"
-                            [disabled]="isDisabled"></mat-datepicker-toggle>
+                        <input matInput [matDatepicker]="picker1" formControlName="candidatureDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
                     </mat-form-field>
                     <mat-form-field class="date-picker" id="second">
                         <mat-label>Data da Entrega</mat-label>
-                        <input matInput [matDatepicker]="picker2" [formControl]="parseDate(data.submitLimitDate)"
-                            [disabled]="isDisabled">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker2"
-                            [disabled]="isDisabled"></mat-datepicker-toggle>
+                        <input matInput [matDatepicker]="picker2" formControlName="submitDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field class="date-picker">
                         <mat-label>Data de Contestação</mat-label>
-                        <input matInput [matDatepicker]="picker3" [formControl]="parseDate(data.contestDate)"
-                            [disabled]="isDisabled">
+                        <input matInput [matDatepicker]="picker3" formControlName="contestDate">
                         <mat-datepicker-toggle matIconSuffix [for]="picker3"
                             [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker3 [disabled]="isDisabled"></mat-datepicker>

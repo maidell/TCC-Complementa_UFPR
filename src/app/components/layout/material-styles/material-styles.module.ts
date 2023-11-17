@@ -7,7 +7,6 @@ import { MatCheckboxModule} from '@angular/material/checkbox'
 import {MatIconModule} from '@angular/material/icon';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
@@ -16,11 +15,29 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatList, MatListModule} from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatSelectModule} from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
+import {MatDialogModule} from '@angular/material/dialog';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 
+const MY_DATE_FORMAT = {
+  parse: {
+    dateInput: 'DD/MM/YYYY', // this is how your date will be parsed from Input
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY', // this is how your date will get displayed on the Input
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @NgModule({
+  
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT }
+  ],
   declarations: [],
   imports: [
     CommonModule,
@@ -31,7 +48,6 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatIconModule,
     BrowserAnimationsModule,
     MatAutocompleteModule,
-    MatDialogModule,
     MatInputModule,
     MatGridListModule,
     MatCardModule,
@@ -41,7 +57,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatToolbarModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    MatDialogModule
     ],
   exports: [
     ReactiveFormsModule,
@@ -51,7 +67,6 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatIconModule,
     BrowserAnimationsModule,
     MatAutocompleteModule,
-    MatDialogModule,
     MatInputModule,
     MatGridListModule,
     MatCardModule,
@@ -61,8 +76,10 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatToolbarModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule,
-    MatList
+    MatList,
+    MatDialogModule
   ]
 })
-export class MaterialStylesModule { }
+export class MaterialStylesModule {
+  
+ }
