@@ -11,10 +11,11 @@ import { ProjetosComponent } from './components/layout/projetos/projetos.compone
 import { AtividadesComponent } from './components/layout/atividades/atividades.component';
 import { ContestacoesComponent } from './components/layout/contestacoes/contestacoes.component';
 import { GraduacoesComponent } from './components/layout/graduacoes/graduacoes.component';
-import { Complexidade } from './shared';
+import { Competencia, Complexidade } from './shared';
 import { ComplexidadesComponent } from './components/layout/complexidades/complexidades.component';
 import { ServidoresComponent } from './components/layout/servidores/servidores.component';
 import { MeuPerfilComponent } from './components/layout/meu-perfil/meu-perfil.component';
+import { CompetenciasComponent } from './components/layout/competencias/competencias.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,10 @@ const routes: Routes = [
   {
     path: 'graduacoes/listar',
     component: GraduacoesComponent
+  },
+  {
+    path: 'competencias/listar',
+    component: CompetenciasComponent
   },
   {
     path: 'complexidades/listar',

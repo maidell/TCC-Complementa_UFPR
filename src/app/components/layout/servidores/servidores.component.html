@@ -1,1 +1,3 @@
-<p>servidores works!</p>
+<ng-container *ngIf="hasObject()">
+	<app-warning [Description]="'Nenhum servidor cadastrado'"></app-warning>
+</ng-container>

@@ -2,19 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { TitleService } from '../../title.service';
 
 @Component({
-  selector: 'app-servidores',
-  templateUrl: './servidores.component.html',
-  styleUrls: ['./servidores.component.scss']
+  selector: 'app-competencias',
+  templateUrl: './competencias.component.html',
+  styleUrls: ['./competencias.component.scss']
 })
-export class ServidoresComponent implements OnInit {
+export class CompetenciasComponent implements OnInit{
   constructor(private titleService: TitleService) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Servidores');
+    this.titleService.setTitle('Competencias');
   }
   objections: String[] = ["aaaa", "bbbb", "cccc"];
 
-  hasObject(): boolean {
+  hasObjections(): boolean {
     return this.objections.length > 0;
   }
+
 }

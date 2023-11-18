@@ -18,6 +18,7 @@ import { GraduacoesComponent } from './graduacoes/graduacoes.component';
 import { ComplexidadesComponent } from './complexidades/complexidades.component';
 import { ServidoresComponent } from './servidores/servidores.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
+import { CompetenciasComponent } from './competencias/competencias.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
     GraduacoesComponent,
     ComplexidadesComponent,
     ServidoresComponent,
-    MeuPerfilComponent
+    MeuPerfilComponent,
+    CompetenciasComponent
   ],
   imports: [
     CommonModule,

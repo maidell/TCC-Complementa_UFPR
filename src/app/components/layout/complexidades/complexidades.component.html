@@ -1,1 +1,3 @@
-<p>complexidades works!</p>
+<ng-container *ngIf="hasObject()">
+	<app-warning [Description]="'Nenhuma complexidade cadastrada'"></app-warning>
+</ng-container>

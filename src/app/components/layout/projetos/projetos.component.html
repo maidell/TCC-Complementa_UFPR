@@ -1,10 +1,6 @@
 <!-- /colocar um ngIf para verificar se o usuario tem projetos -->
-<ng-container *ngIf="!hasProjects()">
-	<app-warning [Description]="'nenhum projeto'"></app-warning>
-</ng-container>
-
 <div class="cards-projects">
-	<div class="let-of-cards">
+	<div class="let-of-cards" *ngIf="hasProjects()">
 		<ng-container *ngFor="let project of obs | async">
 			<app-rect-card [nome]="project.nome" [status]="project.status!" [firstLabel]="tipoLabel" [id]="project.id!"
 				[firstValue]="project.tipo!" [secondLabel]="cursoLabel" [secondValue]="project.curso!.nome"
@@ -12,6 +8,11 @@
 				[nameButtonRect]="nameButtonRect"></app-rect-card>
 		</ng-container>
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+	</div>
+	<div class="warning-card" *ngIf="!hasProjects()">
+		<ng-container>
+			<app-warning [Description]="'Você não participa de nenhum projeto'"></app-warning>
+		</ng-container>
 	</div>
 	<div class="card-square">
 		<app-warn-card [TitleWarning]="TitleWarning" [Description]="Description" [Button]="Button"></app-warn-card>
