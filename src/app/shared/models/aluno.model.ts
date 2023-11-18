@@ -19,5 +19,5 @@ export class Aluno extends Usuario {
     if (grr) this.grr = grr;
     if (graduacao) this.graduacao = graduacao;
   }
-  
+
 }

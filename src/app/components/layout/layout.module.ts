@@ -14,6 +14,10 @@ import { WarningComponent } from './warning/warning.component';
 import { ContestacoesComponent } from './contestacoes/contestacoes.component';
 import { TitleComponent } from './title/title.component';
 import { ConsultasModule } from './consultas/consultas.module';
+import { GraduacoesComponent } from './graduacoes/graduacoes.component';
+import { ComplexidadesComponent } from './complexidades/complexidades.component';
+import { ServidoresComponent } from './servidores/servidores.component';
+import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,11 @@ import { ConsultasModule } from './consultas/consultas.module';
     AtividadesComponent,
     WarningComponent,
     ContestacoesComponent,
-    TitleComponent
+    TitleComponent,
+    GraduacoesComponent,
+    ComplexidadesComponent,
+    ServidoresComponent,
+    MeuPerfilComponent
   ],
   imports: [
     CommonModule,
