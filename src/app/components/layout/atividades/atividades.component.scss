@@ -7,6 +7,9 @@
 	justify-content: center;
 }
 
+mat-paginator {
+	background-color: transparent!important;
+}
 
 .error-img {
 	img.mat-card-image-responsive {
@@ -61,5 +64,5 @@
 }
 
 app-rect-card {
-	margin-bottom: 20px;
+	margin-bottom: 12px;
 }

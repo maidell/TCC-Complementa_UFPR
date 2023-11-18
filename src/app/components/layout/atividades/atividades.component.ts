@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TitleService } from '../../title.service';
 import { Atividade } from 'src/app/shared';
+import { MatPaginator } from '@angular/material/paginator';
+import { Observable } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -8,27 +11,7 @@ import { Atividade } from 'src/app/shared';
   templateUrl: './atividades.component.html',
   styleUrls: ['./atividades.component.scss']
 })
-export class AtividadesComponent implements OnInit {
-  constructor(private titleService: TitleService) { }
-  ngOnInit(): void {
-    this.titleService.setTitle('Atividades');
-  }
-
-  hasActivities(): boolean {
-    return this.atividades.length > 0;
-  }
-
-  nameButtonRect:string = "Detalhes!";
-  dataCriacaoLabel: string = "Data de Criação";
-  dataLimiteCandidaturaLabel: string = "Data de Limite para Candidatura";
-  dataConclusaoLabel: string = "Data de Conclusão";
-  dataContestacaoLabel: string = "Data de Contestação";
-
-  TitleWarning: string = "Aviso";
-  Description: string = "Verificar texto para apresentar de acordo com a role, no figma!";
-  Button: string = "Saiba mais";
-
-
+export class AtividadesComponent implements OnInit, OnDestroy {
 
   atividades: Atividade[] = [
 
@@ -36,7 +19,7 @@ export class AtividadesComponent implements OnInit {
       id: 1,
       nome: "Nome da Atividade",
       status: "Em aberto",
-      dataCriacao: new Date("2021-01-01"),
+      dataCriacao: new Date("2021-11-12"),
       dataLimiteCandidatura: new Date("2021-01-01"),
       dataConclusao: new Date("2021-01-01"),
     },
@@ -80,5 +63,43 @@ export class AtividadesComponent implements OnInit {
       dataLimiteCandidatura: new Date("2022-12-30"),
       dataConclusao: new Date("2023-01-15")
     }];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  obs!: Observable<any>;
+  dataSource!: MatTableDataSource<Atividade>;
+  constructor(private titleService: TitleService, private changeDetectorRef: ChangeDetectorRef) { }
+
+  ngOnInit(): void {
+    this.titleService.setTitle('Atividades');
+    this.dataSource = new MatTableDataSource<Atividade>(this.atividades);
+    this.changeDetectorRef.detectChanges();
+    this.dataSource.paginator = this.paginator;
+    this.obs = this.dataSource.connect();
+  }
+
+  ngOnDestroy() {
+    if (this.dataSource) {
+      this.dataSource.disconnect();
+    }
+  }
+
+  hasActivities(): boolean {
+    return this.atividades.length > 0;
+  }
+
+  nameButtonRect:string = "Detalhes!";
+  dataCriacaoLabel: string = "Data de Criação";
+  dataLimiteCandidaturaLabel: string = "Data de Limite para Candidatura";
+  dataConclusaoLabel: string = "Data de Conclusão";
+  dataContestacaoLabel: string = "Data de Contestação";
+
+  TitleWarning: string = "Aviso";
+  Description: string = "Verificar texto para apresentar de acordo com a role, no figma!";
+  Button: string = "Saiba mais";
+
+
+
+
+
 
 }
