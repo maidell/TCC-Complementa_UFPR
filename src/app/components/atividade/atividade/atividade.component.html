@@ -1,103 +1,114 @@
 <div class="activity-dialog">
     <div class="close">
-        <button mat-dialog-close class="close-button"><mat-icon class="close-button-icon">close</mat-icon></button>
+        <button mat-dialog-close class="close-button"><mat-icon
+                class="close-button-icon">close</mat-icon></button>
     </div>
+    <div class="activity-header">
 
-    <div mat-dialog-title>
-        <div class="activity-header">
-            <div class="left-items">
+        <div class="left-items">
 
-
-
-
-
-                <div class="status" *ngIf="estado!='Nova'">
-                    <button mat-flat-button class="status-button" [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
-                        <h6 [ngStyle]="{'display': displayTimestamp}">Criada em dd/MM/yyy</h6>
-                </div>
-
-        
-                <div class="activity-data">
-                    <div *ngIf="estado!='Nova' ; else newActivity">
-                        <h5>Nome do Projeto</h5>
-                        <h2>Nome da Atividade</h2>
-                    </div>
-                    <ng-template #newActivity>
-                        <h5>Nome do Projeto</h5>
-                        <mat-form-field class="activity-field">
-                            <mat-label>Nome da Atividade</mat-label>
-                            <input matInput class="activity-field-inner">
-                        </mat-form-field>
-                    </ng-template>
-                </div>
+            <div class="status" *ngIf="estado!='Nova'">
+                <button mat-flat-button class="status-button"
+                    [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
+                <h6 [ngStyle]="{'display': displayTimestamp}">Criada em dd/MM/yyy</h6>
             </div>
-            <div class="buttons">
-                <button mat-flat-button class="header-button" [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}">{{firstHeaderButton}}</button>
-                <button mat-flat-button class="header-button" id="second-header-button" [ngStyle]="{'background-image': secondButtonColor, 'display': displaySecondHeaderButton}">{{secondHeaderButton}}</button>
+
+            <div class="activity-header-data">
+                <div *ngIf="estado!='Nova' ; else newActivity">
+                    <div class="project-name">Nome do Projeto</div>
+                    <div class="activity-name">Nome da Atividade</div>
+                </div>
+                <ng-template #newActivity>
+                    <h5>Nome do Projeto</h5>
+                    <mat-form-field class="activity-field">
+                        <mat-label>Nome da Atividade</mat-label>
+                        <input matInput class="activity-field-inner">
+                    </mat-form-field>
+                </ng-template>
             </div>
         </div>
+        <div class="buttons" [ngStyle]="{'margin-top': buttonsMarginTop}">
+            <button mat-flat-button class="header-button"
+                [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}"
+                (click)="firstButtonFunction()">{{firstHeaderButton}}</button>
+            <button mat-flat-button class="header-button" id="second-header-button"
+                [ngStyle]="{'background-image': secondButtonColor, 'display': displaySecondHeaderButton}"
+                (click)="secondButtonFunction()">{{secondHeaderButton}}</button>
+        </div>
     </div>
+
     <div mat-dialog-content class="activity-content">
         <div class="activity-form">
-            <form>
-                <div >
+            <form [formGroup]="activityForm">
+                <div>
                     <mat-form-field class="description">
                         <mat-label>Descrição da Atividade</mat-label>
-                        <textarea matInput class="description-field" rows="10"></textarea> 
+                        <textarea matInput class="description-field" rows="15"
+                            formControlName="description">{{data.description}}</textarea>
                     </mat-form-field>
                 </div>
                 <div class="second-line">
                     <mat-form-field class="competences">
                         <mat-label>Competências</mat-label>
-                        <input matInput>    <!-- TODO: get das competencias-->
+                        <input matInput value="{{data.competences}}" formControlName="competences">
+                        <!-- TODO: get das competencias-->
                     </mat-form-field>
                     <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
-                        <mat-select>
-                            <mat-option value="Simples">Simples</mat-option>
-                            <mat-option value="Média">Média</mat-option>
-                            <mat-option value="Complexa">Complexa</mat-option>
+                        <mat-select value="{{data.complexity}}" formControlName="complexities">
+                            <mat-option *ngFor="let c of complexities" [value]="c">{{c}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="dates">
-                        <mat-form-field class="date-picker" id="first">
-                            <mat-label>Data Limite Candidatura</mat-label>
-                            <input matInput [matDatepicker]="picker">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-                        <mat-form-field class="date-picker" id="second">
-                            <mat-label>Data Limite para Entrega</mat-label>
-                            <input matInput [matDatepicker]="picker">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-
-                        <mat-form-field class="date-picker">
-                            <mat-label>Data de Contestação</mat-label>
-                            <input matInput [matDatepicker]="picker">
-                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-                </div>
-                <div class="students-data">
-                    <mat-form-field class="requester">
-                        <mat-label>Solicitante</mat-label>
-                        <input matInput>
+                    <mat-form-field class="date-picker" id="first">
+                        <mat-label>Data Limite Candidatura</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="candidatureDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
                     </mat-form-field>
-                    <mat-form-field class="executor">
-                        <mat-label>Executor</mat-label>
-                        <input matInput>
+                    <mat-form-field class="date-picker" id="second">
+                        <mat-label>Data da Entrega</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="submitDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="date-picker">
+                        <mat-label>Data de Contestação</mat-label>
+                        <input matInput [matDatepicker]="picker3" formControlName="contestDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker3"
+                            [disabled]="isDisabled"></mat-datepicker-toggle>
+                        <mat-datepicker #picker3 [disabled]="isDisabled"></mat-datepicker>
                     </mat-form-field>
                 </div>
-
 
             </form>
+
         </div>
-       <!--<div class="comments-form">
-            <p>Comentario 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ullamcorper neque sagittis commodo tristique. Suspendisse vulputate dignissim sapien, ac tempus urna sollicitudin id. Suspendisse nisl nisi, facilisis sed leo non, pulvinar viverra diam. Nunc laoreet ultrices leo. In quis dapibus purus. Cras vel justo nec massa rutrum tempus eget ut ante. Donec aliquam, justo sed efficitur volutpat, nibh quam maximus odio, vel congue quam leo eget turpis. Sed fringilla interdum purus et pellentesque.</p>
-        </div>-->
+
+        <div class="comments" [ngStyle]="{'display': displayComments}">
+            <div class="comment-panel">
+                <div *ngFor="let c of comments" class="comment">
+                    <div class="comment-content">
+                        <div class="commentor">{{c.name}}</div>
+                        <div class="comment-text">{{c.content}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <form class="comment-form" #f="ngForm">
+                    <mat-form-field class="comment-form-field">
+                        <input matInput ngModel placeholder="Escreva um comentário" name="commentInput"
+                            (keydown.enter)="addComment(f)" [(ngModel)]="commentValue">
+                        <mat-icon matSuffix (click)="addComment(f)">send</mat-icon>
+                    </mat-form-field>
+                </form>
+            </div>
+
+        </div>
+
     </div>
-    
+
 </div>

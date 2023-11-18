@@ -18,3 +18,11 @@ body {
     margin: 0;
     font-family: Poppins, sans-serif!important;
 }
+
+.mat-mdc-select-disabled{
+    color:black !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input {
+    color: black !important;
+}

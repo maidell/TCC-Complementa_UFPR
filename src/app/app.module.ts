@@ -10,6 +10,7 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
 import { AuthModule } from './components/auth/auth.module';
 import { LayoutModule } from './components/layout/layout.module';
 import { MainComponent } from './main/main.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
@@ -33,7 +34,9 @@ import { MainComponent } from './main/main.component';
     FormsModule
 
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

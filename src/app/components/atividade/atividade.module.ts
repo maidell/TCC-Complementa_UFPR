@@ -15,5 +15,6 @@ import { AtividadeComponent } from './atividade/atividade.component';
     LayoutModule,
     FormsModule
   ],
+  
 })
 export class AtividadeModule { }
