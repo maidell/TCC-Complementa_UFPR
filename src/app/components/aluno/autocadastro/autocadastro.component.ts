@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors} from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Aluno, Graduacao, senhaValidator } from 'src/app/shared';
@@ -15,11 +15,10 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 })
 export class AutocadastroComponent implements OnInit {
 
+  @ViewChild('formLogin') formAluno!: NgForm;
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
 
-  aluno!: Aluno;
-
-  formAluno!: FormGroup;
+  aluno: Aluno = new Aluno();
   senha: string = '';
   confirmarSenha: string = '';
   senhaValida: boolean = false;
@@ -27,7 +26,8 @@ export class AutocadastroComponent implements OnInit {
   mostrarConfirmarSenha: boolean = false;
   grrValido: boolean = true;
   myControl = new FormControl();
-  options!: Graduacao[];
+  options: Graduacao[] = [];
+  graduacao!: Graduacao;
   selectedValue: string = '';
   filteredOptions!: Observable<Graduacao[]>;
   hide: boolean=true;
@@ -36,40 +36,35 @@ export class AutocadastroComponent implements OnInit {
     private router: Router,
     private alunoService: AlunoService,
     public dialog: MatDialog,
-  ) {
-    this.formAluno = new FormGroup({
-      nome: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      email: new FormControl('', [Validators.required, Validators.minLength(2), Validators.pattern('^[a-zA-Z0-9._%+-]+@ufpr\.br$')]),
-      curso: new FormControl('', Validators.required),
-      grr: new FormControl(''),
-      telefone: new FormControl('', [Validators.required, Validators.minLength(11)]),
-      senha: new FormControl('', [Validators.required, Validators.minLength(8), senhaValidator]),
-      confirmarSenha: new FormControl('', Validators.required),
-    }, { validators: this.verificarSenha.bind(this) });
-  }  
+  ) {}  
 
   ngOnInit(): void {
     this.aluno = new Aluno();
     this.listarCursos();
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
+    // this.filteredOptions = this.myControl.valueChanges.pipe(
+    //   startWith(''),
+    //   map(value => this._filter(value || '')),
+    // );
   }
 
   private _filter(value: string): Graduacao[] {
     const filterValue = value.toLowerCase();
-
+  
+    if (!this.options) {
+      return [];
+    }
+  
     return this.options.filter(option => option.nome.toLowerCase().includes(filterValue));
   }
 
 
-  autocadastrar(): void {
-    if (this.formAluno.valid) {
+  autocadastrar(formAluno: NgForm): void {
+    if (formAluno.valid) {
       this.aluno.senha = this.senha;
-      this.aluno.papel = "aluno";
+      this.aluno.papel = "ALUNO";
+      this.aluno.graduacao = this.graduacao;
       this.alunoService.autocadastrarAluno(this.aluno).subscribe(
-        (response: any) => {
+        (response) => {
           alert(`Um e-mail de confirmação foi enviado para ${response.email}`);
           this.router.navigate([""]);
         },
@@ -91,27 +86,22 @@ export class AutocadastroComponent implements OnInit {
     );
   }
 
-  verificarSenha(control: AbstractControl): ValidationErrors | null {
-    const senhaControl = control.get('senha');
-    const confirmarSenhaControl = control.get('confirmarSenha');
-  
-    if (!senhaControl || !confirmarSenhaControl) {
-      return { senhasNaoIguais: true }
+  verificarSenha() {
+    const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
+
+    if (
+      senhaRegex.test(this.senha) &&
+      this.senha === this.confirmarSenha
+    ) {
+      this.senhaValida = true;
+    } else {
+      this.senhaValida = false;
     }
-  
-    const senha = senhaControl.value;
-    const confirmarSenha = confirmarSenhaControl.value;
-  
-    return senha === confirmarSenha ? null : { senhasNaoIguais: true };
   }
 
   validarGRR() {
     const regex = /^20\d{6}$/;
     this.grrValido = regex.test(this.aluno.grr);
   }
-
-  displayFn(graduacao: Graduacao): string {
-    return graduacao && graduacao.nome ? graduacao.nome : '';
-}
 
 }

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.AlunoDTO;
 import br.ufpr.model.Aluno;
+import br.ufpr.model.Graduacao;
 import br.ufpr.repository.AlunoRepository;
+import br.ufpr.repository.GraduacaoRepository;
 import br.ufpr.helper.PasswordUtils;
 
 @CrossOrigin
@@ -24,6 +26,7 @@ public class AutocadastroREST {
 
 	@Autowired
 	private AlunoRepository repo;
+	private GraduacaoRepository repoGrad;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -34,11 +37,11 @@ public class AutocadastroREST {
 		try {
 			String salt = PasswordUtils.generateSalt();
 			aluno.setSalt(salt);
-			aluno.setSenha(PasswordUtils.hashPassword(aluno.getSenha(), salt));
+			aluno.setSenha(PasswordUtils.hashPassword(aluno.getSenha(), salt)); // Hashing a senha com o salt
 			Aluno aln = repo.save(mapper.map(aluno, Aluno.class));
 			Optional<Aluno> alnOpt = repo.findById(aln.getId());
 			if (!alnOpt.isPresent()) {
-				throw new Exception("Criação do aluno não foi realizada com sucesso");
+				throw new Exception("Criação do aluno não foi realizada com sucesso.");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(alnOpt.get(), AlunoDTO.class));
 		} catch (Exception e) {
