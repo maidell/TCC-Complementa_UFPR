@@ -7,7 +7,7 @@
 
         <div class="left-items">
 
-            <div class="status" *ngIf="estado!='Nova'">
+            <div class="status" *ngIf="displayStatus">
                 <button mat-flat-button class="status-button"
                     [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
                 <h6 [ngStyle]="{'display': displayTimestamp}">Criada em dd/MM/yyy</h6>
@@ -15,7 +15,7 @@
 
             <div class="activity-header-data">
                 <div *ngIf="estado!='Nova' ; else newActivity">
-                    <div class="project-name">Nome do Projeto</div>
+                    <div class="project-name">{{projectName}}</div>
                     <div class="activity-name">Nome da Atividade</div>
                 </div>
                 <ng-template #newActivity>
@@ -42,12 +42,12 @@
             <form [formGroup]="activityForm">
                 <div>
                     <mat-form-field class="description">
-                        <mat-label>Descrição da Atividade</mat-label>
+                        <mat-label>{{descriptionLabel}}</mat-label>
                         <textarea matInput class="description-field" rows="15"
                             formControlName="description">{{data.description}}</textarea>
                     </mat-form-field>
                 </div>
-                <div class="second-line">
+                <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
                     <mat-form-field class="competences">
                         <mat-label>Competências</mat-label>
                         <input matInput value="{{data.competences}}" formControlName="competences">
@@ -60,7 +60,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="dates">
+                <div class="dates" [ngStyle]="{'display': displayDates}">
                     <mat-form-field class="date-picker" id="first">
                         <mat-label>Data Limite Candidatura</mat-label>
                         <input matInput [matDatepicker]="picker1" formControlName="candidatureDate">
@@ -73,13 +73,21 @@
                         <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
-
-                    <mat-form-field class="date-picker">
-                        <mat-label>Data de Contestação</mat-label>
-                        <input matInput [matDatepicker]="picker3" formControlName="contestDate">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker3"
-                            [disabled]="isDisabled"></mat-datepicker-toggle>
-                        <mat-datepicker #picker3 [disabled]="isDisabled"></mat-datepicker>
+                </div>
+                <div class="conclusion-form" *ngIf="fillingReport">
+                    <mat-form-field style="width: 32%;">
+                        <mat-label>Anexo</mat-label>
+                        <button mat-icon-button matSuffix (click)="f_input.click()">
+                    <mat-icon>attach_file</mat-icon>
+                  </button>
+                        <input type="text" readonly matInput [formControl]="display" />
+                        <input
+                    type="file"
+                    multiple
+                    hidden
+                    #f_input
+                    (change)="f_input.files && handleFileInputChange(f_input.files)"
+                  />
                     </mat-form-field>
                 </div>
 
