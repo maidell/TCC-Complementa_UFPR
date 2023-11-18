@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormControlName, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
@@ -17,7 +17,7 @@ export class AtividadeComponent {
     {
       id: 1,
       nome: "Teste",
-      status: "Em Execução", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      status: "Nova", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
       dataContestacao: null,
@@ -92,28 +92,39 @@ export class AtividadeComponent {
     contestDate:""
   };
 
-  complexities=['Simples','Média','Complexa'];
+  exampleComplexities=['Simples','Média','Complexa'];
 
 
   commentForm!:FormGroup;
 
   commentValue='';
 
+  // esse formgroup serve pra ativar e desativar o form de acordo com o conteúdo. precisa ter os formcontrols dentro senão quebra
   activityForm = new FormGroup({
-    description: new FormControl,
-    competences: new FormControl,
-    complexities: new FormControl,
+    description:  new FormControl(""),
+    competences: new FormControl(['']),
+    complexities: new FormControl(''),
     candidatureDate: new FormControl,
     submitDate: new FormControl,
     contestDate: new FormControl
   });
+
+  // FormControl pra poder acessar o valor digitado no input
+  description: FormControl =  new FormControl("");
+  competences: FormControl = new FormControl(['']);
+  complexities: FormControl = new FormControl('');
+  candidatureDate: FormControl = new FormControl();
+  submitDate: FormControl = new FormControl();
+  contestDate: FormControl = new FormControl();
+  uploadFile: FormControl = new FormControl("");
+
   datePipe!: DatePipe;
 
   _snackBar!: MatSnackBar;
 
   fillingReport=false;
 
-  display: FormControl = new FormControl("");
+  
   file_store!: FileList;
   file_list: Array<string> = [];
 
@@ -139,7 +150,7 @@ export class AtividadeComponent {
     switch (this.estado){
       case 'Nova':  // tela de criação de atividades
         this.statusButtonColor='linear-gradient(#3473a3,#5b7ba5)';
-
+        this.displayStatus=false;
         this.buttonsMarginTop='3%';
         this.firstHeaderButton='Salvar';
         this.firstButtonColor='linear-gradient(#559958, #418856)';
@@ -247,6 +258,7 @@ export class AtividadeComponent {
           submitDate:new Date(Date.UTC(2023,0,11)),
           contestDate:new Date(Date.UTC(2023,0,11)),
         });
+        this.description.setValue("hfjshfkjsfhlkshlkjs");
         this.displayComments='none';
         this.activityForm.disable();
 
@@ -263,6 +275,7 @@ export class AtividadeComponent {
           submitDate:"03/12/2023",
           contestDate:"15/11/2023"
         });
+        this.description.setValue("fdhjksafhdkjafhkjldsahflkj");
         this.data={
           description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
           competences:["Competência 1", "Competência 2", "Competência 3"],
@@ -294,7 +307,7 @@ export class AtividadeComponent {
     }
     if (this.fillingReport){
       console.log("entrou na função do relatório");
-      this.handleSubmit();
+      this.sendFinalReport();
     }
 
 
@@ -390,7 +403,7 @@ export class AtividadeComponent {
     this.activityForm.enable();
     this.activityForm.setValue({
       description:"",
-      competences:"",
+      competences:[""],
       complexities:"",
       candidatureDate:"",
       submitDate:"",
@@ -405,22 +418,27 @@ export class AtividadeComponent {
     if (l.length) {
       const f = l[0];
       const count = l.length > 1 ? ` (+${l.length - 1} arquivos)` : "";
-      this.display.patchValue(`${f.name}${count}`);
+      this.uploadFile.patchValue(`${f.name}${count}`);
     } else {
-      this.display.patchValue("");
+      this.uploadFile.patchValue("");
     }
   }
 
-  handleSubmit(): void {
+  sendFinalReport(): void {
     var fd = new FormData();
     this.file_list = [];
-    for (let i = 0; i < this.file_store.length; i++) {
-      fd.append("files", this.file_store[i], this.file_store[i].name);
-      this.file_list.push(this.file_store[i].name);
+    if(this.file_store){
+
+      for (let i = 0; i < this.file_store.length; i++) {
+        fd.append("files", this.file_store[i], this.file_store[i].name);
+        this.file_list.push(this.file_store[i].name);
+      }
+      for (let i = 0; i < this.file_store.length; i++){
+        console.log(this.file_store[i]);
+        console.log(this.file_store[i].name);
+      }
     }
-    for (let i = 0; i < this.file_store.length; i++){
-      console.log(this.file_store[i]);
-      console.log(this.file_store[i].name);
-    }
+
+    console.log("valor do campo: " + this.description.value);
   }
 }
