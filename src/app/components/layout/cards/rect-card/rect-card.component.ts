@@ -5,15 +5,15 @@ import { Component, Input } from '@angular/core';
   templateUrl: './rect-card.component.html',
   styleUrls: ['./rect-card.component.scss']
 })
-export class RectCardComponent {
-  @Input() Title!: string;
-  @Input() Subtitle!: string;
-  @Input() firstLabel!: string;
-  @Input() firstValue!: string;
-  @Input() secondLabel!: string;
-  @Input() secondValue!: string;
-  @Input() thirdLabel!: string;
-  @Input() thirdValue!: string;
+export class RectCardComponent{
+  @Input() nome!: string;
+  @Input() status!: string;
+  @Input() dataCriacaoLabel!: string;
+  @Input() dataCriacao!: Date;
+  @Input() dataLimiteCandidaturaLabel!: string;
+  @Input() dataLimiteCandidatura!: Date;
+  @Input() dataConclusaoLabel!: string;
+  @Input() dataConclusao!: Date;
   @Input() Texto!: string;
   @Input() nameButtonRect!: string;
 }
