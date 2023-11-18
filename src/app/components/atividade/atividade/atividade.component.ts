@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -13,10 +14,10 @@ export class AtividadeComponent {
 
   
 
-  estado: string ='Nova'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+  estado: string ='Aberta'; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
   
-  canEdit=true; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
-  hasReport=false; // se possui relatorio de conclusão ou não
+  canEdit=false; // se o usuario que está visualizando pode editar (aluno solicitante, monitor, orientador, etc)
+  hasReport=true; // se possui relatorio de conclusão ou não
   canApproveContest=true; // pode ou não aprovar a contestação
 
   editable=false;
@@ -77,7 +78,7 @@ export class AtividadeComponent {
 
   constructor() {}
 
-  
+  _snackBar!: MatSnackBar;
   
   dialogWidth(){
     if (window.innerWidth<=768){
@@ -192,10 +193,18 @@ export class AtividadeComponent {
           description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
           competences:["Competência 1", "Competência 2", "Competência 3"],
           complexity:"Complexa",
-          candidatureLimitDate:"13/11/2023",
+          candidatureLimitDate: '',
           submitLimitDate:"03/12/2023",
           contestDate:""
         }
+        this.activityForm.setValue({
+          description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
+          competences:["Competência 1", "Competência 2", "Competência 3"],
+          complexities:"Média",
+          candidatureDate: new Date(Date.UTC(2023,0,11)),
+          submitDate:new Date(Date.UTC(2023,0,11)),
+          contestDate:new Date(Date.UTC(2023,0,11)),
+        });
         this.displayComments='none';
         this.activityForm.disable();
 
@@ -203,6 +212,7 @@ export class AtividadeComponent {
       case 'Em Execução':
         this.activityFormWidth='65%';
         this.commentsFormWidth='35%';
+        this.displayComments='';
         this.activityForm.setValue({
           description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
           competences:["Competência 1", "Competência 2", "Competência 3"],
@@ -239,6 +249,9 @@ export class AtividadeComponent {
 
 
   firstButtonFunction(){
+    if (this.estado==="Aberta" && !this.canEdit){
+      this.openSnackBar("Candidatura Registrada!");
+    }
 
 
   }
@@ -265,6 +278,7 @@ export class AtividadeComponent {
     if (this.canEdit){
       this.editable=true;
       this.isDisabled=false;
+      this.activityForm.enable();
       this.data={
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
         competences:["Competência 1", "Competência 2", "Competência 3"],
@@ -308,5 +322,10 @@ export class AtividadeComponent {
       this.comments.push(newComment);
       this.commentValue='';
     }
+  }
+
+  openSnackBar(message: string){
+    console.log("entrou na função");
+    this._snackBar.open("funcionou");
   }
 }

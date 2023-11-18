@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule} from '@angular/material/button';
-import { MatCheckboxModule} from '@angular/material/checkbox'
+import { MatCheckboxModule} from '@angular/material/checkbox';
 import {MatIconModule} from '@angular/material/icon';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -57,7 +57,8 @@ const MY_DATE_FORMAT = {
     MatToolbarModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatDialogModule
+    MatDialogModule,
+
     ],
   exports: [
     ReactiveFormsModule,
