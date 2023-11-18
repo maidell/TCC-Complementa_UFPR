@@ -9,6 +9,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,33 +30,39 @@ public class Atividade implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "nome")
     private String nome;
 
-    @Column(nullable = false)
+    @Column(name = "data_criacao")
     private Date dataCriacao;
 
-    @Column(nullable = false)
+    @Column(name = "data_limite_candidatura")
     private Date dataLimiteCandidatura;
 
-    @Column(nullable = false)
+    @Column(name = "data_contestacao")
     private Date dataContestacao;
 
-    @Column(nullable = false)
+    @Column(name = "data_conclusao")
     private Date dataConclusao;
     
-//    private Projeto projeto;
-//    
-//    private Usuario autor;
-//   
-//    private Aluno executor;
+    @ManyToOne
+    @JoinColumn(name = "projeto_id")
+    private Projeto projeto;
+    
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_usuario")
+    private Usuario autor;
+   
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "grr_aluno")
+    private Aluno executor;
 
     @ManyToOne
-    @JoinColumn(name = "competencia_id", nullable = false)
+    @JoinColumn(name = "competencia_id")
     private Competencia competencia;
 
     @ManyToOne
-    @JoinColumn(name = "complexidade_id", nullable = false)
+    @JoinColumn(name = "complexidade_id")
     private Complexidade complexidade;
 
     @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -70,6 +78,10 @@ public class Atividade implements Serializable {
 
     @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Anexo> anexos;
+    
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "fk_id_status")
+    private Status status;
 
     public Atividade() {
     }
