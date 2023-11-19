@@ -4,14 +4,15 @@ import { Comentario } from "./comentario.model";
 
 export class Atividade {
   public id!: number;
+  public status: string = "Nova"; // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
   public nome: string = "";
   public dataCriacao: Date = new Date();
   public dataLimiteCandidatura: Date = new Date();
-  public dataContestacao: Date = new Date();
+  public dataContestacao?: Date = new Date();
   public dataConclusao: Date = new Date();
-  public competencia!: Competencia;
-  public complexidade!: Complexidade;
-  public comentarios!: Comentario[];
+  public competencia?: Competencia;
+  public complexidade?: Complexidade;
+  public comentarios?: Comentario[];
 
   constructor(
     id?: number,

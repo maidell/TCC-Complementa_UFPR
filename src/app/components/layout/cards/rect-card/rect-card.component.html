@@ -1,20 +1,20 @@
 <section class="main-container">
     <div class="title-container">
-        <div class="title">{{ Title }}</div>
-        <div class="subtitle">{{ Subtitle }}</div>
+        <div class="title">{{ nome }}</div>
+        <div class="subtitle">{{ status }}</div>
     </div>
     <div class="info-container">
         <div class="info-item">
-            <div class="label">{{ firstLabel }}</div>
-            <div class="value">{{ firstValue }}</div>
+            <div class="label">{{ dataCriacaoLabel }}</div>
+            <div class="value">{{ dataCriacao | date: 'dd/MM/yyyy' }}</div>
         </div>
         <div class="info-item">
-            <div class="label">{{ secondLabel }}</div>
-            <div class="value">{{ secondValue }}</div>
+            <div class="label">{{ dataLimiteCandidaturaLabel }}</div>
+            <div class="value">{{ dataLimiteCandidatura | date: 'dd/MM/yyyy' }}</div>
         </div>
         <div class="info-item">
-            <div class="label">{{ thirdLabel }}</div>
-            <div class="value">{{ thirdValue }}</div>
+            <div class="label">{{ dataConclusaoLabel }}</div>
+            <div class="value">{{ dataConclusao | date: 'dd/MM/yyyy' }}</div>
         </div>
         <button mat-raised-button class="button custom-button">
             {{nameButtonRect}}

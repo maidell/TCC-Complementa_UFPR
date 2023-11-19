@@ -3,7 +3,7 @@ package br.ufpr.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "aluno")
+@Table(name = "aluno", uniqueConstraints = { @UniqueConstraint(columnNames = { "grr_aluno" }) })
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Aluno extends Usuario {
 

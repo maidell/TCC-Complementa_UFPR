@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.ufpr.dto.AlunoDTO;
 import br.ufpr.dto.ProjetoDTO;
+import br.ufpr.model.Aluno;
 import br.ufpr.model.Projeto;
 import br.ufpr.repository.ProjetoRepository;
 
@@ -96,4 +98,5 @@ public class ProjetoREST {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
     }
+   
 }

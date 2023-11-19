@@ -99,4 +99,5 @@ public class AtividadeREST {
 			return ResponseEntity.status(HttpStatus.OK).body(null);
 		}
 	}
+	
 }
