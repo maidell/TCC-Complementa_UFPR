@@ -1,0 +1,51 @@
+.close {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+}
+
+.close-button {
+	border: none;
+	background-color: white;
+}
+
+.close-button-icon {
+	color: red;
+	font-weight: bold;
+}
+
+// .let-of-cards {
+// 	display: flex;
+// 	flex: 0.83;
+// 	flex-direction: column;
+// 	padding: 10px 15px;
+// 	justify-content: space-between;
+// 	align-items: center;
+// }
+.let-of-cards {
+	display: flex;
+	flex-direction: column;
+	padding: 0 15px;
+}
+
+.title-card, .filter {
+	padding: 0 15+24px;
+}
+
+// .header-card {
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: space-between;
+// }
+
+// mat-form-field {
+// 	padding-left: 24px;
+
+// }
+.servidor-class, mat-dialog-content{
+	padding-top: 0!important;
+}
+app-rect-card {
+	margin-bottom: 15px!important;
+}

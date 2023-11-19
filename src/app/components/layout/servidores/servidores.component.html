@@ -1,3 +1,34 @@
-<ng-container *ngIf="hasObject()">
-	<app-warning [Description]="'Nenhum servidor cadastrado'"></app-warning>
-</ng-container>
+<button mat-dialog-close class="close close-button"><mat-icon class="close-button-icon">close</mat-icon></button>
+<div class="cards-servidores">
+	<div class="header-card">
+		<div class="title-card">
+		<h1>Servidores</h1>
+		</div>
+		<div class="filter">
+			<mat-form-field appearance="outline">
+				<mat-label>Pesquisar</mat-label>
+				<input matInput (keyup)="applyFilter($event)" #input>
+				<mat-icon matSuffix>search</mat-icon>
+			</mat-form-field>
+		</div>
+	</div>
+	<div mat-dialog-content class="servidor-class">
+
+			<div class="warning-card" *ngIf="!hasObject()">
+				<ng-container>
+					<app-warning [Description]="'Nenhum servidor cadastrado'"></app-warning>
+				</ng-container>
+			</div>
+			<div class="let-of-cards" *ngIf="hasObject()">
+				<ng-container *ngFor="let servidor of obs | async">
+					<app-rect-card [nome]="servidor.nome" [firstLabel]="'Matricula'" [firstValue]="servidor.matricula"
+						[secondLabel]="'Email'" [secondValue]="servidor.email" [thirdLabel]="'Telefone'"
+						[thirdValue]="servidor.telefone" [nameButtonRect]="'Selecionar'"
+						[buttonColor]="'btn-green'"></app-rect-card>
+				</ng-container>
+
+			</div>
+
+
+	</div>
+</div>
