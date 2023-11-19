@@ -16,6 +16,7 @@ import { ComplexidadesComponent } from './components/layout/complexidades/comple
 import { ServidoresComponent } from './components/layout/servidores/servidores.component';
 import { MeuPerfilComponent } from './components/layout/meu-perfil/meu-perfil.component';
 import { CompetenciasComponent } from './components/layout/competencias/competencias.component';
+import { ModifyCardComponent } from './components/layout/cards/modify-card/modify-card.component';
 
 const routes: Routes = [
   {
@@ -89,6 +90,10 @@ const routes: Routes = [
   {
     path: 'meu-perfil',
     component: MeuPerfilComponent
+  },
+  {
+    path: 'teste',
+    component: ModifyCardComponent
   },
 
 

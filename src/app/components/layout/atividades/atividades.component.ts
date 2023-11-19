@@ -83,6 +83,11 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     }
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   hasActivities(): boolean {
     return this.atividades.length > 0;
   }
