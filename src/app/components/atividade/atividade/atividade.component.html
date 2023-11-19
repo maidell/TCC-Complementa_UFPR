@@ -90,7 +90,13 @@
                   />
                     </mat-form-field>
                 </div>
-
+                <button mat-button [matMenuTriggerFor]="attachments">Anexos</button>
+                <mat-menu #attachments="matMenu">
+                    <div *ngFor="let a of exampleResponse[0].anexos">
+                        <button mat-menu-item (click)="download(a.path,a.name)">{{a.name}}</button>
+                    </div>
+                    
+                </mat-menu>
             </form>
 
         </div>

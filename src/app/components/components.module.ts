@@ -27,6 +27,6 @@ import { AtividadeModule } from './atividade/atividade.module';
     AtividadeModule
 
   ],
-
+ 
 })
 export class ComponentsModule { }

@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormControl, FormControlName, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
+import { DownloadService } from '../download.service';
 
 
 @Component({
@@ -26,7 +27,10 @@ export class AtividadeComponent {
       complexidade: null,
       comentarios: null,
       certificado: null,
-      relatorioDeConclusao: null
+      relatorioDeConclusao: null,
+      anexos:[
+        {name:'logo_complementa_light.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
+      ]
   }];
 
   allowedUsers=[
@@ -130,7 +134,11 @@ export class AtividadeComponent {
 
 
 
-  constructor() {}
+  constructor(private downloadService: DownloadService) {}
+
+  download(fileUrl: string, fileName: string): void {
+    this.downloadService.downloadFile(fileUrl, fileName);
+  }
 
   ngOnInit(){
     this.setHeaderContent();
