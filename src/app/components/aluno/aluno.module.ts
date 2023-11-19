@@ -7,6 +7,7 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
 import { LayoutModule } from '../layout/layout.module';
 import { FormsModule } from '@angular/forms';
 
+
 @NgModule({
   declarations: [
     AutocadastroComponent,

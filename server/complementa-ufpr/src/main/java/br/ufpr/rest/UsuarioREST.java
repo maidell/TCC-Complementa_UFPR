@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.UsuarioDTO;
+import br.ufpr.helper.PasswordUtils;
 import br.ufpr.model.Usuario;
 import br.ufpr.repository.UsuarioRepository;
 
@@ -68,7 +69,9 @@ public class UsuarioREST {
 		}
 
 		try {
-			usuario.setSenha(bCryptPasswordEncoder.encode(usuario.getSenha()));
+			String salt = PasswordUtils.generateSalt();
+			usuario.setSalt(salt);
+			usuario.setSenha(PasswordUtils.hashPassword(usuario.getSenha(), salt)); // Hashing a senha com o salt
 			Usuario usu = repo.save(mapper.map(usuario, Usuario.class));
 			Optional<Usuario> usuOpt = repo.findById(usu.getId());
 			if (!usuOpt.isPresent()) {

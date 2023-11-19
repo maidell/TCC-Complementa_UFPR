@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,8 +84,14 @@ public class AlunoREST {
 		if (aln.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			aluno.setId(id);
-			repo.save(mapper.map(aluno, Aluno.class));
+			Aluno newAln = aln.get();
+			newAln.setNome(aluno.getNome());
+			newAln.setTelefone(aluno.getTelefone());
+			newAln.setGraduacao(aluno.getGraduacao());
+			if(aluno.getSenha() != null && !aluno.getSenha().isEmpty()) {
+				newAln.setSenha(PasswordUtils.hashPassword(aluno.getSenha(), newAln.getSalt()));
+			}
+			repo.save(mapper.map(newAln, Aluno.class));
 			aln = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(aln.get(), AlunoDTO.class));
 		}

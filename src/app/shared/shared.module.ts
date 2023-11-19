@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { EmailDirective } from './directives/email.directive';
 import { NumericoDirective } from './directives/numerico.directive';
 
-
-
 @NgModule({
   declarations: [
     EmailDirective,

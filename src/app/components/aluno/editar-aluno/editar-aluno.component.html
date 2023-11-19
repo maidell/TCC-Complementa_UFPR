@@ -1,43 +1,35 @@
 <div class="edit">
-<h2>Editar Perfil</h2>
-  <form [formGroup]="formAluno">
+  <h2>Editar Perfil</h2>
+  <form #formAluno="ngForm">
     <!-- Nome -->
     <mat-form-field class="full-input-field">
       <mat-label>Nome</mat-label>
-      <input matInput type="text" formControlName="nome" placeholder="Nome Completo">
-      <mat-error *ngIf="formAluno.get('nome')?.hasError('required') && formAluno.get('nome')?.touched">
+      <input matInput type="text" [(ngModel)]="aluno.nome" #nome="ngModel" name="nome" placeholder="Nome Completo"
+        required minlength="2">
+      <mat-error *ngIf="formAluno.controls['nome']?.errors?.['required'] && formAluno.controls['nome']?.touched">
         Digite o nome completo!
       </mat-error>
-      <mat-error *ngIf="formAluno.get('nome')?.hasError('minlength') && formAluno.get('nome')?.touched">
+      <mat-error *ngIf="formAluno.controls['nome']?.errors?.['minlength'] && formAluno.controls['nome']?.touched">
         O nome deve conter ao menos 2 caracteres!
       </mat-error>
     </mat-form-field>
-    
+
     <!-- Email -->
     <mat-form-field class="full-input-field">
       <mat-label>Email UFPR</mat-label>
-      <input matInput type="email" formControlName="email" placeholder="ex. nome.aluno@ufpr.br">
-      <mat-error *ngIf="formAluno.get('email')?.hasError('required') && formAluno.get('email')?.touched">
-        Digite o email do aluno.
-      </mat-error>
-      <mat-error *ngIf="formAluno.get('email')?.hasError('minlength') && formAluno.get('email')?.touched">
-        O email deve conter pelo menos 2 caracteres.
-      </mat-error>
-      <mat-error *ngIf="formAluno.get('email')?.hasError('pattern') && formAluno.get('email')?.touched">
-        O email deve pertencer ao domínio "@ufpr.br".
-      </mat-error>
+      <input matInput type="email" [(ngModel)]="aluno.email" name="email" #email="ngModel"
+        placeholder="ex. nome.aluno@ufpr.br" readonly email minlength="2" pattern=".+@ufpr\.br$"
+        placeholder="ex. nome.aluno@ufpr.br">
     </mat-form-field>
 
-    <!-- Curso -->
     <mat-form-field class="full-input-field">
       <mat-label>Curso</mat-label>
-      <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" required>
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      <mat-select [(ngModel)]="graduacao" name="curso" #curso="ngModel" required>
+        <mat-option *ngFor="let option of options" [value]="option">
           {{ option.nome }}
         </mat-option>
-      </mat-autocomplete>
-      <mat-error *ngIf="myControl.hasError('required')">
+      </mat-select>
+      <mat-error *ngIf="curso.errors?.['required'] && curso.touched">
         Seleção do curso é obrigatória!
       </mat-error>
     </mat-form-field>
@@ -45,31 +37,47 @@
     <!-- GRR -->
     <mat-form-field class="half-input-field">
       <mat-label>GRR</mat-label>
-      <input matInput type="text" id="grr" formControlName="grr" required numerico mask="00000000" placeholder="ex. 20100000">
-      <mat-error *ngIf="!grrValido">
-        O GRR deve conter apenas números.
+      <input matInput type="text" id="grr" [(ngModel)]="aluno.grr" name="grr" required pattern="^\d{8}$"
+        placeholder="ex. 20100000" #grr="ngModel" readonly>
+      <mat-error *ngIf="grr.errors?.['required'] && grr.touched">
+        O GRR é obrigatório.
+      </mat-error>
+      <mat-error *ngIf="grr.errors?.['pattern'] && grr.touched">
+        O GRR deve conter 8 dígitos numéricos.
       </mat-error>
     </mat-form-field>
 
     <!-- Celular -->
     <mat-form-field class="half-input-field" id="right-input-field">
       <mat-label>Celular</mat-label>
-      <input matInput type="text" formControlName="telefone" required placeholder="ex. (41)99999-9999" mask="(00)00000-0000">
-      <mat-error *ngIf="formAluno.get('telefone')?.hasError('required') && formAluno.get('telefone')?.touched">
+      <input matInput type="text" [(ngModel)]="aluno.telefone" name="telefone" required placeholder="ex. (41)99999-9999"
+        mask="(00)00000-0000" #telefoneField="ngModel">
+      <mat-error *ngIf="telefoneField.errors?.['required'] && telefoneField.touched">
         Digite o número do celular.
       </mat-error>
-      <mat-error *ngIf="formAluno.get('telefone')?.hasError('minlength') && formAluno.get('telefone')?.touched">
+      <mat-error *ngIf="telefoneField.errors?.['minlength'] && telefoneField.touched">
         O número do celular deve conter 11 dígitos.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Validação de Senha -->
+    <mat-form-field class="full-input-field">
+      <mat-label>Senha Atual</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="alunoLogado.senha" name="validarSenha"
+        minlength="8" (input)="verificarSenha()">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-error *ngIf="!senhaAtualValida && alunoLogado.senha !== ''">
+        Senha inválida!
       </mat-error>
     </mat-form-field>
 
     <!-- Senha -->
     <mat-form-field class="full-input-field">
       <mat-label>Senha</mat-label>
-      <input matInput [type]="hide ? 'password' : 'text'" formControlName="senha" required minlength="8">
+      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="senha" name="senha" minlength="8"
+        (input)="verificarSenha()" [disabled]="!senhaAtualValida">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      <!-- Validação customizada de senha -->
-      <mat-error *ngIf="formAluno.get('senha')?.hasError('customError')">
+      <mat-error *ngIf="!senhaValida && senha !== '' && confirmarSenha !== ''">
         • Deve conter pelo menos 8 caracteres. <br>
         • Deve conter pelo menos um caractere especial (!@#$%^&*()]).<br>
         • Deve conter pelo menos um caractere numérico. <br>
@@ -78,19 +86,21 @@
       </mat-error>
     </mat-form-field>
 
+
     <!-- Confirmação de Senha -->
     <mat-form-field class="full-input-field">
       <mat-label>Confirme sua senha</mat-label>
-      <input matInput [type]="hide ? 'password' : 'text'" formControlName="confirmarSenha" required minlength="8">
+      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="confirmarSenha" name="confirmarSenha"
+        minlength="8" (input)="verificarSenha()" [disabled]="!senhaAtualValida">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      <!-- Validação de comparação de senha -->
-      <mat-error *ngIf="formAluno.hasError('senhasNaoIguais')">
+      <mat-error *ngIf="!senhaValida">
         As senhas não correspondem.
       </mat-error>
     </mat-form-field>
   </form>
 
-  <button mat-button cdkFocusInitial (click)="autocadastrar()" [disabled]="!formAluno.valid">Salvar</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="atualizarAluno(formAluno)"
+    [disabled]="!formAluno.valid">Salvar</button>
 
   <button mat-button (click)="openDialog()">Abrir</button>
 </div>
