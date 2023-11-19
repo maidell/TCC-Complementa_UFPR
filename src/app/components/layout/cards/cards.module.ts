@@ -4,12 +4,14 @@ import { RectCardComponent } from './rect-card/rect-card.component';
 import { SquareCardComponent } from './square-card/square-card.component';
 import { MaterialStylesModule } from '../material-styles/material-styles.module';
 import { WarnCardComponent } from './warn-card/warn-card.component';
+import { ModifyCardComponent } from './modify-card/modify-card.component';
 
 @NgModule({
   declarations: [
     RectCardComponent,
     SquareCardComponent,
-    WarnCardComponent
+    WarnCardComponent,
+    ModifyCardComponent
   ],
   imports: [
     CommonModule,
