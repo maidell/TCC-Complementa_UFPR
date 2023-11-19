@@ -12,11 +12,11 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./projetos.component.scss']
 })
 export class ProjetosComponent implements OnInit, OnDestroy {
-
+  inputValue: string = '';
   projetos: Projeto[] = [
     {
       id: 1,
-      nome: "Nome da Atividade",
+      nome: "Nome do Projeto",
       status: "Aberto",
       tipo: "Extensão",
       curso: new Graduacao(0, "ADS"),
@@ -69,7 +69,14 @@ export class ProjetosComponent implements OnInit, OnDestroy {
   dataSource!: MatTableDataSource<Projeto>;
   constructor(private titleService: TitleService, private changeDetectorRef: ChangeDetectorRef) { }
 
-
+  applyFilter(event: Event) {
+    this.inputValue = (event.target as HTMLInputElement).value;
+    const filterValue = this.inputValue.replace(/\s+/g, ' ').trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
   ngOnInit(): void {
     //usar serviço de verificaçãod de role pra apresentar o titulo de acordo com a role

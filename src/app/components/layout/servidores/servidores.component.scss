@@ -15,14 +15,6 @@
 	font-weight: bold;
 }
 
-// .let-of-cards {
-// 	display: flex;
-// 	flex: 0.83;
-// 	flex-direction: column;
-// 	padding: 10px 15px;
-// 	justify-content: space-between;
-// 	align-items: center;
-// }
 .let-of-cards {
 	display: flex;
 	flex-direction: column;
@@ -33,19 +25,17 @@
 	padding: 0 15+24px;
 }
 
-// .header-card {
-// 	display: flex;
-// 	flex-direction: column;
-// 	justify-content: space-between;
-// }
-
-// mat-form-field {
-// 	padding-left: 24px;
-
-// }
 .servidor-class, mat-dialog-content{
 	padding-top: 0!important;
 }
 app-rect-card {
 	margin-bottom: 15px!important;
 }
+
+app-warning {
+	width: 50%;
+	display: block;
+	margin: 0 auto;
+}
+
+

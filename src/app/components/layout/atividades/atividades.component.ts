@@ -12,7 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./atividades.component.scss']
 })
 export class AtividadesComponent implements OnInit, OnDestroy {
-
+  inputValue: string = '';
   atividades: Atividade[] = [
 
     {
@@ -84,8 +84,12 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    this.inputValue = (event.target as HTMLInputElement).value;
+    const filterValue = this.inputValue.replace(/\s+/g, ' ').trim().toLowerCase();
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   hasActivities(): boolean {

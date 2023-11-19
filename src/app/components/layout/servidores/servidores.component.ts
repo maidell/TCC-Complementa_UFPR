@@ -1,16 +1,19 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { TitleService } from '../../title.service';
 import { Servidor } from 'src/app/shared';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
+import { DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-servidores',
   templateUrl: './servidores.component.html',
-  styleUrls: ['./servidores.component.scss']
+  styleUrls: ['./servidores.component.scss'],
+
 })
 export class ServidoresComponent implements OnInit, OnDestroy {
+  inputValue: string = '';
 
   servidores: Servidor[] = [{
     id: 1,
@@ -44,12 +47,11 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Servidor>;
-  constructor(private titleService: TitleService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(@Inject(DIALOG_DATA) public data: Servidor, private changeDetectorRef: ChangeDetectorRef) {
     this.dataSource = new MatTableDataSource(this.servidores);
    }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Servidores');
     this.changeDetectorRef.detectChanges();
     this.dataSource.paginator = this.paginator;
     this.obs = this.dataSource.connect();
@@ -64,16 +66,10 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   hasObject(): boolean {
     return this.servidores.length > 0;
   }
-  // id?: number,
-  // nome?: string,
-  // email?: string,
-  // telefone?: string,
-  // senha?: string,
-  // papel?: string,
-  // matricula?: string
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    this.inputValue = (event.target as HTMLInputElement).value;
+    const filterValue = this.inputValue.replace(/\s+/g, ' ').trim().toLowerCase();
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

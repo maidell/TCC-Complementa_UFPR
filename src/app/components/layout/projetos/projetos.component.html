@@ -1,19 +1,25 @@
-<!-- /colocar um ngIf para verificar se o usuario tem projetos -->
 <div class="cards-projects">
 	<div class="let-of-cards" *ngIf="hasProjects()">
-		<ng-container *ngFor="let project of obs | async">
-			<app-rect-card [nome]="project.nome" [status]="project.status!" [firstLabel]="tipoLabel" [id]="project.id!"
-				[firstValue]="project.tipo!" [secondLabel]="cursoLabel" [secondValue]="project.curso!.nome"
-				[thirdLabel]="orientadorLabel" [thirdValue]="project.orientador!.nome"
-				[nameButtonRect]="nameButtonRect"></app-rect-card>
+		<mat-form-field>
+			<mat-label>Filter</mat-label>
+			<input matInput (keyup)="applyFilter($event)" #input>
+		</mat-form-field>
+		<ng-container *ngIf="(obs | async) as projetos">
+			<ng-container *ngIf="projetos.length > 0; else noActivities">
+				<app-rect-card *ngFor="let projeto of projetos" [nome]="projeto.nome" [status]="projeto.status!" [firstLabel]="tipoLabel" [id]="projeto.id!"
+				[firstValue]="projeto.tipo!" [secondLabel]="cursoLabel" [secondValue]="projeto.curso!.nome"
+				[thirdLabel]="orientadorLabel" [thirdValue]="projeto.orientador!.nome"
+				[nameButtonRect]="nameButtonRect">
+				</app-rect-card>
+			</ng-container>
 		</ng-container>
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 	</div>
-	<div class="warning-card" *ngIf="!hasProjects()">
-		<ng-container>
-			<app-warning [Description]="'Você não participa de nenhum projeto'"></app-warning>
-		</ng-container>
-	</div>
+	<ng-template #noActivities>
+		<div class="warning-card" *ngIf="inputValue && inputValue.length > 0">
+			<app-warning [Description]="'O projeto \'' + inputValue + '\' não foi encontrado'"></app-warning>
+		</div>
+	</ng-template>
 	<div class="card-square">
 		<app-warn-card [TitleWarning]="TitleWarning" [Description]="Description" [Button]="Button"></app-warn-card>
 	</div>

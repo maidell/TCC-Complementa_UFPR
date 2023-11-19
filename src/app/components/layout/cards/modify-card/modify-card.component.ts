@@ -13,8 +13,7 @@ title: string = 'Modificar';
 
   openDialog() {
     this.dialog.open(ServidoresComponent, {
-      width: '100%',
-      height: '30rem'
+      minWidth: '50%',
     });
   }
 
