@@ -58,7 +58,7 @@ mat-card-title {
 
 
 .custom-button {
-    background: linear-gradient(180deg, #2494D3, #0076D0) !important;
+    background: linear-gradient(180deg, #2494D3, #0076D0);
     color: white !important;
     border-radius: 20px;
 
@@ -68,3 +68,22 @@ mat-card-title {
     background: linear-gradient(90deg, #0076D0, #2494D3);
     color: white;
 }
+
+.btn-green {
+    background: linear-gradient( #559958, #418856);
+
+}
+.btn-green:hover {
+    box-shadow:#343434;
+    background: linear-gradient(#559958, #418856);
+}
+
+.btn-red {
+    background: linear-gradient( #C7433F, #C7241F);
+
+}
+.btn-red:hover {
+    box-shadow:#343434;
+    background: linear-gradient(#C7433F, #C7241F);
+}
+

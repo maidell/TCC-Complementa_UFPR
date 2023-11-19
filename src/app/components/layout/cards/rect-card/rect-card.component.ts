@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-rect-card',
   templateUrl: './rect-card.component.html',
-  styleUrls: ['./rect-card.component.scss']
+  styleUrls: ['./rect-card.component.scss', './styles.scss']
 })
 export class RectCardComponent{
   @Input() nome!: string;
@@ -16,4 +16,5 @@ export class RectCardComponent{
   @Input() thirdValue!: string;
   @Input() Texto!: string;
   @Input() nameButtonRect!: string;
+  @Input() buttonColor?: string;
 }
