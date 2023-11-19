@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TitleService } from '../../title.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { TitleService } from '../../title.service';
   templateUrl: './title.component.html',
   styleUrls: ['./title.component.scss']
 })
-export class TitleComponent {
+export class TitleComponent implements OnInit {
 
   title!: string;
 
