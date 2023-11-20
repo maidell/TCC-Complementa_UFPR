@@ -11,8 +11,6 @@ import { AuthModule } from './components/auth/auth.module';
 import { LayoutModule } from './components/layout/layout.module';
 import { MainComponent } from './main/main.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { NgxMaskModule, IConfig } from 'ngx-mask';
-export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
   declarations: [
@@ -29,8 +27,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     FormsModule,
     MaterialStylesModule,
     AuthModule,
-    LayoutModule,
-    NgxMaskModule.forRoot()
+    LayoutModule
   ],
   exports: [
     FormsModule
