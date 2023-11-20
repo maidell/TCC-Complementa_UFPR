@@ -11,6 +11,7 @@ import { AuthModule } from './components/auth/auth.module';
 import { LayoutModule } from './components/layout/layout.module';
 import { MainComponent } from './main/main.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     FormsModule,
     MaterialStylesModule,
     AuthModule,
-    LayoutModule
+    LayoutModule,
+    ToastrModule.forRoot()
   ],
   exports: [
     FormsModule

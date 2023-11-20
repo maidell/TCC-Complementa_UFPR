@@ -1,9 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormControlName, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { DatePipe, formatDate } from '@angular/common';
 import { DownloadService } from '../download.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -18,7 +20,7 @@ export class AtividadeComponent {
     {
       id: 1,
       nome: "Teste",
-      status: "Em Execução", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      status: "Aberta", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
@@ -28,9 +30,9 @@ export class AtividadeComponent {
       complexidade: "Média",
       comentarios: null,
       certificado: null,
-      relatorioDeConclusao: null,
+      relatorioDeConclusao: "teste",
       anexos:[
-        {name:'logo complementa light teste teste teste teste.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
+        {name:'logo complementa light.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
       ]
   }];
 
@@ -42,9 +44,9 @@ export class AtividadeComponent {
 
 
 
-  parsedDate = new Date(this.exampleResponse[0].dataCriacao);
+
   
-  onlineUserId=5;
+  onlineUserId=1;
 
   estado: string =this.exampleResponse[0].status; 
   
@@ -52,6 +54,8 @@ export class AtividadeComponent {
   canApproveContest=true; // pode ou não aprovar a contestação
 
   editable=false;
+  isEditing=false;
+  disputingHours=false;
 
   displayStatus=true;
 
@@ -88,6 +92,8 @@ export class AtividadeComponent {
   
   descriptionLabel="Descrição da Atividade";
 
+  hoursOffered='';
+
   data={
     description:"",
     competences:[""],
@@ -104,7 +110,7 @@ export class AtividadeComponent {
 
   commentValue='';
 
-  // esse formgroup serve pra ativar e desativar o form de acordo com o conteúdo. precisa ter os formcontrols dentro senão quebra
+  // esse formgroup serve pra ativar e desativar o form de acordo com o estado. precisa ter os formcontrols dentro senão quebra
   activityForm = new FormGroup({
     description:  new FormControl(""),
     competences: new FormControl(['']),
@@ -123,10 +129,13 @@ export class AtividadeComponent {
   contestDate: FormControl = new FormControl();
   uploadFile: FormControl = new FormControl("");
 
+
+  disputedHoursValue: FormControl = new FormControl("");
+  proposedHours: FormControl = new FormControl();
+
   creationDate!: Date;
   datePipe!: DatePipe;
 
-  _snackBar!: MatSnackBar;
 
   fillingReport=false;
 
@@ -135,8 +144,7 @@ export class AtividadeComponent {
   file_list: Array<string> = [];
 
 
-
-  constructor(private downloadService: DownloadService) {}
+  constructor(private downloadService: DownloadService, public dialog: MatDialogRef<AtividadeComponent>, private toastr: ToastrService) {}
 
   download(fileUrl: string, fileName: string): void {
     this.downloadService.downloadFile(fileUrl, fileName);
@@ -171,7 +179,7 @@ export class AtividadeComponent {
       case 'Aberta': 
         this.statusButtonColor='linear-gradient(#3473A3, #5B7BA5';
 
-        if(this.allowedUsers.some(user => user.id === this.onlineUserId)){
+        if(this.canUserEdit()){
           this.firstHeaderButton='Visualizar Candidaturas';
           this.secondHeaderButton='Editar';
           this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
@@ -186,21 +194,22 @@ export class AtividadeComponent {
         this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
         
         break;
-      case 'Em Execução': //visão do solicitante quando o relatorio de conclusão tiver sido preenchido. tratar quando não tiver sido preenchido ainda
+      case 'Em Execução': 
         this.statusButtonColor='linear-gradient(#DEB345, #C99614)';
 
-        if(this.allowedUsers.some(user => user.id === this.onlineUserId)){
+        if(this.canUserEdit()){
 
           if(this.exampleResponse[0].relatorioDeConclusao!=null){
+            this.firstButtonWidth='100%';
             this.firstHeaderButton='Finalizar';
-            this.secondHeaderButton='Contestar';
             this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
-            this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
+            this.displaySecondHeaderButton='none';
         
           } else {
             this.displayFirstHeaderButton='none';
             this.displaySecondHeaderButton='none';
           }
+
         } else {
 
           if(this.exampleResponse[0].relatorioDeConclusao!=null){
@@ -212,6 +221,10 @@ export class AtividadeComponent {
             this.firstButtonWidth='100%';
             this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
             this.displaySecondHeaderButton='none';
+            if(this.disputingHours){
+              this.firstHeaderButton="Contestar Carga Horária";
+              this.firstButtonColor='linear-gradient(#CC6E00,#D95409)';
+            }
           }
 
         }
@@ -278,6 +291,11 @@ export class AtividadeComponent {
         this.contestDate.setValue(this.exampleResponse[0].dataContestacao);
 
         this.activityForm.disable();
+
+        if(this.canUserEdit() && this.exampleResponse[0].relatorioDeConclusao!=null){
+          this.comments.push({name:"Admin", content: "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais"});
+        }
+
         break;
       case 'Carga Horária Contestada':
         break;
@@ -292,16 +310,44 @@ export class AtividadeComponent {
 
   firstButtonFunction(){
     console.log("entrou na função do botão");
-    console.log(this.fillingReport);
-    if (this.estado==="Aberta" && !this.allowedUsers.some(user => user.id === this.onlineUserId)){
-      this.openSnackBar("Candidatura Registrada!");
-    } else if (this.estado==="Em Execução" && !this.allowedUsers.some(user => user.id === this.onlineUserId)){
-      this.fillReport();
+
+    switch(this.estado){
+      case "Nova":
+        this.saveActivity();
+      break;
+      case "Aberta":
+
+        if(this.isEditing){
+          this.saveEdit();
+        }
+      break;
+
+      case "Em Execução":
+        console.log("entrou no case em execução");
+
+        if (!this.canUserEdit) {
+          this.fillReport();
+          
+          if (this.fillingReport){
+
+              if(this.disputingHours){
+                this.sendDispute();
+              } else {
+                this.sendFinalReport();
+              }
+          }
+
+        } else { 
+
+          this.endActivity();
+        }
+      break;
+
     }
-    if (this.fillingReport){
-      console.log("entrou na função do relatório");
-      this.sendFinalReport();
-    }
+      
+   
+    
+
 
 
 
@@ -309,24 +355,46 @@ export class AtividadeComponent {
 
 
   secondButtonFunction(){
+    
     if(!this.editable){
+      
       switch (this.estado){
         case 'Aberta':
+          
           this.editActivity();
           break;
+        case 'Em Execução':
+          if(this.fillingReport){
+            
+            this.disputeHours();
+
+          }
+        break; 
+
 
       }
-  } else {
+    } else{
+
+      
       this.editable=false;
+      this.isEditing=false;
       this.isDisabled=true;
+      this.setContent();
       this.setHeaderContent();
+    }
+
+
   }
 
-
+  saveActivity(){
+    this.showSuccessToastr("Atividade criada com sucesso!");
+    this.onNoClick();
   }
 
   editActivity(){
-    if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
+    this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
+    this.isEditing=true;
+    if (this.canUserEdit()){
       this.editable=true;
       this.isDisabled=false;
       this.activityForm.enable();
@@ -375,13 +443,11 @@ export class AtividadeComponent {
     }
   }
 
-  openSnackBar(message: string){
-    console.log("entrou na função");
-    this._snackBar.open("funcionou");
-  }
+
 
 
   fillReport(){
+
     this.displayComments='none';
     this.projectName='Relatório de Conclusão';
     this.descriptionLabel="Relatório de Conclusão";
@@ -432,7 +498,94 @@ export class AtividadeComponent {
         console.log(this.file_store[i].name);
       }
     }
-
     console.log("valor do campo: " + this.description.value);
   }
+
+  saveEdit(){
+    this.showSuccessToastr("Atividade salva!");
+    this.isEditing=false;
+    // substituir daqui pra baixo pela função de enviar pro banco
+    console.log(this.description.value);
+    this.exampleResponse[0].descricao=this.description.value;
+    this.exampleResponse[0].status='Aberta';
+    
+    this.setContent(); // essa sai também
+  
+    this.setHeaderContent(); // essa fica
+  }
+
+
+  disputeHours(){
+    console.log("entrou na função de contestar carga horária");
+    this.disputingHours=true;
+    this.setHeaderContent();
+    this.descriptionLabel="Descrição da Contestação de Carga Horária";
+    this.disputedHoursValue.setValue("4 a 8 horas");
+  }
+
+
+  canUserEdit(){
+    if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  sendDispute(){
+    console.log("funcionou essa porra");
+    this.disputingHours=false;
+
+    this.onNoClick();
+  }
+
+  endActivity(){
+    this.showSuccessToastr("funcionou");
+    this.onNoClick();
+    console.log("entrou na função de finalizar");
+    this.displayComments='none';
+    this.projectName='Relatório de Conclusão';
+    this.descriptionLabel="Relatório de Conclusão";
+    this.firstHeaderButton="Finalizar Atividade";
+    this.displaySecondHeaderButton='';
+    this.secondHeaderButton="Contestar Execução";
+    this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
+    this.displayStatus=false;
+    this.displayDates='none';
+
+    this.activityForm.setValue({
+      description:"",
+      competences:[""],
+      complexities:"",
+      candidatureDate:"",
+      submitDate:"",
+      contestDate:""
+    });
+    
+
+  }
+
+
+  onNoClick(): void {
+    this.dialog.close();
+  }
+
+  showSuccessToastr(s: string) {
+    this.toastr.success(s);
+  }
+
+  showInfoToastr(s: string){
+    this.toastr.info(s);
+  }
+
+  showWarningToastr(s: string){
+    this.toastr.warning(s);
+  }
+
+  showErrorToastr(s: string){
+    this.toastr.error(s);
+  }
+
 }
+
+
