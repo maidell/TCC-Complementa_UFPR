@@ -10,7 +10,7 @@
             <div class="status" *ngIf="displayStatus">
                 <button mat-flat-button class="status-button"
                     [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
-                <h6 [ngStyle]="{'display': displayTimestamp}">Criada em dd/MM/yyy</h6>
+                <h6 [ngStyle]="{'display': displayTimestamp}">Criada em {{this.exampleResponse[0].dataCriacao | date:'dd/MM/yyyy'}}</h6>
             </div>
 
             <div class="activity-header-data">
@@ -44,18 +44,19 @@
                     <mat-form-field class="description">
                         <mat-label>{{descriptionLabel}}</mat-label>
                         <textarea matInput class="description-field" rows="15"
-                            formControlName="description" [formControl]="description">{{data.description}}</textarea>
+                            formControlName="description" [formControl]="description"></textarea>
                     </mat-form-field>
                 </div>
+
                 <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
                     <mat-form-field class="competences">
                         <mat-label>Competências</mat-label>
-                        <input matInput value="{{data.competences}}" formControlName="competences" [formControl]="competences">
+                        <input matInput formControlName="competences" [formControl]="competences">
                         
                     </mat-form-field>
                     <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
-                        <mat-select value="{{data.complexity}}" formControlName="complexities" [formControl]="complexities">
+                        <mat-select value={{this.exampleResponse[0].complexidade}} formControlName="complexities" [formControl]="complexities">
                             <mat-option *ngFor="let c of exampleComplexities" [value]="c">{{c}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -64,7 +65,7 @@
                     <mat-form-field class="date-picker" id="first">
                         <mat-label>Data Limite Candidatura</mat-label>
                         <input matInput [matDatepicker]="picker1" formControlName="candidatureDate" [formControl]="candidatureDate">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1" [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
                     </mat-form-field>
                     <mat-form-field class="date-picker" id="second">
@@ -73,10 +74,18 @@
                         <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
+                        <button mat-flat-button color="primary" [matMenuTriggerFor]="attachments" class="attachments" *ngIf="estado!='Nova'">Ver Anexos</button>
+                        <mat-menu #attachments="matMenu" yPosition="above">
+                            <div *ngFor="let a of exampleResponse[0].anexos">
+                                <button mat-menu-item (click)="download(a.path,a.name)">{{a.name}}</button>
+                            </div>
+                        </mat-menu>
+
                 </div>
-                <div class="conclusion-form" *ngIf="fillingReport">
-                    <mat-form-field style="width: 32%;">
-                        <mat-label>Anexo</mat-label>
+
+                <div class="conclusion-form" *ngIf="fillingReport || estado==='Nova'">
+                    <mat-form-field class="attachment-field">
+                        <mat-label>Anexar</mat-label>
                         <button mat-icon-button matSuffix (click)="f_input.click()">
                     <mat-icon>attach_file</mat-icon>
                   </button>
@@ -89,14 +98,13 @@
                     (change)="f_input.files && handleFileInputChange(f_input.files)"
                   />
                     </mat-form-field>
+                   
                 </div>
-                <button mat-button [matMenuTriggerFor]="attachments">Anexos</button>
-                <mat-menu #attachments="matMenu">
-                    <div *ngFor="let a of exampleResponse[0].anexos">
-                        <button mat-menu-item (click)="download(a.path,a.name)">{{a.name}}</button>
-                    </div>
-                    
-                </mat-menu>
+
+
+            
+        
+                
             </form>
 
         </div>
