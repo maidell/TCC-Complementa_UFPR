@@ -20,9 +20,9 @@ export class AtividadeComponent {
  ABERTA - EXECUTOR: DONE
  EM EXECUÇÃO- autor - sem relatório de conclusão: DONE
  EM EXECUÇÃO - executor - sem relatório de conclusão: DONE
- relatório de conclusão - autor: 
+ relatório de conclusão - autor: DONE
  relatório de conclusão - executor: DONE
- Contestar carga horária: 
+ Contestar carga horária: DONE
  Contestar Execução: 
  Aprovar Contestação: 
  Finalizada: DONE (Exceto botão de gerar certificado)
@@ -42,7 +42,7 @@ export class AtividadeComponent {
       complexidade: "Média",
       comentarios: null,
       certificado: null,
-      relatorioDeConclusao: "teste",
+      relatorioDeConclusao: "TESTE",
       anexos:[
         {name:'logo complementa light.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
       ]
@@ -54,20 +54,16 @@ export class AtividadeComponent {
     {id: 4}
   ];
 
-
-
-
-  
   onlineUserId=1;
 
   estado: string =this.exampleResponse[0].status; 
   
-
   canApproveContest=true; // pode ou não aprovar a contestação
 
-  editable=false;
+
   isEditing=false;
   disputingHours=false;
+  disputingExecution=false;
 
   displayStatus=true;
 
@@ -152,6 +148,7 @@ export class AtividadeComponent {
   fillingReport=false;
   isReadingReport=false;
 
+
   
   file_store!: FileList;
   file_list: Array<string> = [];
@@ -159,9 +156,7 @@ export class AtividadeComponent {
 
   constructor(private downloadService: DownloadService, public dialog: MatDialogRef<AtividadeComponent>, private toastr: ToastrService) {}
 
-  download(fileUrl: string, fileName: string): void {
-    this.downloadService.downloadFile(fileUrl, fileName);
-  }
+
 
   ngOnInit(){
     this.setHeaderContent();
@@ -176,7 +171,7 @@ export class AtividadeComponent {
       return "80vw";
     } 
   }
-
+//controle de dados do header e do conteudo
   setHeaderContent(){
     switch (this.estado){
       case 'Nova':  // tela de criação de atividades
@@ -324,10 +319,8 @@ export class AtividadeComponent {
 
   }
 
-
+// primeiro e segundo botão
   firstButtonFunction(){
-
-
     switch(this.estado){
       case "Nova":
         this.saveActivity();
@@ -352,8 +345,9 @@ export class AtividadeComponent {
             this.fillReport();
           } else {
             if(this.disputingHours){
-              this.sendDispute();
+              this.sendHoursDispute();
             } else {
+
               this.sendFinalReport();
             }
           }
@@ -365,6 +359,9 @@ export class AtividadeComponent {
 
             if(this.isReadingReport){
               this.approveReport();
+              if(this.disputingExecution){
+                this.sendExecutionDispute();
+              }
             } else {
               this.readConclusionReport();
             }
@@ -374,65 +371,38 @@ export class AtividadeComponent {
           }
 
         }
-
-
-  /**      if (!this.canUserEdit() && !this.fillingReport) {
-          console.log("entrou no primeiro if");
-          this.fillReport();
-      
-        } else if (!this.canUserEdit() && this.fillingReport){
-          console.log("entrou no else if");
-            if(this.disputingHours){
-              this.sendDispute();
-            } else {
-              this.sendFinalReport();
-            }
-        } else if (this.canUserEdit() && !this.exampleResponse[0].relatorioDeConclusao) { 
-
-          this.endActivity();
-        }*/
       break;
 
     }
-      
-   
     
-
-
-
-
   }
 
-
   secondButtonFunction(){
-    
-    if(!this.editable){
-      
-      switch (this.estado){
-        case 'Aberta':
-          
-          this.editActivity();
-          break;
-        case 'Em Execução':
-          if(this.fillingReport){
-            
-            this.disputeHours();
-
+    switch (this.estado){
+      case "Aberta": //CASE PRONTO
+        if (this.canUserEdit()){
+          if(!this.isEditing){
+            this.editActivity();
+          } else {
+            this.isEditing=false;
+            this.setHeaderContent();
+            this.setContent();
           }
-        break; 
+        }
+        break;
+      case "Em Execução":
 
-
-      }
-    } else{
-
-      
-      this.editable=false;
-      this.isEditing=false;
-      this.isDisabled=true;
-      this.setContent();
-      this.setHeaderContent();
+        if(this.fillingReport){
+          this.disputeHours();
+        } else {
+          if (this.disputingExecution){
+            this.sendExecutionDispute();
+          } else {
+            this.disputeExecution();
+          }
+        }
+        break;
     }
-
 
   }
 
@@ -446,46 +416,9 @@ export class AtividadeComponent {
     this.toastr.success("Candidatura registrada com sucesso!");
     this.onNoClick();
   }
-  editActivity(){
-    this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
-    this.isEditing=true;
-    if (this.canUserEdit()){
-      this.editable=true;
-      this.isDisabled=false;
-      this.activityForm.enable();
-      this.data={
-        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
-        competences:["Competência 1", "Competência 2", "Competência 3"],
-        complexity:"Média",
-        candidatureLimitDate:"13/11/2023",
-        submitLimitDate:"03/12/2023",
-        contestDate:""
-      }
-
-      this.firstHeaderButton='Salvar';
-      this.firstButtonColor='linear-gradient(#559958, #418856)';
-      this.secondHeaderButton="Cancelar";
-      this.secondButtonColor='linear-gradient(#C7433F, #C7241F)';
-    }
 
 
-  }
-  parseDate(date: string){
-      var dateParts=date.split("/");
 
-      var dateParsed= new FormControl(new Date(+dateParts[2], +dateParts[1]-1, +dateParts[0]));
-      return dateParsed;
-  }
-
-  @ViewChild('commentPanel') commentPanel!: ElementRef;
-  scrollParaUltimoComentario() {
-    try {
-      const commentPanel = this.commentPanel.nativeElement;
-      commentPanel.scrollTop = commentPanel.scrollHeight;
-    } catch (err) {
-      console.error(err);
-    }
-  }
 
   addComment(f: NgForm){
     
@@ -500,6 +433,102 @@ export class AtividadeComponent {
 
 
 
+
+  // arquivos
+  handleFileInputChange(l: FileList): void {
+    this.file_store = l;
+    if (l.length) {
+      const f = l[0];
+      const count = l.length > 1 ? ` (+${l.length - 1} arquivos)` : "";
+      this.uploadFile.patchValue(`${f.name}${count}`);
+    } else {
+      this.uploadFile.patchValue("");
+    }
+  }
+
+  download(fileUrl: string, fileName: string): void {
+    this.downloadService.downloadFile(fileUrl, fileName);
+  }
+
+
+
+  //Edição
+  editActivity(){
+    this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
+    this.isEditing=true;
+    if (this.canUserEdit()){
+      this.isDisabled=false;
+      this.activityForm.enable();
+      this.data={
+        description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
+        competences:["Competência 1", "Competência 2", "Competência 3"],
+        complexity:"Média",
+        candidatureLimitDate:"13/11/2023",
+        submitLimitDate:"03/12/2023",
+        contestDate:""
+      }
+      this.firstHeaderButton='Salvar';
+      this.firstButtonColor='linear-gradient(#559958, #418856)';
+      this.secondHeaderButton="Cancelar";
+      this.secondButtonColor='linear-gradient(#C7433F, #C7241F)';
+    }
+  }
+
+  saveEdit(){
+    this.showSuccessToastr("Atividade salva!");
+    this.isEditing=false;
+    // substituir daqui pra baixo pela função de enviar pro banco
+
+    this.exampleResponse[0].descricao=this.description.value;
+    this.exampleResponse[0].status='Aberta';
+    
+    this.setContent(); // essa sai também
+  
+    this.setHeaderContent(); // essa fica
+  }
+
+  canUserEdit(){
+    if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Carga Horária
+  disputeHours(){
+    console.log("entrou na função de contestar carga horária");
+    this.disputingHours=true;
+    
+    this.projectName="Contestação de Carga Horária";
+    this.descriptionLabel="Descrição da Contestação de Carga Horária";
+    this.disputedHoursValue.setValue("4 a 8 horas");
+
+    this.setHeaderContent();
+  }
+
+  sendHoursDispute(){
+    this.disputingHours=false;
+    this.toastr.success("Contestação de Complexidade Realizada com sucesso!");
+    this.onNoClick();
+  }
+
+  //Contestação de Execução
+  disputeExecution(){
+    console.log("entrou na função de contestar execução");
+    this.disputingExecution=true;
+    this.projectName="Contestação de Execução";
+    this.descriptionLabel="Descrição da Contestação de Execução";
+    this.firstHeaderButton="Contestar Execução";
+    this.secondHeaderButton="Cancelar";
+  }
+
+  sendExecutionDispute(){
+    this.toastr.warning("Contestação de Execução enviada");
+  }
+
+
+  //Relatório de Conclusão
   fillReport(){
 
     this.displayComments='none';
@@ -525,73 +554,6 @@ export class AtividadeComponent {
     });
 
 
-  }
-
-  handleFileInputChange(l: FileList): void {
-    this.file_store = l;
-    if (l.length) {
-      const f = l[0];
-      const count = l.length > 1 ? ` (+${l.length - 1} arquivos)` : "";
-      this.uploadFile.patchValue(`${f.name}${count}`);
-    } else {
-      this.uploadFile.patchValue("");
-    }
-  }
-
-  sendFinalReport(): void {
-
-    var fd = new FormData();
-    this.file_list = [];
-    if(this.file_store){
-
-      for (let i = 0; i < this.file_store.length; i++) {
-        fd.append("files", this.file_store[i], this.file_store[i].name);
-        this.file_list.push(this.file_store[i].name);
-      }
-      for (let i = 0; i < this.file_store.length; i++){
-        console.log(this.file_store[i]);
-        console.log(this.file_store[i].name);
-      }
-    }
-    this.toastr.success("Relatório de Conclusão Enviado!");
-    this.onNoClick();
-  }
-
-  saveEdit(){
-    this.showSuccessToastr("Atividade salva!");
-    this.isEditing=false;
-    // substituir daqui pra baixo pela função de enviar pro banco
-
-    this.exampleResponse[0].descricao=this.description.value;
-    this.exampleResponse[0].status='Aberta';
-    
-    this.setContent(); // essa sai também
-  
-    this.setHeaderContent(); // essa fica
-  }
-
-
-  disputeHours(){
-    console.log("entrou na função de contestar carga horária");
-    this.disputingHours=true;
-    this.setHeaderContent();
-    this.descriptionLabel="Descrição da Contestação de Carga Horária";
-    this.disputedHoursValue.setValue("4 a 8 horas");
-  }
-
-
-  canUserEdit(){
-    if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  sendDispute(){
-    this.disputingHours=false;
-    this.toastr.success("Contestação de Complexidade Realizada com sucesso!");
-    this.onNoClick();
   }
 
   readConclusionReport(){
@@ -620,16 +582,32 @@ export class AtividadeComponent {
 
   }
 
+  sendFinalReport(): void {
+
+    var fd = new FormData();
+    this.file_list = [];
+    if(this.file_store){
+
+      for (let i = 0; i < this.file_store.length; i++) {
+        fd.append("files", this.file_store[i], this.file_store[i].name);
+        this.file_list.push(this.file_store[i].name);
+      }
+      for (let i = 0; i < this.file_store.length; i++){
+        console.log(this.file_store[i]);
+        console.log(this.file_store[i].name);
+      }
+    }
+    this.toastr.success("Relatório de Conclusão Enviado!");
+    this.onNoClick();
+  }
+
   approveReport(){
     this.toastr.success("Atividade Concluída!");
     this.onNoClick();
   }
 
 
-  onNoClick(): void {
-    this.dialog.close();
-  }
-
+  /** TOASTR DE NOTIFICAÇÃO */
   showSuccessToastr(s: string) {
     this.toastr.success(s);
   }
@@ -644,6 +622,11 @@ export class AtividadeComponent {
 
   showErrorToastr(s: string){
     this.toastr.error(s);
+  }
+
+  // Fechar dialog
+  onNoClick(): void {
+    this.dialog.close();
   }
 
 }

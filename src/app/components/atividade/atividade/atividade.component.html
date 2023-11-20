@@ -106,9 +106,9 @@
                     </mat-form-field>
                     <mat-form-field class="hours-field">
                         <mat-label>Carga Horária Proposta</mat-label>
-                        <input matInput [formControl]="proposedHours">
+                        <input matInput type="number" proposedHours>
                     </mat-form-field>
-                    <!-- não lembro se tem anexo na contestação-->
+                    <!-- não lembro se tem anexo na contestação
                     <mat-form-field class="hours-field">
                         <mat-label>Anexar</mat-label>
                         <button mat-icon-button matSuffix (click)="f_input.click()">
@@ -122,7 +122,7 @@
                                 #f_input
                                 (change)="f_input.files && handleFileInputChange(f_input.files)"
                             />
-                    </mat-form-field>
+                    </mat-form-field>-->
                 </div>
 
                 <div class="conclusion-form" *ngIf="fillingReport && !disputingHours">
