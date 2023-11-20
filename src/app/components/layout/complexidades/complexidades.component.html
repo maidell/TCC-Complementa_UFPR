@@ -1,3 +1,13 @@
-<ng-container *ngIf="hasObject()">
-	<app-warning [Description]="'Nenhuma complexidade cadastrada'"></app-warning>
-</ng-container>
+
+<div class="table-source-body">
+
+	<ng-container *ngIf="!hasObject()">
+		<app-warning [Description]="'Nenhuma complexidade cadastrada'"></app-warning>
+	</ng-container>
+
+	<div class="table-source" *ngIf="hasObject()">
+		<app-table-card [dataSource]="dataSource" [columns]="columns" [button]="button" [display]="'displayTrue'"></app-table-card>
+	</div>
+
+</div>
+
