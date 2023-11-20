@@ -5,13 +5,15 @@ import { SquareCardComponent } from './square-card/square-card.component';
 import { MaterialStylesModule } from '../material-styles/material-styles.module';
 import { WarnCardComponent } from './warn-card/warn-card.component';
 import { ModifyCardComponent } from './modify-card/modify-card.component';
+import { TableCardComponent } from './table-card/table-card.component';
 
 @NgModule({
   declarations: [
     RectCardComponent,
     SquareCardComponent,
     WarnCardComponent,
-    ModifyCardComponent
+    ModifyCardComponent,
+    TableCardComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { ModifyCardComponent } from './modify-card/modify-card.component';
   exports: [
     RectCardComponent,
     SquareCardComponent,
-    WarnCardComponent
+    WarnCardComponent,
+    TableCardComponent
   ]
 })
 export class CardsModule { }

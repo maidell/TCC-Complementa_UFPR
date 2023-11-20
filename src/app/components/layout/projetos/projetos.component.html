@@ -3,6 +3,7 @@
 		<mat-form-field>
 			<mat-label>Filter</mat-label>
 			<input matInput (keyup)="applyFilter($event)" #input>
+			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obs | async) as projetos">
 			<ng-container *ngIf="projetos.length > 0; else noActivities">

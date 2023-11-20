@@ -1,8 +1,9 @@
 <div class="cards-atvs">
 	<div class="let-of-cards" *ngIf="hasActivities()">
 		<mat-form-field>
-			<mat-label>Filter</mat-label>
+			<mat-label>Pesquisar</mat-label>
 			<input matInput (keyup)="applyFilter($event)" #input>
+			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obs | async) as atividades">
 			<ng-container *ngIf="atividades.length > 0; else noActivities">
