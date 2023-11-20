@@ -29,7 +29,7 @@ export class AtividadeComponent {
       complexidade: "Média",
       comentarios: null,
       certificado: null,
-      relatorioDeConclusao: null,
+      relatorioDeConclusao: "teste",
       anexos:[
         {name:'logo complementa light.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
       ]
@@ -45,7 +45,7 @@ export class AtividadeComponent {
 
 
   
-  onlineUserId=5;
+  onlineUserId=1;
 
   estado: string =this.exampleResponse[0].status; 
   
@@ -199,10 +199,10 @@ export class AtividadeComponent {
         if(this.canUserEdit()){
 
           if(this.exampleResponse[0].relatorioDeConclusao!=null){
+            this.firstButtonWidth='100%';
             this.firstHeaderButton='Finalizar';
-            this.secondHeaderButton='Contestar';
             this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
-            this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
+            this.displaySecondHeaderButton='none';
         
           } else {
             this.displayFirstHeaderButton='none';
@@ -290,6 +290,11 @@ export class AtividadeComponent {
         this.contestDate.setValue(this.exampleResponse[0].dataContestacao);
 
         this.activityForm.disable();
+
+        if(this.canUserEdit() && this.exampleResponse[0].relatorioDeConclusao!=null){
+          this.comments.push({name:"Admin", content: "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais"});
+        }
+
         break;
       case 'Carga Horária Contestada':
         break;
@@ -304,24 +309,41 @@ export class AtividadeComponent {
 
   firstButtonFunction(){
     console.log("entrou na função do botão");
-    console.log(this.fillingReport);
-    if (this.estado==="Aberta" && !this.canUserEdit()){
 
-    } else if (this.estado==="Em Execução" && !this.canUserEdit()){
-      this.fillReport();
+    switch(this.estado){
+      case "Aberta":
+
+        if(this.isEditing){
+          this.saveEdit();
+        }
+      break;
+
+      case "Em Execução":
+        console.log("entrou no case em execução");
+
+        if (!this.canUserEdit) {
+          this.fillReport();
+          
+          if (this.fillingReport){
+
+              if(this.disputingHours){
+                this.sendDispute();
+              } else {
+                this.sendFinalReport();
+              }
+          }
+
+        } else { 
+
+          this.endActivity();
+        }
+      break;
+
+    }
       
-    }
-    if (this.fillingReport){
-      console.log("entrou na função do relatório");
-      if(this.disputingHours){
-        this.sendDispute();
-      } else {
-        this.sendFinalReport();
-      }
-    }
-    if(this.isEditing){
-      this.saveEdit();
-    }
+   
+    
+
 
 
 
@@ -504,6 +526,30 @@ export class AtividadeComponent {
     this.disputingHours=false;
 
     this.onNoClick();
+  }
+
+  endActivity(){
+    console.log("entrou na função de finalizar");
+    this.displayComments='none';
+    this.projectName='Relatório de Conclusão';
+    this.descriptionLabel="Relatório de Conclusão";
+    this.firstHeaderButton="Finalizar Atividade";
+    this.displaySecondHeaderButton='';
+    this.secondHeaderButton="Contestar Execução";
+    this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
+    this.displayStatus=false;
+    this.displayDates='none';
+
+    this.activityForm.setValue({
+      description:"",
+      competences:[""],
+      complexities:"",
+      candidatureDate:"",
+      submitDate:"",
+      contestDate:""
+    });
+    
+
   }
 
 
