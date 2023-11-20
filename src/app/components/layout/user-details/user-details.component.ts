@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../../auth/services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-details',
@@ -14,6 +15,7 @@ export class UserDetailsComponent {
   displayName = '';
 
   constructor(
+    private router: Router,
     private loginService: LoginService
   ) { }
 
@@ -43,6 +45,11 @@ export class UserDetailsComponent {
     } else {
       this.displayName = `${this.name[0]} ${this.name[(this.name.length - 1)]}`;
     }
+  }
+
+  logout() {
+    this.loginService.logout();
+    this.router.navigate(["login"]);
   }
 
 

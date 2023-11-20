@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, NgForm} from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Aluno, Graduacao, Login, Usuario } from 'src/app/shared';
 import { AlunoService } from '../services/aluno.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { AtividadeComponent } from '../../atividade/atividade/atividade.component';
 import { LoginService } from '../../auth/services/login.service';
@@ -15,7 +15,7 @@ import { LoginService } from '../../auth/services/login.service';
   templateUrl: './editar-aluno.component.html',
   styleUrls: ['./editar-aluno.component.scss']
 })
-export class EditarAlunoComponent implements OnInit{
+export class EditarAlunoComponent implements OnInit {
 
   @ViewChild('formLogin') formAluno!: NgForm;
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
@@ -35,62 +35,79 @@ export class EditarAlunoComponent implements OnInit{
   graduacao!: Graduacao;
   selectedValue: string = '';
   filteredOptions!: Observable<Graduacao[]>;
-  hide: boolean=true;
+  hide: boolean = true;
 
   constructor(
     private router: Router,
     private alunoService: AlunoService,
     private loginService: LoginService,
     public dialog: MatDialog,
-  ) {}  
+  ) { }
 
   ngOnInit(): void {
     this.usuarioLogado = this.loginService.usuarioLogado;
     if (this.usuarioLogado.papel !== 'ALUNO' && this.usuarioLogado.papel !== 'ADMIN') {
       this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
     }
-    this.instanciarAluno(this.usuarioLogado.id);
-    this.listarCursos();
-    this.graduacao = this.alunoLogado.graduacao;
+    forkJoin({
+      aluno: this.instanciarAluno(this.usuarioLogado.id),
+      cursos: this.listarCursos()
+    }).subscribe(({ aluno, cursos }) => {
+      if (aluno) {
+        this.alunoLogado = aluno;
+        this.aluno = aluno;
+      }
+      this.options = cursos;
+  
+      this.syncGraduacao();
+    });
+
   }
 
-  instanciarAluno(id: number): void {
-    this.alunoService.buscarAlunoPorId(id).subscribe(
-        (response: Aluno) => {
-          if (response != null) {
-            this.alunoLogado = response;
-            this.aluno = response;
-            } 
-        });
-    }
+  instanciarAluno(id: number): Observable<Aluno> {
+    return this.alunoService.buscarAlunoPorId(id);
+  }
 
-  validarSenhaAtual(): void{
+  validarSenhaAtual(): void {
     let login: Login = new Login();
     login.email = this.usuarioLogado.email;
-    login.senha = this.usuarioLogado.senha;
-    this.loginService.validarSenha(login);
+    login.senha = this.alunoLogado.senha;
+    this.loginService.validarSenha(login).subscribe(
+      (response) => {
+        let res: Boolean = response;
+        this.senhaAtualValida = res.valueOf();
+      },
+      (error) => {
+        console.error("Senha atual inválida:", error);
+      }
+    );
   }
 
-  validarAlteracoes(aluno: Aluno){
-    if(this.senhaAtualValida){
+  validarAlteracoes(aluno: Aluno) {
+    if (this.senhaAtualValida) {
       this.verificarSenha();
-      if(this.senhaValida){
+      if (this.senhaValida) {
         this.alunoLogado.senha = this.senha;
       }
     }
-    this.alunoLogado.nome = aluno.nome;
+    if(this.alunoLogado.nome !== aluno.nome && aluno.nome !== ''){
+      this.alunoLogado.nome = aluno.nome;
+    }
+    if(this.alunoLogado.telefone !== aluno.telefone && aluno.telefone !== ''){
     this.alunoLogado.telefone = aluno.telefone;
+    }
+    if(this.alunoLogado.graduacao !== this.graduacao && aluno.graduacao.nome !== ''){
     this.alunoLogado.graduacao = this.graduacao;
+    }
   }
 
   atualizarAluno(formAluno: NgForm): void {
     if (formAluno.valid) {
+      this.aluno.graduacao = this.graduacao;
       this.validarAlteracoes(this.aluno);
       this.alunoService.atualizarAluno(this.alunoLogado).subscribe(
         (response) => {
           alert(`Alterações salvas com sucesso!`);
-          this.alunoService.limparLS();
-          this.ngOnInit();
         },
         (error) => {
           console.error("Erro ao cadastrar aluno:", error);
@@ -99,25 +116,8 @@ export class EditarAlunoComponent implements OnInit{
     }
   }
 
-  listarCursos(): void {
-    this.alunoService.listarTodosCursos().subscribe(
-      (response) => {
-        this.options = response;
-      },
-      (error) => {
-        console.error("Erro ao listar Cursos:", error);
-      }
-    );
-    if (this.aluno && this.aluno.graduacao) {
-      this.syncGraduacao();
-    }
-  }
-
-  syncGraduacao() {
-    const matchedGraduacao = this.options.find(op => op.id === this.aluno.graduacao.id);
-    if (matchedGraduacao) {
-      this.aluno.graduacao = matchedGraduacao;
-    } 
+  listarCursos(): Observable<Graduacao[]> {
+    return this.alunoService.listarTodosCursos();
   }
 
   verificarSenha() {
@@ -138,25 +138,32 @@ export class EditarAlunoComponent implements OnInit{
     this.grrValido = regex.test(this.aluno.grr);
   }
 
-/* CÓDIGO PRA TESTAR O COMPONENTE DE ATIVIDADE. EXCLUIR DAQUI PRA BAIXO QUANDO FOR PRA PRD*/
+  syncGraduacao() {
+    const matchedGraduacao = this.options.find(op => op.id === this.aluno.graduacao.id);
+    if (matchedGraduacao) {
+      this.graduacao = matchedGraduacao;
+    } 
+  }
 
-openDialog() {
-  const dialogRef = this.dialog.open(AtividadeComponent, {
-    maxWidth: this.dialogWidth()
-  });
+  /* CÓDIGO PRA TESTAR O COMPONENTE DE ATIVIDADE. EXCLUIR DAQUI PRA BAIXO QUANDO FOR PRA PRD*/
 
-  dialogRef.afterClosed().subscribe(result => {
-    console.log(`Dialog result: ${result}`);
-  });
-}
+  openDialog() {
+    const dialogRef = this.dialog.open(AtividadeComponent, {
+      maxWidth: this.dialogWidth()
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 
 
-dialogWidth(){
-  if (window.innerWidth<=768){
-    return "100vw";
-  } else  {
-    return "80vw";
-  } 
-}
+  dialogWidth() {
+    if (window.innerWidth <= 768) {
+      return "100vw";
+    } else {
+      return "80vw";
+    }
+  }
 
 }

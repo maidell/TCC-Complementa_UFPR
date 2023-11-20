@@ -60,12 +60,11 @@ public class AuthREST {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}
 			Usuario usu = usuOpt.get();
-
 			Boolean senhaValida = PasswordUtils.checkPassword(login.getSenha(), usu.getSenha(), usu.getSalt());
 			if (!senhaValida) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}
-			return ResponseEntity.ok(senhaValida);
+			return ResponseEntity.ok(mapper.map(senhaValida, Boolean.class));
 			
 		} catch (Exception e) {
 			System.err.println("Erro ao validar senha:" + e.toString());

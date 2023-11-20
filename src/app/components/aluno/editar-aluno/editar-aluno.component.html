@@ -64,7 +64,7 @@
     <mat-form-field class="full-input-field">
       <mat-label>Senha Atual</mat-label>
       <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="alunoLogado.senha" name="validarSenha"
-        minlength="8" (input)="verificarSenha()">
+        minlength="8" (keyup.enter)="validarSenhaAtual()">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       <mat-error *ngIf="!senhaAtualValida && alunoLogado.senha !== ''">
         Senha inválida!
