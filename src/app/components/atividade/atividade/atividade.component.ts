@@ -18,7 +18,7 @@ export class AtividadeComponent {
     {
       id: 1,
       nome: "Teste",
-      status: "Em Execução", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      status: "Aberta", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
@@ -30,7 +30,7 @@ export class AtividadeComponent {
       certificado: null,
       relatorioDeConclusao: null,
       anexos:[
-        {name:'logo complementa light teste teste teste teste.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
+        {name:'logo complementa light.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
       ]
   }];
 
@@ -44,7 +44,7 @@ export class AtividadeComponent {
 
   parsedDate = new Date(this.exampleResponse[0].dataCriacao);
   
-  onlineUserId=5;
+  onlineUserId=1;
 
   estado: string =this.exampleResponse[0].status; 
   
@@ -52,6 +52,7 @@ export class AtividadeComponent {
   canApproveContest=true; // pode ou não aprovar a contestação
 
   editable=false;
+  isEditing=false;
 
   displayStatus=true;
 
@@ -302,6 +303,9 @@ export class AtividadeComponent {
       console.log("entrou na função do relatório");
       this.sendFinalReport();
     }
+    if(this.isEditing){
+      this.saveEdit();
+    }
 
 
 
@@ -312,20 +316,24 @@ export class AtividadeComponent {
     if(!this.editable){
       switch (this.estado){
         case 'Aberta':
+          console.log("entrou no case de edição");
           this.editActivity();
           break;
 
       }
-  } else {
+    } else{
       this.editable=false;
+      this.isEditing=false;
       this.isDisabled=true;
+      this.setContent();
       this.setHeaderContent();
-  }
+    }
 
 
   }
 
   editActivity(){
+    this.isEditing=true;
     if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
       this.editable=true;
       this.isDisabled=false;
@@ -435,4 +443,25 @@ export class AtividadeComponent {
 
     console.log("valor do campo: " + this.description.value);
   }
+
+  saveEdit(){
+    this.isEditing=false;
+    // substituir daqui pra baixo pela função de enviar pro banco
+    console.log(this.description.value);
+    this.exampleResponse[0].descricao=this.description.value;
+    this.exampleResponse[0].status='Aberta';
+    
+    this.setContent(); // essa sai também
+  
+    this.setHeaderContent(); // essa fica
+  }
+
+  cancelEdit(){
+    this.isEditing=false;
+    this.setHeaderContent();
+    this.setContent();
+  }
+
 }
+
+

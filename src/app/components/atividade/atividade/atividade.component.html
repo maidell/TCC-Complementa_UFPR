@@ -80,10 +80,27 @@
                                 <button mat-menu-item (click)="download(a.path,a.name)">{{a.name}}</button>
                             </div>
                         </mat-menu>
+                    
+                        <mat-form-field class="attachment-field" *ngIf="estado==='Nova'">
+                            <mat-label>Anexar Arquivos</mat-label>
+                            <button mat-icon-button matSuffix (click)="f_input.click()">
+                        <mat-icon>attach_file</mat-icon>
+                        </button>
+                            <input type="text" readonly matInput [formControl]="uploadFile" />
+                            <input
+                        type="file"
+                        multiple
+                        hidden
+                        #f_input
+                        (change)="f_input.files && handleFileInputChange(f_input.files)"
+                        />
+                        </mat-form-field>
+                           
+                    
 
                 </div>
 
-                <div class="conclusion-form" *ngIf="fillingReport || estado==='Nova'">
+                <div class="conclusion-form" *ngIf="fillingReport">
                     <mat-form-field class="attachment-field">
                         <mat-label>Anexar</mat-label>
                         <button mat-icon-button matSuffix (click)="f_input.click()">
