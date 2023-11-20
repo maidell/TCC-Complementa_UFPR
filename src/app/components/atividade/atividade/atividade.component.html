@@ -99,14 +99,14 @@
                     
 
                 </div>
-                <div *ngIf="disputingHours" class="dispute-hours">
+                <div *ngIf="disputingHours || readingHoursDispute" class="dispute-hours">
                     <mat-form-field class="hours-field">
                         <mat-label>Carga Horária Oferecida</mat-label>
-                        <input readonly [disabled]="true" matInput [formControl]="disputedHoursValue">
+                        <input readonly [disabled]="true" matInput [formControl]="disputedHoursValue" formControlName="disputedHoursValue">
                     </mat-form-field>
                     <mat-form-field class="hours-field">
                         <mat-label>Carga Horária Proposta</mat-label>
-                        <input matInput type="number" proposedHours>
+                        <input matInput type="number" [formControl]="proposedHours" formControlName="proposedHours">
                     </mat-form-field>
                     <!-- não lembro se tem anexo na contestação
                     <mat-form-field class="hours-field">

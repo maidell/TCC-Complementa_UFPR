@@ -18,14 +18,15 @@ export class AtividadeComponent {
  NOVA: DONE
  ABERTA - autor: DONE (Falta botão de visualizar candidaturas)
  ABERTA - EXECUTOR: DONE
- VISUALIZAR CANDIDATURAS
+ VISUALIZAR CANDIDATURAS: 
  EM EXECUÇÃO- autor - sem relatório de conclusão: DONE
  EM EXECUÇÃO - executor - sem relatório de conclusão: DONE
  relatório de conclusão - autor: DONE
  relatório de conclusão - executor: DONE
  Contestar carga horária: DONE
  Contestar Execução: DONE
- Aprovar Contestação: 
+ Aprovar Contestação carga horária:
+ apovar contestação execução:  
  Finalizada: DONE (Exceto botão de gerar certificado)
 */
 
@@ -33,7 +34,7 @@ export class AtividadeComponent {
     {
       id: 1,
       nome: "Teste", 
-      status: "Em Execução", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      status: "Execução Contestada", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
@@ -55,16 +56,19 @@ export class AtividadeComponent {
     {id: 4}
   ];
 
+  
+
   onlineUserId=1;
 
   estado: string =this.exampleResponse[0].status; 
   
   canApproveContest=true; // pode ou não aprovar a contestação
-
+  isReadingContest=false;
 
   isEditing=false;
   disputingHours=false;
   disputingExecution=false;
+  readingHoursDispute=false;
 
   displayStatus=true;
 
@@ -126,7 +130,9 @@ export class AtividadeComponent {
     complexities: new FormControl(''),
     candidatureDate: new FormControl,
     submitDate: new FormControl,
-    contestDate: new FormControl
+    contestDate: new FormControl,
+    disputedHoursValue: new FormControl,
+    proposedHours: new FormControl
   });
 
   // FormControl pra poder acessar o valor digitado no input
@@ -242,17 +248,28 @@ export class AtividadeComponent {
         break;
       case 'Carga Horária Contestada': case 'Execução Contestada':
         this.statusButtonColor='linear-gradient(#CC6E00, #D95409)';
-        if (this.canApproveContest){
-          this.firstHeaderButton='Aprovar';
-          this.firstButtonColor='linear-gradient(#318B35, #297E42)';
+        console.log("entrou no case certo");
 
-          this.secondHeaderButton='Recusar';
-          this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
+          
+          if (this.canApproveContest){
 
-        } else {
-          this.displayFirstHeaderButton='none';
-          this.displaySecondHeaderButton='none';
-        }
+            if(this.isReadingContest){
+              this.firstButtonWidth='';
+              this.firstHeaderButton='Aprovar';
+              this.firstButtonColor='linear-gradient(#318B35, #297E42)';
+              this.displaySecondHeaderButton='';
+              
+              this.secondHeaderButton='Recusar';
+              this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
+            } else {
+              this.displayFirstHeaderButton='';
+              this.firstHeaderButton="Ler Contestação";
+              this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
+              this.firstButtonWidth='100%';
+              this.displaySecondHeaderButton='none';
+            }
+          } 
+        
 
 
 
@@ -309,6 +326,17 @@ export class AtividadeComponent {
 
         break;
       case 'Carga Horária Contestada':
+        /**if(this.canApproveContest){
+        this.projectName='Contestação de Carga Horária';
+        this.descriptionLabel="Descrição da Contestação";
+        this.activityForm.disable();
+        this.readingDispute=true;
+        this.displaySecondLine='none';
+        this.displayDates='none';
+        } else {*/
+          this.activityForm.disable();
+          this.displayComments='';
+        //}
         break;
       case 'Execução Contestada':
         break;
@@ -373,7 +401,16 @@ export class AtividadeComponent {
 
         }
       break;
+      case "Carga Horária Contestada": case "Execução Contestada":
+        if(this.canApproveContest){
+          if(!this.isReadingContest){
+            this.readContest();
+          } else {
+            this.approveContest();
+          }
+        }
 
+        break;
     }
     
   }
@@ -405,6 +442,14 @@ export class AtividadeComponent {
           }
         }
         break;
+        case "Carga Horária Contestada": case "Execução Contestada":
+          if(this.isReadingContest){
+            this.refuseContest();
+
+          }
+
+        break;
+        
     }
 
   }
@@ -534,6 +579,32 @@ export class AtividadeComponent {
     this.toastr.warning("Contestação de Execução enviada");
   }
 
+  //leitura e aprovação da contestação
+  readContest(){
+    this.projectName="Contestação";
+    this.descriptionLabel="Descrição da Contestação";
+    this.displayComments='none';
+    this.displaySecondLine='none';
+    this.displayDates='none';
+    this.isReadingContest=true;
+    if(this.estado==='Carga Horária Contestada'){
+      this.readingHoursDispute=true;
+    }
+    this.setHeaderContent();
+  }
+
+  approveContest(){
+    this.toastr.success("Contestação Aprovada!");
+    this.onNoClick();
+    this.isReadingContest=false;
+  }
+
+  refuseContest(){
+    this.toastr.warning("Contestação Recusada");
+    this.onNoClick();
+    this.isReadingContest=false;
+  }
+
 
   //Relatório de Conclusão
   fillReport(){
@@ -557,7 +628,9 @@ export class AtividadeComponent {
       complexities:"",
       candidatureDate:"",
       submitDate:"",
-      contestDate:""
+      contestDate:"",
+      disputedHoursValue:"",
+      proposedHours:"",
     });
 
 
@@ -583,7 +656,9 @@ export class AtividadeComponent {
       complexities:"",
       candidatureDate:"",
       submitDate:"",
-      contestDate:""
+      contestDate:"",
+      disputedHoursValue:"",
+      proposedHours:""
     });
     
 
