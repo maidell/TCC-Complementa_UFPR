@@ -1,9 +1,9 @@
-<button mat-button [matMenuTriggerFor]="menu" class="user-card-out">
+<button mat-button [matMenuTriggerFor]="menu" class="user-card-out" *ngIf="exibir">
             <p class="user-name">{{displayName}}</p>
             <p class="grr">{{grr}}</p>
 
 </button>
 <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="aluno/editar">Editar Perfil</button>
-    <button mat-menu-item>Sair</button>
+    <button mat-menu-item (click)="logout()">Sair</button>
 </mat-menu>

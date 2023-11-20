@@ -112,6 +112,12 @@ app.post('/logout', function (req, res) {
   res.json({ auth: false, token: null });
 })
 
+//app.post('/authPassword', verifyJWT, (req, res, next) => {
+app.post('/authPassword', (req, res, next) => {
+  console.log(`Roteando POST de http://localhost:${PORT}/authPassword para http://localhost:5000/authPassword`);
+  servicesProxy(req, res, next);
+})
+
 console.log(`Configurando rotas de usuario`)
 app.post('/usuarios', verifyJWT, (req, res, next) => {
   console.log(`Roteando POST de http://localhost:${PORT}/usuarios para http://localhost:5000/usuarios`);
@@ -139,13 +145,23 @@ app.post('/alunos', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+// app.get('/alunos/:id', verifyJWT, (req, res, next) => {
+app.get('/alunos/:id', (req, res, next) => {
+  const alunoId = req.query.id;
+  const destinationUrl = `http://localhost:5000/alunos/${alunoId}`;
+  console.log(`Roteando GET de http://localhost:${PORT}/alunos/${alunoId} para ${destinationUrl}`);
+  servicesProxy(req, res, next, destinationUrl);
+})
+
 app.get('/alunos', verifyJWT, (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/alunos para http://localhost:5000/alunos`);
   servicesProxy(req, res, next);
 })
 
-app.put('/alunos', verifyJWT, (req, res, next) => {
-  console.log(`Roteando PUT de http://localhost:${PORT}/alunos para http://localhost:5000/alunos`);
+// app.put('/alunos/:id', verifyJWT, (req, res, next) => {
+app.put('/alunos/:id', (req, res, next) => {
+  const alunoId = req.query.id;
+  console.log(`Roteando PUT de http://localhost:${PORT}/alunos/${alunoId} para http://localhost:5000/alunos/${alunoId}`);
   servicesProxy(req, res, next);
 })
 

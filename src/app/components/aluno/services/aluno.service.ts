@@ -30,6 +30,10 @@ export class AlunoService {
 
   constructor(private httpClient: HttpClient) { }
 
+  limparLS(): void {
+    delete localStorage[LS_CHAVE];
+  }
+
   listarTodosAlunos(): Observable<Aluno[]> {
     return this.httpClient.get<Aluno[]>(this.BASE_URL + 'alunos/', this.httpOptions);
   }
@@ -47,7 +51,6 @@ export class AlunoService {
   }
 
   atualizarAluno(aluno: Aluno): Observable<Aluno> {
-    this.alunoLogado = aluno;
     return this.httpClient.put<Aluno>(this.BASE_URL + 'alunos/' + aluno.id, JSON.stringify(aluno), this.httpOptions);
   }
 
@@ -58,4 +61,5 @@ export class AlunoService {
   listarTodosCursos(): Observable<Graduacao[]> {
     return this.httpClient.get<Graduacao[]>(this.BASE_URL + 'graduacoes/', this.httpOptions);
   }
+
 }

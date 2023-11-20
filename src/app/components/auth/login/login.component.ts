@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
             alert([`${usu.id}\n${usu.nome}\n${usu.email}\n${usu.telefone}\n${usu.papel}`]);
             this.loginService.usuarioLogado = usu;
             this.loading = false;
-            this.router.navigate([`${usu.papel}`]);
+            this.router.navigate([`${usu.papel}`.toLowerCase()]);
           } else {
             this.message = 'Usuário/Senha inválidos.';
           }

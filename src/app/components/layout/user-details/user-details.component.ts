@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { LoginService } from '../../auth/services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-details',
@@ -6,21 +8,48 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent {
-  userName="Leonardo Henrique de Souza Hortmann";
-  grr="20231234";
-  name=this.userName.split(/[, ]+/);
-  displayName='';
+  exibir: boolean = false;
+  userName = "";
+  grr = "";
+  name = this.userName.split(/[, ]+/);
+  displayName = '';
+
+  constructor(
+    private router: Router,
+    private loginService: LoginService
+  ) { }
 
   ngOnInit(): void {
-    this.printName();
+    if (this.loginService.usuarioLogado) {
+      this.exibir = true;
+      this.userName = this.loginService.usuarioLogado.nome;
+      this.grr = this.loginService.usuarioLogado.papel;
+      this.printName();
+    } else {
+      this.loginService.usuarioLogado$.subscribe(usuario => {
+        if (usuario) {
+          this.exibir = true;
+          this.userName = this.loginService.usuarioLogado.nome;
+          this.grr = this.loginService.usuarioLogado.papel;
+          this.printName();
+        } else {
+          this.exibir = false;
+        }
+      });
+    }
   }
 
-  printName(){
-    if (this.name.length===2){
-      this.displayName=`${this.name[0]} ${this.name[1]}`;
+  printName() {
+    if (this.name.length === 2) {
+      this.displayName = `${this.name[0]} ${this.name[1]}`;
     } else {
-      this.displayName=`${this.name[0]} ${this.name[(this.name.length-1)]}`;
+      this.displayName = `${this.name[0]} ${this.name[(this.name.length - 1)]}`;
     }
+  }
+
+  logout() {
+    this.loginService.logout();
+    this.router.navigate(["login"]);
   }
 
 

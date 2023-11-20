@@ -3,17 +3,17 @@ import { FormControl, NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Aluno, Graduacao } from 'src/app/shared';
-import { AlunoService } from '../services/aluno.service';
+import { AlunoService } from '../../aluno/services/aluno.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
-  selector: 'app-autocadastro',
-  templateUrl: './autocadastro.component.html',
-  styleUrls: ['./autocadastro.component.scss']
+  selector: 'app-cadastro-de-usuarios',
+  templateUrl: './cadastro-de-usuarios.component.html',
+  styleUrls: ['./cadastro-de-usuarios.component.scss']
 })
-export class AutocadastroComponent implements OnInit {
+export class CadastroDeUsuariosComponent implements OnInit {
 
   @ViewChild('formLogin') formAluno!: NgForm;
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
