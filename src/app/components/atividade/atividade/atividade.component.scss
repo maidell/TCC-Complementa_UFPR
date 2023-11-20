@@ -242,6 +242,16 @@ fieldset {
     .attachment-field {
         width: 32%;
     }
+
+    .dispute-hours{
+        width:66%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .hours-field{
+        width:49%;
+    }
 }
 
 .activity-field {
