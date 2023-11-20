@@ -5,6 +5,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import { DatePipe, formatDate } from '@angular/common';
 import { DownloadService } from '../download.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class AtividadeComponent {
     {
       id: 1,
       nome: "Teste",
-      status: "Em Execução", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      status: "Aberta", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
@@ -143,7 +144,7 @@ export class AtividadeComponent {
   file_list: Array<string> = [];
 
 
-  constructor(private downloadService: DownloadService, public dialog: MatDialogRef<AtividadeComponent>) {}
+  constructor(private downloadService: DownloadService, public dialog: MatDialogRef<AtividadeComponent>, private toastr: ToastrService) {}
 
   download(fileUrl: string, fileName: string): void {
     this.downloadService.downloadFile(fileUrl, fileName);
@@ -311,6 +312,9 @@ export class AtividadeComponent {
     console.log("entrou na função do botão");
 
     switch(this.estado){
+      case "Nova":
+        this.saveActivity();
+      break;
       case "Aberta":
 
         if(this.isEditing){
@@ -371,7 +375,7 @@ export class AtividadeComponent {
       }
     } else{
 
-
+      
       this.editable=false;
       this.isEditing=false;
       this.isDisabled=true;
@@ -382,7 +386,13 @@ export class AtividadeComponent {
 
   }
 
+  saveActivity(){
+    this.showSuccessToastr("Atividade criada com sucesso!");
+    this.onNoClick();
+  }
+
   editActivity(){
+    this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
     this.isEditing=true;
     if (this.canUserEdit()){
       this.editable=true;
@@ -492,6 +502,7 @@ export class AtividadeComponent {
   }
 
   saveEdit(){
+    this.showSuccessToastr("Atividade salva!");
     this.isEditing=false;
     // substituir daqui pra baixo pela função de enviar pro banco
     console.log(this.description.value);
@@ -529,6 +540,8 @@ export class AtividadeComponent {
   }
 
   endActivity(){
+    this.showSuccessToastr("funcionou");
+    this.onNoClick();
     console.log("entrou na função de finalizar");
     this.displayComments='none';
     this.projectName='Relatório de Conclusão';
@@ -555,6 +568,22 @@ export class AtividadeComponent {
 
   onNoClick(): void {
     this.dialog.close();
+  }
+
+  showSuccessToastr(s: string) {
+    this.toastr.success(s);
+  }
+
+  showInfoToastr(s: string){
+    this.toastr.info(s);
+  }
+
+  showWarningToastr(s: string){
+    this.toastr.warning(s);
+  }
+
+  showErrorToastr(s: string){
+    this.toastr.error(s);
   }
 
 }
