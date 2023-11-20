@@ -18,12 +18,13 @@ export class AtividadeComponent {
  NOVA: DONE
  ABERTA - autor: DONE (Falta botão de visualizar candidaturas)
  ABERTA - EXECUTOR: DONE
+ VISUALIZAR CANDIDATURAS
  EM EXECUÇÃO- autor - sem relatório de conclusão: DONE
  EM EXECUÇÃO - executor - sem relatório de conclusão: DONE
  relatório de conclusão - autor: DONE
  relatório de conclusão - executor: DONE
  Contestar carga horária: DONE
- Contestar Execução: 
+ Contestar Execução: DONE
  Aprovar Contestação: 
  Finalizada: DONE (Exceto botão de gerar certificado)
 */
@@ -396,7 +397,9 @@ export class AtividadeComponent {
           this.disputeHours();
         } else {
           if (this.disputingExecution){
-            this.sendExecutionDispute();
+            !this.disputingExecution;
+            this.setContent();
+            this.setHeaderContent();
           } else {
             this.disputeExecution();
           }
@@ -517,10 +520,14 @@ export class AtividadeComponent {
   disputeExecution(){
     console.log("entrou na função de contestar execução");
     this.disputingExecution=true;
+    this.activityForm.enable();
+    this.displaySecondLine='none';
     this.projectName="Contestação de Execução";
     this.descriptionLabel="Descrição da Contestação de Execução";
     this.firstHeaderButton="Contestar Execução";
+    this.firstButtonColor='linear-gradient(#CC6E00, #D95409)';
     this.secondHeaderButton="Cancelar";
+    this.secondButtonColor='linear-gradient(#C7433F, #C7241F)';
   }
 
   sendExecutionDispute(){
@@ -558,7 +565,7 @@ export class AtividadeComponent {
 
   readConclusionReport(){
     console.log("entrou na função de finalizar");
-    this.activityForm.enable();
+    this.activityForm.disable();
     this.displayComments='none';
     this.projectName='Relatório de Conclusão';
     this.descriptionLabel="Relatório de Conclusão";
