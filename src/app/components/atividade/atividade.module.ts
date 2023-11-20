@@ -4,6 +4,8 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
 import { LayoutModule } from '../layout/layout.module';
 import { FormsModule } from '@angular/forms';
 import { AtividadeComponent } from './atividade/atividade.component';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -13,7 +15,8 @@ import { AtividadeComponent } from './atividade/atividade.component';
     CommonModule,
     MaterialStylesModule,
     LayoutModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   
 })

@@ -148,6 +148,16 @@ fieldset {
         padding-top: 1%;
 
     }
+    .attachments {
+        width: 100%;
+        height:56px;
+        margin-bottom: 3%;
+        background-image: linear-gradient(#2494D3,#0076D0);
+    }
+
+    .attachment-field {
+        width: 100%;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -220,6 +230,17 @@ fieldset {
         width: 100%;
         height: 100% !important;
         padding-top: 1%;
+    }
+
+    .attachments {
+        width: 32%;
+        height:56px;
+        margin-top: -2%;
+        background-image: linear-gradient(#2494D3,#0076D0);
+    }
+
+    .attachment-field {
+        width: 32%;
     }
 }
 
