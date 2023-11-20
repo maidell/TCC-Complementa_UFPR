@@ -1,9 +1,9 @@
 export class Complexidade {
-    private id!: number;
-    private nome: string = "";
-    private cargaHorariaMinima!: number;
-    private cargaHorariaMaxima!: number;
-  
+    public id!: number;
+    public nome: string = "";
+    public cargaHorariaMinima!: number;
+    public cargaHorariaMaxima!: number;
+
     constructor(
         id?: number,
         nome?: string,
@@ -15,5 +15,5 @@ export class Complexidade {
         if (cargaHorariaMinima) this.cargaHorariaMinima = cargaHorariaMinima;
         if (cargaHorariaMaxima) this.cargaHorariaMaxima = cargaHorariaMaxima;
       }
-   
+
 }

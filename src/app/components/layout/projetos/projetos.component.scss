@@ -7,7 +7,9 @@
 	justify-content: center;
 }
 
-
+mat-paginator {
+	background-color: transparent !important;
+}
 .error-img {
 	img.mat-card-image-responsive {
 		width: 100%;
@@ -38,7 +40,7 @@
 }
 
 
-.let-of-cards {
+.let-of-cards, .warning-card {
 	display: flex;
 	flex: 0.83;
 	flex-direction: column;
@@ -61,5 +63,9 @@
 }
 
 app-rect-card {
-	margin-bottom: 20px;
+	margin-bottom: 12px;
+}
+
+mat-form-field {
+	width: 100%;
 }

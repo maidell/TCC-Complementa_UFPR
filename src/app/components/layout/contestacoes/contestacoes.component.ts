@@ -13,7 +13,7 @@ export class ContestacoesComponent implements OnInit {
   }
   objections : String [] = ["aaaa","bbbb","cccc"];
 
-  hasObjections(): boolean {
+  hasObject(): boolean {
     return this.objections.length > 0;
   }
 }

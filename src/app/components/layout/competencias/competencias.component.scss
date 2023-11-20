@@ -1,0 +1,18 @@
+.table-source-body{
+	display: flex;
+	flex-direction: row;
+
+}
+
+.table-source{
+	display: flex;
+	flex: 0.83;
+	flex-direction: column;
+	padding: 10px 15px;
+
+}
+mat-header-row {
+	display: none;
+
+}
+

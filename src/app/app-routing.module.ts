@@ -10,6 +10,13 @@ import { DashboardComponent } from './components/layout/dashboard/dashboard.comp
 import { ProjetosComponent } from './components/layout/projetos/projetos.component';
 import { AtividadesComponent } from './components/layout/atividades/atividades.component';
 import { ContestacoesComponent } from './components/layout/contestacoes/contestacoes.component';
+import { GraduacoesComponent } from './components/layout/graduacoes/graduacoes.component';
+import { Competencia, Complexidade } from './shared';
+import { ComplexidadesComponent } from './components/layout/complexidades/complexidades.component';
+import { ServidoresComponent } from './components/layout/servidores/servidores.component';
+import { MeuPerfilComponent } from './components/layout/meu-perfil/meu-perfil.component';
+import { CompetenciasComponent } from './components/layout/competencias/competencias.component';
+import { ModifyCardComponent } from './components/layout/cards/modify-card/modify-card.component';
 
 const routes: Routes = [
   {
@@ -53,17 +60,43 @@ const routes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'projetos',
+    path: 'projetos/listar',
     component: ProjetosComponent
   },
   {
-    path: 'atividades',
+    path: 'atividades/listar',
     component: AtividadesComponent
   },
   {
-    path: 'contestacoes',
+    path: 'contestacoes/listar',
     component: ContestacoesComponent
   },
+  {
+    path: 'graduacoes/listar',
+    component: GraduacoesComponent
+  },
+  {
+    path: 'competencias/listar',
+    component: CompetenciasComponent
+  },
+  {
+    path: 'complexidades/listar',
+    component: ComplexidadesComponent
+  },
+  {
+    path: 'servidores/listar',
+    component: ServidoresComponent
+  },
+  {
+    path: 'meu-perfil',
+    component: MeuPerfilComponent
+  },
+  {
+    path: 'teste',
+    component: ModifyCardComponent
+  },
+
+
   ...LoginRoutes
 ];
 

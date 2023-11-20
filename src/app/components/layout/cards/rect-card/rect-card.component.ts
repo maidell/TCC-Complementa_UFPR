@@ -8,12 +8,13 @@ import { Component, Input } from '@angular/core';
 export class RectCardComponent{
   @Input() nome!: string;
   @Input() status!: string;
-  @Input() dataCriacaoLabel!: string;
-  @Input() dataCriacao!: Date;
-  @Input() dataLimiteCandidaturaLabel!: string;
-  @Input() dataLimiteCandidatura!: Date;
-  @Input() dataConclusaoLabel!: string;
-  @Input() dataConclusao!: Date;
+  @Input() firstLabel!: string;
+  @Input() firstValue!: string;
+  @Input() secondLabel!: string;
+  @Input() secondValue!: string;
+  @Input() thirdLabel!: string;
+  @Input() thirdValue!: string;
   @Input() Texto!: string;
   @Input() nameButtonRect!: string;
+  @Input() buttonColor?: string;
 }

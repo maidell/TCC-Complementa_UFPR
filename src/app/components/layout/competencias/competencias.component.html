@@ -1,0 +1,11 @@
+<div class="table-source-body">
+
+	<ng-container *ngIf="!hasObjects()">
+		<app-warning [Description]="'Nenhuma competência cadastrada'"></app-warning>
+	</ng-container>
+
+	<div class="table-source" *ngIf="hasObjects()">
+		<app-table-card [dataSource]="dataSource" [columns]="columns" [display]="'displaynone'" [button]="button"></app-table-card>
+	</div>
+
+</div>
