@@ -14,13 +14,25 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./atividade.component.scss']
 })
 export class AtividadeComponent {
-
+/**
+ NOVA: DONE
+ ABERTA - autor: DONE (Falta botão de visualizar candidaturas)
+ ABERTA - EXECUTOR: DONE
+ EM EXECUÇÃO- autor - sem relatório de conclusão: DONE
+ EM EXECUÇÃO - executor - sem relatório de conclusão: DONE
+ relatório de conclusão - autor: 
+ relatório de conclusão - executor: DONE
+ Contestar carga horária: 
+ Contestar Execução: 
+ Aprovar Contestação: 
+ Finalizada: DONE (Exceto botão de gerar certificado)
+*/
 
   exampleResponse=[
     {
       id: 1,
-      nome: "Teste",
-      status: "Aberta", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      nome: "Teste", 
+      status: "Em Execução", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
@@ -138,6 +150,7 @@ export class AtividadeComponent {
 
 
   fillingReport=false;
+  isReadingReport=false;
 
   
   file_store!: FileList;
@@ -200,6 +213,7 @@ export class AtividadeComponent {
         if(this.canUserEdit()){
 
           if(this.exampleResponse[0].relatorioDeConclusao!=null){
+            this.showInfoToastr("Essa atividade possui um relatório de Conclusão. Clique em \"Finalizar\" para visualizar");
             this.firstButtonWidth='100%';
             this.firstHeaderButton='Finalizar';
             this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
@@ -278,6 +292,7 @@ export class AtividadeComponent {
 
         break;
       case 'Em Execução':
+
         this.activityFormWidth='65%';
         this.commentsFormWidth='35%';
         this.displayComments='';
@@ -302,6 +317,8 @@ export class AtividadeComponent {
       case 'Execução Contestada':
         break;
       case 'Finalizada':
+        this.activityForm.disable();
+        this.displayComments='';
         break;
     }
 
@@ -309,13 +326,17 @@ export class AtividadeComponent {
 
 
   firstButtonFunction(){
-    console.log("entrou na função do botão");
+
 
     switch(this.estado){
       case "Nova":
         this.saveActivity();
       break;
       case "Aberta":
+
+        if(!this.canUserEdit()){
+          this.registerCandidature();
+        }
 
         if(this.isEditing){
           this.saveEdit();
@@ -325,22 +346,51 @@ export class AtividadeComponent {
       case "Em Execução":
         console.log("entrou no case em execução");
 
-        if (!this.canUserEdit) {
-          this.fillReport();
-          
-          if (this.fillingReport){
-
-              if(this.disputingHours){
-                this.sendDispute();
-              } else {
-                this.sendFinalReport();
-              }
+        if (!this.canUserEdit()){
+          console.log("entrou no if (!this.canUserEdit()");
+          if (!this.fillingReport){
+            this.fillReport();
+          } else {
+            if(this.disputingHours){
+              this.sendDispute();
+            } else {
+              this.sendFinalReport();
+            }
           }
 
-        } else { 
+        } else {
+
+          if (this.exampleResponse[0].relatorioDeConclusao!=null){
+            console.log("entrou no if do relatorio de conclusão");
+
+            if(this.isReadingReport){
+              this.approveReport();
+            } else {
+              this.readConclusionReport();
+            }
+
+          } else {
+            console.log("entrou no else do relatorio de conclusao");
+          }
+
+        }
+
+
+  /**      if (!this.canUserEdit() && !this.fillingReport) {
+          console.log("entrou no primeiro if");
+          this.fillReport();
+      
+        } else if (!this.canUserEdit() && this.fillingReport){
+          console.log("entrou no else if");
+            if(this.disputingHours){
+              this.sendDispute();
+            } else {
+              this.sendFinalReport();
+            }
+        } else if (this.canUserEdit() && !this.exampleResponse[0].relatorioDeConclusao) { 
 
           this.endActivity();
-        }
+        }*/
       break;
 
     }
@@ -391,6 +441,11 @@ export class AtividadeComponent {
     this.onNoClick();
   }
 
+
+  registerCandidature(){
+    this.toastr.success("Candidatura registrada com sucesso!");
+    this.onNoClick();
+  }
   editActivity(){
     this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
     this.isEditing=true;
@@ -437,7 +492,6 @@ export class AtividadeComponent {
     var commentContent: string =f.value.commentInput;
     if(commentContent!= ''){
       var newComment={name:"Teste 1", content:commentContent}
-      console.log(newComment.content);
       this.comments.push(newComment);
       this.commentValue='';
     }
@@ -485,6 +539,7 @@ export class AtividadeComponent {
   }
 
   sendFinalReport(): void {
+
     var fd = new FormData();
     this.file_list = [];
     if(this.file_store){
@@ -498,14 +553,15 @@ export class AtividadeComponent {
         console.log(this.file_store[i].name);
       }
     }
-    console.log("valor do campo: " + this.description.value);
+    this.toastr.success("Relatório de Conclusão Enviado!");
+    this.onNoClick();
   }
 
   saveEdit(){
     this.showSuccessToastr("Atividade salva!");
     this.isEditing=false;
     // substituir daqui pra baixo pela função de enviar pro banco
-    console.log(this.description.value);
+
     this.exampleResponse[0].descricao=this.description.value;
     this.exampleResponse[0].status='Aberta';
     
@@ -533,16 +589,14 @@ export class AtividadeComponent {
   }
 
   sendDispute(){
-    console.log("funcionou essa porra");
     this.disputingHours=false;
-
+    this.toastr.success("Contestação de Complexidade Realizada com sucesso!");
     this.onNoClick();
   }
 
-  endActivity(){
-    this.showSuccessToastr("funcionou");
-    this.onNoClick();
+  readConclusionReport(){
     console.log("entrou na função de finalizar");
+    this.activityForm.enable();
     this.displayComments='none';
     this.projectName='Relatório de Conclusão';
     this.descriptionLabel="Relatório de Conclusão";
@@ -552,6 +606,7 @@ export class AtividadeComponent {
     this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
     this.displayStatus=false;
     this.displayDates='none';
+    this.isReadingReport=true;
 
     this.activityForm.setValue({
       description:"",
@@ -563,6 +618,11 @@ export class AtividadeComponent {
     });
     
 
+  }
+
+  approveReport(){
+    this.toastr.success("Atividade Concluída!");
+    this.onNoClick();
   }
 
 
