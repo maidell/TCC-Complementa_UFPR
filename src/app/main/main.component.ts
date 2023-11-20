@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
-  exibir: boolean = false;
+  exibir: boolean = true;
   userRole: string = ''; // Altere para o perfil do usuário logado:
   // 'aluno' | 'coordenadorOrientador' | 'profOrientador' | 'Administrador';
 
@@ -22,19 +22,19 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.loginService.usuarioLogado) {
-      this.userRole = this.loginService.usuarioLogado.papel;
+    // if (this.loginService.usuarioLogado) {
+    //   this.userRole = this.loginService.usuarioLogado.papel;
       this.exibir = true;
-    } else {
-      this.loginService.usuarioLogado$.subscribe(usuario => {
-        if (usuario) {
-          this.userRole = this.loginService.usuarioLogado.papel;
-          this.exibir = true;
-        } else {
-          this.exibir = false;
-        }
-      });
-    }
+    // } else {
+    //   this.loginService.usuarioLogado$.subscribe(usuario => {
+    //     if (usuario) {
+    //       this.userRole = this.loginService.usuarioLogado.papel;
+    //       this.exibir = true;
+    //     } else {
+    //       this.exibir = false;
+    //     }
+    //   });
+    // }
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)

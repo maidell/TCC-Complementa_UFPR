@@ -10,9 +10,9 @@ import { LoginService } from '../../auth/services/login.service';
 })
 // type UserRole =
 export class NavbarComponent {
-  exibir: boolean = false;
-  userRole: string = ''; // Altere para o perfil do usuário logado:
-  // 'aluno' | 'coordenadorOrientador' | 'profOrientador' | 'Administrador';
+  exibir: boolean = true;
+  userRole: string = 'COORDENADOR'; // Altere para o perfil do usuário logado:
+  // 'ALUNO' | 'SERVIDOR' | 'MONITOR' | 'ORIENTADOR' | 'COORDENADOR' | 'SERVIDOR_COORDENADOR' |'ADMIN';
 
   constructor(
     private router: Router,
@@ -20,17 +20,17 @@ export class NavbarComponent {
   ) { }
 
   ngOnInit(): void {
-    if (this.loginService.usuarioLogado) {
-      this.userRole = this.loginService.usuarioLogado.papel;
+    // if (this.loginService.usuarioLogado) {
+    //   this.userRole = this.loginService.usuarioLogado.papel;
       this.exibir = true;
-    } else {
-      this.loginService.usuarioLogado$.subscribe(usuario => {
-        if (usuario) {
-          this.userRole = this.loginService.usuarioLogado.papel;
-          this.exibir = true;
-        }
-      });
-    }
+    // } else {
+    //   this.loginService.usuarioLogado$.subscribe(usuario => {
+    //     if (usuario) {
+    //       this.userRole = this.loginService.usuarioLogado.papel;
+    //       this.exibir = true;
+    //     }
+    //   });
+    // }
   }
 
 

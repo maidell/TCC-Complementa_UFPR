@@ -30,7 +30,7 @@ export class TableCardComponent<T> implements OnInit {
   }
   @Input() dataSource!: MatTableDataSource<T>;
   @Input() button!: string;
-  @Input() buttonColor?: string;
+  @Input() colorButtonOne?: string;
   @Input() columns!: {title: string, suffix?: string, key: string}[];
   @Input() display!: string;
   displayedColumns!: string[];

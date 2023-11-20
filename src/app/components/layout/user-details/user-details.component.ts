@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent {
-  exibir: boolean = false;
+  exibir: boolean = true;
   userName = "";
   grr = "";
   name = this.userName.split(/[, ]+/);
@@ -20,23 +20,23 @@ export class UserDetailsComponent {
   ) { }
 
   ngOnInit(): void {
-    if (this.loginService.usuarioLogado) {
+    // if (this.loginService.usuarioLogado) {
       this.exibir = true;
-      this.userName = this.loginService.usuarioLogado.nome;
-      this.grr = this.loginService.usuarioLogado.papel;
-      this.printName();
-    } else {
-      this.loginService.usuarioLogado$.subscribe(usuario => {
-        if (usuario) {
-          this.exibir = true;
-          this.userName = this.loginService.usuarioLogado.nome;
-          this.grr = this.loginService.usuarioLogado.papel;
-          this.printName();
-        } else {
-          this.exibir = false;
-        }
-      });
-    }
+    //   this.userName = this.loginService.usuarioLogado.nome;
+    //   this.grr = this.loginService.usuarioLogado.papel;
+    //   this.printName();
+    // } else {
+    //   this.loginService.usuarioLogado$.subscribe(usuario => {
+    //     if (usuario) {
+    //       this.exibir = true;
+    //       this.userName = this.loginService.usuarioLogado.nome;
+    //       this.grr = this.loginService.usuarioLogado.papel;
+    //       this.printName();
+    //     } else {
+    //       this.exibir = false;
+    //     }
+    //   });
+    // }
   }
 
   printName() {

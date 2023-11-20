@@ -10,7 +10,7 @@
 				<app-rect-card *ngFor="let projeto of projetos" [nome]="projeto.nome" [status]="projeto.status!" [firstLabel]="tipoLabel" [id]="projeto.id!"
 				[firstValue]="projeto.tipo!" [secondLabel]="cursoLabel" [secondValue]="projeto.curso!.nome"
 				[thirdLabel]="orientadorLabel" [thirdValue]="projeto.orientador!.nome"
-				[nameButtonRect]="nameButtonRect">
+				[buttonOne]="buttonOne">
 				</app-rect-card>
 			</ng-container>
 		</ng-container>

@@ -96,7 +96,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     return this.atividades.length > 0;
   }
 
-  nameButtonRect:string = "Detalhes!";
+  buttonOne:string = "Detalhes!";
   dataCriacaoLabel: string = "Data de Criação";
   dataLimiteCandidaturaLabel: string = "Data de Limite para Candidatura";
   dataConclusaoLabel: string = "Data de Conclusão";

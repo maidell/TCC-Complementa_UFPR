@@ -1,5 +1,12 @@
-<!-- colocar um ngIf para verificar se o usuario tem contestações -->
-<ng-container *ngIf="hasObject()">
-<app-warning [Description]="'Nenhuma contestação cadastrada'"></app-warning>
+<ng-container *ngIf="!hasObject()">
+	<app-warning [Description]="'Nenhuma contestação cadastrada'"></app-warning>
 </ng-container>
+<div class="table-source-body">
 
+
+	<div class="table-source" *ngIf="hasObject()">
+		<app-table-card [dataSource]="dataSource" [columns]="columns" [button]="button"
+			[display]="'displayTrue'"></app-table-card>
+	</div>
+
+</div>
