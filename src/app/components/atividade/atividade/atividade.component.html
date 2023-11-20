@@ -99,8 +99,33 @@
                     
 
                 </div>
+                <div *ngIf="disputingHours" class="dispute-hours">
+                    <mat-form-field class="hours-field">
+                        <mat-label>Carga Horária Oferecida</mat-label>
+                        <input readonly [disabled]="true" matInput [formControl]="disputedHoursValue">
+                    </mat-form-field>
+                    <mat-form-field class="hours-field">
+                        <mat-label>Carga Horária Proposta</mat-label>
+                        <input matInput [formControl]="proposedHours">
+                    </mat-form-field>
+                    <!-- não lembro se tem anexo na contestação-->
+                    <mat-form-field class="hours-field">
+                        <mat-label>Anexar</mat-label>
+                        <button mat-icon-button matSuffix (click)="f_input.click()">
+                        <mat-icon>attach_file</mat-icon>
+                        </button>
+                            <input type="text" readonly matInput [formControl]="uploadFile" />
+                            <input
+                                type="file"
+                                multiple
+                                hidden
+                                #f_input
+                                (change)="f_input.files && handleFileInputChange(f_input.files)"
+                            />
+                    </mat-form-field>
+                </div>
 
-                <div class="conclusion-form" *ngIf="fillingReport">
+                <div class="conclusion-form" *ngIf="fillingReport && !disputingHours">
                     <mat-form-field class="attachment-field">
                         <mat-label>Anexar</mat-label>
                         <button mat-icon-button matSuffix (click)="f_input.click()">

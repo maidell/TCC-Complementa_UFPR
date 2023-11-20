@@ -1,9 +1,10 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormControlName, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { DatePipe, formatDate } from '@angular/common';
 import { DownloadService } from '../download.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class AtividadeComponent {
     {
       id: 1,
       nome: "Teste",
-      status: "Aberta", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      status: "Em Execução", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
@@ -42,9 +43,9 @@ export class AtividadeComponent {
 
 
 
-  parsedDate = new Date(this.exampleResponse[0].dataCriacao);
+
   
-  onlineUserId=1;
+  onlineUserId=5;
 
   estado: string =this.exampleResponse[0].status; 
   
@@ -53,6 +54,7 @@ export class AtividadeComponent {
 
   editable=false;
   isEditing=false;
+  disputingHours=false;
 
   displayStatus=true;
 
@@ -89,6 +91,8 @@ export class AtividadeComponent {
   
   descriptionLabel="Descrição da Atividade";
 
+  hoursOffered='';
+
   data={
     description:"",
     competences:[""],
@@ -105,7 +109,7 @@ export class AtividadeComponent {
 
   commentValue='';
 
-  // esse formgroup serve pra ativar e desativar o form de acordo com o conteúdo. precisa ter os formcontrols dentro senão quebra
+  // esse formgroup serve pra ativar e desativar o form de acordo com o estado. precisa ter os formcontrols dentro senão quebra
   activityForm = new FormGroup({
     description:  new FormControl(""),
     competences: new FormControl(['']),
@@ -124,10 +128,13 @@ export class AtividadeComponent {
   contestDate: FormControl = new FormControl();
   uploadFile: FormControl = new FormControl("");
 
+
+  disputedHoursValue: FormControl = new FormControl("");
+  proposedHours: FormControl = new FormControl();
+
   creationDate!: Date;
   datePipe!: DatePipe;
 
-  _snackBar!: MatSnackBar;
 
   fillingReport=false;
 
@@ -136,8 +143,7 @@ export class AtividadeComponent {
   file_list: Array<string> = [];
 
 
-
-  constructor(private downloadService: DownloadService) {}
+  constructor(private downloadService: DownloadService, public dialog: MatDialogRef<AtividadeComponent>) {}
 
   download(fileUrl: string, fileName: string): void {
     this.downloadService.downloadFile(fileUrl, fileName);
@@ -172,7 +178,7 @@ export class AtividadeComponent {
       case 'Aberta': 
         this.statusButtonColor='linear-gradient(#3473A3, #5B7BA5';
 
-        if(this.allowedUsers.some(user => user.id === this.onlineUserId)){
+        if(this.canUserEdit()){
           this.firstHeaderButton='Visualizar Candidaturas';
           this.secondHeaderButton='Editar';
           this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
@@ -187,10 +193,10 @@ export class AtividadeComponent {
         this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
         
         break;
-      case 'Em Execução': //visão do solicitante quando o relatorio de conclusão tiver sido preenchido. tratar quando não tiver sido preenchido ainda
+      case 'Em Execução': 
         this.statusButtonColor='linear-gradient(#DEB345, #C99614)';
 
-        if(this.allowedUsers.some(user => user.id === this.onlineUserId)){
+        if(this.canUserEdit()){
 
           if(this.exampleResponse[0].relatorioDeConclusao!=null){
             this.firstHeaderButton='Finalizar';
@@ -202,6 +208,7 @@ export class AtividadeComponent {
             this.displayFirstHeaderButton='none';
             this.displaySecondHeaderButton='none';
           }
+
         } else {
 
           if(this.exampleResponse[0].relatorioDeConclusao!=null){
@@ -213,6 +220,10 @@ export class AtividadeComponent {
             this.firstButtonWidth='100%';
             this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
             this.displaySecondHeaderButton='none';
+            if(this.disputingHours){
+              this.firstHeaderButton="Contestar Carga Horária";
+              this.firstButtonColor='linear-gradient(#CC6E00,#D95409)';
+            }
           }
 
         }
@@ -294,14 +305,19 @@ export class AtividadeComponent {
   firstButtonFunction(){
     console.log("entrou na função do botão");
     console.log(this.fillingReport);
-    if (this.estado==="Aberta" && !this.allowedUsers.some(user => user.id === this.onlineUserId)){
-      this.openSnackBar("Candidatura Registrada!");
-    } else if (this.estado==="Em Execução" && !this.allowedUsers.some(user => user.id === this.onlineUserId)){
+    if (this.estado==="Aberta" && !this.canUserEdit()){
+
+    } else if (this.estado==="Em Execução" && !this.canUserEdit()){
       this.fillReport();
+      
     }
     if (this.fillingReport){
       console.log("entrou na função do relatório");
-      this.sendFinalReport();
+      if(this.disputingHours){
+        this.sendDispute();
+      } else {
+        this.sendFinalReport();
+      }
     }
     if(this.isEditing){
       this.saveEdit();
@@ -313,15 +329,27 @@ export class AtividadeComponent {
 
 
   secondButtonFunction(){
+    
     if(!this.editable){
+      
       switch (this.estado){
         case 'Aberta':
-          console.log("entrou no case de edição");
+          
           this.editActivity();
           break;
+        case 'Em Execução':
+          if(this.fillingReport){
+            
+            this.disputeHours();
+
+          }
+        break; 
+
 
       }
     } else{
+
+
       this.editable=false;
       this.isEditing=false;
       this.isDisabled=true;
@@ -334,7 +362,7 @@ export class AtividadeComponent {
 
   editActivity(){
     this.isEditing=true;
-    if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
+    if (this.canUserEdit()){
       this.editable=true;
       this.isDisabled=false;
       this.activityForm.enable();
@@ -383,13 +411,11 @@ export class AtividadeComponent {
     }
   }
 
-  openSnackBar(message: string){
-    console.log("entrou na função");
-    this._snackBar.open("funcionou");
-  }
+
 
 
   fillReport(){
+
     this.displayComments='none';
     this.projectName='Relatório de Conclusão';
     this.descriptionLabel="Relatório de Conclusão";
@@ -440,7 +466,6 @@ export class AtividadeComponent {
         console.log(this.file_store[i].name);
       }
     }
-
     console.log("valor do campo: " + this.description.value);
   }
 
@@ -456,10 +481,34 @@ export class AtividadeComponent {
     this.setHeaderContent(); // essa fica
   }
 
-  cancelEdit(){
-    this.isEditing=false;
+
+  disputeHours(){
+    console.log("entrou na função de contestar carga horária");
+    this.disputingHours=true;
     this.setHeaderContent();
-    this.setContent();
+    this.descriptionLabel="Descrição da Contestação de Carga Horária";
+    this.disputedHoursValue.setValue("4 a 8 horas");
+  }
+
+
+  canUserEdit(){
+    if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  sendDispute(){
+    console.log("funcionou essa porra");
+    this.disputingHours=false;
+
+    this.onNoClick();
+  }
+
+
+  onNoClick(): void {
+    this.dialog.close();
   }
 
 }
