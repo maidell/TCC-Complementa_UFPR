@@ -6,6 +6,8 @@ import { HomeAlunoComponent } from './home-aluno/home-aluno.component';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 import { LayoutModule } from '../layout/layout.module';
 import { FormsModule } from '@angular/forms';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     MaterialStylesModule,
     LayoutModule,
-    FormsModule
+    FormsModule,
+    NgxMaskModule.forRoot()
   ]
 })
 export class AlunoModule { }

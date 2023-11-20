@@ -20,7 +20,6 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
-
 const MY_DATE_FORMAT = {
   parse: {
     dateInput: 'DD/MM/YYYY', // this is how your date will be parsed from Input
@@ -58,7 +57,7 @@ const MY_DATE_FORMAT = {
     MatToolbarModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatDialogModule,
+    MatDialogModule
 
     ],
   exports: [
