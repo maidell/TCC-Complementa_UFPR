@@ -35,6 +35,10 @@ public class AuthREST {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}
 			Usuario usu = usuOpt.get();
+			
+			if (!usu.isAtivo()) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+			}
 
 			Boolean senhaValida = PasswordUtils.checkPassword(login.getSenha(), usu.getSenha(), usu.getSalt());
 			if (!senhaValida) {

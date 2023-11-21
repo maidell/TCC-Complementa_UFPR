@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { Usuario } from 'src/app/shared/models/usuario.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 const LS_CHAVE: string = "usuarios"
 
@@ -9,39 +10,46 @@ const LS_CHAVE: string = "usuarios"
 })
 export class UsuarioService {
 
-  constructor() { }
+  BASE_URL = "http://localhost:3000/";
 
-  listarTodos(): Usuario[] {
-    const usuarios = localStorage[LS_CHAVE];
-    return usuarios ? JSON.parse(usuarios) : [];
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+
+  public get adminLogado(): Usuario {
+    let adminLogado = localStorage[LS_CHAVE];
+    return adminLogado ? JSON.parse(adminLogado) : null;
   }
 
-  inserir(usuario: Usuario): void {
-    const usuarios = this.listarTodos();
-
-    usuario.id = new Date().getTime();
-    usuarios.push(usuario);
-    localStorage[LS_CHAVE] = JSON.stringify(usuarios);
+  public set adminLogado(admin: Usuario) {
+    localStorage[LS_CHAVE] = JSON.stringify(admin)
   }
 
-  buscarPorId(id: number): Usuario | undefined {
-    const usuarios = this.listarTodos();
-    return usuarios.find(usuario => usuario.id === id);
+  constructor(private httpClient: HttpClient) { }
+
+  limparLS(): void {
+    delete localStorage[LS_CHAVE];
   }
 
-  atualizar(usuario: Usuario): void {
-    const usuarios: Usuario[] = this.listarTodos();
-
-    usuarios.forEach((obj, index, objs) => {
-      if (usuario.id === obj.id) {
-        objs[index] = usuario;
-      }
-    });
+  listarTodosUsuarios(): Observable<Usuario[]> {
+    return this.httpClient.get<Usuario[]>(this.BASE_URL + 'usuarios/', this.httpOptions);
   }
 
-  remover(id: number): void {
-    let usuarios: Usuario[] = this.listarTodos();
-    usuarios = usuarios.filter(usuario => usuario.id !== id);
-    localStorage[LS_CHAVE] = JSON.stringify(usuarios);
+  inserirUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.httpClient.post<Usuario>(this.BASE_URL + 'usuarios/', JSON.stringify(usuario), this.httpOptions);
+  }
+
+  buscarUsuarioPorId(id: number): Observable<Usuario> {
+    return this.httpClient.get<Usuario>(this.BASE_URL + 'usuarios/' + id, this.httpOptions);
+  }
+
+  atualizarUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.httpClient.put<Usuario>(this.BASE_URL + 'usuarios/' + usuario.id, JSON.stringify(usuario), this.httpOptions);
+  }
+
+  removerUsuario(id: number): Observable<Usuario> {
+    return this.httpClient.delete<Usuario>(this.BASE_URL + 'usuarios/' + id, this.httpOptions);
   }
 }

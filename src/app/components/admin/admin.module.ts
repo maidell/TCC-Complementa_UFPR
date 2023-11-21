@@ -4,6 +4,10 @@ import { DashAdminComponent } from './dash-admin/dash-admin.component';
 import { MaterialStylesModule } from '../layout/material-styles/material-styles.module';
 import { CardsModule } from '../layout/cards/cards.module';
 import { CadastroDeUsuariosComponent } from './cadastro-de-usuarios/cadastro-de-usuarios.component';
+import { FormsModule } from '@angular/forms';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
+
 @NgModule({
   declarations: [
     DashAdminComponent,
@@ -12,7 +16,9 @@ import { CadastroDeUsuariosComponent } from './cadastro-de-usuarios/cadastro-de-
   imports: [
     CommonModule,
     MaterialStylesModule,
-    CardsModule
+    CardsModule,
+    FormsModule,
+    NgxMaskModule.forRoot()
    ],
   exports: [
     DashAdminComponent

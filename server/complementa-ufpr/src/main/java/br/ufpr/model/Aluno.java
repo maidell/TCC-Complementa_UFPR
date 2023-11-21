@@ -19,8 +19,8 @@ public class Aluno extends Usuario {
     public Aluno() {
     }
 
-    public Aluno(Long id, String nome, String email, String telefone, String senha, Papel papel, String grr, Graduacao graduacao) {
-        super(id, nome, email, telefone, senha, papel);
+    public Aluno(Long id, String nome, String email, String telefone, String senha, boolean ativo, Papel papel, String grr, Graduacao graduacao) {
+        super(id, nome, email, telefone, senha, ativo, papel);
         this.grr = grr;
         this.graduacao = graduacao;
     }

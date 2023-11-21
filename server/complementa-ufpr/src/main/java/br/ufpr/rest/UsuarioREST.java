@@ -1,5 +1,7 @@
 package br.ufpr.rest;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.UsuarioDTO;
+import br.ufpr.helper.EmailService;
 import br.ufpr.helper.PasswordUtils;
 import br.ufpr.model.Usuario;
 import br.ufpr.repository.UsuarioRepository;
@@ -35,8 +38,8 @@ public class UsuarioREST {
 	private ModelMapper mapper;
 	
 	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+	private EmailService emailService;
+	
 	@GetMapping
 	public ResponseEntity<List<UsuarioDTO>> obterTodosUsuarios() {
 
@@ -70,13 +73,21 @@ public class UsuarioREST {
 
 		try {
 			String salt = PasswordUtils.generateSalt();
+			String senha = PasswordUtils.generatePassword();
+			usuario.setSenha(senha);
 			usuario.setSalt(salt);
+			usuario.setAtivo(true);
 			usuario.setSenha(PasswordUtils.hashPassword(usuario.getSenha(), salt)); // Hashing a senha com o salt
 			Usuario usu = repo.save(mapper.map(usuario, Usuario.class));
 			Optional<Usuario> usuOpt = repo.findById(usu.getId());
 			if (!usuOpt.isPresent()) {
 				throw new Exception("Criação do usuario não foi realizada com sucesso");
 			}
+			String conteudoEmail = "Bem-vindo ao Complementa UFPR " + usuario.getNome() + "! \n \n "
+					+ "Por favor, realize seu login com as seguintes credenciais \n"
+					+ "E-mail: " + usuario.getEmail() + "\n"
+					+ "Senha: " + senha;
+					emailService.enviarEmail(usuario.getEmail(), "Confirmação de Email", conteudoEmail);
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(usuOpt.get(), UsuarioDTO.class));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

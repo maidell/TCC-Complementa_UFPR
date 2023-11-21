@@ -8,114 +8,137 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_usuario")
+	private Long id;
 
-    @Column(name = "nome")
-    private String nome;
+	@Column(name = "nome")
+	private String nome;
 
-    @Column(name = "email")
-    private String email;
+	@Column(name = "email")
+	private String email;
 
-    @Column(name = "telefone")
-    private String telefone;
+	@Column(name = "telefone")
+	private String telefone;
 
-    @Column(name = "senha")
-    private String senha;
+	@Column(name = "senha")
+	private String senha;
 
-    @Column(name = "salt")
-    private String salt;
-    
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "fk_id_papel")
-    private Papel papel;
+	@Column(name = "salt")
+	private String salt;
 
-    public Usuario() {
-    }
+	@Column(name = "ativo")
+	private boolean ativo;
 
-    public Usuario(Long id, String nome, String email, String telefone, String senha, Papel papel) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.senha = senha;
-        this.papel = papel;
-    }
-    
-    public Usuario(Long id, String nome, String email, String telefone, String senha, String salt, Papel papel) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.senha = senha;
-        this.salt = salt;
-        this.papel = papel;
-    }
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "fk_id_papel")
+	private Papel papel;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+	public Usuario() {
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Usuario(Long id, String nome, String email, String telefone, String senha, Papel papel) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.telefone = telefone;
+		this.senha = senha;
+		this.papel = papel;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public Usuario(Long id, String nome, String email, String telefone, String senha, boolean ativo, Papel papel) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.telefone = telefone;
+		this.senha = senha;
+		this.ativo = ativo;
+		this.papel = papel;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public Usuario(Long id, String nome, String email, String telefone, String senha, String salt, boolean ativo,
+			Papel papel) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.telefone = telefone;
+		this.senha = senha;
+		this.salt = salt;
+		this.ativo = ativo;
+		this.papel = papel;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	// Getters and Setters
+	public Long getId() {
+		return id;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getTelefone() {
-        return telefone;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public String getSenha() {
-        return senha;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public Papel getPapel() {
-        return papel;
-    }
+	public String getTelefone() {
+		return telefone;
+	}
 
-    public void setPapel(Papel papel) {
-        this.papel = papel;
-    }
-    
-    public String getSalt() {
-        return salt;
-    }
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
+	public String getSenha() {
+		return senha;
+	}
 
-    @Override
-    public String toString() {
-        return "Usuario [id=" + id + ", nome=" + nome + ", email=" + email + ", telefone=" + telefone + ", senha=" + senha
-                + ", papel=" + papel + "]";
-    }
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public Papel getPapel() {
+		return papel;
+	}
+
+	public void setPapel(Papel papel) {
+		this.papel = papel;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome + ", email=" + email + ", telefone=" + telefone + ", senha="
+				+ senha + ", ativo=" + ativo + ", papel=" + papel + "]";
+	}
 }

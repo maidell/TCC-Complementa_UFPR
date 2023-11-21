@@ -17,7 +17,7 @@ import { LoginService } from '../../auth/services/login.service';
 })
 export class EditarAlunoComponent implements OnInit {
 
-  @ViewChild('formLogin') formAluno!: NgForm;
+  @ViewChild('formAluno') formAluno!: NgForm;
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
 
   usuarioLogado: Usuario = new Usuario();
