@@ -11,7 +11,9 @@ public enum Status {
     EM_EXECUCAO(1),
     FINALIZADA(2),
     EXECUCAO_CONTESTADA(3),
-    CARGA_HORARIA_CONTESTADA(4);
+    CARGA_HORARIA_CONTESTADA(4),
+	DEFERIDA(5),
+	INDEFERIDA(6);
 
     @Id
     private int valor;

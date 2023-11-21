@@ -1,5 +1,7 @@
 package br.ufpr.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -23,8 +25,9 @@ public class ContestacaoCargaHoraria extends Contestacao{
 		super();
 	}
 
-	public ContestacaoCargaHoraria(Long id, String descricao, double cargaHorariaOriginal, double cargaHorariaNova) {
-		super(id, descricao);
+	public ContestacaoCargaHoraria(Long id, String descricao, TipoContestacao tipoContestacao, Date dataContestacao, Status status,
+			Usuario autor, Atividade atividade, double cargaHorariaOriginal, double cargaHorariaNova) {
+		super(id, descricao, tipoContestacao, dataContestacao, status, autor, atividade);
 		this.cargaHorariaOriginal = cargaHorariaOriginal;
 		this.cargaHorariaNova = cargaHorariaNova;
 	}
@@ -47,8 +50,9 @@ public class ContestacaoCargaHoraria extends Contestacao{
 	
 	@Override
 	public String toString() {
-	    return "ContestacaoCargaHoraria [id=" + getId() + ", descricao=" + getDescricao() +
-	           ", cargaHorariaOriginal=" + cargaHorariaOriginal + ", cargaHorariaNova=" + cargaHorariaNova + "]";
+	    return "Contestacao [id=" + getId() + "descricao=" + getDescricao() + "tipoContestacao=" + getTipoContestacao()
+	    	    + "dataContestacao=" + getDataContestacao() + "status=" + getStatus() + "autor=" + getAutor()
+	    	    + "atividade=" + getAtividade() + ", cargaHorariaOriginal=" + getCargaHorariaOriginal() + ", cargaHorariaNova=" + getCargaHorariaNova() + "]";
 	}
 
 	
