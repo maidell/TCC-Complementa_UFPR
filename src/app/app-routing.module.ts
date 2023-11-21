@@ -90,6 +90,10 @@ const routes: Routes = [
     component: ComplexidadesComponent
   },
   {
+    path: 'servidores',
+    component: ServidoresComponent
+  },
+  {
     path: 'servidores/listar',
     component: ServidoresComponent
   },

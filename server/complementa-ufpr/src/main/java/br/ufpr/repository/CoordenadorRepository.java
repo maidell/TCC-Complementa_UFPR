@@ -10,6 +10,8 @@ public interface CoordenadorRepository extends JpaRepository<Coordenador, Long> 
 	
 	Optional<Coordenador> findById(String id);
 	
+	Optional<Coordenador> findOptByEmail(String email);
+	
     Coordenador findByEmail(String email);
     
     public long count();

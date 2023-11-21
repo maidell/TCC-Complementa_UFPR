@@ -50,7 +50,8 @@ import { CompetenciasComponent } from './competencias/competencias.component';
     UserDetailsComponent,
     NavbarComponent,
     DashboardComponent,
-    TitleComponent
+    TitleComponent,
+    ServidoresComponent
   ]
 })
 export class LayoutModule { }

@@ -284,5 +284,45 @@ app.delete('/orientadores', (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+console.log(`Configurando rota de coordenador`)
+//app.post('/coordenadores', verifyJWT, (req, res, next) => {
+app.post('/coordenadores', (req, res, next) => {
+  console.log(`Roteando POST de http://localhost:${PORT}/coordenadores para http://localhost:5000/coordenadores`);
+  servicesProxy(req, res, next);
+})
+
+// app.get('/coordenadores/:id', verifyJWT, (req, res, next) => {
+app.get('/coordenadores/:id', (req, res, next) => {
+  const coordenadorId = req.query.id;
+  const destinationUrl = `http://localhost:5000/coordenadores/${coordenadorId}`;
+  console.log(`Roteando GET de http://localhost:${PORT}/coordenadores/${coordenadorId} para ${destinationUrl}`);
+  servicesProxy(req, res, next, destinationUrl);
+})
+
+//app.get('/coordenadores', verifyJWT, (req, res, next) => {
+app.get('/coordenadores', (req, res, next) => {
+  console.log(`Roteando GET de http://localhost:${PORT}/coordenadores para http://localhost:5000/coordenadores`);
+  servicesProxy(req, res, next);
+})
+
+//app.get('/coordenadores/:email', verifyJWT, (req, res, next) => {
+app.get('/coordenadores/:email', (req, res, next) => {
+  const email = req.query.id;
+  console.log(`Roteando PUT de http://localhost:${PORT}/coordenadores/${email} para http://localhost:5000/coordenadores/${email}`);
+  servicesProxy(req, res, next);
+})
+
+// app.put('/coordenadores/:id', verifyJWT, (req, res, next) => {
+app.put('/coordenadores/:id', (req, res, next) => {
+  const coordenadorId = req.query.id;
+  console.log(`Roteando PUT de http://localhost:${PORT}/coordenadores/${coordenadorId} para http://localhost:5000/coordenadores/${coordenadorId}`);
+  servicesProxy(req, res, next);
+})
+
+// app.delete('/coordenadores', verifyJWT, (req, res, next) => {
+app.delete('/coordenadores', (req, res, next) => {
+  console.log(`Roteando DELETE de http://localhost:${PORT}/coordenadores para http://localhost:5000/coordenadores`);
+  servicesProxy(req, res, next);
+})
 
 app.listen(PORT, () => console.log(`Gateway online on http://localhost:${PORT}`));

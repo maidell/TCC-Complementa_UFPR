@@ -7,6 +7,7 @@ import { AlunoService } from '../services/aluno.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-autocadastro',
@@ -36,6 +37,7 @@ export class AutocadastroComponent implements OnInit {
     private router: Router,
     private alunoService: AlunoService,
     public dialog: MatDialog,
+    public toastr: ToastrService
   ) {}  
 
   ngOnInit(): void {
@@ -65,10 +67,11 @@ export class AutocadastroComponent implements OnInit {
       this.aluno.graduacao = this.graduacao;
       this.alunoService.autocadastrarAluno(this.aluno).subscribe(
         (response) => {
-          alert(`Um e-mail de confirmação foi enviado para ${response.email}`);
+          this.toastr.success(`Um e-mail de confirmação foi enviado para ${response.email}`);
           this.router.navigate([""]);
         },
         (error) => {
+          this.toastr.error("Erro ao cadastrar aluno");
           console.error("Erro ao cadastrar aluno:", error);
         }
       );
@@ -81,6 +84,7 @@ export class AutocadastroComponent implements OnInit {
         this.options = response;
       },
       (error) => {
+        this.toastr.error("Erro ao listar Cursos:");
         console.error("Erro ao listar Cursos:", error);
       }
     );

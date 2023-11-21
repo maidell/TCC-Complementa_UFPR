@@ -14,7 +14,7 @@
         </mat-form-field>
 
         <!-- Email -->
-        <mat-form-field class="full-input-field">
+        <mat-form-field class="half-input-field">
             <mat-label>Email UFPR</mat-label>
             <input matInput type="email" [(ngModel)]="email" name="email" #emailField="ngModel"
                 placeholder="ex. nome@ufpr.br" email minlength="2" pattern=".+@ufpr\.br$">
@@ -58,7 +58,7 @@
         </mat-form-field>
 
         <!-- GRR - Mostrado apenas para 'Aluno' -->
-        <mat-form-field class="half-input-field" *ngIf="papel === 'Aluno'">
+        <mat-form-field class="full-input-field" *ngIf="papel === 'Aluno'">
             <mat-label>GRR</mat-label>
             <input matInput type="text" id="grr" [(ngModel)]="grr" name="grr" pattern="^\d{8}$"
                 placeholder="ex. 20100000" #grrField="ngModel">

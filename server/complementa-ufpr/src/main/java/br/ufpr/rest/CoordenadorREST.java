@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,10 @@ import br.ufpr.dto.CoordenadorDTO;
 import br.ufpr.helper.EmailService;
 import br.ufpr.helper.PasswordUtils;
 import br.ufpr.model.Coordenador;
+import br.ufpr.model.Orientador;
+import br.ufpr.model.Papel;
 import br.ufpr.repository.CoordenadorRepository;
+import br.ufpr.repository.OrientadorRepository;
 
 @CrossOrigin
 @RestController
@@ -31,6 +36,9 @@ public class CoordenadorREST {
 
 	@Autowired
 	private CoordenadorRepository repo;
+	
+	@Autowired
+	private OrientadorRepository repoOri;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -54,6 +62,17 @@ public class CoordenadorREST {
 	public ResponseEntity<CoordenadorDTO> buscaPorId(@PathVariable String id) {
 
 		Optional<Coordenador> coordenador = repo.findById(id);
+		if (coordenador.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(coordenador.get(), CoordenadorDTO.class));
+		}
+	}
+	
+	@GetMapping("/{email}")
+	public ResponseEntity<CoordenadorDTO> buscaPorEmail(@PathVariable String email) {
+
+		Optional<Coordenador> coordenador = repo.findOptByEmail(email);
 		if (coordenador.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
@@ -87,16 +106,48 @@ public class CoordenadorREST {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CoordenadorDTO> alterarCoordenador(@PathVariable("id") String id,
+	public ResponseEntity<CoordenadorDTO> alterarCoordenador(@PathVariable("id") Long id,
 			@RequestBody Coordenador coordenador) {
 		Optional<Coordenador> coord = repo.findById(id);
 
 		if (coord.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			coordenador.setId(Long.parseLong(id));
-			repo.save(coordenador);
+			Coordenador newCoord = coord.get();
+			newCoord.setId(id);
+			newCoord.setNome(coordenador.getNome());
+			newCoord.setTelefone(coordenador.getTelefone());
+			newCoord.setPapel(coordenador.getPapel());
+			newCoord.setMatricula(coordenador.getMatricula());
+			newCoord.setGraduacao(coordenador.getGraduacao());
+			
+			if (coordenador.getSenha() != null && !coordenador.getSenha().isEmpty()) {
+				newCoord.setSenha(PasswordUtils.hashPassword(coordenador.getSenha(), coordenador.getSalt()));
+			}
+			repo.save(mapper.map(coordenador, Coordenador.class));
 			coord = repo.findById(id);
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(coord.get(), CoordenadorDTO.class));
+		}
+	}
+	
+	@PutMapping("/encarregar/{id}")
+	public ResponseEntity<CoordenadorDTO> encarregarCoordenador(@PathVariable("id") Long id,
+			@RequestBody Orientador orientador) throws InterruptedException {
+		Optional<Orientador> oriOpt = repoOri.findById(id);
+
+		if (oriOpt.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			Orientador ori = oriOpt.get();
+			Coordenador newCoord = mapper.map(ori, Coordenador.class);
+			newCoord.setPapel(Papel.COORDENADOR);
+			if (orientador.getSenha() != null && !orientador.getSenha().isEmpty()) {
+				newCoord.setSenha(PasswordUtils.hashPassword(orientador.getSenha(), newCoord.getSalt()));
+			}
+			repoOri.delete(ori);
+			Thread.sleep(500);
+			repo.save(mapper.map(newCoord, Coordenador.class));
+			Optional<Coordenador> coord = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(coord.get(), CoordenadorDTO.class));
 		}
 	}

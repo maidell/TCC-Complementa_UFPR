@@ -15,6 +15,10 @@ export class RectCardComponent{
   @Input() thirdLabel!: string;
   @Input() thirdValue!: string;
   @Input() Texto!: string;
-  @Input() nameButtonRect!: string;
+  @Input() nameButtonRect?: string;
   @Input() buttonColor?: string;
+  @Input() showButton: boolean = true;
+  @Input() nameSecondButtonRect?: string;
+  @Input() secondButtonColor?: string;
+  @Input() showSecondButton: boolean = true;
 }
