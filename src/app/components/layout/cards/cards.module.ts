@@ -6,6 +6,12 @@ import { MaterialStylesModule } from '../material-styles/material-styles.module'
 import { WarnCardComponent } from './warn-card/warn-card.component';
 import { ModifyCardComponent } from './modify-card/modify-card.component';
 import { TableCardComponent } from './table-card/table-card.component';
+import { ComplexidadesTableComponent } from './complexidades-table/complexidades-table.component';
+import { ComplexidadesDialogComponent } from './complexidades-dialog/complexidades-dialog.component';
+import { ContestacoesTableComponent } from './contestacoes-table/contestacoes-table.component';
+import { ContestacoesDialogComponent } from './contestacoes-dialog/contestacoes-dialog.component';
+import { CompetenciasTableComponent } from './competencias-table/competencias-table.component';
+import { CompetenciasDialogComponent } from './competencias-dialog/competencias-dialog.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +19,13 @@ import { TableCardComponent } from './table-card/table-card.component';
     SquareCardComponent,
     WarnCardComponent,
     ModifyCardComponent,
-    TableCardComponent
+    TableCardComponent,
+    ComplexidadesTableComponent,
+    ComplexidadesDialogComponent,
+    ContestacoesTableComponent,
+    ContestacoesDialogComponent,
+    CompetenciasTableComponent,
+    CompetenciasDialogComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +35,11 @@ import { TableCardComponent } from './table-card/table-card.component';
     RectCardComponent,
     SquareCardComponent,
     WarnCardComponent,
-    TableCardComponent
+    TableCardComponent,
+    ComplexidadesTableComponent,
+    ComplexidadesDialogComponent,
+    ContestacoesTableComponent,
+    ContestacoesDialogComponent
   ]
 })
 export class CardsModule { }
