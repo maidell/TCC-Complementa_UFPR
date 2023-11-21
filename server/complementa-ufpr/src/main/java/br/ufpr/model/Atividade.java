@@ -42,9 +42,6 @@ public class Atividade implements Serializable {
     @Column(name = "data_limite_candidatura")
     private Date dataLimiteCandidatura;
 
-    @Column(name = "data_contestacao")
-    private Date dataContestacao;
-
     @Column(name = "data_conclusao")
     private Date dataConclusao;
     
@@ -82,6 +79,9 @@ public class Atividade implements Serializable {
     @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Anexo> anexos;
     
+    @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contestacao> contestacoes = new ArrayList<>();
+    
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "fk_id_status")
     private Status status;
@@ -89,19 +89,17 @@ public class Atividade implements Serializable {
     public Atividade() {
     }
 
-    
-
-    public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
-			Date dataContestacao, Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor,
-			Competencia competencia, Complexidade complexidade, List<Comentario> comentarios, Certificado certificado,
-			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, Status status) {
+	public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
+			Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor, Competencia competencia,
+			Complexidade complexidade, List<Comentario> comentarios, Certificado certificado,
+			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, List<Contestacao> contestacoes,
+			Status status) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.dataCriacao = dataCriacao;
 		this.dataLimiteCandidatura = dataLimiteCandidatura;
-		this.dataContestacao = dataContestacao;
 		this.dataConclusao = dataConclusao;
 		this.projeto = projeto;
 		this.autor = autor;
@@ -112,33 +110,57 @@ public class Atividade implements Serializable {
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
 		this.anexos = anexos;
+		this.contestacoes = contestacoes;
 		this.status = status;
 	}
 
+	
+    public Long getId() {
+		return id;
+	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	public Long getId() {
-        return id;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    
-    public String getDescricao() {
+	public String getDescricao() {
 		return descricao;
 	}
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Date getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(Date dataCriacao) {
+		this.dataCriacao = dataCriacao;
+	}
+
+	public Date getDataLimiteCandidatura() {
+		return dataLimiteCandidatura;
+	}
+
+	public void setDataLimiteCandidatura(Date dataLimiteCandidatura) {
+		this.dataLimiteCandidatura = dataLimiteCandidatura;
+	}
+
+	public Date getDataConclusao() {
+		return dataConclusao;
+	}
+
+	public void setDataConclusao(Date dataConclusao) {
+		this.dataConclusao = dataConclusao;
 	}
 
 	public Projeto getProjeto() {
@@ -165,6 +187,38 @@ public class Atividade implements Serializable {
 		this.executor = executor;
 	}
 
+	public Competencia getCompetencia() {
+		return competencia;
+	}
+
+	public void setCompetencia(Competencia competencia) {
+		this.competencia = competencia;
+	}
+
+	public Complexidade getComplexidade() {
+		return complexidade;
+	}
+
+	public void setComplexidade(Complexidade complexidade) {
+		this.complexidade = complexidade;
+	}
+
+	public List<Comentario> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(List<Comentario> comentarios) {
+		this.comentarios = comentarios;
+	}
+
+	public Certificado getCertificado() {
+		return certificado;
+	}
+
+	public void setCertificado(Certificado certificado) {
+		this.certificado = certificado;
+	}
+
 	public RelatorioDeConclusao getRelatorioDeConclusao() {
 		return relatorioDeConclusao;
 	}
@@ -181,88 +235,42 @@ public class Atividade implements Serializable {
 		this.anexos = anexos;
 	}
 
+	public List<Contestacao> getContestacoes() {
+		return contestacoes;
+	}
+
+	public void setContestacoes(List<Contestacao> contestacoes) {
+		this.contestacoes = contestacoes;
+	}
+
 	public Status getStatus() {
 		return status;
 	}
-
-
 
 	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-
-
-	public Date getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(Date dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public Date getDataLimiteCandidatura() {
-        return dataLimiteCandidatura;
-    }
-
-    public void setDataLimiteCandidatura(Date dataLimiteCandidatura) {
-        this.dataLimiteCandidatura = dataLimiteCandidatura;
-    }
-
-    public Date getDataContestacao() {
-        return dataContestacao;
-    }
-
-    public void setDataContestacao(Date dataContestacao) {
-        this.dataContestacao = dataContestacao;
-    }
-
-    public Date getDataConclusao() {
-        return dataConclusao;
-    }
-
-    public void setDataConclusao(Date dataConclusao) {
-        this.dataConclusao = dataConclusao;
-    }
-
-    public Competencia getCompetencia() {
-        return competencia;
-    }
-
-    public void setCompetencia(Competencia competencia) {
-        this.competencia = competencia;
-    }
-
-    public Complexidade getComplexidade() {
-        return complexidade;
-    }
-
-    public void setComplexidade(Complexidade complexidade) {
-        this.complexidade = complexidade;
-    }
-
-    public List<Comentario> getComentarios() {
-        return comentarios;
-    }
-
-    public void setComentarios(List<Comentario> comentarios) {
-        this.comentarios = comentarios;
-    }
-    
-    public Certificado getCertificado() {
-        return certificado;
-    }
-
-    public void setCertificado(Certificado certificado) {
-        this.certificado = certificado;
-    }
-    
-    @Override
+	@Override
     public String toString() {
-        return "Atividade [id=" + id + ", nome=" + nome + ", dataCriacao=" + dataCriacao + ", dataLimiteCandidatura="
-               + dataLimiteCandidatura + ", dataContestacao=" + dataContestacao + ", dataConclusao=" + dataConclusao
-               + ", competencia=" + competencia + ", complexidade=" + complexidade + ", certificado=" + certificado
-               + ", anexos=" + anexos + ", comentarios=" + comentarios + "]";
+        return "Atividade [id=" + id 
+        	    + "nome=" + nome
+        	    + "descricao=" + descricao
+        	    + "dataCriacao=" + dataCriacao
+        	    + "dataLimiteCandidatura=" + dataLimiteCandidatura
+        	    + "dataConclusao=" + dataConclusao
+        	    + "projeto=" + projeto
+        	    + "autor=" + autor
+        	    + "executor=" + executor
+        	    + "competencia=" + competencia
+        	    + "complexidade=" + complexidade
+        	    + "comentarios=" + comentarios
+        	    + "certificado=" + certificado
+        	    + "relatorioDeConclusao=" + relatorioDeConclusao
+        	    + "anexos=" + anexos
+        	    + "contestacoes=" + contestacoes
+        	    + "status=" + status + 
+        		"]";
     }
 
 }
