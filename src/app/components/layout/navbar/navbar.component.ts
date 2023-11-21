@@ -20,17 +20,17 @@ export class NavbarComponent {
   ) { }
 
   ngOnInit(): void {
-    // if (this.loginService.usuarioLogado) {
-    //   this.userRole = this.loginService.usuarioLogado.papel;
+    /**if (this.loginService.usuarioLogado) {
+      this.userRole = this.loginService.usuarioLogado.papel;*/
       this.exibir = true;
-    // } else {
-    //   this.loginService.usuarioLogado$.subscribe(usuario => {
-    //     if (usuario) {
-    //       this.userRole = this.loginService.usuarioLogado.papel;
-    //       this.exibir = true;
-    //     }
-    //   });
-    // }
+   /** } else {
+      this.loginService.usuarioLogado$.subscribe(usuario => {
+        if (usuario) {
+          this.userRole = this.loginService.usuarioLogado.papel;
+          this.exibir = true;
+        }
+      });
+    }*/
   }
 
 

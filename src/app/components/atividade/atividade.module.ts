@@ -5,6 +5,7 @@ import { LayoutModule } from '../layout/layout.module';
 import { FormsModule } from '@angular/forms';
 import { AtividadeComponent } from './atividade/atividade.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
     LayoutModule,
     FormsModule,
     HttpClientModule,
+    ToastrModule.forRoot()
   ],
   
 })

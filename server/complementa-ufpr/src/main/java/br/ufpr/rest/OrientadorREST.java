@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.OrientadorDTO;
+import br.ufpr.helper.EmailService;
 import br.ufpr.helper.PasswordUtils;
 import br.ufpr.model.Orientador;
 import br.ufpr.repository.OrientadorRepository;
@@ -28,76 +29,88 @@ import br.ufpr.repository.OrientadorRepository;
 @RequestMapping(value = "orientadores")
 public class OrientadorREST {
 
-    @Autowired
-    private OrientadorRepository repo;
+	@Autowired
+	private OrientadorRepository repo;
 
-    @Autowired
-    private ModelMapper mapper;
+	@Autowired
+	private ModelMapper mapper;
 
-    @GetMapping
-    public ResponseEntity<List<OrientadorDTO>> obterTodosOrientadores() {
+	@Autowired
+	private EmailService emailService;
 
-        List<Orientador> lista = repo.findAll();
+	@GetMapping
+	public ResponseEntity<List<OrientadorDTO>> obterTodosOrientadores() {
 
-        if (lista.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(lista.stream().map(e -> mapper.map(e, OrientadorDTO.class)).collect(Collectors.toList()));
-    }
+		List<Orientador> lista = repo.findAll();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<OrientadorDTO> buscaPorId(@PathVariable String id) {
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, OrientadorDTO.class)).collect(Collectors.toList()));
+	}
 
-        Optional<Orientador> orientador = repo.findById(id);
-        if (orientador.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(orientador.get(), OrientadorDTO.class));
-        }
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<OrientadorDTO> buscaPorId(@PathVariable String id) {
 
-    @PostMapping
-    public ResponseEntity<OrientadorDTO> inserirOrientador(@RequestBody Orientador orientador) {
+		Optional<Orientador> orientador = repo.findById(id);
+		if (orientador.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(orientador.get(), OrientadorDTO.class));
+		}
+	}
 
-        try {
-        	String salt = PasswordUtils.generateSalt();
-        	orientador.setSalt(salt);
-        	orientador.setSenha(PasswordUtils.hashPassword(orientador.getSenha(), salt));
-            Orientador ori = repo.save(orientador);
-            Optional<Orientador> oriOpt = repo.findById(ori.getId().toString());
-            if (!oriOpt.isPresent()) {
-                throw new Exception("Criação do orientador não foi realizada com sucesso");
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(oriOpt.get(), OrientadorDTO.class));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+	@PostMapping
+	public ResponseEntity<OrientadorDTO> inserirOrientador(@RequestBody Orientador orientador) {
 
-    @PutMapping("/{id}")
-    public ResponseEntity<OrientadorDTO> alterarOrientador(@PathVariable("id") String id, @RequestBody Orientador orientador) {
-        Optional<Orientador> ori = repo.findById(id);
+		try {
+			String salt = PasswordUtils.generateSalt();
+			String senha = PasswordUtils.generatePassword();
+			orientador.setSenha(senha);
+			orientador.setSalt(salt);
+			orientador.setAtivo(true);
+			orientador.setSenha(PasswordUtils.hashPassword(orientador.getSenha(), salt));
+			Orientador ori = repo.save(mapper.map(orientador, Orientador.class));
+			Optional<Orientador> oriOpt = repo.findById(ori.getId());
+			if (!oriOpt.isPresent()) {
+				throw new Exception("Criação do orientador não foi realizada com sucesso");
+			}
+			String conteudoEmail = "Bem-vindo ao Complementa UFPR " + ori.getNome() + "! \n \n "
+					+ "Por favor, realize seu login com as seguintes credenciais \n" + "E-mail: " + ori.getEmail()
+					+ "\n" + "Senha: " + senha;
+			emailService.enviarEmail(ori.getEmail(), "Complementa UFPR - Cadastro", conteudoEmail);
+			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(oriOpt.get(), OrientadorDTO.class));
+		} catch (Exception e) {
+			System.err.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 
-        if (ori.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            orientador.setId(Long.parseLong(id));
-            repo.save(orientador);
-            ori = repo.findById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(ori.get(), OrientadorDTO.class));
-        }
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<OrientadorDTO> alterarOrientador(@PathVariable("id") String id,
+			@RequestBody Orientador orientador) {
+		Optional<Orientador> ori = repo.findById(id);
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerOrientador(@PathVariable("id") String id) {
+		if (ori.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			orientador.setId(Long.parseLong(id));
+			repo.save(orientador);
+			ori = repo.findById(id);
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(ori.get(), OrientadorDTO.class));
+		}
+	}
 
-        Optional<Orientador> orientador = repo.findById(id);
-        if (orientador.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            repo.delete(orientador.get());
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> removerOrientador(@PathVariable("id") String id) {
+
+		Optional<Orientador> orientador = repo.findById(id);
+		if (orientador.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			repo.delete(orientador.get());
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+	}
 }

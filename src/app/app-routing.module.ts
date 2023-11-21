@@ -17,6 +17,7 @@ import { ServidoresComponent } from './components/layout/servidores/servidores.c
 import { MeuPerfilComponent } from './components/layout/meu-perfil/meu-perfil.component';
 import { CompetenciasComponent } from './components/layout/competencias/competencias.component';
 import { ModifyCardComponent } from './components/layout/cards/modify-card/modify-card.component';
+import { CadastroDeUsuariosComponent } from './components/admin/cadastro-de-usuarios/cadastro-de-usuarios.component';
 
 const routes: Routes = [
   {
@@ -53,7 +54,12 @@ const routes: Routes = [
     component: HomeUsuarioComponent
   },
   {
-    path: 'dash-admin', component: DashAdminComponent
+    path: 'dash-admin',
+    component: DashAdminComponent
+  },
+  {
+    path: 'admin/cadastro/usuarios',
+    component: CadastroDeUsuariosComponent
   },
   {
     path: 'dashboard',

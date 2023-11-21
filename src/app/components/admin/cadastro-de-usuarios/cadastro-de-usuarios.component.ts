@@ -1,12 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, NgForm} from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Aluno, Graduacao } from 'src/app/shared';
+import { Aluno, Graduacao, Login, Orientador, Servidor, Usuario } from 'src/app/shared';
 import { AlunoService } from '../../aluno/services/aluno.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { LoginService } from '../../auth/services/login.service';
+import { UsuarioService } from '../../usuario/services/usuario.service';
+import { ServidorService } from '../../servidor/services/servidor.service';
+import { OrientadorService } from '../../orientador/services/orientador.service';
 
 @Component({
   selector: 'app-cadastro-de-usuarios',
@@ -15,13 +19,23 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 })
 export class CadastroDeUsuariosComponent implements OnInit {
 
-  @ViewChild('formLogin') formAluno!: NgForm;
+  @ViewChild('formUsuario') formUsuario!: NgForm;
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
 
+  usuarioLogado: Usuario = new Usuario();
+  admin: Usuario = new Usuario();
   aluno: Aluno = new Aluno();
-  senha: string = '';
-  confirmarSenha: string = '';
+  servidor: Servidor = new Servidor();
+  orientador: Orientador = new Orientador();
+  nome: string = '';
+  email: string = '';
+  telefone: string = '';
+  papel: string = '';
+  grr: string = '';
+  matricula: string = '';
+  papeis: string[] = ["Administrador", "Aluno", "Servidor", "Orientador"];
   senhaValida: boolean = false;
+  senhaAtualValida: boolean = false;
   mostrarSenha: boolean = false;
   mostrarConfirmarSenha: boolean = false;
   grrValido: boolean = true;
@@ -30,48 +44,45 @@ export class CadastroDeUsuariosComponent implements OnInit {
   graduacao!: Graduacao;
   selectedValue: string = '';
   filteredOptions!: Observable<Graduacao[]>;
-  hide: boolean=true;
+  hide: boolean = true;
 
   constructor(
     private router: Router,
     private alunoService: AlunoService,
+    private usuarioService: UsuarioService,
+    private servidorService: ServidorService,
+    private orientadorService: OrientadorService,
+    private loginService: LoginService,
     public dialog: MatDialog,
-  ) {}  
+  ) { }
 
   ngOnInit(): void {
-    this.aluno = new Aluno();
-    this.listarCursos();
-    // this.filteredOptions = this.myControl.valueChanges.pipe(
-    //   startWith(''),
-    //   map(value => this._filter(value || '')),
-    // );
-  }
-
-  private _filter(value: string): Graduacao[] {
-    const filterValue = value.toLowerCase();
-  
-    if (!this.options) {
-      return [];
+    this.usuarioLogado = this.loginService.usuarioLogado;
+    if (this.usuarioLogado.papel !== 'ADMIN') {
+      this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
     }
-  
-    return this.options.filter(option => option.nome.toLowerCase().includes(filterValue));
+    this.listarCursos()
+    
   }
 
-
-  autocadastrar(formAluno: NgForm): void {
-    if (formAluno.valid) {
-      this.aluno.senha = this.senha;
-      this.aluno.papel = "ALUNO";
+  cadastrarUsuario(formUsuario: NgForm): void {
+    if (formUsuario.valid) {
       this.aluno.graduacao = this.graduacao;
-      this.alunoService.autocadastrarAluno(this.aluno).subscribe(
-        (response) => {
-          alert(`Um e-mail de confirmação foi enviado para ${response.email}`);
-          this.router.navigate([""]);
-        },
-        (error) => {
-          console.error("Erro ao cadastrar aluno:", error);
-        }
-      );
+      switch (this.papel) {
+        case "Administrador":
+          this.cadastrarAdministrador(formUsuario);
+          break;
+        case "Aluno":
+          this.cadastrarAluno(formUsuario);
+          break;
+        case "Servidor":
+          this.cadastrarServidor(formUsuario);
+          break;
+        case "Orientador":
+          this.cadastrarOrientador(formUsuario);
+          break;
+        default: break;
+      }
     }
   }
 
@@ -86,22 +97,92 @@ export class CadastroDeUsuariosComponent implements OnInit {
     );
   }
 
-  verificarSenha() {
-    const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
-
-    if (
-      senhaRegex.test(this.senha) &&
-      this.senha === this.confirmarSenha
-    ) {
-      this.senhaValida = true;
-    } else {
-      this.senhaValida = false;
-    }
+  public onPapelChange(selectedPapel: string): void {
+    this.papel = selectedPapel;
   }
+
+
 
   validarGRR() {
     const regex = /^20\d{6}$/;
     this.grrValido = regex.test(this.aluno.grr);
+  }
+
+  cadastrarAdministrador(form: NgForm): void {
+    if (form.valid) {
+      this.admin.nome = this.nome;
+      this.admin.email = this.email;
+      this.admin.telefone = this.telefone;
+      this.admin.papel = "ADMIN";
+      this.usuarioService.inserirUsuario(this.admin).subscribe(
+        (response) => {
+          alert(`Usuário cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.router.navigate([""]);
+        },
+        (error) => {
+          console.error("Erro ao cadastrar usuario:", error);
+        }
+      );
+    }
+  }
+
+  cadastrarAluno(form: NgForm): void {
+    if (form.valid) {
+      this.aluno.nome = this.nome;
+      this.aluno.email = this.email;
+      this.aluno.telefone = this.telefone;
+      this.aluno.papel = "ALUNO";
+      this.aluno.grr = this.grr;
+      this.aluno.graduacao = this.graduacao;
+      this.alunoService.inserirAluno(this.aluno).subscribe(
+        (response) => {
+          alert(`Aluno cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.router.navigate([""]);
+        },
+        (error) => {
+          console.error("Erro ao cadastrar aluno:", error);
+        }
+      );
+    }
+  }
+
+  cadastrarServidor(form: NgForm): void {
+    if (form.valid) {
+      this.servidor.nome = this.nome;
+      this.servidor.email = this.email;
+      this.servidor.telefone = this.telefone;
+      this.servidor.papel = "SERVIDOR";
+      this.servidor.matricula = this.matricula;
+      this.servidorService.inserirServidor(this.servidor).subscribe(
+        (response) => {
+          alert(`Servidor cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.router.navigate([""]);
+        },
+        (error) => {
+          console.error("Erro ao cadastrar servidor:", error);
+        }
+      );
+    }
+  }
+
+  cadastrarOrientador(form: NgForm): void {
+    if (form.valid) {
+      this.orientador.nome = this.nome;
+      this.orientador.email = this.email;
+      this.orientador.telefone = this.telefone;
+      this.orientador.papel = "ORIENTADOR";
+      this.orientador.matricula = this.matricula;
+      this.orientador.graduacao = this.graduacao;
+      this.orientadorService.inserirOrientador(this.orientador).subscribe(
+        (response) => {
+          alert(`Orientador cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.router.navigate([""]);
+        },
+        (error) => {
+          console.error("Erro ao cadastrar orientador:", error);
+        }
+      );
+    }
   }
 
 }

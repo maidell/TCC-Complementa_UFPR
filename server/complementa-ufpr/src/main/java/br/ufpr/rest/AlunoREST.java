@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.AlunoDTO;
+import br.ufpr.helper.EmailService;
+import br.ufpr.helper.PasswordUtils;
 import br.ufpr.model.Aluno;
 import br.ufpr.repository.AlunoRepository;
-import br.ufpr.helper.PasswordUtils;
 
 @CrossOrigin
 @RestController
@@ -34,6 +34,9 @@ public class AlunoREST {
 
 	@Autowired
 	private ModelMapper mapper;
+
+	@Autowired
+	private EmailService emailService;
 
 	@GetMapping
 	public ResponseEntity<List<AlunoDTO>> obterTodosAlunos() {
@@ -64,13 +67,21 @@ public class AlunoREST {
 
 		try {
 			String salt = PasswordUtils.generateSalt();
+			String senha = PasswordUtils.generatePassword();
+			aluno.setSenha(senha);
 			aluno.setSalt(salt);
+			aluno.setAtivo(true);
 			aluno.setSenha(PasswordUtils.hashPassword(aluno.getSenha(), salt)); // Hashing a senha com o salt
 			Aluno aln = repo.save(mapper.map(aluno, Aluno.class));
 			Optional<Aluno> alnOpt = repo.findById(aln.getId());
 			if (!alnOpt.isPresent()) {
 				throw new Exception("Criação do aluno não foi realizada com sucesso");
 			}
+				String conteudoEmail = "Bem-vindo ao Complementa UFPR " + aluno.getNome() + "! \n \n "
+						+ "Por favor, realize seu login com as seguintes credenciais \n"
+						+ "E-mail: " + aluno.getEmail() + "\n"
+						+ "Senha: " + senha;
+				emailService.enviarEmail(aluno.getEmail(), "Complementa UFPR - Cadastro", conteudoEmail);	
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(alnOpt.get(), AlunoDTO.class));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -88,7 +99,7 @@ public class AlunoREST {
 			newAln.setNome(aluno.getNome());
 			newAln.setTelefone(aluno.getTelefone());
 			newAln.setGraduacao(aluno.getGraduacao());
-			if(aluno.getSenha() != null && !aluno.getSenha().isEmpty()) {
+			if (aluno.getSenha() != null && !aluno.getSenha().isEmpty()) {
 				newAln.setSenha(PasswordUtils.hashPassword(aluno.getSenha(), newAln.getSalt()));
 			}
 			repo.save(mapper.map(newAln, Aluno.class));
