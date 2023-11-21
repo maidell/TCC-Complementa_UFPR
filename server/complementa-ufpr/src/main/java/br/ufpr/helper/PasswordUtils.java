@@ -8,12 +8,19 @@ import java.util.Base64;
 public class PasswordUtils {
 
     private static final SecureRandom RANDOM = new SecureRandom();
-    private static final int SALT_LENGTH = 16; // 16 bytes = 128 bits
+    private static final int SALT_LENGTH = 16;
+    private static final int PASS_LENGTH = 8;
 
     public static String generateSalt() {
         byte[] salt = new byte[SALT_LENGTH];
         RANDOM.nextBytes(salt);
         return Base64.getEncoder().encodeToString(salt);
+    }
+    
+    public static String generatePassword() {
+        byte[] pass = new byte[PASS_LENGTH];
+        RANDOM.nextBytes(pass);
+        return Base64.getEncoder().encodeToString(pass);
     }
 
     public static String hashPassword(String password, String salt) {

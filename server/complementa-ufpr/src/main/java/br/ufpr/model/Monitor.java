@@ -16,7 +16,7 @@ public class Monitor extends Aluno {
         super();
     }
 
-    public Monitor(Long id, String nome, String email, String telefone, String senha, Papel papel, String grr, Graduacao graduacao) {
-        super(id, nome, email, telefone, senha, papel, grr, graduacao);
+    public Monitor(Long id, String nome, String email, String telefone, String senha, boolean ativo, Papel papel, String grr, Graduacao graduacao) {
+        super(id, nome, email, telefone, senha, ativo, papel, grr, graduacao);
     }
 }

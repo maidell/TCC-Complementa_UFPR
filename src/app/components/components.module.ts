@@ -10,6 +10,9 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
 import { AtividadeComponent } from './atividade/atividade/atividade.component';
 import { AtividadeModule } from './atividade/atividade.module';
+import { CoordenadorModule } from './coordenador/coordenador.module';
+import { OrientadorModule } from './orientador/orientador.module';
+import { ServidorModule } from './servidor/servidor.module';
 
 
 @NgModule({
@@ -24,7 +27,10 @@ import { AtividadeModule } from './atividade/atividade.module';
     LayoutModule,
     UsuarioModule,
     MaterialStylesModule,
-    AtividadeModule
+    AtividadeModule,
+    CoordenadorModule,
+    OrientadorModule,
+    ServidorModule
 
   ],
  

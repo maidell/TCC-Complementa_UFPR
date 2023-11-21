@@ -19,85 +19,97 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.CoordenadorDTO;
+import br.ufpr.helper.EmailService;
+import br.ufpr.helper.PasswordUtils;
 import br.ufpr.model.Coordenador;
 import br.ufpr.repository.CoordenadorRepository;
-import br.ufpr.helper.PasswordUtils;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "coordenadores")
 public class CoordenadorREST {
 
-    @Autowired
-    private CoordenadorRepository repo;
+	@Autowired
+	private CoordenadorRepository repo;
 
-    @Autowired
-    private ModelMapper mapper;
+	@Autowired
+	private ModelMapper mapper;
 
-    @GetMapping
-    public ResponseEntity<List<CoordenadorDTO>> obterTodosCoordenadores() {
+	@Autowired
+	private EmailService emailService;
 
-        List<Coordenador> lista = repo.findAll();
+	@GetMapping
+	public ResponseEntity<List<CoordenadorDTO>> obterTodosCoordenadores() {
 
-        if (lista.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(lista.stream().map(e -> mapper.map(e, CoordenadorDTO.class)).collect(Collectors.toList()));
-    }
+		List<Coordenador> lista = repo.findAll();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CoordenadorDTO> buscaPorId(@PathVariable String id) {
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, CoordenadorDTO.class)).collect(Collectors.toList()));
+	}
 
-        Optional<Coordenador> coordenador = repo.findById(id);
-        if (coordenador.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(coordenador.get(), CoordenadorDTO.class));
-        }
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<CoordenadorDTO> buscaPorId(@PathVariable String id) {
 
-    @PostMapping
-    public ResponseEntity<CoordenadorDTO> inserirCoordenador(@RequestBody Coordenador coordenador) {
+		Optional<Coordenador> coordenador = repo.findById(id);
+		if (coordenador.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(coordenador.get(), CoordenadorDTO.class));
+		}
+	}
 
-        try {
-        	String salt = PasswordUtils.generateSalt();
-        	coordenador.setSalt(salt);
-        	coordenador.setSenha(PasswordUtils.hashPassword(coordenador.getSenha(), salt));
-            Coordenador coord = repo.save(coordenador);
-            Optional<Coordenador> coordOpt = repo.findById(coord.getId().toString());
-            if (!coordOpt.isPresent()) {
-                throw new Exception("Criação do coordenador não foi realizada com sucesso");
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(coordOpt.get(), CoordenadorDTO.class));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+	@PostMapping
+	public ResponseEntity<CoordenadorDTO> inserirCoordenador(@RequestBody Coordenador coordenador) {
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CoordenadorDTO> alterarCoordenador(@PathVariable("id") String id, @RequestBody Coordenador coordenador) {
-        Optional<Coordenador> coord = repo.findById(id);
+		try {
+			String salt = PasswordUtils.generateSalt();
+			String senha = PasswordUtils.generatePassword();
+			coordenador.setSenha(senha);
+			coordenador.setSalt(salt);
+			coordenador.setAtivo(true);
+			coordenador.setSenha(PasswordUtils.hashPassword(coordenador.getSenha(), salt));
+			Coordenador coord = repo.save(mapper.map(coordenador, Coordenador.class));
+			Optional<Coordenador> coordOpt = repo.findById(coord.getId());
+			if (!coordOpt.isPresent()) {
+				throw new Exception("Criação do coordenador não foi realizada com sucesso");
+			}
+			String conteudoEmail = "Bem-vindo ao Complementa UFPR " + coordenador.getNome() + "! \n \n "
+					+ "Por favor, realize seu login com as seguintes credenciais \n" + "E-mail: " + coord.getEmail()
+					+ "\n" + "Senha: " + senha;
+			emailService.enviarEmail(coord.getEmail(), "Complementa UFPR - Cadastro", conteudoEmail);
+			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(coordOpt.get(), CoordenadorDTO.class));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 
-        if (coord.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            coordenador.setId(Long.parseLong(id));
-            repo.save(coordenador);
-            coord = repo.findById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(coord.get(), CoordenadorDTO.class));
-        }
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<CoordenadorDTO> alterarCoordenador(@PathVariable("id") String id,
+			@RequestBody Coordenador coordenador) {
+		Optional<Coordenador> coord = repo.findById(id);
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerCoordenador(@PathVariable("id") String id) {
+		if (coord.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			coordenador.setId(Long.parseLong(id));
+			repo.save(coordenador);
+			coord = repo.findById(id);
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(coord.get(), CoordenadorDTO.class));
+		}
+	}
 
-        Optional<Coordenador> coordenador = repo.findById(id);
-        if (coordenador.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            repo.delete(coordenador.get());
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> removerCoordenador(@PathVariable("id") String id) {
+
+		Optional<Coordenador> coordenador = repo.findById(id);
+		if (coordenador.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			repo.delete(coordenador.get());
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+	}
 }

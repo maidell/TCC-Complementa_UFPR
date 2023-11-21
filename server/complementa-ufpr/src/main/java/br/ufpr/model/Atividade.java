@@ -33,6 +33,9 @@ public class Atividade implements Serializable {
     @Column(name = "nome")
     private String nome;
 
+    @Column(name = "descricao")
+    private String descricao;
+    
     @Column(name = "data_criacao")
     private Date dataCriacao;
 
@@ -86,20 +89,35 @@ public class Atividade implements Serializable {
     public Atividade() {
     }
 
-    public Atividade(String nome, Date dataCriacao, Date dataLimiteCandidatura, Date dataContestacao, Date dataConclusao,
-                     Competencia competencia, Complexidade complexidade, List<Comentario> comentarios, Certificado certificado) {
-        this.nome = nome;
-        this.dataCriacao = dataCriacao;
-        this.dataLimiteCandidatura = dataLimiteCandidatura;
-        this.dataContestacao = dataContestacao;
-        this.dataConclusao = dataConclusao;
-        this.competencia = competencia;
-        this.complexidade = complexidade;
-        this.comentarios = comentarios;
-        this.certificado = certificado;
-    }
+    
 
-    public Long getId() {
+    public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
+			Date dataContestacao, Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor,
+			Competencia competencia, Complexidade complexidade, List<Comentario> comentarios, Certificado certificado,
+			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, Status status) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.descricao = descricao;
+		this.dataCriacao = dataCriacao;
+		this.dataLimiteCandidatura = dataLimiteCandidatura;
+		this.dataContestacao = dataContestacao;
+		this.dataConclusao = dataConclusao;
+		this.projeto = projeto;
+		this.autor = autor;
+		this.executor = executor;
+		this.competencia = competencia;
+		this.complexidade = complexidade;
+		this.comentarios = comentarios;
+		this.certificado = certificado;
+		this.relatorioDeConclusao = relatorioDeConclusao;
+		this.anexos = anexos;
+		this.status = status;
+	}
+
+
+
+	public Long getId() {
         return id;
     }
 
@@ -114,8 +132,68 @@ public class Atividade implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+    
+    public String getDescricao() {
+		return descricao;
+	}
 
-    public Date getDataCriacao() {
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Projeto getProjeto() {
+		return projeto;
+	}
+
+	public void setProjeto(Projeto projeto) {
+		this.projeto = projeto;
+	}
+
+	public Usuario getAutor() {
+		return autor;
+	}
+
+	public void setAutor(Usuario autor) {
+		this.autor = autor;
+	}
+
+	public Aluno getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(Aluno executor) {
+		this.executor = executor;
+	}
+
+	public RelatorioDeConclusao getRelatorioDeConclusao() {
+		return relatorioDeConclusao;
+	}
+
+	public void setRelatorioDeConclusao(RelatorioDeConclusao relatorioDeConclusao) {
+		this.relatorioDeConclusao = relatorioDeConclusao;
+	}
+
+	public List<Anexo> getAnexos() {
+		return anexos;
+	}
+
+	public void setAnexos(List<Anexo> anexos) {
+		this.anexos = anexos;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+
+
+	public Date getDataCriacao() {
         return dataCriacao;
     }
 

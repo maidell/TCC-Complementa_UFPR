@@ -43,7 +43,7 @@ export class AlunoService {
   }
 
   autocadastrarAluno(aluno: Aluno): Observable<Aluno> {
-    return this.httpClient.post<Aluno>(this.BASE_URL + 'autocadastro', aluno, this.httpOptions);
+    return this.httpClient.post<Aluno>(this.BASE_URL + 'autocadastro', JSON.stringify(aluno), this.httpOptions);
   }
 
   buscarAlunoPorId(id: number): Observable<Aluno> {

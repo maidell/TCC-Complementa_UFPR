@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.ServidorDTO;
+import br.ufpr.helper.EmailService;
 import br.ufpr.helper.PasswordUtils;
 import br.ufpr.model.Servidor;
 import br.ufpr.repository.ServidorRepository;
@@ -28,76 +29,86 @@ import br.ufpr.repository.ServidorRepository;
 @RequestMapping(value = "servidores")
 public class ServidorREST {
 
-    @Autowired
-    private ServidorRepository repo;
+	@Autowired
+	private ServidorRepository repo;
 
-    @Autowired
-    private ModelMapper mapper;
+	@Autowired
+	private ModelMapper mapper;
 
-    @GetMapping
-    public ResponseEntity<List<ServidorDTO>> obterTodosServidores() {
+	@Autowired
+	private EmailService emailService;
 
-        List<Servidor> lista = repo.findAll();
+	@GetMapping
+	public ResponseEntity<List<ServidorDTO>> obterTodosServidores() {
 
-        if (lista.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(lista.stream().map(e -> mapper.map(e, ServidorDTO.class)).collect(Collectors.toList()));
-    }
+		List<Servidor> lista = repo.findAll();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ServidorDTO> buscaPorId(@PathVariable String id) {
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, ServidorDTO.class)).collect(Collectors.toList()));
+	}
 
-        Optional<Servidor> servidor = repo.findById(id);
-        if (servidor.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(servidor.get(), ServidorDTO.class));
-        }
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<ServidorDTO> buscaPorId(@PathVariable String id) {
 
-    @PostMapping
-    public ResponseEntity<ServidorDTO> inserirServidor(@RequestBody Servidor servidor) {
+		Optional<Servidor> servidor = repo.findById(id);
+		if (servidor.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(servidor.get(), ServidorDTO.class));
+		}
+	}
 
-        try {
-        	String salt = PasswordUtils.generateSalt();
-        	servidor.setSalt(salt);
-        	servidor.setSenha(PasswordUtils.hashPassword(servidor.getSenha(), salt));
-            Servidor srv = repo.save(servidor);
-            Optional<Servidor> srvOpt = repo.findById(srv.getId().toString());
-            if (!srvOpt.isPresent()) {
-                throw new Exception("Criação do servidor não foi realizada com sucesso");
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(srvOpt.get(), ServidorDTO.class));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+	@PostMapping
+	public ResponseEntity<ServidorDTO> inserirServidor(@RequestBody Servidor servidor) {
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ServidorDTO> alterarServidor(@PathVariable("id") String id, @RequestBody Servidor servidor) {
-        Optional<Servidor> srv = repo.findById(id);
+		try {
+			String salt = PasswordUtils.generateSalt();
+			String senha = PasswordUtils.generatePassword();
+			servidor.setSenha(senha);
+			servidor.setSalt(salt);
+			servidor.setAtivo(true);
+			servidor.setSenha(PasswordUtils.hashPassword(servidor.getSenha(), salt));
+			Servidor srv = repo.save(mapper.map(servidor, Servidor.class));
+			Optional<Servidor> srvOpt = repo.findById(srv.getId());
+			if (!srvOpt.isPresent()) {
+				throw new Exception("Criação do servidor não foi realizada com sucesso");
+			}
+			String conteudoEmail = "Bem-vindo ao Complementa UFPR " + srv.getNome() + "! \n \n "
+					+ "Por favor, realize seu login com as seguintes credenciais \n" + "E-mail: " + srv.getEmail()
+					+ "\n" + "Senha: " + senha;
+			emailService.enviarEmail(srv.getEmail(), "Complementa UFPR - Cadastro", conteudoEmail);
+			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(srvOpt.get(), ServidorDTO.class));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 
-        if (srv.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            servidor.setId(Long.parseLong(id));
-            repo.save(servidor);
-            srv = repo.findById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(srv.get(), ServidorDTO.class));
-        }
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<ServidorDTO> alterarServidor(@PathVariable("id") String id, @RequestBody Servidor servidor) {
+		Optional<Servidor> srv = repo.findById(id);
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerServidor(@PathVariable("id") String id) {
+		if (srv.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			servidor.setId(Long.parseLong(id));
+			repo.save(servidor);
+			srv = repo.findById(id);
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(srv.get(), ServidorDTO.class));
+		}
+	}
 
-        Optional<Servidor> servidor = repo.findById(id);
-        if (servidor.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            repo.delete(servidor.get());
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> removerServidor(@PathVariable("id") String id) {
+
+		Optional<Servidor> servidor = repo.findById(id);
+		if (servidor.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			repo.delete(servidor.get());
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+	}
 }
