@@ -13,7 +13,6 @@ import { AtividadesComponent } from './atividades/atividades.component';
 import { WarningComponent } from './warning/warning.component';
 import { ContestacoesComponent } from './contestacoes/contestacoes.component';
 import { TitleComponent } from './title/title.component';
-import { ConsultasModule } from './consultas/consultas.module';
 import { GraduacoesComponent } from './graduacoes/graduacoes.component';
 import { ComplexidadesComponent } from './complexidades/complexidades.component';
 import { ServidoresComponent } from './servidores/servidores.component';
@@ -43,7 +42,6 @@ import { CompetenciasComponent } from './competencias/competencias.component';
     MaterialStylesModule,
     CardsModule,
     RouterModule,
-    ConsultasModule
   ],
   exports: [
     HeaderComponent,
