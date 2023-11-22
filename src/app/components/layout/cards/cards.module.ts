@@ -39,7 +39,9 @@ import { CompetenciasDialogComponent } from './competencias-dialog/competencias-
     ComplexidadesTableComponent,
     ComplexidadesDialogComponent,
     ContestacoesTableComponent,
-    ContestacoesDialogComponent
+    ContestacoesDialogComponent,
+    CompetenciasTableComponent,
+    CompetenciasDialogComponent
   ]
 })
 export class CardsModule { }
