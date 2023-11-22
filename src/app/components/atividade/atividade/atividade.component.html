@@ -4,15 +4,12 @@
                 class="close-button-icon">close</mat-icon></button>
     </div>
     <div class="activity-header">
-
         <div class="left-items">
-
             <div class="status" *ngIf="displayStatus">
                 <button mat-flat-button class="status-button"
                     [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
                 <h6 [ngStyle]="{'display': displayTimestamp}">Criada em {{this.exampleResponse[0].dataCriacao | date:'dd/MM/yyyy'}}</h6>
             </div>
-
             <div class="activity-header-data">
                 <div *ngIf="estado!='Nova' ; else newActivity">
                     <div class="project-name">{{projectName}}</div>
@@ -36,7 +33,6 @@
                 (click)="secondButtonFunction()">{{secondHeaderButton}}</button>
         </div>
     </div>
-
     <div mat-dialog-content class="activity-content">
         <div class="activity-form">
             <form [formGroup]="activityForm">
@@ -47,12 +43,10 @@
                             formControlName="description" [formControl]="description"></textarea>
                     </mat-form-field>
                 </div>
-
                 <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
                     <mat-form-field class="competences">
                         <mat-label>Competências</mat-label>
-                        <input matInput formControlName="competences" [formControl]="competences">
-                        
+                        <input matInput formControlName="competences" [formControl]="competences">                        
                     </mat-form-field>
                     <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
@@ -79,8 +73,7 @@
                             <div *ngFor="let a of exampleResponse[0].anexos">
                                 <button mat-menu-item (click)="download(a.path,a.name)">{{a.name}}</button>
                             </div>
-                        </mat-menu>
-                    
+                        </mat-menu>      
                         <mat-form-field class="attachment-field" *ngIf="estado==='Nova'">
                             <mat-label>Anexar Arquivos</mat-label>
                             <button mat-icon-button matSuffix (click)="f_input.click()">
@@ -95,9 +88,6 @@
                         (change)="f_input.files && handleFileInputChange(f_input.files)"
                         />
                         </mat-form-field>
-                           
-                    
-
                 </div>
                 <div *ngIf="disputingHours || readingHoursDispute" class="dispute-hours">
                     <mat-form-field class="hours-field">
@@ -108,23 +98,7 @@
                         <mat-label>Carga Horária Proposta</mat-label>
                         <input matInput type="number" [formControl]="proposedHours" formControlName="proposedHours">
                     </mat-form-field>
-                    <!-- não lembro se tem anexo na contestação
-                    <mat-form-field class="hours-field">
-                        <mat-label>Anexar</mat-label>
-                        <button mat-icon-button matSuffix (click)="f_input.click()">
-                        <mat-icon>attach_file</mat-icon>
-                        </button>
-                            <input type="text" readonly matInput [formControl]="uploadFile" />
-                            <input
-                                type="file"
-                                multiple
-                                hidden
-                                #f_input
-                                (change)="f_input.files && handleFileInputChange(f_input.files)"
-                            />
-                    </mat-form-field>-->
                 </div>
-
                 <div class="conclusion-form" *ngIf="fillingReport && !disputingHours">
                     <mat-form-field class="attachment-field">
                         <mat-label>Anexar</mat-label>
@@ -142,15 +116,8 @@
                     </mat-form-field>
                    
                 </div>
-
-
-            
-        
-                
             </form>
-
         </div>
-
         <div class="comments" [ngStyle]="{'display': displayComments}">
             <div class="comment-panel">
                 <div *ngFor="let c of comments" class="comment">
@@ -160,7 +127,6 @@
                     </div>
                 </div>
             </div>
-
             <div>
                 <form class="comment-form" #f="ngForm">
                     <mat-form-field class="comment-form-field">
@@ -170,9 +136,6 @@
                     </mat-form-field>
                 </form>
             </div>
-
         </div>
-
     </div>
-
 </div>
