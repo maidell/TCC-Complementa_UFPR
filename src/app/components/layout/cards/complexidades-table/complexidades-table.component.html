@@ -1,4 +1,7 @@
-<p>complexidades-table works!</p>
+<!-- botao de Adicionar complexidade -->
+<button mat-raised-button color="primary" (click)="openDialog()" class="button custom-button {{colorButtonOne}}">
+	{{buttonNew}}
+</button>
 <mat-form-field>
 	<mat-label>Filter</mat-label>
 	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>

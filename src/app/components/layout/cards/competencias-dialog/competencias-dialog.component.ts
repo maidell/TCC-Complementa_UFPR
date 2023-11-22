@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { Competencia } from 'src/app/shared';
 
 @Component({
   selector: 'app-competencias-dialog',
@@ -6,5 +9,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./competencias-dialog.component.scss']
 })
 export class CompetenciasDialogComponent {
+
 
 }

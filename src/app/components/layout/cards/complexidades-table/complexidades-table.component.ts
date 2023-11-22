@@ -13,6 +13,8 @@ export class ComplexidadesTableComponent<T> implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  buttonNew: string = "Nova Complexidade";
+
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -47,7 +49,7 @@ export class ComplexidadesTableComponent<T> implements OnInit{
 
   openDialog() {
     this.dialog.open(ComplexidadesDialogComponent, {
-      minWidth: '50%',
+      width: '40rem',
     });
   }
 

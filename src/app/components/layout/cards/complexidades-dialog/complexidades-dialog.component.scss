@@ -1,0 +1,60 @@
+.close-button {
+	border: none;
+	background-color: white;
+}
+
+.close-button-icon {
+	color: red;
+	font-weight: bold;
+}
+
+.header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+h1,
+.close-button {
+	margin: 10px;
+}
+
+.input-form {
+	margin-left: -15px;
+
+	mat-form-field {
+		margin-left: 15px;
+		width: 12rem;
+	}
+}
+
+
+mat-card-content {
+	background: #EEF5F9;
+}
+
+.buttons {
+	text-align: center;
+
+}
+
+.save-button {
+	background: linear-gradient(#318B35, #297E42);
+	color: white;
+	margin: 5px;
+	border-radius: 20px;
+}
+
+.delete-button {
+	background: linear-gradient(#C7433F, #C7241F);
+	color: white;
+	margin: 5px;
+	border-radius: 20px;
+}
+
+.cancel-button {
+	background: linear-gradient(#CC6E00, #D95409);
+	color: white;
+	margin: 5px;
+	border-radius: 20px;
+}
