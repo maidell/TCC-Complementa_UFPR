@@ -74,9 +74,9 @@ public class Comentario implements Serializable {
     
     @Override
     public String toString() {
-        return "ComentarioDTO [id=" + id +
-                ", usuario=" + usuario +
-                ", comentario='" + comentario + '\'' +
+        return "Comentario [id=" + getId() +
+                ", usuario=" + getUsuario() +
+                ", comentario='" + getComentario() + '\'' +
                 "]";
     }
 }

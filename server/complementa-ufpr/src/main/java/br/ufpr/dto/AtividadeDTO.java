@@ -1,13 +1,10 @@
 package br.ufpr.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import br.ufpr.model.Aluno;
-import br.ufpr.model.Projeto;
 import br.ufpr.model.Status;
-import br.ufpr.model.Usuario;
 
 public class AtividadeDTO implements Serializable {
 
@@ -15,33 +12,36 @@ public class AtividadeDTO implements Serializable {
 
 	private Long id;
 	private String nome;
+	private String descricao;
 	private Date dataCriacao;
 	private Date dataLimiteCandidatura;
-	private Date dataContestacao;
 	private Date dataConclusao;
-    private Projeto projeto;
-    private Usuario autor;
-    private Aluno executor;
+	private ProjetoDTO projeto;
+	private UsuarioDTO autor;
+	private UsuarioDTO executor;
 	private CompetenciaDTO competencia;
 	private ComplexidadeDTO complexidade;
-	private List<ComentarioDTO> comentarios;
+	private List<ComentarioDTO> comentarios = new ArrayList<>();
 	private CertificadoDTO certificado;
 	private RelatorioDeConclusaoDTO relatorioDeConclusao;
+	private List<AnexoDTO> anexos = new ArrayList<>();
+	private List<ContestacaoDTO> contestacoes = new ArrayList<>();
 	private Status status;
 
 	public AtividadeDTO() {
 	}
-	
-	public AtividadeDTO(Long id, String nome, Date dataCriacao, Date dataLimiteCandidatura, Date dataContestacao,
-			Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor, CompetenciaDTO competencia,
+
+	public AtividadeDTO(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
+			Date dataConclusao, ProjetoDTO projeto, UsuarioDTO autor, UsuarioDTO executor, CompetenciaDTO competencia,
 			ComplexidadeDTO complexidade, List<ComentarioDTO> comentarios, CertificadoDTO certificado,
-			RelatorioDeConclusaoDTO relatorioDeConclusao, Status status) {
+			RelatorioDeConclusaoDTO relatorioDeConclusao, List<AnexoDTO> anexos, List<ContestacaoDTO> contestacoes,
+			Status status) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.descricao = descricao;
 		this.dataCriacao = dataCriacao;
 		this.dataLimiteCandidatura = dataLimiteCandidatura;
-		this.dataContestacao = dataContestacao;
 		this.dataConclusao = dataConclusao;
 		this.projeto = projeto;
 		this.autor = autor;
@@ -51,6 +51,8 @@ public class AtividadeDTO implements Serializable {
 		this.comentarios = comentarios;
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
+		this.anexos = anexos;
+		this.contestacoes = contestacoes;
 		this.status = status;
 	}
 
@@ -70,6 +72,14 @@ public class AtividadeDTO implements Serializable {
 		this.nome = nome;
 	}
 
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public Date getDataCriacao() {
 		return dataCriacao;
 	}
@@ -86,14 +96,6 @@ public class AtividadeDTO implements Serializable {
 		this.dataLimiteCandidatura = dataLimiteCandidatura;
 	}
 
-	public Date getDataContestacao() {
-		return dataContestacao;
-	}
-
-	public void setDataContestacao(Date dataContestacao) {
-		this.dataContestacao = dataContestacao;
-	}
-
 	public Date getDataConclusao() {
 		return dataConclusao;
 	}
@@ -101,28 +103,28 @@ public class AtividadeDTO implements Serializable {
 	public void setDataConclusao(Date dataConclusao) {
 		this.dataConclusao = dataConclusao;
 	}
-	
-	public Projeto getProjeto() {
+
+	public ProjetoDTO getProjeto() {
 		return projeto;
 	}
 
-	public void setProjeto(Projeto projeto) {
+	public void setProjeto(ProjetoDTO projeto) {
 		this.projeto = projeto;
 	}
 
-	public Usuario getAutor() {
+	public UsuarioDTO getAutor() {
 		return autor;
 	}
 
-	public void setAutor(Usuario autor) {
+	public void setAutor(UsuarioDTO autor) {
 		this.autor = autor;
 	}
 
-	public Aluno getExecutor() {
+	public UsuarioDTO getExecutor() {
 		return executor;
 	}
 
-	public void setExecutor(Aluno executor) {
+	public void setExecutor(UsuarioDTO executor) {
 		this.executor = executor;
 	}
 
@@ -150,6 +152,14 @@ public class AtividadeDTO implements Serializable {
 		this.comentarios = comentarios;
 	}
 
+	public CertificadoDTO getCertificado() {
+		return certificado;
+	}
+
+	public void setCertificado(CertificadoDTO certificado) {
+		this.certificado = certificado;
+	}
+
 	public RelatorioDeConclusaoDTO getRelatorioDeConclusao() {
 		return relatorioDeConclusao;
 	}
@@ -158,12 +168,20 @@ public class AtividadeDTO implements Serializable {
 		this.relatorioDeConclusao = relatorioDeConclusao;
 	}
 
-	public CertificadoDTO getCertificado() {
-		return certificado;
+	public List<AnexoDTO> getAnexos() {
+		return anexos;
 	}
 
-	public void setCertificado(CertificadoDTO certificado) {
-		this.certificado = certificado;
+	public void setAnexos(List<AnexoDTO> anexos) {
+		this.anexos = anexos;
+	}
+
+	public List<ContestacaoDTO> getContestacoes() {
+		return contestacoes;
+	}
+
+	public void setContestacoes(List<ContestacaoDTO> contestacoes) {
+		this.contestacoes = contestacoes;
 	}
 
 	public Status getStatus() {
@@ -174,15 +192,19 @@ public class AtividadeDTO implements Serializable {
 		this.status = status;
 	}
 
-	
-	 @Override
-	    public String toString() {
-	        return "AtividadeDTO [id=" + getId() + ", nome=" + getNome() + ", dataCriacao=" + getDataCriacao()
-	               + ", dataLimiteCandidatura=" + getDataLimiteCandidatura() + ", dataContestacao=" + getDataContestacao()
-	               + ", dataConclusao=" + getDataConclusao() + ", projeto=" + getProjeto() + ", autor=" + getAutor()
-	               + ", executor=" + getExecutor() + ", competencia=" + getCompetencia()
-	               + ", complexidade=" + getComplexidade() + ", certificado=" + getCertificado()
-	               + ", relatorioDeConclusao=" + getRelatorioDeConclusao() + ", comentarios=" + getComentarios() + ", status=" + getStatus() + "]";
-	    }
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "Atividade [id=" + getId() + ", nome=" + getNome() + ", descricao=" + getDescricao() + ", dataCriacao="
+				+ getDataCriacao() + ", dataLimiteCandidatura=" + getDataLimiteCandidatura() + ", dataConclusao="
+				+ getDataConclusao() + ", projeto=" + getProjeto() + ", autor=" + getAutor() + ", executor="
+				+ getExecutor() + ", competencia=" + getCompetencia() + ", complexidade=" + getComplexidade()
+				+ ", comentarios=" + getComentarios() + ", certificado=" + getCertificado() + ", relatorioDeConclusao="
+				+ getRelatorioDeConclusao() + ", anexos=" + getAnexos() + ", contestacoes=" + getContestacoes()
+				+ ", status=" + getStatus() + "]";
+	}
 
 }

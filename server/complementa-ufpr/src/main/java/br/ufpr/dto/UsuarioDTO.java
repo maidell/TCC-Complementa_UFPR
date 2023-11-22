@@ -48,7 +48,7 @@ public class UsuarioDTO implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public String getTelefone() {
 		return telefone;
 	}
@@ -56,7 +56,7 @@ public class UsuarioDTO implements Serializable {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	
+
 	public String getPapel() {
 		return papel;
 	}
@@ -65,9 +65,13 @@ public class UsuarioDTO implements Serializable {
 		this.papel = papel;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nome=" + nome + ", email=" + email + ", telefone=" + telefone + ", papel=" + papel
+		return "Usuario [id=" + getId() + ", nome=" + getNome() + ", email=" + getEmail() + ", telefone=" + getTelefone() + ", papel=" + getPapel()
 				+ "]";
 	}
 }

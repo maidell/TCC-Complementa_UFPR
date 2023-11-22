@@ -8,7 +8,7 @@ import br.ufpr.model.Projeto;
 
 public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
 	
-	Optional<Projeto> findById(String id);
+	Optional<Projeto> findById(Long id);
 	
     public long count();
     

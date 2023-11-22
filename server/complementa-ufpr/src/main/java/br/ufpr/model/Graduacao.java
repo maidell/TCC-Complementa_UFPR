@@ -27,7 +27,7 @@ public class Graduacao implements Serializable{
     private String nome;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Orientador orientador;
+    private Orientador coordenador;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Servidor> servidoresCoordenadores;
@@ -38,12 +38,12 @@ public class Graduacao implements Serializable{
     public Graduacao() {
     }
 
-	public Graduacao(Long id, String nome, Orientador orientador, List<Servidor> servidoresCoordenadores,
+	public Graduacao(Long id, String nome, Orientador coordenador, List<Servidor> servidoresCoordenadores,
 			List<Competencia> competencias) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.orientador = orientador;
+		this.coordenador = coordenador;
 		this.servidoresCoordenadores = servidoresCoordenadores;
 		this.competencias = competencias;
 	}
@@ -64,12 +64,12 @@ public class Graduacao implements Serializable{
 		this.nome = nome;
 	}
 
-	public Orientador getOrientador() {
-		return orientador;
+	public Orientador getCoordenador() {
+		return coordenador;
 	}
 
-	public void setCoordenador(Orientador orientador) {
-		this.orientador = orientador;
+	public void setCoordenador(Orientador coordenador) {
+		this.coordenador = coordenador;
 	}
 
 	public List<Servidor> getServidoresCoordenadores() {
@@ -94,7 +94,7 @@ public class Graduacao implements Serializable{
 	
     @Override
     public String toString() {
-        return "Graduacao [id=" + getId() + ", nome=" + getNome() + ", coordenador=" + getOrientador() +
+        return "Graduacao [id=" + getId() + ", nome=" + getNome() + ", coordenador=" + getCoordenador() +
         		", servidoresCoordenadores=" + getServidoresCoordenadores() + ", competencias=" + getCompetencias() + "]";
     }
 

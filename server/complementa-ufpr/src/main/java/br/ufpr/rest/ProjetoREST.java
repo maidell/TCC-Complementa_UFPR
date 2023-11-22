@@ -48,7 +48,7 @@ public class ProjetoREST {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjetoDTO> buscaPorId(@PathVariable String id) {
+    public ResponseEntity<ProjetoDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<Projeto> projeto = repo.findById(id);
         if (projeto.isEmpty()) {
@@ -63,7 +63,7 @@ public class ProjetoREST {
 
         try {
             Projeto prj = repo.save(projeto);
-            Optional<Projeto> prjOpt = repo.findById(prj.getId().toString());
+            Optional<Projeto> prjOpt = repo.findById(prj.getId());
             if (!prjOpt.isPresent()) {
                 throw new Exception("Criação do projeto não foi realizada com sucesso");
             }
@@ -74,13 +74,13 @@ public class ProjetoREST {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjetoDTO> alterarProjeto(@PathVariable("id") String id, @RequestBody Projeto projeto) {
+    public ResponseEntity<ProjetoDTO> alterarProjeto(@PathVariable("id") Long id, @RequestBody Projeto projeto) {
         Optional<Projeto> prj = repo.findById(id);
 
         if (prj.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
-            projeto.setId(Long.parseLong(id));
+            projeto.setId(id);
             repo.save(projeto);
             prj = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(prj.get(), ProjetoDTO.class));
@@ -88,7 +88,7 @@ public class ProjetoREST {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerProjeto(@PathVariable("id") String id) {
+    public ResponseEntity<?> removerProjeto(@PathVariable("id") Long id) {
 
         Optional<Projeto> projeto = repo.findById(id);
         if (projeto.isEmpty()) {

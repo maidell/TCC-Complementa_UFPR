@@ -12,13 +12,13 @@ public class ProjetoDTO implements Serializable {
     private String descricao;
     private OrientadorDTO orientador;
     private List<AlunoDTO> alunos;
-    private List<MonitorDTO> monitores;
+    private List<AlunoDTO> monitores;
 
     public ProjetoDTO() {
     }
 
     public ProjetoDTO(Long id, String nome, String descricao, OrientadorDTO orientador,
-            List<AlunoDTO> alunos, List<MonitorDTO> monitores) {
+            List<AlunoDTO> alunos, List<AlunoDTO> monitores) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -67,11 +67,11 @@ public class ProjetoDTO implements Serializable {
         this.alunos = alunos;
     }
 
-    public List<MonitorDTO> getMonitores() {
+    public List<AlunoDTO> getMonitores() {
         return monitores;
     }
 
-    public void setMonitores(List<MonitorDTO> monitores) {
+    public void setMonitores(List<AlunoDTO> monitores) {
         this.monitores = monitores;
     }
 

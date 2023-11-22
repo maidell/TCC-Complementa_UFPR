@@ -7,15 +7,15 @@ public class ComentarioDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private UsuarioDTO usuarioDTO;
+    private UsuarioSimplesDTO usuario;
     private String comentario;
 
     public ComentarioDTO() {
     }
 
-    public ComentarioDTO(Long id, UsuarioDTO usuarioDTO, String comentario) {
+    public ComentarioDTO(Long id, UsuarioSimplesDTO usuario, String comentario) {
         this.id = id;
-        this.usuarioDTO = usuarioDTO;
+        this.usuario = usuario;
         this.comentario = comentario;
     }
 
@@ -27,12 +27,12 @@ public class ComentarioDTO implements Serializable {
         this.id = id;
     }
 
-    public UsuarioDTO getUsuarioDTO() {
-        return usuarioDTO;
+    public UsuarioSimplesDTO getUsuario() {
+        return usuario;
     }
 
-    public void setUsuarioDTO(UsuarioDTO usuarioDTO) {
-        this.usuarioDTO = usuarioDTO;
+    public void setUsuario(UsuarioSimplesDTO usuario) {
+        this.usuario = usuario;
     }
 
     public String getComentario() {
@@ -45,9 +45,9 @@ public class ComentarioDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ComentarioDTO [id=" + id + 
-               ", usuarioDTO=" + usuarioDTO + 
-               ", comentario='" + comentario + '\'' +
+        return "Comentario [id=" + getId() + 
+               ", usuario=" + getUsuario() + 
+               ", comentario ='" + getComentario() + '\'' +
                "]";
     }
 }

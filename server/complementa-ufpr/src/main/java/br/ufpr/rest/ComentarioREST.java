@@ -46,7 +46,7 @@ public class ComentarioREST {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ComentarioDTO> buscaPorId(@PathVariable String id) {
+	public ResponseEntity<ComentarioDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Comentario> comentario = repo.findById(id);
 		if (comentario.isEmpty()) {
@@ -72,13 +72,13 @@ public class ComentarioREST {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ComentarioDTO> alterarComentario(@PathVariable("id") String id, @RequestBody Comentario comentario) {
+	public ResponseEntity<ComentarioDTO> alterarComentario(@PathVariable("id") Long id, @RequestBody Comentario comentario) {
 		Optional<Comentario> cmt = repo.findById(id);
 
 		if (cmt.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			comentario.setId(Long.parseLong(id));
+			comentario.setId(id);
 			repo.save(comentario);
 			cmt = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(cmt.get(), ComentarioDTO.class));
@@ -86,7 +86,7 @@ public class ComentarioREST {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerComentario(@PathVariable("id") String id) {
+	public ResponseEntity<?> removerComentario(@PathVariable("id") Long id) {
 
 		Optional<Comentario> comentario = repo.findById(id);
 		if (comentario.isEmpty()) {

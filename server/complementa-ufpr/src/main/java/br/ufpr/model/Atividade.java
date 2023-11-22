@@ -1,6 +1,5 @@
 package br.ufpr.model;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,8 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,75 +17,79 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "atividade")
 public class Atividade implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "nome")
-    private String nome;
+	@Column(name = "nome")
+	private String nome;
 
-    @Column(name = "descricao")
-    private String descricao;
-    
-    @Column(name = "data_criacao")
-    private Date dataCriacao;
+	@Column(name = "descricao")
+	private String descricao;
 
-    @Column(name = "data_limite_candidatura")
-    private Date dataLimiteCandidatura;
+	@Column(name = "data_criacao")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataCriacao;
 
-    @Column(name = "data_conclusao")
-    private Date dataConclusao;
-    
-    @ManyToOne
-    @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
-    
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_usuario")
-    private Usuario autor;
-   
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "grr_aluno")
-    private Aluno executor;
+	@Column(name = "data_limite_candidatura")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataLimiteCandidatura;
 
-    @ManyToOne
-    @JoinColumn(name = "competencia_id")
-    private Competencia competencia;
+	@Column(name = "data_conclusao")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataConclusao;
 
-    @ManyToOne
-    @JoinColumn(name = "complexidade_id")
-    private Complexidade complexidade;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "projeto_id")
+	private Projeto projeto;
 
-    @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comentario> comentarios = new ArrayList<>();
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_usuario")
+	private Usuario autor;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "certificado_id")
-    private Certificado certificado;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_executor")
+	private Usuario executor;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "relatorio_de_conclusao")
-    private RelatorioDeConclusao relatorioDeConclusao;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "competencia_id")
+	private Competencia competencia;
 
-    @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Anexo> anexos;
-    
-    @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Contestacao> contestacoes = new ArrayList<>();
-    
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "fk_id_status")
-    private Status status;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "complexidade_id")
+	private Complexidade complexidade;
 
-    public Atividade() {
-    }
+	@OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Comentario> comentarios = new ArrayList<>();
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "certificado_id")
+	private Certificado certificado;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "relatorio_de_conclusao")
+	private RelatorioDeConclusao relatorioDeConclusao;
+
+	@OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Anexo> anexos = new ArrayList<>();
+
+	@OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Contestacao> contestacoes = new ArrayList<>();
+
+	@Column(name = "fk_id_status")
+	private Status status;
+
+	public Atividade() {
+	}
 
 	public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
 			Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor, Competencia competencia,
@@ -114,8 +116,7 @@ public class Atividade implements Serializable {
 		this.status = status;
 	}
 
-	
-    public Long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -179,11 +180,11 @@ public class Atividade implements Serializable {
 		this.autor = autor;
 	}
 
-	public Aluno getExecutor() {
+	public Usuario getExecutor() {
 		return executor;
 	}
 
-	public void setExecutor(Aluno executor) {
+	public void setExecutor(Usuario executor) {
 		this.executor = executor;
 	}
 
@@ -251,26 +252,18 @@ public class Atividade implements Serializable {
 		this.status = status;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
-    public String toString() {
-        return "Atividade [id=" + id 
-        	    + "nome=" + nome
-        	    + "descricao=" + descricao
-        	    + "dataCriacao=" + dataCriacao
-        	    + "dataLimiteCandidatura=" + dataLimiteCandidatura
-        	    + "dataConclusao=" + dataConclusao
-        	    + "projeto=" + projeto
-        	    + "autor=" + autor
-        	    + "executor=" + executor
-        	    + "competencia=" + competencia
-        	    + "complexidade=" + complexidade
-        	    + "comentarios=" + comentarios
-        	    + "certificado=" + certificado
-        	    + "relatorioDeConclusao=" + relatorioDeConclusao
-        	    + "anexos=" + anexos
-        	    + "contestacoes=" + contestacoes
-        	    + "status=" + status + 
-        		"]";
-    }
+	public String toString() {
+		return "Atividade [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", dataCriacao=" + dataCriacao
+				+ ", dataLimiteCandidatura=" + dataLimiteCandidatura + ", dataConclusao=" + dataConclusao + ", projeto="
+				+ projeto + ", autor=" + autor + ", executor=" + executor + ", competencia=" + competencia
+				+ ", complexidade=" + complexidade + ", comentarios=" + comentarios + ", certificado=" + certificado
+				+ ", relatorioDeConclusao=" + relatorioDeConclusao + ", anexos=" + anexos + ", contestacoes="
+				+ contestacoes + ", status=" + status + "]";
+	}
 
 }
