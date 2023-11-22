@@ -6,6 +6,7 @@ import { DatePipe, formatDate } from '@angular/common';
 import { DownloadService } from '../download.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { jsPDF } from "jspdf";
 
 
 @Component({
@@ -14,27 +15,17 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./atividade.component.scss']
 })
 export class AtividadeComponent {
-/**
- NOVA: DONE
- ABERTA - autor: DONE (Falta botão de visualizar candidaturas)
- ABERTA - EXECUTOR: DONE
- VISUALIZAR CANDIDATURAS: 
- EM EXECUÇÃO- autor - sem relatório de conclusão: DONE
- EM EXECUÇÃO - executor - sem relatório de conclusão: DONE
- relatório de conclusão - autor: DONE
- relatório de conclusão - executor: DONE
- Contestar carga horária: DONE
- Contestar Execução: DONE
- Aprovar Contestação carga horária:
- apovar contestação execução:  
- Finalizada: DONE (Exceto botão de gerar certificado)
-*/
+  doc = new jsPDF({
+    orientation:"landscape",
+    unit:"mm"
+  });
+
 
   exampleResponse=[
     {
       id: 1,
-      nome: "Teste", 
-      status: "Execução Contestada", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
+      nome: "Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste", 
+      status: "Finalizada", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
       dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
@@ -44,7 +35,7 @@ export class AtividadeComponent {
       complexidade: "Média",
       comentarios: null,
       certificado: null,
-      relatorioDeConclusao: "TESTE",
+      relatorioDeConclusao: "teste",
       anexos:[
         {name:'logo complementa light.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
       ]
@@ -268,7 +259,10 @@ export class AtividadeComponent {
               this.firstButtonWidth='100%';
               this.displaySecondHeaderButton='none';
             }
-          } 
+          } else {
+            this.displayFirstHeaderButton='none';
+            this.displaySecondHeaderButton='none';
+          }
         
 
 
@@ -278,6 +272,7 @@ export class AtividadeComponent {
         this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondHeaderButton='Gerar Certificado';
         this.displayTimestamp='none';
+        this.displayFirstHeaderButton='none';
         this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondButtonColor='linear-gradient(#559958, #418856)';
         break;
@@ -326,17 +321,8 @@ export class AtividadeComponent {
 
         break;
       case 'Carga Horária Contestada':
-        /**if(this.canApproveContest){
-        this.projectName='Contestação de Carga Horária';
-        this.descriptionLabel="Descrição da Contestação";
-        this.activityForm.disable();
-        this.readingDispute=true;
-        this.displaySecondLine='none';
-        this.displayDates='none';
-        } else {*/
           this.activityForm.disable();
           this.displayComments='';
-        //}
         break;
       case 'Execução Contestada':
         break;
@@ -384,7 +370,6 @@ export class AtividadeComponent {
         } else {
 
           if (this.exampleResponse[0].relatorioDeConclusao!=null){
-            console.log("entrou no if do relatorio de conclusão");
 
             if(this.isReadingReport){
               this.approveReport();
@@ -411,6 +396,7 @@ export class AtividadeComponent {
         }
 
         break;
+
     }
     
   }
@@ -449,7 +435,9 @@ export class AtividadeComponent {
           }
 
         break;
-        
+        case "Finalizada":
+          this.generateCerticate();
+          break;
     }
 
   }
@@ -688,6 +676,26 @@ export class AtividadeComponent {
     this.onNoClick();
   }
 
+  /** CERTIFICADO */
+generateCerticate(){
+  let grr=20193878;
+  let fullGrr = "GRR" + grr;
+
+
+  this.doc.addImage('../assets/plugins/images/Certificado.jpg',"JPG",0,0,297,210);
+  this.doc.setFontSize(18);
+  this.doc.text("Leonardo Hortmann",150,100,{align: "center"});
+  this.doc.setFontSize(12);
+  this.doc.text(fullGrr,150,110,{align: "center"});
+  this.doc.setFontSize(18);
+  this.doc.text("Por sua participação e conclusão da atividade " + this.exampleResponse[0].nome + " contribuindo para o desenvolvimento do projeto "+ this.projectName + " disponível na plataforma Complementa UFPR, tendo duração de 12 horas", 150,130,{align: "center", maxWidth:180});
+  this.doc.text("Nome do Orientador", 150,174,{align:"center"});
+
+  this.doc.save("certificado.pdf");
+  //Por sua participação e conclusão na atividade [nome da atividade] 
+  //contribuindo para o desenvolvimento do projeto 
+  //[nome do projeto] disponível na plataforma Complementa UFPR, tendo duração de [xx] horas.
+}
 
   /** TOASTR DE NOTIFICAÇÃO */
   showSuccessToastr(s: string) {

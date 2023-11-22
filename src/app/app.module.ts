@@ -32,7 +32,8 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot()
   ],
   exports: [
-    FormsModule
+    FormsModule,
+    ToastrModule
 
   ],
   providers: [
