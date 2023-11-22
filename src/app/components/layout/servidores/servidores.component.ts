@@ -26,10 +26,10 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   idGrad: number = 12;
 
   servidoresCoordenadores: ServidorCoordenador[] = [];
-  
+
   servidores: Servidor[] = [];
   orientadores: Orientador[] = [];
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Servidor>;
@@ -41,10 +41,10 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     private servidorService: ServidorService,
     private orientadorService: OrientadorService,
     public toastr: ToastrService
-    ) {
-      if (!this.loginService.usuarioLogado) {
-        this.router.navigate([`login`]);
-      }
+  ) {
+    if (!this.loginService.usuarioLogado) {
+      this.router.navigate([`login`]);
+    }
     this.dataSource = new MatTableDataSource(this.servidores);
   }
 
@@ -54,7 +54,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     this.obs = this.dataSource.connect();
     this.usuarioLogado = this.loginService.usuarioLogado;
     if (this.usuarioLogado.papel !== "ADMIN"
-        && this.usuarioLogado.papel !== "COORDENADOR" ) {
+      && this.usuarioLogado.papel !== "COORDENADOR") {
       this.router.navigate([`${this.usuarioLogado.papel}`]);
     }
     forkJoin({
@@ -64,20 +64,20 @@ export class ServidoresComponent implements OnInit, OnDestroy {
       servidores: this.listarServidores(),
       orientadores: this.listarOrientadores()
     }).subscribe(({ graduacao, coord, servidores, orientadores }) => {
-      if(servidores && orientadores){
-              this.coordenador = coord;
-      this.graduacao = graduacao;
-      this.servidores = servidores;
-      this.orientadores = orientadores;
-      this.servidoresCoordenadores = graduacao.servidoresCoordenadores;
+      if (servidores && orientadores) {
+        this.coordenador = coord;
+        this.graduacao = graduacao;
+        this.servidores = servidores;
+        this.orientadores = orientadores;
+        this.servidoresCoordenadores = graduacao.servidoresCoordenadores;
       }
 
       this.servidores = this.filtrarServidores(this.servidores, this.orientadores, this.graduacao);
-      this.servidores = this.verificarServidoresCoordenadores(this.servidores);
-      this.dataSource.data = this.servidores; 
+      this.verificarServidoresCoordenadores(this.servidores);
+      this.dataSource.data = this.servidores;
     });
   }
-  
+
   ngOnDestroy() {
     if (this.dataSource) {
       this.dataSource.disconnect();
@@ -98,33 +98,72 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     return this.orientadorService.buscarOrientadorPorId(id);
   }
 
-  listarServidores(): Observable<Servidor[]>{
+  listarServidores(): Observable<Servidor[]> {
     return this.servidorService.listarTodosServidores();
   }
 
-  listarOrientadores(): Observable<Orientador[]>{
+  listarOrientadores(): Observable<Orientador[]> {
     return this.orientadorService.listarTodosOrientadores();
   }
 
-  instanciarGraduacao(id: number): Observable<Graduacao>{
+  instanciarGraduacao(id: number): Observable<Graduacao> {
     return this.servidorService.buscarGraduacaoPorId(id);
   }
 
-  verificarServidoresCoordenadores(servidores: Servidor[]): Servidor[] {
+  adicionarServidor(servidor: Servidor): void {
+    let servCoordenador = new ServidorCoordenador(servidor.id, servidor.nome, servidor.email,
+      servidor.telefone, servidor.senha, servidor.papel, servidor.matricula);
+    this.servidoresCoordenadores.push(servCoordenador);
+    this.graduacao.servidoresCoordenadores = this.servidoresCoordenadores;
+    this.servidorService.atualizarGraduacao(this.graduacao).subscribe(
+      (response) => {
+        this.graduacao = response;
+        this.toastr.success("Servidor cadastrado!");
+        this.servidoresCoordenadores = response.servidoresCoordenadores;
+        this.verificarServidoresCoordenadores(this.servidores);
+        this.dataSource.data = this.servidores;
+      },
+      (error) => {
+        this.toastr.error("Erro ao cadastrar servidor");
+        console.error("Erro ao cadastrar servidor:", error);
+      }
+    );
+    this.dataSource.data = this.servidores;
+   }
+   
+   removerServidor(servidor: Servidor): void {
+    this.servidoresCoordenadores = this.servidoresCoordenadores.filter(serv => serv.id !== servidor.id);
+    this.graduacao.servidoresCoordenadores = this.servidoresCoordenadores;
+    this.servidorService.atualizarGraduacao(this.graduacao).subscribe(
+      (response) => {
+        this.graduacao = response;
+        this.toastr.info("Servidor removido!");
+        this.servidoresCoordenadores = response.servidoresCoordenadores;
+        this.verificarServidoresCoordenadores(this.servidores);
+        },
+      (error) => {
+        this.toastr.error("Erro ao cadastrar servidor");
+        console.error("Erro ao cadastrar servidor:", error);
+      }
+    );
+    this.dataSource.data = this.servidores;
+   }
+
+  verificarServidoresCoordenadores(servidores: Servidor[]): void {
     const servidoresCoordenadoresIds = this.servidoresCoordenadores.map(servidor => servidor.id);
     servidores.forEach(servidor => {
       if (servidoresCoordenadoresIds.includes(servidor.id)) {
         servidor.incluido = true;
       }
     });
-    return servidores;
+    this.servidores = servidores;
   }
 
   filtrarServidores(servidores: Servidor[], orientadores: Orientador[], graduacao: Graduacao): Servidor[] {
-    
+
     const servidoresFiltrados = servidores.filter(servidor => servidor.papel === 'SERVIDOR');
     const orientadoresFiltrados = orientadores.filter(orientador => orientador.graduacao === graduacao);
-  
+
     return [...servidoresFiltrados, ...orientadoresFiltrados];
   }
 

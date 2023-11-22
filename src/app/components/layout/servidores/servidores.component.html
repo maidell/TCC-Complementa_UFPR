@@ -12,8 +12,9 @@
 				<app-rect-card *ngFor="let servidor of obs | async" [nome]="servidor.nome" [firstLabel]="'Matricula'"
 					[firstValue]="servidor.matricula" [secondLabel]="'Email'" [secondValue]="servidor.email"
 					[thirdLabel]="'Telefone'" [thirdValue]="servidor.telefone"  
-					[nameButtonRect]="'Selecionar'" [buttonColor]="'btn-green'" [showButton]="!servidor.incluido"
-					[nameSecondButtonRect]="'Remover'" [secondButtonColor]="'btn-red'" [showSecondButton]="servidor.incluido"></app-rect-card>
+					[nameButtonRect]="'Selecionar'" [buttonColor]="'btn-green'" [showButton]="!servidor.incluido" (clickButtonRect)="adicionarServidor(servidor)"
+					[nameSecondButtonRect]="'Remover'" [secondButtonColor]="'btn-red'" [showSecondButton]="servidor.incluido"
+					(clickSecondButtonRect)="removerServidor(servidor)"></app-rect-card>
 			</ng-container>
 		</ng-container>
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>

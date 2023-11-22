@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-rect-card',
@@ -21,4 +21,14 @@ export class RectCardComponent{
   @Input() nameSecondButtonRect?: string;
   @Input() secondButtonColor?: string;
   @Input() showSecondButton: boolean = true;
+  @Output() clickButtonRect = new EventEmitter<any>();
+  @Output() clickSecondButtonRect = new EventEmitter<any>();
+
+  onButtonClick() {
+    this.clickButtonRect.emit();
+  }
+
+  onSecondButtonClick() {
+    this.clickSecondButtonRect.emit();
+  }
 }
