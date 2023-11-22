@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,10 +27,10 @@ public class Graduacao implements Serializable{
     private String nome;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Coordenador coordenador;
+    private Orientador orientador;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<ServidorCoordenador> servidoresCoordenadores;
+    private List<Servidor> servidoresCoordenadores;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Competencia> competencias;
@@ -39,12 +38,12 @@ public class Graduacao implements Serializable{
     public Graduacao() {
     }
 
-	public Graduacao(Long id, String nome, Coordenador coordenador, List<ServidorCoordenador> servidoresCoordenadores,
+	public Graduacao(Long id, String nome, Orientador orientador, List<Servidor> servidoresCoordenadores,
 			List<Competencia> competencias) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.coordenador = coordenador;
+		this.orientador = orientador;
 		this.servidoresCoordenadores = servidoresCoordenadores;
 		this.competencias = competencias;
 	}
@@ -65,19 +64,19 @@ public class Graduacao implements Serializable{
 		this.nome = nome;
 	}
 
-	public Coordenador getCoordenador() {
-		return coordenador;
+	public Orientador getOrientador() {
+		return orientador;
 	}
 
-	public void setCoordenador(Coordenador coordenador) {
-		this.coordenador = coordenador;
+	public void setCoordenador(Orientador orientador) {
+		this.orientador = orientador;
 	}
 
-	public List<ServidorCoordenador> getServidoresCoordenadores() {
+	public List<Servidor> getServidoresCoordenadores() {
 		return servidoresCoordenadores;
 	}
 
-	public void setServidoresCoordenadores(List<ServidorCoordenador> servidoresCoordenadores) {
+	public void setServidoresCoordenadores(List<Servidor> servidoresCoordenadores) {
 		this.servidoresCoordenadores = servidoresCoordenadores;
 	}
 
@@ -95,7 +94,7 @@ public class Graduacao implements Serializable{
 	
     @Override
     public String toString() {
-        return "Graduacao [id=" + getId() + ", nome=" + getNome() + ", coordenador=" + getCoordenador() +
+        return "Graduacao [id=" + getId() + ", nome=" + getNome() + ", coordenador=" + getOrientador() +
         		", servidoresCoordenadores=" + getServidoresCoordenadores() + ", competencias=" + getCompetencias() + "]";
     }
 

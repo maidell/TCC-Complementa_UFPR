@@ -1,15 +1,15 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { TitleService } from '../../title.service';
-import { Coordenador, Graduacao, Servidor, Usuario } from 'src/app/shared';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Coordenador, Graduacao, Orientador, Servidor, Usuario } from 'src/app/shared';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, filter, forkJoin } from 'rxjs';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { LoginService } from '../../auth/services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { ServidorService } from '../../servidor/services/servidor.service';
 import { Router } from '@angular/router';
-import { CoordenadorService } from '../../coordenador/services/coordenador.service';
+import { OrientadorService } from '../../orientador/services/orientador.service';
+import { ServidorCoordenador } from 'src/app/shared/models/servidor-coordenador.model';
 
 @Component({
   selector: 'app-servidores',
@@ -21,50 +21,25 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   inputValue: string = '';
   usuarioLogado: Usuario = new Usuario;
   coordenador: Coordenador = new Coordenador;
+  graduacao: Graduacao = new Graduacao;
+  idCoord: number = 48;
+  idGrad: number = 12;
 
-  servidores: Servidor[] = [
-  // {
-  //   id: 1,
-  //   nome: "João",
-  //   email: "joao@ufpr.br",
-  //   telefone: "123456789",
-  //   senha: "123456",
-  //   papel: "Orientador",
-  //   matricula: "123456",
-  //   incluido : true
-  // },
-  // {
-  //   id: 2,
-  //   nome: "Maria",
-  //   email: "maria@ufpr.br",
-  //   telefone: "123456789",
-  //   senha: "123456",
-  //   papel: "Orientador",
-  //   matricula: "123456",
-  //   incluido : false
-  // },
-  // {
-  //   id: 3,
-  //   nome: "José",
-  //   email: "jose@ufpr.br",
-  //   telefone: "123456789",
-  //   senha: "123456",
-  //   papel: "Orientador",
-  //   matricula: "123456",
-  //   incluido : true
-  // }
-  ]
-
+  servidoresCoordenadores: ServidorCoordenador[] = [];
+  
+  servidores: Servidor[] = [];
+  orientadores: Orientador[] = [];
+  
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Servidor>;
   constructor(
-    // @Inject(DIALOG_DATA) public data: Servidor,
+    // @Inject(DIALOG_DATA) public data: any,
     private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
     private loginService: LoginService,
     private servidorService: ServidorService,
-    private coordenadorService: CoordenadorService,
+    private orientadorService: OrientadorService,
     public toastr: ToastrService
     ) {
       if (!this.loginService.usuarioLogado) {
@@ -82,17 +57,25 @@ export class ServidoresComponent implements OnInit, OnDestroy {
         && this.usuarioLogado.papel !== "COORDENADOR" ) {
       this.router.navigate([`${this.usuarioLogado.papel}`]);
     }
-    
     forkJoin({
-      coord: this.instanciarCoordenador(this.usuarioLogado.email),
-      servidores: this.listarServidores()
-    }).subscribe(({ coord, servidores }) => {
-      if (coord) {
-        this.coordenador = coord;
-      }
-      this.servidores = servidores;
-    });
 
+      graduacao: this.instanciarGraduacao(this.idGrad),
+      coord: this.instanciarCoordenador(this.idCoord),
+      servidores: this.listarServidores(),
+      orientadores: this.listarOrientadores()
+    }).subscribe(({ graduacao, coord, servidores, orientadores }) => {
+      if(servidores && orientadores){
+              this.coordenador = coord;
+      this.graduacao = graduacao;
+      this.servidores = servidores;
+      this.orientadores = orientadores;
+      this.servidoresCoordenadores = graduacao.servidoresCoordenadores;
+      }
+
+      this.servidores = this.filtrarServidores(this.servidores, this.orientadores, this.graduacao);
+      this.servidores = this.verificarServidoresCoordenadores(this.servidores);
+      this.dataSource.data = this.servidores; 
+    });
   }
   
   ngOnDestroy() {
@@ -111,12 +94,42 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  instanciarCoordenador(email: string): Observable<Coordenador> {
-    return this.coordenadorService.buscarCoordenadorPorEmail(email);
+  instanciarCoordenador(id: number): Observable<Orientador> {
+    return this.orientadorService.buscarOrientadorPorId(id);
   }
 
   listarServidores(): Observable<Servidor[]>{
     return this.servidorService.listarTodosServidores();
   }
 
+  listarOrientadores(): Observable<Orientador[]>{
+    return this.orientadorService.listarTodosOrientadores();
+  }
+
+  instanciarGraduacao(id: number): Observable<Graduacao>{
+    return this.servidorService.buscarGraduacaoPorId(id);
+  }
+
+  verificarServidoresCoordenadores(servidores: Servidor[]): Servidor[] {
+    const servidoresCoordenadoresIds = this.servidoresCoordenadores.map(servidor => servidor.id);
+    servidores.forEach(servidor => {
+      if (servidoresCoordenadoresIds.includes(servidor.id)) {
+        servidor.incluido = true;
+      }
+    });
+    return servidores;
+  }
+
+  filtrarServidores(servidores: Servidor[], orientadores: Orientador[], graduacao: Graduacao): Servidor[] {
+    
+    const servidoresFiltrados = servidores.filter(servidor => servidor.papel === 'SERVIDOR');
+    const orientadoresFiltrados = orientadores.filter(orientador => orientador.graduacao === graduacao);
+  
+    return [...servidoresFiltrados, ...orientadoresFiltrados];
+  }
+
+
+
 }
+
+

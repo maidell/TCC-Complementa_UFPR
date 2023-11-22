@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Servidor } from 'src/app/shared/models/servidor.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Graduacao } from 'src/app/shared';
 
 const LS_CHAVE: string = "servidores"
 
@@ -51,5 +52,9 @@ export class ServidorService {
 
   removerServidor(id: number): Observable<Servidor> {
     return this.httpClient.delete<Servidor>(this.BASE_URL + 'servidores/' + id, this.httpOptions);
+  }
+
+  buscarGraduacaoPorId(id: number): Observable<Graduacao> {
+    return this.httpClient.get<Graduacao>(this.BASE_URL + 'graduacoes/' + id, this.httpOptions);
   }
 }
