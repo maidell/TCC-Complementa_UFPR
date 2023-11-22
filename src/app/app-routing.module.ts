@@ -18,6 +18,7 @@ import { MeuPerfilComponent } from './components/layout/meu-perfil/meu-perfil.co
 import { CompetenciasComponent } from './components/layout/competencias/competencias.component';
 import { ModifyCardComponent } from './components/layout/cards/modify-card/modify-card.component';
 import { CadastroDeUsuariosComponent } from './components/admin/cadastro-de-usuarios/cadastro-de-usuarios.component';
+import { AtividadeComponent } from './components/atividade/atividade/atividade.component';
 
 const routes: Routes = [
   {
@@ -90,6 +91,10 @@ const routes: Routes = [
     component: ComplexidadesComponent
   },
   {
+    path: 'servidores',
+    component: ServidoresComponent
+  },
+  {
     path: 'servidores/listar',
     component: ServidoresComponent
   },
@@ -101,7 +106,10 @@ const routes: Routes = [
     path: 'teste',
     component: ModifyCardComponent
   },
-
+  {
+    path: 'atividade/detalhes',
+    component: AtividadeComponent
+  },
 
   ...LoginRoutes
 ];

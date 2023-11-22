@@ -8,7 +8,7 @@ import br.ufpr.model.Orientador;
 
 public interface OrientadorRepository extends JpaRepository<Orientador, Long> {
 	
-	Optional<Orientador> findById(String id);
+	Optional<Orientador> findById(Long id);
 	
     Orientador findByEmail(String email);
     

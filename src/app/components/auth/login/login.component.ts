@@ -5,6 +5,7 @@ import { Login, Usuario} from 'src/app/shared';
 import { LoginService } from '../services/login.service';
 import { AutocadastroComponent } from '../../aluno/autocadastro/autocadastro.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private route: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public toastr: ToastrService
   ) {
 
     if (this.loginService.usuarioLogado) {
@@ -68,7 +70,8 @@ export class LoginComponent implements OnInit {
         (response: Usuario) => {
           if (response != null) {
             let usu = response;
-            alert([`${usu.id}\n${usu.nome}\n${usu.email}\n${usu.telefone}\n${usu.papel}`]);
+            // alert([`${usu.id}\n${usu.nome}\n${usu.email}\n${usu.telefone}\n${usu.papel}`]);
+            this.toastr.success("Bem-vindo " + usu.nome + "!");
             this.loginService.usuarioLogado = usu;
             this.loading = false;
             this.router.navigate([`${usu.papel}`.toLowerCase()]);

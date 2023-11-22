@@ -8,6 +8,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { AtividadeComponent } from '../../atividade/atividade/atividade.component';
 import { LoginService } from '../../auth/services/login.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class EditarAlunoComponent implements OnInit {
     private alunoService: AlunoService,
     private loginService: LoginService,
     public dialog: MatDialog,
+    public toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -107,10 +109,11 @@ export class EditarAlunoComponent implements OnInit {
       this.validarAlteracoes(this.aluno);
       this.alunoService.atualizarAluno(this.alunoLogado).subscribe(
         (response) => {
-          alert(`Alterações salvas com sucesso!`);
+          this.toastr.success(`Alterações salvas com sucesso!`);
         },
         (error) => {
-          console.error("Erro ao cadastrar aluno:", error);
+          this.toastr.error("Erro ao salvar alterações:");
+          console.error("Erro ao salvar alterações:", error);
         }
       );
     }

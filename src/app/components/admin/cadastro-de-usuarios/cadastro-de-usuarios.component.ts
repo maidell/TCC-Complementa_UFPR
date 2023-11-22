@@ -11,6 +11,7 @@ import { LoginService } from '../../auth/services/login.service';
 import { UsuarioService } from '../../usuario/services/usuario.service';
 import { ServidorService } from '../../servidor/services/servidor.service';
 import { OrientadorService } from '../../orientador/services/orientador.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-cadastro-de-usuarios',
@@ -54,6 +55,7 @@ export class CadastroDeUsuariosComponent implements OnInit {
     private orientadorService: OrientadorService,
     private loginService: LoginService,
     public dialog: MatDialog,
+    public toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -116,11 +118,12 @@ export class CadastroDeUsuariosComponent implements OnInit {
       this.admin.papel = "ADMIN";
       this.usuarioService.inserirUsuario(this.admin).subscribe(
         (response) => {
-          alert(`Usuário cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.toastr.success(`Usuário cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
           this.router.navigate([""]);
         },
         (error) => {
-          console.error("Erro ao cadastrar usuario:", error);
+          this.toastr.error("Erro ao cadastrar administrador");
+          console.error("Erro ao cadastrar administrador:", error);
         }
       );
     }
@@ -136,10 +139,11 @@ export class CadastroDeUsuariosComponent implements OnInit {
       this.aluno.graduacao = this.graduacao;
       this.alunoService.inserirAluno(this.aluno).subscribe(
         (response) => {
-          alert(`Aluno cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.toastr.success(`Aluno cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
           this.router.navigate([""]);
         },
         (error) => {
+          this.toastr.error("Erro ao cadastrar aluno");
           console.error("Erro ao cadastrar aluno:", error);
         }
       );
@@ -155,10 +159,11 @@ export class CadastroDeUsuariosComponent implements OnInit {
       this.servidor.matricula = this.matricula;
       this.servidorService.inserirServidor(this.servidor).subscribe(
         (response) => {
-          alert(`Servidor cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.toastr.success(`Servidor cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
           this.router.navigate([""]);
         },
         (error) => {
+          this.toastr.error("Erro ao cadastrar servidor");
           console.error("Erro ao cadastrar servidor:", error);
         }
       );
@@ -175,10 +180,11 @@ export class CadastroDeUsuariosComponent implements OnInit {
       this.orientador.graduacao = this.graduacao;
       this.orientadorService.inserirOrientador(this.orientador).subscribe(
         (response) => {
-          alert(`Orientador cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
+          this.toastr.success(`Orientador cadastrado! Um e-mail com a senha foi enviado para ${response.email}`);
           this.router.navigate([""]);
         },
         (error) => {
+          this.toastr.error("Erro ao cadastrar orientador");
           console.error("Erro ao cadastrar orientador:", error);
         }
       );

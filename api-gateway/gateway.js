@@ -128,9 +128,8 @@ app.post('/usuarios', (req, res, next) => {
 // app.get('/usuarios/:id', verifyJWT, (req, res, next) => {
 app.get('/usuarios/:id', (req, res, next) => {
   const usuarioId = req.query.id;
-  const destinationUrl = `http://localhost:5000/usuarios/${usuarioId}`;
-  console.log(`Roteando GET de http://localhost:${PORT}/usuarios/${usuarioId} para ${destinationUrl}`);
-  servicesProxy(req, res, next, destinationUrl);
+  console.log(`Roteando GET de http://localhost:${PORT}/usuarios/${usuarioId} para http://localhost:5000/usuarios/${usuarioId}`);
+  servicesProxy(req, res, next);
 })
 
 //app.get('/usuarios', verifyJWT, (req, res, next) => {
@@ -161,10 +160,9 @@ app.post('/alunos', (req, res, next) => {
 
 // app.get('/alunos/:id', verifyJWT, (req, res, next) => {
 app.get('/alunos/:id', (req, res, next) => {
-  const alunoId = req.query.id;
-  const destinationUrl = `http://localhost:5000/alunos/${alunoId}`;
-  console.log(`Roteando GET de http://localhost:${PORT}/alunos/${alunoId} para ${destinationUrl}`);
-  servicesProxy(req, res, next, destinationUrl);
+  const alunoId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/alunos/${alunoId} para http://localhost:5000/alunos/${alunoId}`);
+  servicesProxy(req, res, next);
 })
 
 //app.get('/alunos', verifyJWT, (req, res, next) => {
@@ -198,9 +196,18 @@ app.get('/graduacoes', (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+// app.get('/graduacoes/:id', verifyJWT, (req, res, next) => {
+  app.get('/graduacoes/:id', (req, res, next) => {
+    const graduacaoId = req.params.id;
+    console.log(graduacaoId);
+    console.log(`Roteando GET de http://localhost:${PORT}/graduacoes/${graduacaoId} para http://localhost:5000/graduacoes/${graduacaoId}`);
+    servicesProxy(req, res, next);
+  })
+
 // app.put('/graduacoes', verifyJWT, (req, res, next) => {
-app.put('/graduacoes', (req, res, next) => {
-  console.log(`Roteando PUT de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+app.put('/graduacoes/:id', (req, res, next) => {
+  const graduacaoId = req.query.id;
+  console.log(`Roteando PUT de http://localhost:${PORT}/graduacoes/${graduacaoId} para http://localhost:5000/graduacoes/${graduacaoId}`);
   servicesProxy(req, res, next);
 })
 
@@ -211,7 +218,7 @@ app.delete('/graduacoes', (req, res, next) => {
 })
 
 app.get('/confirmacao/:email', (req, res, next) => {
-  const email = req.query.id;
+  const email = req.params.email;
   console.log(`Roteando PUT de http://localhost:${PORT}/confirmacao/${email} para http://localhost:5000/confirmacao/${email}`);
   servicesProxy(req, res, next);
 })
@@ -225,10 +232,9 @@ app.post('/servidores', (req, res, next) => {
 
 // app.get('/servidores/:id', verifyJWT, (req, res, next) => {
 app.get('/servidores/:id', (req, res, next) => {
-  const servidorId = req.query.id;
-  const destinationUrl = `http://localhost:5000/servidores/${servidorId}`;
-  console.log(`Roteando GET de http://localhost:${PORT}/servidores/${servidorId} para ${destinationUrl}`);
-  servicesProxy(req, res, next, destinationUrl);
+  const servidorId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/servidores/${servidorId} para http://localhost:5000/servidores/${servidorId}`);
+  servicesProxy(req, res, next);
 })
 
 //app.get('/servidores', verifyJWT, (req, res, next) => {
@@ -239,7 +245,7 @@ app.get('/servidores', (req, res, next) => {
 
 // app.put('/servidores/:id', verifyJWT, (req, res, next) => {
 app.put('/servidores/:id', (req, res, next) => {
-  const servidorId = req.query.id;
+  const servidorId = req.params.id;
   console.log(`Roteando PUT de http://localhost:${PORT}/servidores/${servidorId} para http://localhost:5000/servidores/${servidorId}`);
   servicesProxy(req, res, next);
 })
@@ -259,10 +265,10 @@ app.post('/orientadores', (req, res, next) => {
 
 // app.get('/orientadores/:id', verifyJWT, (req, res, next) => {
 app.get('/orientadores/:id', (req, res, next) => {
-  const orientadorId = req.query.id;
-  const destinationUrl = `http://localhost:5000/orientadores/${orientadorId}`;
-  console.log(`Roteando GET de http://localhost:${PORT}/orientadores/${orientadorId} para ${destinationUrl}`);
-  servicesProxy(req, res, next, destinationUrl);
+  const orientadorId = req.params.id;
+  console.log(orientadorId);
+  console.log(`Roteando GET de http://localhost:${PORT}/orientadores/${orientadorId} para http://localhost:5000/orientadores/${orientadorId}`);
+  servicesProxy(req, res, next);
 })
 
 //app.get('/orientadores', verifyJWT, (req, res, next) => {
@@ -283,6 +289,5 @@ app.delete('/orientadores', (req, res, next) => {
   console.log(`Roteando DELETE de http://localhost:${PORT}/orientadores para http://localhost:5000/orientadores`);
   servicesProxy(req, res, next);
 })
-
 
 app.listen(PORT, () => console.log(`Gateway online on http://localhost:${PORT}`));

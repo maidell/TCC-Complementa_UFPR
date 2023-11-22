@@ -1,7 +1,6 @@
 <button mat-dialog-close class="close close-button"><mat-icon class="close-button-icon">close</mat-icon></button>
 <div class="cards-servidores">
 
-
 	<div class="let-of-cards" *ngIf="hasObject()">
 		<h1>Servidores</h1>
 		<mat-form-field>
@@ -12,8 +11,11 @@
 			<ng-container *ngIf="servidores.length > 0; else noServidores">
 				<app-rect-card *ngFor="let servidor of obs | async" [nome]="servidor.nome" [firstLabel]="'Matricula'"
 					[firstValue]="servidor.matricula" [secondLabel]="'Email'" [secondValue]="servidor.email"
-					[thirdLabel]="'Telefone'" [thirdValue]="servidor.telefone" [buttonOne]="'Selecionar'"
-					[colorButtonOne]="'btn-green'"></app-rect-card>
+					[thirdLabel]="'Telefone'" [thirdValue]="servidor.telefone"  
+					[nameButtonRect]="'Selecionar'" [buttonColor]="'btn-green'" [showButton]="!servidor.incluido" (clickButtonRect)="adicionarServidor(servidor)"
+					[nameSecondButtonRect]="'Remover'" [secondButtonColor]="'btn-red'" [showSecondButton]="servidor.incluido"
+					(clickSecondButtonRect)="removerServidor(servidor)">
+					</app-rect-card>
 			</ng-container>
 		</ng-container>
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
@@ -25,4 +27,3 @@
 	</ng-template>
 
 </div>
-

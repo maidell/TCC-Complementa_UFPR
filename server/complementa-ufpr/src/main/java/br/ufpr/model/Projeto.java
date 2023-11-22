@@ -46,12 +46,12 @@ public class Projeto {
             joinColumns = @JoinColumn(name = "id_projeto"),
             inverseJoinColumns = @JoinColumn(name = "id_monitor")
     )
-    private List<Monitor> monitores;
+    private List<Aluno> monitores;
 
     public Projeto() {
     }
 
-    public Projeto(Long id, String nome, String descricao, Orientador orientador, List<Aluno> alunos, List<Monitor> monitores) {
+    public Projeto(Long id, String nome, String descricao, Orientador orientador, List<Aluno> alunos, List<Aluno> monitores) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -100,11 +100,11 @@ public class Projeto {
         this.alunos = alunos;
     }
 
-    public List<Monitor> getMonitores() {
+    public List<Aluno> getMonitores() {
         return monitores;
     }
 
-    public void setMonitores(List<Monitor> monitores) {
+    public void setMonitores(List<Aluno> monitores) {
         this.monitores = monitores;
     }
 }

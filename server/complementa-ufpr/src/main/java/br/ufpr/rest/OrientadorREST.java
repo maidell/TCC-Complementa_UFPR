@@ -51,7 +51,7 @@ public class OrientadorREST {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<OrientadorDTO> buscaPorId(@PathVariable String id) {
+	public ResponseEntity<OrientadorDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Orientador> orientador = repo.findById(id);
 		if (orientador.isEmpty()) {
@@ -88,14 +88,14 @@ public class OrientadorREST {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<OrientadorDTO> alterarOrientador(@PathVariable("id") String id,
+	public ResponseEntity<OrientadorDTO> alterarOrientador(@PathVariable("id") Long id,
 			@RequestBody Orientador orientador) {
 		Optional<Orientador> ori = repo.findById(id);
 
 		if (ori.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			orientador.setId(Long.parseLong(id));
+			orientador.setId(id);
 			repo.save(orientador);
 			ori = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(ori.get(), OrientadorDTO.class));
@@ -103,7 +103,7 @@ public class OrientadorREST {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerOrientador(@PathVariable("id") String id) {
+	public ResponseEntity<?> removerOrientador(@PathVariable("id") Long id) {
 
 		Optional<Orientador> orientador = repo.findById(id);
 		if (orientador.isEmpty()) {

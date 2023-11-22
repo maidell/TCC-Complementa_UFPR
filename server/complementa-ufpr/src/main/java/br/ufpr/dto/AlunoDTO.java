@@ -4,14 +4,14 @@ public class AlunoDTO extends UsuarioDTO {
 
 	private static final long serialVersionUID = 1L;
 	private String grr;
-	private GraduacaoDTO graduacao;
+	private GraduacaoAlunoDTO graduacao;
 
 	public AlunoDTO() {
 		super();
 	}
 
 	public AlunoDTO(Long id, String nome, String email, String telefone, String papel, String grr,
-			GraduacaoDTO graduacao) {
+			GraduacaoAlunoDTO graduacao) {
 		super(id, nome, email, telefone, papel);
 		this.grr = grr;
 		this.graduacao = graduacao;
@@ -25,11 +25,11 @@ public class AlunoDTO extends UsuarioDTO {
 		this.grr = grr;
 	}
 
-	public GraduacaoDTO getGraduacao() {
+	public GraduacaoAlunoDTO getGraduacao() {
 		return graduacao;
 	}
 
-	public void setGraduacao(GraduacaoDTO graduacao) {
+	public void setGraduacao(GraduacaoAlunoDTO graduacao) {
 		this.graduacao = graduacao;
 	}
 

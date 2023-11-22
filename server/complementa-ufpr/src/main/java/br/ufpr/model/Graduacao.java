@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,10 +27,10 @@ public class Graduacao implements Serializable{
     private String nome;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Coordenador coordenador;
+    private Orientador coordenador;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<ServidorCoordenador> servidoresCoordenadores;
+    private List<Servidor> servidoresCoordenadores;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Competencia> competencias;
@@ -39,7 +38,7 @@ public class Graduacao implements Serializable{
     public Graduacao() {
     }
 
-	public Graduacao(Long id, String nome, Coordenador coordenador, List<ServidorCoordenador> servidoresCoordenadores,
+	public Graduacao(Long id, String nome, Orientador coordenador, List<Servidor> servidoresCoordenadores,
 			List<Competencia> competencias) {
 		super();
 		this.id = id;
@@ -65,19 +64,19 @@ public class Graduacao implements Serializable{
 		this.nome = nome;
 	}
 
-	public Coordenador getCoordenador() {
+	public Orientador getCoordenador() {
 		return coordenador;
 	}
 
-	public void setCoordenador(Coordenador coordenador) {
+	public void setCoordenador(Orientador coordenador) {
 		this.coordenador = coordenador;
 	}
 
-	public List<ServidorCoordenador> getServidoresCoordenadores() {
+	public List<Servidor> getServidoresCoordenadores() {
 		return servidoresCoordenadores;
 	}
 
-	public void setServidoresCoordenadores(List<ServidorCoordenador> servidoresCoordenadores) {
+	public void setServidoresCoordenadores(List<Servidor> servidoresCoordenadores) {
 		this.servidoresCoordenadores = servidoresCoordenadores;
 	}
 

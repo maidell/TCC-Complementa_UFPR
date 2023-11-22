@@ -16,12 +16,15 @@
             <div class="label">{{ thirdLabel }}</div>
             <div class="value">{{ thirdValue }}</div>
         </div>
-        <button mat-raised-button class="button custom-button {{colorButtonOne}}">
-            {{buttonOne}}
-        </button>
-        <button mat-raised-button class="button custom-button {{colorButtonTwo}}">
-            {{buttonTwo}}
-        </button>
-
+        <div *ngIf="showButton">
+            <button mat-raised-button class="button custom-button {{buttonColor}}" (click)="onButtonClick()">
+                {{nameButtonRect}}
+            </button>
+        </div>
+        <div *ngIf="showSecondButton">
+            <button mat-raised-button class="button custom-button {{secondButtonColor}}" (click)="onSecondButtonClick()">
+                {{nameSecondButtonRect}}
+            </button>
+        </div>
     </mat-card-content>
 </mat-card>

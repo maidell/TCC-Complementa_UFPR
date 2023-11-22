@@ -8,9 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { LayoutModule } from './layout/layout.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
-import { AtividadeComponent } from './atividade/atividade/atividade.component';
 import { AtividadeModule } from './atividade/atividade.module';
-import { CoordenadorModule } from './coordenador/coordenador.module';
 import { OrientadorModule } from './orientador/orientador.module';
 import { ServidorModule } from './servidor/servidor.module';
 
@@ -28,10 +26,8 @@ import { ServidorModule } from './servidor/servidor.module';
     UsuarioModule,
     MaterialStylesModule,
     AtividadeModule,
-    CoordenadorModule,
     OrientadorModule,
     ServidorModule
-
   ],
  
 })

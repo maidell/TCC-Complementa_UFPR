@@ -21,7 +21,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     NgxMaskModule.forRoot()
    ],
   exports: [
-    DashAdminComponent
+    DashAdminComponent,
+    CadastroDeUsuariosComponent
   ]
 })
 export class AdminModule { }
