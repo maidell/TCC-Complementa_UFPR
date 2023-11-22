@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
-  exibir: boolean = false;
+  exibir: boolean = true;
   userRole: string = ''; // Altere para o perfil do usuário logado:
   // 'aluno' | 'coordenadorOrientador' | 'profOrientador' | 'Administrador';
 

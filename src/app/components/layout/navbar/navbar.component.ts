@@ -10,9 +10,9 @@ import { LoginService } from '../../auth/services/login.service';
 })
 // type UserRole =
 export class NavbarComponent {
-  exibir: boolean = false;
-  userRole: string = ''; // Altere para o perfil do usuário logado:
-  // 'aluno' | 'coordenadorOrientador' | 'profOrientador' | 'Administrador';
+  exibir: boolean = true;
+  userRole: string = 'COORDENADOR'; // Altere para o perfil do usuário logado:
+  // 'ALUNO' | 'SERVIDOR' | 'MONITOR' | 'ORIENTADOR' | 'COORDENADOR' | 'SERVIDOR_COORDENADOR' |'ADMIN';
 
   constructor(
     private router: Router,

@@ -97,7 +97,7 @@ export class ProjetosComponent implements OnInit, OnDestroy {
     return this.projetos.length > 0;
   }
 
-  nameButtonRect: string = "Detalhes!";
+  buttonOne: string = "Detalhes!";
   tipoLabel: string = "Tipo";//Extenção, tcc,...
   cursoLabel: string = "Curso";
   orientadorLabel: string = "Orientador";

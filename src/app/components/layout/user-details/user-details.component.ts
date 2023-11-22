@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent {
-  exibir: boolean = false;
+  exibir: boolean = true;
   userName = "";
   grr = "";
   name = this.userName.split(/[, ]+/);

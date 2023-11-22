@@ -14,7 +14,8 @@
 					[thirdLabel]="'Telefone'" [thirdValue]="servidor.telefone"  
 					[nameButtonRect]="'Selecionar'" [buttonColor]="'btn-green'" [showButton]="!servidor.incluido" (clickButtonRect)="adicionarServidor(servidor)"
 					[nameSecondButtonRect]="'Remover'" [secondButtonColor]="'btn-red'" [showSecondButton]="servidor.incluido"
-					(clickSecondButtonRect)="removerServidor(servidor)"></app-rect-card>
+					(clickSecondButtonRect)="removerServidor(servidor)">
+					</app-rect-card>
 			</ng-container>
 		</ng-container>
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>

@@ -1,18 +1,19 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'app-table-card',
-  templateUrl: './table-card.component.html',
-  styleUrls: ['./table-card.component.scss']
+  selector: 'app-contestacoes-table',
+  templateUrl: './contestacoes-table.component.html',
+  styleUrls: ['./contestacoes-table.component.scss']
 })
-export class TableCardComponent<T> implements OnInit {
+export class ContestacoesTableComponent<T> implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.displayedColumns = [];
@@ -42,6 +43,12 @@ export class TableCardComponent<T> implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  openDialog() {
+    this.dialog.open(ContestacoesTableComponent, {
+      minWidth: '50%',
+    });
   }
 
 }
