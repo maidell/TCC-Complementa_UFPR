@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../auth/services/login.service';
+import { ServidoresComponent } from '../servidores/servidores.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -15,9 +17,16 @@ export class NavbarComponent {
   // 'ALUNO' | 'SERVIDOR' | 'MONITOR' | 'ORIENTADOR' | 'COORDENADOR' | 'SERVIDOR_COORDENADOR' |'ADMIN';
 
   constructor(
+    public dialog: MatDialog,
     private router: Router,
     private loginService: LoginService
   ) { }
+
+  openDialog() {
+    this.dialog.open(ServidoresComponent, {
+      minWidth: '50%',
+    });
+  }
 
   ngOnInit(): void {
     // if (this.loginService.usuarioLogado) {

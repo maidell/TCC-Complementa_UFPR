@@ -1,6 +1,7 @@
 export class Contestacao {
     public id!: number;
     public descricao: string = "";
+    public status!: string;
 
     constructor(
         id?: number,

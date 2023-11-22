@@ -1,3 +1,7 @@
+<!-- botao de Adicionar complexidade -->
+<button mat-raised-button color="primary" (click)="openDialog()" class="button custom-button {{colorButtonOne}}">
+	{{buttonNew}}
+</button>
 <mat-form-field>
 	<mat-label>Filter</mat-label>
 	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
@@ -20,7 +24,7 @@
 		</ng-container>
 
 		<tr class="mat-row" *matNoDataRow>
-			<td class="mat-cell" colspan="4">Nenhuma contestação da atividade "{{input.value}}" pesquisada foi encontrada</td>
+			<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
 		</tr>
 
 		<mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

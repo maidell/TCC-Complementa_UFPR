@@ -1,0 +1,48 @@
+<div class="card-complexidades">
+	<mat-card>
+		<div class="header">
+			<div>
+			<h1>Graduacoes</h1>
+			</div>
+			<div>
+			<button mat-dialog-close class="close close-button"><mat-icon
+					class="close-button-icon">close</mat-icon></button>
+					</div>
+		</div>
+		<mat-card-content>
+			<div class="complexidades">
+				<form [formGroup]="gradForm">
+					<div>
+					<div class="input-form">
+						<mat-form-field class="id">
+                            <mat-label>Id</mat-label>
+                            <input matInput formControlName="id" [formControl]="id" placeholder="Gerado Automaticamente" readonly>
+                          </mat-form-field>                          
+						<mat-form-field  class="nomeDoCurso">
+							<mat-label>Nome do Curso</mat-label>
+							<input placeholder="Nome do Curso" matInput formControlName="nomeDoCurso" [formControl]="nomeDoCurso">
+						</mat-form-field>
+						<mat-form-field  class="coordenador">
+							<mat-label>Coordenador</mat-label>
+							<input  matInput placeholder="Coordenador" formControlName="coordenador" [formControl]="coordenador">
+						</mat-form-field>
+					</div>
+						<div class="buttons">
+							<button mat-flat-button class="save-button" (click)="saveComplexity()">Salvar</button>
+							<button mat-flat-button class="delete-button" (click)="deleteComplexity()">Excluir</button>
+							<button mat-flat-button mat-dialog-close class="cancel-button" (click)="cancel()">Cancelar</button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</mat-card-content>
+	</mat-card>
+
+
+
+
+
+
+
+</div>

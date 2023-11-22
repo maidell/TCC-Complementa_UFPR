@@ -12,6 +12,8 @@ import { ContestacoesTableComponent } from './contestacoes-table/contestacoes-ta
 import { ContestacoesDialogComponent } from './contestacoes-dialog/contestacoes-dialog.component';
 import { CompetenciasTableComponent } from './competencias-table/competencias-table.component';
 import { CompetenciasDialogComponent } from './competencias-dialog/competencias-dialog.component';
+import { GraduacoesTableComponent } from './graduacoes-table/graduacoes-table.component';
+import { GraduacoesDialogComponent } from './graduacoes-dialog/graduacoes-dialog.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { CompetenciasDialogComponent } from './competencias-dialog/competencias-
     ContestacoesTableComponent,
     ContestacoesDialogComponent,
     CompetenciasTableComponent,
-    CompetenciasDialogComponent
+    CompetenciasDialogComponent,
+    GraduacoesTableComponent,
+    GraduacoesDialogComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +45,9 @@ import { CompetenciasDialogComponent } from './competencias-dialog/competencias-
     ContestacoesTableComponent,
     ContestacoesDialogComponent,
     CompetenciasTableComponent,
-    CompetenciasDialogComponent
+    CompetenciasDialogComponent,
+    GraduacoesTableComponent,
+    GraduacoesDialogComponent
   ]
 })
 export class CardsModule { }

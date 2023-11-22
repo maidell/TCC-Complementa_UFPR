@@ -59,7 +59,7 @@
     <a routerLink="/contestacoes/listar" href="#" class="list-group-item list-group-item-action py-2 ripple">
         <mat-icon>warning</mat-icon><span> Contestações</span>
     </a>
-    <a routerLink="/servidores" href="#" class="list-group-item list-group-item-action py-2 ripple">
+    <a (click)="openDialog()"  class="list-group-item list-group-item-action py-2 ripple">
         <mat-icon>people</mat-icon><span> Servidores</span>
     </a>
     <a routerLink="/meu-perfil" href="#" class="list-group-item list-group-item-action py-2 ripple">
