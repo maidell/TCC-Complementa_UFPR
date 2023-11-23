@@ -9,20 +9,18 @@ public class AnexoDTO implements Serializable {
     private Long id;
     private String fileName;
     private String filePath;
-    private AtividadeDTO atividade;
-    private RelatorioDeConclusaoDTO relatorioDeConclusao;
-
+    private String fileType;
+    
     public AnexoDTO() {
         super();
     }
 
-    public AnexoDTO(Long id, String fileName, String filePath, AtividadeDTO atividade, RelatorioDeConclusaoDTO relatorioDeConclusao) {
+    public AnexoDTO(Long id, String fileName, String filePath, String fileType, AtividadeDTO atividade, RelatorioDeConclusaoDTO relatorioDeConclusao) {
         super();
         this.id = id;
         this.fileName = fileName;
         this.filePath = filePath;
-        this.atividade = atividade;
-        this.relatorioDeConclusao = relatorioDeConclusao;
+        this.fileType = fileType;
     }
 
     public Long getId() {
@@ -48,25 +46,17 @@ public class AnexoDTO implements Serializable {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-
-    public AtividadeDTO getAtividade() {
-        return atividade;
+    
+    public String getFileType() {
+        return fileType;
     }
 
-    public void setAtividade(AtividadeDTO atividade) {
-        this.atividade = atividade;
-    }
-
-    public RelatorioDeConclusaoDTO getRelatorioDeConclusao() {
-        return relatorioDeConclusao;
-    }
-
-    public void setRelatorioDeConclusao(RelatorioDeConclusaoDTO relatorioDeConclusao) {
-        this.relatorioDeConclusao = relatorioDeConclusao;
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
     @Override
     public String toString() {
-        return "AnexoDTO [id=" + id + ", fileName=" + fileName + ", filePath=" + filePath + ", atividade=" + atividade + ", relatorioDeConclusao=" + relatorioDeConclusao + "]";
+        return "Anexo [id=" + getId() + ", fileName=" + getFileName() + ", filePath=" + getFilePath() + ", fileType=" + getFileType() + "]";
     }
 }

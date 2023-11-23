@@ -1,6 +1,7 @@
 package br.ufpr.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,23 +27,27 @@ public class Anexo implements Serializable {
     @Column(name = "filePath")
 	private String filePath;
     
-    @ManyToOne
-    @JoinColumn(name = "atividade_id", nullable = false)
+    @Column(name = "fileType")
+	private String fileType;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atividade_id")
     private Atividade atividade;
     
-    @ManyToOne
-    @JoinColumn(name = "relatorio_de_conclusao", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "relatorio_de_conclusao")
     private RelatorioDeConclusao relatorioDeConclusao;
 
 	public Anexo() {
 		super();
 	}
 
-	public Anexo(Long id, String fileName, String filePath, Atividade atividade, RelatorioDeConclusao relatorioDeConclusao) {
+	public Anexo(Long id, String fileName, String filePath, String fileType, Atividade atividade, RelatorioDeConclusao relatorioDeConclusao) {
 		super();
 		this.id = id;
 		this.fileName = fileName;
 		this.filePath = filePath;
+		this.fileType = fileType;
 		this.atividade = atividade;
 		this.relatorioDeConclusao = relatorioDeConclusao;
 	}
@@ -71,6 +76,18 @@ public class Anexo implements Serializable {
 		this.filePath = filePath;
 	}
 	
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public Atividade getAtividade() {
 		return atividade;
 	}
@@ -89,7 +106,7 @@ public class Anexo implements Serializable {
 
 	@Override
 	public String toString() {
-	    return "Anexo [id=" + id + ", fileName=" + fileName + ", filePath=" + filePath + ", atividade=" + atividade + ", relatorioDeConclusao=" + relatorioDeConclusao + "]";
+	    return "Anexo [id=" + getId() + ", fileName=" + getFileName() + ", filePath=" + getFilePath() + ", fileType=" + getFileType() + ", atividade=" + getAtividade() + ", relatorioDeConclusao=" + getRelatorioDeConclusao() + "]";
 	}
     
 }
