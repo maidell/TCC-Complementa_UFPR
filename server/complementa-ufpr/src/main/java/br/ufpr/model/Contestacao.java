@@ -13,6 +13,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -43,16 +44,12 @@ public class Contestacao implements Serializable{
     @JoinColumn(name = "id_usuario")
     private Usuario autor;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atividade_id") // Certifique-se de que este é o nome da coluna correta para a chave estrangeira
-    private Atividade atividade;
-
 	public Contestacao() {
 		super();
 	}
 
 	public Contestacao(Long id, String descricao, TipoContestacao tipoContestacao, Date dataContestacao, Status status,
-			Usuario autor, Atividade atividade) {
+			Usuario autor) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
@@ -60,7 +57,6 @@ public class Contestacao implements Serializable{
 		this.dataContestacao = dataContestacao;
 		this.status = status;
 		this.autor = autor;
-		this.atividade = atividade;
 	}
 
 	public Long getId() {
@@ -111,23 +107,14 @@ public class Contestacao implements Serializable{
 		this.dataContestacao = dataContestacao;
 	}
 
-	public Atividade getAtividade() {
-		return atividade;
-	}
-
-	public void setAtividade(Atividade atividade) {
-		this.atividade = atividade;
-	}
-
 	@Override
 	public String toString() {
-	    return "Contestacao [id=" + id 
-	    		+ "descricao=" + descricao
-	    	    + "tipoContestacao=" + tipoContestacao
-	    	    + "dataContestacao=" + dataContestacao
-	    	    + "status=" + status
-	    	    + "autor=" + autor
-	    	    + "atividade=" + atividade + "]";
+	    return "Contestacao [id=" + getId() 
+	    		+ "descricao=" + getDescricao()
+	    	    + "tipoContestacao=" + getTipoContestacao()
+	    	    + "dataContestacao=" + getDataContestacao()
+	    	    + "status=" + getStatus()
+	    	    + "autor=" + getAutor() + "]";
 	}
 
 

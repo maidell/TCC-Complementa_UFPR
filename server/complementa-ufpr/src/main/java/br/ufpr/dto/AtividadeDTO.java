@@ -25,7 +25,8 @@ public class AtividadeDTO implements Serializable {
 	private CertificadoDTO certificado;
 	private RelatorioDeConclusaoDTO relatorioDeConclusao;
 	private List<AnexoDTO> anexos = new ArrayList<>();
-	private List<ContestacaoDTO> contestacoes = new ArrayList<>();
+	private ContestacaoDTO contestacao;
+	private ContestacaoCargaHorariaDTO contestacaoCargaHoraria;
 	private Status status;
 
 	public AtividadeDTO() {
@@ -34,8 +35,8 @@ public class AtividadeDTO implements Serializable {
 	public AtividadeDTO(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
 			Date dataConclusao, ProjetoDTO projeto, UsuarioDTO autor, UsuarioDTO executor, CompetenciaDTO competencia,
 			ComplexidadeDTO complexidade, List<ComentarioDTO> comentarios, CertificadoDTO certificado,
-			RelatorioDeConclusaoDTO relatorioDeConclusao, List<AnexoDTO> anexos, List<ContestacaoDTO> contestacoes,
-			Status status) {
+			RelatorioDeConclusaoDTO relatorioDeConclusao, List<AnexoDTO> anexos, ContestacaoDTO contestacao,
+			ContestacaoCargaHorariaDTO contestacaoCargaHoraria, Status status) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -52,7 +53,8 @@ public class AtividadeDTO implements Serializable {
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
 		this.anexos = anexos;
-		this.contestacoes = contestacoes;
+		this.contestacao = contestacao;
+		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
 		this.status = status;
 	}
 
@@ -176,14 +178,21 @@ public class AtividadeDTO implements Serializable {
 		this.anexos = anexos;
 	}
 
-	public List<ContestacaoDTO> getContestacoes() {
-		return contestacoes;
+	public ContestacaoDTO getContestacao() {
+		return contestacao;
+	}
+	public void setContestacao(ContestacaoDTO contestacao) {
+		this.contestacao = contestacao;
 	}
 
-	public void setContestacoes(List<ContestacaoDTO> contestacoes) {
-		this.contestacoes = contestacoes;
+	public ContestacaoCargaHorariaDTO getContestacaoCargaHoraria() {
+		return contestacaoCargaHoraria;
 	}
 
+	public void setContestacaoCargaHoraria(ContestacaoCargaHorariaDTO contestacaoCargaHoraria) {
+		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
+	}
+	
 	public Status getStatus() {
 		return status;
 	}
@@ -198,12 +207,23 @@ public class AtividadeDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Atividade [id=" + getId() + ", nome=" + getNome() + ", descricao=" + getDescricao() + ", dataCriacao="
-				+ getDataCriacao() + ", dataLimiteCandidatura=" + getDataLimiteCandidatura() + ", dataConclusao="
-				+ getDataConclusao() + ", projeto=" + getProjeto() + ", autor=" + getAutor() + ", executor="
-				+ getExecutor() + ", competencia=" + getCompetencia() + ", complexidade=" + getComplexidade()
-				+ ", comentarios=" + getComentarios() + ", certificado=" + getCertificado() + ", relatorioDeConclusao="
-				+ getRelatorioDeConclusao() + ", anexos=" + getAnexos() + ", contestacoes=" + getContestacoes()
+		return "Atividade [id=" + getId() 
+				+ ", nome=" + getNome() 
+				+ ", descricao=" + getDescricao() 
+				+ ", dataCriacao=" + getDataCriacao()
+				+ ", dataLimiteCandidatura=" + getDataLimiteCandidatura() 
+				+ ", dataConclusao=" + getDataConclusao() 
+				+ ", projeto=" + getProjeto() 
+				+ ", autor=" + getAutor() 
+				+ ", executor=" + getExecutor() 
+				+ ", competencia=" + getCompetencia()
+				+ ", complexidade=" + getComplexidade() 
+				+ ", comentarios=" + getComentarios() 
+				+ ", certificado=" + getCertificado()
+				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao() 
+				+ ", anexos=" + getAnexos() 
+				+ ", contestacao=" + getContestacao() 
+				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria() 
 				+ ", status=" + getStatus() + "]";
 	}
 

@@ -4,8 +4,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,7 +30,7 @@ public class ContestacaoCargaHoraria extends Contestacao{
 
 	public ContestacaoCargaHoraria(Long id, String descricao, TipoContestacao tipoContestacao, Date dataContestacao, Status status,
 			Usuario autor, Atividade atividade, double cargaHorariaOriginal, double cargaHorariaNova) {
-		super(id, descricao, tipoContestacao, dataContestacao, status, autor, atividade);
+		super(id, descricao, tipoContestacao, dataContestacao, status, autor);
 		this.cargaHorariaOriginal = cargaHorariaOriginal;
 		this.cargaHorariaNova = cargaHorariaNova;
 	}
@@ -52,7 +55,7 @@ public class ContestacaoCargaHoraria extends Contestacao{
 	public String toString() {
 	    return "Contestacao [id=" + getId() + "descricao=" + getDescricao() + "tipoContestacao=" + getTipoContestacao()
 	    	    + "dataContestacao=" + getDataContestacao() + "status=" + getStatus() + "autor=" + getAutor()
-	    	    + "atividade=" + getAtividade() + ", cargaHorariaOriginal=" + getCargaHorariaOriginal() + ", cargaHorariaNova=" + getCargaHorariaNova() + "]";
+	    	    + ", cargaHorariaOriginal=" + getCargaHorariaOriginal() + ", cargaHorariaNova=" + getCargaHorariaNova() + "]";
 	}
 
 	
