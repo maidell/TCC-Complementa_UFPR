@@ -84,6 +84,7 @@ public class AlunoREST {
 				emailService.enviarEmail(aluno.getEmail(), "Complementa UFPR - Cadastro", conteudoEmail);	
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(alnOpt.get(), AlunoDTO.class));
 		} catch (Exception e) {
+			System.err.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}

@@ -8,7 +8,7 @@ import br.ufpr.model.Comentario;
 
 public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
 	
-	Optional<Comentario> findById(String id);
+	Optional<Comentario> findById(Long id);
 
 	public long count();
     

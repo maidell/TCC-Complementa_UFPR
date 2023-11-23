@@ -60,13 +60,14 @@ public class RelatorioDeConclusaoREST {
     public ResponseEntity<RelatorioDeConclusaoDTO> inserirRelatorio(@RequestBody RelatorioDeConclusao relatorio) {
 
         try {
-            RelatorioDeConclusao rlt = repo.save(relatorio);
+            RelatorioDeConclusao rlt = repo.save(mapper.map(relatorio, RelatorioDeConclusao.class));
             Optional<RelatorioDeConclusao> rltOpt = repo.findById(rlt.getId().toString());
             if (!rltOpt.isPresent()) {
                 throw new Exception("Criação do relatório não foi realizada com sucesso");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(rltOpt.get(), RelatorioDeConclusaoDTO.class));
         } catch (Exception e) {
+        	System.err.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -79,7 +80,7 @@ public class RelatorioDeConclusaoREST {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             relatorio.setId(Long.parseLong(id));
-            repo.save(relatorio);
+            repo.save(mapper.map(relatorio, RelatorioDeConclusao.class));
             rlt = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(rlt.get(), RelatorioDeConclusaoDTO.class));
         }

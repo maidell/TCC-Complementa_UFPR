@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufpr.dto.UsuarioDTO;
 import br.ufpr.helper.EmailService;
 import br.ufpr.helper.PasswordUtils;
+import br.ufpr.model.Aluno;
 import br.ufpr.model.Usuario;
 import br.ufpr.repository.UsuarioRepository;
 
@@ -87,6 +88,7 @@ public class UsuarioREST {
 					emailService.enviarEmail(usuario.getEmail(), "Confirmação de Email", conteudoEmail);
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(usuOpt.get(), UsuarioDTO.class));
 		} catch (Exception e) {
+			System.err.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
@@ -98,8 +100,13 @@ public class UsuarioREST {
 		if (usu.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			usuario.setId(id);
-			repo.save(mapper.map(usuario, Usuario.class));
+			Usuario newUsu = usu.get();
+			newUsu.setNome(usuario.getNome());
+			newUsu.setTelefone(usuario.getTelefone());
+			if (usuario.getSenha() != null && !usuario.getSenha().isEmpty()) {
+				newUsu.setSenha(PasswordUtils.hashPassword(usuario.getSenha(), newUsu.getSalt()));
+			}
+			repo.save(mapper.map(newUsu, Usuario.class));
 			usu = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(usu, UsuarioDTO.class));
 		}

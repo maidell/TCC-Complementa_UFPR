@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.GraduacaoDTO;
+import br.ufpr.dto.GraduacaoSimplesDTO;
 import br.ufpr.model.Graduacao;
 import br.ufpr.repository.GraduacaoRepository;
 
@@ -44,6 +45,18 @@ public class GraduacaoREST {
         return ResponseEntity.status(HttpStatus.OK)
         		.body(lista.stream().map(e -> mapper.map(e, GraduacaoDTO.class)).collect(Collectors.toList()));
     }
+    
+    @GetMapping("/autocadastro")
+    public ResponseEntity<List<GraduacaoSimplesDTO>> obterTodasGraduacoesSimples() {
+
+        List<Graduacao> lista = repo.findAll();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+        		.body(lista.stream().map(e -> mapper.map(e, GraduacaoSimplesDTO.class)).collect(Collectors.toList()));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<GraduacaoDTO> buscaPorId(@PathVariable Long id) {
@@ -61,13 +74,14 @@ public class GraduacaoREST {
     public ResponseEntity<GraduacaoDTO> inserirGraduacao(@RequestBody Graduacao graduacao) {
 
         try {
-            Graduacao grad = repo.save(graduacao);
+            Graduacao grad = repo.save(mapper.map(graduacao, Graduacao.class));
             Optional<Graduacao> gradOpt = repo.findById(grad.getId());
             if (!gradOpt.isPresent()) {
                 throw new Exception("Criação da graduação não foi realizada com sucesso");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(gradOpt.get(), GraduacaoDTO.class));
         } catch (Exception e) {
+        	System.err.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -80,7 +94,7 @@ public class GraduacaoREST {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             graduacao.setId(id);
-            repo.save(graduacao);
+            repo.save(mapper.map(graduacao, Graduacao.class));
             grad = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad.get(), GraduacaoDTO.class));
         }

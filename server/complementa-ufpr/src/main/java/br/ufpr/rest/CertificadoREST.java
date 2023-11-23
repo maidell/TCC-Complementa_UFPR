@@ -62,13 +62,14 @@ public class CertificadoREST {
 	public ResponseEntity<CertificadoDTO> inserirCertificado(@RequestBody Certificado certificado) {
 		
 		try {
-			Certificado crt = repo.save(certificado);
+			Certificado crt = repo.save(mapper.map(certificado, Certificado.class));
 			Optional<Certificado> crtOpt = repo.findById(crt.getId().toString());
 			if (!crtOpt.isPresent()) {
 				throw new Exception("Criação do certificado não foi realizada com sucesso");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(crtOpt.get(), CertificadoDTO.class));
 		} catch (Exception e) {
+			System.err.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
@@ -81,7 +82,7 @@ public class CertificadoREST {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			certificado.setId(id);
-			repo.save(certificado);
+			repo.save(mapper.map(certificado, Certificado.class));
 			crt = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(crt.get(), CertificadoDTO.class));
 		}

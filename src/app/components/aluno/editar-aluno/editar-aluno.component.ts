@@ -9,6 +9,7 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { AtividadeComponent } from '../../atividade/atividade/atividade.component';
 import { LoginService } from '../../auth/services/login.service';
 import { ToastrService } from 'ngx-toastr';
+import { GraduacaoService } from '../../graduacao/services/graduacao.service';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class EditarAlunoComponent implements OnInit {
     private router: Router,
     private alunoService: AlunoService,
     private loginService: LoginService,
+    private graduacaoService: GraduacaoService,
     public dialog: MatDialog,
     public toastr: ToastrService
   ) { }
@@ -120,7 +122,7 @@ export class EditarAlunoComponent implements OnInit {
   }
 
   listarCursos(): Observable<Graduacao[]> {
-    return this.alunoService.listarTodosCursos();
+    return this.graduacaoService.listarTodasGraduacoes();
   }
 
   verificarSenha() {

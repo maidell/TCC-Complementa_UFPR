@@ -60,13 +60,14 @@ public class ProjetoREST {
     public ResponseEntity<ProjetoDTO> inserirProjeto(@RequestBody Projeto projeto) {
 
         try {
-            Projeto prj = repo.save(projeto);
+            Projeto prj = repo.save(mapper.map(projeto, Projeto.class));
             Optional<Projeto> prjOpt = repo.findById(prj.getId());
             if (!prjOpt.isPresent()) {
                 throw new Exception("Criação do projeto não foi realizada com sucesso");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(prjOpt.get(), ProjetoDTO.class));
         } catch (Exception e) {
+        	System.err.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -79,7 +80,7 @@ public class ProjetoREST {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             projeto.setId(id);
-            repo.save(projeto);
+            repo.save(mapper.map(projeto, Projeto.class));
             prj = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(prj.get(), ProjetoDTO.class));
         }

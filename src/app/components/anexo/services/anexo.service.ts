@@ -19,10 +19,6 @@ export class AnexoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  listarTodosAnexos(): Observable<Anexo[]> {
-    return this.httpClient.get<Anexo[]>(this.BASE_URL + 'anexos/', this.httpOptions);
-  }
-
   inserirAnexoAtividade(file: File, atividadeId: number): Observable<Anexo> {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
@@ -39,8 +35,8 @@ export class AnexoService {
     return this.httpClient.get(this.BASE_URL + 'anexos/download/' + id, {responseType: 'blob' as 'json'});
   }
 
-  atualizarAnexo(anexo: Anexo): Observable<Anexo> {
-    return this.httpClient.put<Anexo>(this.BASE_URL + 'anexos/' + anexo.id, JSON.stringify(anexo), this.httpOptions);
+  buscarAnexoPorId(id: number): Observable<Anexo> {
+    return this.httpClient.get<Anexo>(this.BASE_URL + 'anexos/' + id, this.httpOptions);
   }
 
   removerAnexo(id: number): Observable<Anexo> {

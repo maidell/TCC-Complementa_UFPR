@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -85,9 +83,8 @@ public class AnexoREST {
 	        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
 			}
 	    } catch (IOException e) {
+	    	System.err.println(e);
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 	    }
 	}
 	
@@ -115,10 +112,9 @@ public class AnexoREST {
 	        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
 			}
 	    } catch (IOException e) {
+	    	System.err.println(e);
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-	    }
+	    } 
 	}
 	
 	@GetMapping("/download/{id}")
@@ -145,6 +141,7 @@ public class AnexoREST {
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
                     .body(resource);
         } catch (Exception e) {
+        	System.err.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -157,35 +154,6 @@ public class AnexoREST {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(anexo.get(), AnexoDTO.class));
-		}
-	}
-
-	@PostMapping
-	public ResponseEntity<AnexoDTO> inserirAnexo(@RequestBody Anexo anexo) {
-
-		try {
-			Anexo anx = repo.save(anexo);
-			Optional<Anexo> anxOpt = repo.findById(anx.getId().toString());
-			if (!anxOpt.isPresent()) {
-				throw new Exception("Criação do anexo não foi realizada com sucesso");
-			}
-			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(anxOpt.get(), AnexoDTO.class));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
-
-	@PutMapping("/{id}")
-	public ResponseEntity<AnexoDTO> alterarAnexo(@PathVariable("id") Long id, @RequestBody Anexo anexo) {
-		Optional<Anexo> anx = repo.findById(id);
-
-		if (anx.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-		} else {
-			anexo.setId(id);
-			repo.save(anexo);
-			anx = repo.findById(id);
-			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(anx.get(), AnexoDTO.class));
 		}
 	}
 

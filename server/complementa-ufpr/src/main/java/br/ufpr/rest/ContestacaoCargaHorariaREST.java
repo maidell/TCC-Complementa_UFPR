@@ -24,7 +24,7 @@ import br.ufpr.repository.ContestacaoCargaHorariaRepository;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "contestacoesCargaHoraria")
+@RequestMapping(value = "contestacoes-carga-horaria")
 public class ContestacaoCargaHorariaREST {
 
     @Autowired
@@ -60,13 +60,14 @@ public class ContestacaoCargaHorariaREST {
     public ResponseEntity<ContestacaoCargaHorariaDTO> inserirContestacaoCargaHoraria(@RequestBody ContestacaoCargaHoraria contestacaoCargaHoraria) {
 
         try {
-            ContestacaoCargaHoraria contstCarga = repo.save(contestacaoCargaHoraria);
+            ContestacaoCargaHoraria contstCarga = repo.save(mapper.map(contestacaoCargaHoraria, ContestacaoCargaHoraria.class));
             Optional<ContestacaoCargaHoraria> contstCargaOpt = repo.findById(contstCarga.getId().toString());
             if (!contstCargaOpt.isPresent()) {
                 throw new Exception("Criação da contestação de carga horária não foi realizada com sucesso");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(contstCargaOpt.get(), ContestacaoCargaHorariaDTO.class));
         } catch (Exception e) {
+        	System.err.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -79,7 +80,7 @@ public class ContestacaoCargaHorariaREST {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             contestacaoCargaHoraria.setId(Long.parseLong(id));
-            repo.save(contestacaoCargaHoraria);
+            repo.save(mapper.map(contestacaoCargaHoraria, ContestacaoCargaHoraria.class));
             contstCarga = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(contstCarga.get(), ContestacaoCargaHorariaDTO.class));
         }

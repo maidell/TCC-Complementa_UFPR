@@ -12,6 +12,8 @@ import { LayoutModule } from './components/layout/layout.module';
 import { MainComponent } from './main/main.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ToastrModule } from 'ngx-toastr';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './components/auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,10 @@ import { ToastrModule } from 'ngx-toastr';
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    { provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -95,8 +95,15 @@ public class OrientadorREST {
 		if (ori.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			orientador.setId(id);
-			repo.save(orientador);
+			Orientador newOri = ori.get();
+			newOri.setNome(orientador.getNome());
+			newOri.setTelefone(orientador.getTelefone());
+			newOri.setMatricula(orientador.getMatricula());
+			newOri.setGraduacao(orientador.getGraduacao());
+			if (orientador.getSenha() != null && !orientador.getSenha().isEmpty()) {
+				newOri.setSenha(PasswordUtils.hashPassword(orientador.getSenha(), newOri.getSalt()));
+			}
+			repo.save(mapper.map(newOri, Orientador.class));
 			ori = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(ori.get(), OrientadorDTO.class));
 		}

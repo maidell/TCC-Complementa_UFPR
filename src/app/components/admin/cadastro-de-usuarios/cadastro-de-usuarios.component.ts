@@ -12,6 +12,7 @@ import { UsuarioService } from '../../usuario/services/usuario.service';
 import { ServidorService } from '../../servidor/services/servidor.service';
 import { OrientadorService } from '../../orientador/services/orientador.service';
 import { ToastrService } from 'ngx-toastr';
+import { GraduacaoService } from '../../graduacao/services/graduacao.service';
 
 @Component({
   selector: 'app-cadastro-de-usuarios',
@@ -54,6 +55,7 @@ export class CadastroDeUsuariosComponent implements OnInit {
     private servidorService: ServidorService,
     private orientadorService: OrientadorService,
     private loginService: LoginService,
+    private graduacaoService: GraduacaoService,
     public dialog: MatDialog,
     public toastr: ToastrService
   ) { }
@@ -89,7 +91,7 @@ export class CadastroDeUsuariosComponent implements OnInit {
   }
 
   listarCursos(): void {
-    this.alunoService.listarTodosCursos().subscribe(
+    this.graduacaoService.listarTodasGraduacoes().subscribe(
       (response) => {
         this.options = response;
       },
