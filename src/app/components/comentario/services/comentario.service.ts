@@ -5,8 +5,6 @@ import { Comentario } from 'src/app/shared';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const LS_CHAVE: string = "comentarios"
-
 @Injectable({
   providedIn: 'root'
 })

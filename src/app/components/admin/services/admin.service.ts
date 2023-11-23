@@ -31,9 +31,4 @@ export class AdminService {
 
   constructor(private httpClient: HttpClient) { }
 
-  atualizarAluno(aluno: Aluno): Observable<Aluno> {
-    this.alunoLogado = aluno;
-    return this.httpClient.put<Aluno>(this.BASE_URL + 'alunos/' + aluno.id, JSON.stringify(aluno), this.httpOptions);
-  }
-  
 }
