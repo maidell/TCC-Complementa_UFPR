@@ -546,11 +546,11 @@ export class AtividadeComponent {
     //inserir os valores pulverizados dentro da instancia de atividade antes de enviar para a chamada do service
 
     this.atividadeService.atualizarAtividade(this.atividade).subscribe(
-      response => {
-        console.log('Arquivo enviado com sucesso', response);
+      (response: Atividade) => {
+        console.log('Atividade salva com sucesso', response);
         this.showSuccessToastr("Atividade salva!");
       },
-      error => {
+      (error: any) => {
         console.error('Erro ao enviar arquivo', error);
       }
     );
@@ -764,7 +764,7 @@ generateCerticate(){
 
   downloadAnexo(id: number, anexo: Anexo) {
     this.anexoService.downloadAnexoPorId(id).subscribe(
-      blob => {
+      (blob: Blob | MediaSource) => {
         const url = window.URL.createObjectURL(blob);
         window.open(url);
         const a = document.createElement('a');
@@ -775,7 +775,7 @@ generateCerticate(){
         window.URL.revokeObjectURL(url);
         a.remove();
       },
-      error => {
+      (error: any) => {
         this.toastr.error('Erro ao baixar o arquivo');
         console.error('Erro ao baixar o arquivo', error);
       }
@@ -784,10 +784,10 @@ generateCerticate(){
 
   uploadAnexoRelatorio(file: File, anexo: Anexo, relatorioid: number) {
     this.anexoService.inserirAnexoAtividade(file, relatorioid).subscribe(
-      response => {
+      (response: any) => {
         console.log('Arquivo enviado com sucesso', response);
       },
-      error => {
+      (error: any) => {
         console.error('Erro ao enviar arquivo', error);
       }
     );
@@ -795,10 +795,10 @@ generateCerticate(){
 
   instanciarAtividade(id: number){
     this.atividadeService.buscarAtividadePorId(id).subscribe(
-      (response) => {
+      (response: Atividade) => {
         this.atividade = response;
       },
-      (error) => {
+      (error: any) => {
         this.toastr.error("Erro ao instanciar Atividade");
         console.error("Erro ao listar Cursos:", error);
       }
