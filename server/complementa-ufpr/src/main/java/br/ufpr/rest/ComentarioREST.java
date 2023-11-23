@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufpr.dto.ComentarioDTO;
 import br.ufpr.model.Atividade;
 import br.ufpr.model.Comentario;
+import br.ufpr.model.Usuario;
 import br.ufpr.repository.AtividadeRepository;
 import br.ufpr.repository.ComentarioRepository;
+import br.ufpr.repository.UsuarioRepository;
 
 @CrossOrigin
 @RestController
@@ -34,6 +36,9 @@ public class ComentarioREST {
 
 	@Autowired
 	private AtividadeRepository atRepo;
+	
+	@Autowired
+	private UsuarioRepository usuRepo;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -66,10 +71,13 @@ public class ComentarioREST {
 
 		try {
 			Optional<Atividade> atv = atRepo.findById(id);
-			if (!atv.isPresent()) {
+			Optional<Usuario> usu = usuRepo.findById(comentario.getUsuario().getId());
+			if (atv.isEmpty() && usu.isEmpty()) {
 				throw new Exception("Criação do comentário não foi realizada com sucesso");
 			}
-			Comentario cmt = repo.save(mapper.map(comentario, Comentario.class));
+			Comentario cmt = mapper.map(comentario, Comentario.class);
+			cmt.setAtividade(atv.get());
+			cmt = repo.save(mapper.map(cmt, Comentario.class));
 			Optional<Comentario> cmtOpt = repo.findById(cmt.getId());
 			if (!cmtOpt.isPresent()) {
 				throw new Exception("Criação do comentário não foi realizada com sucesso");

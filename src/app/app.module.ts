@@ -14,6 +14,9 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './components/auth/auth.interceptor';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
+
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import { AuthInterceptor } from './components/auth/auth.interceptor';
     MaterialStylesModule,
     AuthModule,
     LayoutModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgxMaskModule.forRoot(options)
   ],
   exports: [
     FormsModule,

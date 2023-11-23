@@ -7,6 +7,7 @@ import * as pages from './components/pages';
 import { ModifyCardComponent } from './components/layout/cards/modify-card/modify-card.component';
 import { CadastroDeUsuariosComponent } from './components/pages/cadastro-de-usuarios/cadastro-de-usuarios.component';
 import { AtividadeComponent } from './components/atividade/atividade/atividade.component';
+import { DashboardComponent } from './components/pages';
 
 const routes: Routes = [
   {
@@ -19,7 +20,11 @@ const routes: Routes = [
     redirectTo: 'aluno/home'
   },
   {
-    path: 'aluno/editar', //removi o :id
+    path: 'aluno/editar',
+    component: DashboardComponent
+  },
+  {
+    path: 'aluno/editar',
     component: EditarAlunoComponent
   },
   {

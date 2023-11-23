@@ -10,6 +10,7 @@ import { ServidorService } from '../../../services/servidor/services/servidor.se
 import { Router } from '@angular/router';
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { ServidorCoordenador } from 'src/app/shared/models/servidor-coordenador.model';
+import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
 
 @Component({
   selector: 'app-servidores',
@@ -40,6 +41,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private servidorService: ServidorService,
     private orientadorService: OrientadorService,
+    private graduacaoService: GraduacaoService,
     public toastr: ToastrService
   ) {
     if (!this.loginService.usuarioLogado) {
@@ -107,7 +109,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   }
 
   instanciarGraduacao(id: number): Observable<Graduacao> {
-    return this.servidorService.buscarGraduacaoPorId(id);
+    return this.graduacaoService.buscarGraduacaoPorId(id);
   }
 
   adicionarServidor(servidor: Servidor): void {
@@ -115,7 +117,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
       servidor.telefone, servidor.senha, servidor.papel, servidor.matricula);
     this.servidoresCoordenadores.push(servCoordenador);
     this.graduacao.servidoresCoordenadores = this.servidoresCoordenadores;
-    this.servidorService.atualizarGraduacao(this.graduacao).subscribe(
+    this.graduacaoService.atualizarGraduacao(this.graduacao).subscribe(
       (response) => {
         this.graduacao = response;
         this.toastr.success("Servidor cadastrado!");
@@ -134,7 +136,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
    removerServidor(servidor: Servidor): void {
     this.servidoresCoordenadores = this.servidoresCoordenadores.filter(serv => serv.id !== servidor.id);
     this.graduacao.servidoresCoordenadores = this.servidoresCoordenadores;
-    this.servidorService.atualizarGraduacao(this.graduacao).subscribe(
+    this.graduacaoService.atualizarGraduacao(this.graduacao).subscribe(
       (response) => {
         this.graduacao = response;
         this.toastr.info("Servidor removido!");
