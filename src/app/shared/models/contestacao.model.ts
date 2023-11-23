@@ -7,7 +7,7 @@ export class Contestacao {
     public dataContestacao!: Date;
     public status!: string;
     public autor!: Usuario;
-    
+
     constructor(
       id?: number,
       descricao?: string,
