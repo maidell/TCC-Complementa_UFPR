@@ -14,7 +14,7 @@ import { CardsModule } from '../layout/cards/cards.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
-import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { IConfig } from 'ngx-mask';
 import { AutocadastroComponent } from '../pages/autocadastro/autocadastro.component';
 import { EditarAlunoComponent } from '../pages/editar-aluno/editar-aluno.component';
 import { CadastroDeUsuariosComponent } from './cadastro-de-usuarios/cadastro-de-usuarios.component';
@@ -42,8 +42,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     LayoutModule,
     FormsModule,
     RouterModule,
-    CardsModule,
-    NgxMaskModule.forRoot()
+    CardsModule
   ],
   exports: [
     DashboardComponent,

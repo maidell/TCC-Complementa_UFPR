@@ -21,5 +21,10 @@
                 {{nameButtonRect}}
             </button>
         </div>
+        <div *ngIf="showSecondButton">
+            <button mat-raised-button class="button custom-button {{secondButtonColor}}" (click)="onSecondButtonClick()">
+                {{nameSecondButtonRect}}
+            </button>
+        </div>
     </mat-card-content>
 </mat-card>
