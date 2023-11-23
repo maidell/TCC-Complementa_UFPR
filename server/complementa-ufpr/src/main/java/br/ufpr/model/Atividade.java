@@ -68,7 +68,7 @@ public class Atividade implements Serializable {
 	@JoinColumn(name = "complexidade_id")
 	private Complexidade complexidade;
 
-	@OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "atividade", fetch = FetchType.LAZY)
 	private List<Comentario> comentarios = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.LAZY)
@@ -79,16 +79,21 @@ public class Atividade implements Serializable {
 	@JoinColumn(name = "relatorio_de_conclusao")
 	private RelatorioDeConclusao relatorioDeConclusao;
 
-	@OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "atividade", fetch = FetchType.LAZY)
 	private List<Anexo> anexos = new ArrayList<>();
 
-	@OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "atividade", fetch = FetchType.LAZY)
 	private List<Contestacao> contestacoes = new ArrayList<>();
 
 	@Column(name = "fk_id_status")
 	private Status status;
 
 	public Atividade() {
+	}
+	
+	public Atividade(Long id) {
+		super();
+		this.id = id;
 	}
 
 	public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,

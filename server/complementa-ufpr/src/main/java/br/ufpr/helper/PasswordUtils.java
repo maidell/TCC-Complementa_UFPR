@@ -10,7 +10,7 @@ public class PasswordUtils {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final int SALT_LENGTH = 16;
     private static final int PASS_LENGTH = 8;
-
+       
     public static String generateSalt() {
         byte[] salt = new byte[SALT_LENGTH];
         RANDOM.nextBytes(salt);

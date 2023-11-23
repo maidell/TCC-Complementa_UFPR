@@ -1,9 +1,11 @@
 package br.ufpr.model;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,9 +14,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "RelatorioDeConclusao")
-public class RelatorioDeConclusao {
+public class RelatorioDeConclusao implements Serializable{
 
-    @Id
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
@@ -22,10 +26,28 @@ public class RelatorioDeConclusao {
     @Column(name = "descricao")
     private String descricao;
 
-    @OneToMany(mappedBy = "relatorioDeConclusao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "relatorioDeConclusao", fetch = FetchType.LAZY)
     private List<Anexo> anexos;
 
-    public Long getId() {
+    
+    
+    public RelatorioDeConclusao() {
+		super();
+	}
+    
+	public RelatorioDeConclusao(Long id) {
+		super();
+		this.id = id;
+	}
+
+	public RelatorioDeConclusao(Long id, String descricao, List<Anexo> anexos) {
+		super();
+		this.id = id;
+		this.descricao = descricao;
+		this.anexos = anexos;
+	}
+
+	public Long getId() {
 		return id;
 	}
 

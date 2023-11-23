@@ -7,6 +7,16 @@ import { DownloadService } from '../download.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { jsPDF } from "jspdf";
+import { AtividadeService } from '../services/atividade.service';
+import { LoginService } from '../../auth/services/login.service';
+import { ComentarioService } from '../../comentario/services/comentario.service';
+import { OrientadorService } from '../../orientador/services/orientador.service';
+import { Anexo } from 'src/app/shared/models/anexo.model';
+import { AnexoService } from '../../anexo/services/anexo.service';
+import { Atividade, Usuario } from 'src/app/shared';
+import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
+import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -20,7 +30,10 @@ export class AtividadeComponent {
     unit:"mm"
   });
 
-
+  atividade: Atividade = new Atividade();
+  contestacao: ContestacaoCargaHoraria = new ContestacaoCargaHoraria();
+  relatorioConclusao: RelatorioDeConclusao = new RelatorioDeConclusao();
+  
   exampleResponse=[
     {
       id: 1,
@@ -48,7 +61,7 @@ export class AtividadeComponent {
   ];
 
   
-
+  usuarioLogado: Usuario = new Usuario();
   onlineUserId=1;
 
   estado: string =this.exampleResponse[0].status; 
@@ -152,11 +165,30 @@ export class AtividadeComponent {
   file_list: Array<string> = [];
 
 
-  constructor(private downloadService: DownloadService, public dialog: MatDialogRef<AtividadeComponent>, private toastr: ToastrService) {}
+  constructor(
+    private router: Router,
+    private downloadService: DownloadService,
+    public dialog: MatDialogRef<AtividadeComponent>,
+    private toastr: ToastrService,
+    public atividadeService: AtividadeService,
+    public loginService: LoginService,
+    public comentarioService: ComentarioService,
+    public orientadorService: OrientadorService,
+    public anexoService: AnexoService
+    ){
+    
+    }
 
 
 
   ngOnInit(){
+    if (!this.loginService.usuarioLogado){
+      this.router.navigate([`/login`]);
+    }
+    this.usuarioLogado = this.loginService.usuarioLogado;
+    // if (this.usuarioLogado.papel !== 'ALUNO' && this.usuarioLogado.papel !== 'ADMIN') {
+    //   this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
+    // }
     this.setHeaderContent();
     this.setContent();
   }
@@ -511,7 +543,18 @@ export class AtividadeComponent {
   }
 
   saveEdit(){
-    this.showSuccessToastr("Atividade salva!");
+    //inserir os valores pulverizados dentro da instancia de atividade antes de enviar para a chamada do service
+
+    this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+      response => {
+        console.log('Arquivo enviado com sucesso', response);
+        this.showSuccessToastr("Atividade salva!");
+      },
+      error => {
+        console.error('Erro ao enviar arquivo', error);
+      }
+    );
+    
     this.isEditing=false;
     // substituir daqui pra baixo pela função de enviar pro banco
 
@@ -717,6 +760,49 @@ generateCerticate(){
   // Fechar dialog
   onNoClick(): void {
     this.dialog.close();
+  }
+
+  downloadAnexo(id: number, anexo: Anexo) {
+    this.anexoService.downloadAnexoPorId(id).subscribe(
+      blob => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = anexo.fileName;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      error => {
+        this.toastr.error('Erro ao baixar o arquivo');
+        console.error('Erro ao baixar o arquivo', error);
+      }
+    );
+  }
+
+  uploadAnexoRelatorio(file: File, anexo: Anexo, relatorioid: number) {
+    this.anexoService.inserirAnexoAtividade(file, relatorioid).subscribe(
+      response => {
+        console.log('Arquivo enviado com sucesso', response);
+      },
+      error => {
+        console.error('Erro ao enviar arquivo', error);
+      }
+    );
+  }
+
+  instanciarAtividade(id: number){
+    this.atividadeService.buscarAtividadePorId(id).subscribe(
+      (response) => {
+        this.atividade = response;
+      },
+      (error) => {
+        this.toastr.error("Erro ao instanciar Atividade");
+        console.error("Erro ao listar Cursos:", error);
+      }
+    );
   }
 
 }
