@@ -48,7 +48,7 @@ export class CompetenciasTableComponent<T> implements OnInit{
 
   openDialog() {
     this.dialog.open(CompetenciasDialogComponent, {
-      minWidth: '50%',
+      minWidth: '40rem',
     });
   }
 

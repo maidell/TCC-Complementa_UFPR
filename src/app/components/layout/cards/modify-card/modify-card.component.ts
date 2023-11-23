@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServidoresComponent } from '../../servidores/servidores.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Competencia, Complexidade } from 'src/app/shared';
+import { Competencia, Complexidade, Graduacao } from 'src/app/shared';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -32,16 +32,16 @@ export class ModifyCardComponent implements OnInit {
   }
 
   competencias: Competencia[] = [
-    { nome: 'Front-end', id: 2304 },
-    { nome: 'Back-end', id: 2305 },
-    { nome: 'Full-stack', id: 2306 },
-    { nome: 'Mobile', id: 2307 },
-    { nome: 'DevOps', id: 2308 },
-    { nome: 'UX/UI', id: 2309 },
-    { nome: 'Data Science', id: 2310 },
-    { nome: 'Business Intelligence', id: 2311 },
-    { nome: 'Business Analytics', id: 2312 },
-    { nome: 'Outros', id: 2313 },
+    { nome: 'Front-end', id: 2304, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'Back-end', id: 2305, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'Full-stack', id: 2306, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'Mobile', id: 2307, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'DevOps', id: 2308, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'UX/UI', id: 2309, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'Data Science', id: 2310, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'Business Intelligence', id: 2311, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'Business Analytics', id: 2312, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
+    { nome: 'Outros', id: 2313, graduacaoId: new Graduacao(), complexidadeId: new Complexidade()},
   ]
 
 }

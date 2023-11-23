@@ -1,1 +1,48 @@
-<p>complexidades-dialog works!</p>
+<div class="card-complexidades">
+	<mat-card>
+		<div class="header">
+			<div>
+			<h1>Complexidade</h1>
+			</div>
+			<div>
+			<button mat-dialog-close class="close close-button"><mat-icon
+					class="close-button-icon">close</mat-icon></button>
+					</div>
+		</div>
+		<mat-card-content>
+			<div class="complexidades">
+				<form [formGroup]="complexForm">
+					<div>
+					<div class="input-form">
+						<mat-form-field  class="nome">
+							<mat-label>Nome</mat-label>
+							<input  matInput formControlName="nome" [formControl]="nome">
+						</mat-form-field>
+						<mat-form-field  class="cargaHorariaMinima">
+							<mat-label>Carga Horária Mín</mat-label>
+							<input  type="number" matInput formControlName="cargaHorariaMinima" [formControl]="cargaHorariaMinima">
+						</mat-form-field>
+						<mat-form-field  class="cargaHorariaMaxima">
+							<mat-label>Carga Horária Máx</mat-label>
+							<input  type="number" matInput formControlName="cargaHorariaMaxima" [formControl]="cargaHorariaMaxima">
+						</mat-form-field>
+					</div>
+						<div class="buttons">
+							<button mat-flat-button class="save-button" (click)="saveComplexity()">Salvar</button>
+							<button mat-flat-button class="delete-button" (click)="deleteComplexity()">Excluir</button>
+							<button mat-dialog-close mat-flat-button class="cancel-button" (click)="cancel()">Cancelar</button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</mat-card-content>
+	</mat-card>
+
+
+
+
+
+
+
+</div>
