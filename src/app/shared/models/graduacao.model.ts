@@ -4,7 +4,7 @@ import { ServidorCoordenador } from "./servidor-coordenador.model";
 
 export class Graduacao {
   public id!: number;
-  public nome: string = "";
+  public nome!: string;
   public coordenador!: Coordenador;
   public competencias!: Competencia[];
   public servidoresCoordenadores!: ServidorCoordenador[];

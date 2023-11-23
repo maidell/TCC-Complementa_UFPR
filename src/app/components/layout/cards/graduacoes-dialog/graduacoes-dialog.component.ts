@@ -15,10 +15,7 @@ export class GraduacoesDialogComponent  {
   @ViewChild('formCompetencia') formAluno!: NgForm;
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
   
-  graduacoes: Graduacao[] = [{
-    id: 1, nome: "Graduação 1", coordenador: new Coordenador(), competencias: [new Competencia(), new Competencia()],
-    
-  }]
+  graduacoes: Graduacao[] = [];
  
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Graduacao>;

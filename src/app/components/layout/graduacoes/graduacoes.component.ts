@@ -28,13 +28,7 @@ export class GraduacoesComponent implements OnInit {
   // public nome: string = "";
   // public coordenador!: Coordenador;
   // public competencias!: Competencia[];
-  graduacoes: Graduacao[] = [
-    {id: 1, nome: "Graduação 1", coordenador: new Coordenador(), competencias: [new Competencia(), new Competencia()]},
-    {id: 2, nome: "Graduação 2", coordenador: new Coordenador(), competencias: [new Competencia(), new Competencia()]},
-    {id: 3, nome: "Graduação 3", coordenador: new Coordenador(), competencias: [new Competencia(), new Competencia()]},
-    {id: 4, nome: "Graduação 4", coordenador: new Coordenador(), competencias: [new Competencia(), new Competencia()]},
-
-  ]
+  graduacoes: Graduacao[] = []
 
   hasObjects(): boolean {
     return this.graduacoes.length > 0;
