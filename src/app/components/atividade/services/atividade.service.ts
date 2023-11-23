@@ -5,8 +5,6 @@ import { Atividade } from 'src/app/shared';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const LS_CHAVE: string = "atividades"
-
 @Injectable({
   providedIn: 'root'
 })
@@ -19,20 +17,7 @@ export class AtividadeService {
     })
   };
 
-  public get atividadeLogado(): Atividade {
-    let atividadeLogado = localStorage[LS_CHAVE];
-    return atividadeLogado ? JSON.parse(atividadeLogado) : null;
-  }
-
-  public set atividadeLogado(atividade: Atividade) {
-    localStorage[LS_CHAVE] = JSON.stringify(atividade)
-  }
-
   constructor(private httpClient: HttpClient) { }
-
-  limparLS(): void {
-    delete localStorage[LS_CHAVE];
-  }
 
   listarTodosAtividades(): Observable<Atividade[]> {
     return this.httpClient.get<Atividade[]>(this.BASE_URL + 'atividades/', this.httpOptions);
