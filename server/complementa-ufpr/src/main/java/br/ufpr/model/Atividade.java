@@ -82,8 +82,11 @@ public class Atividade implements Serializable {
 	@OneToMany(mappedBy = "atividade", fetch = FetchType.LAZY)
 	private List<Anexo> anexos = new ArrayList<>();
 
-	@OneToMany(mappedBy = "atividade", fetch = FetchType.LAZY)
-	private List<Contestacao> contestacoes = new ArrayList<>();
+	@OneToOne(fetch = FetchType.LAZY)
+	private Contestacao contestacao;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private ContestacaoCargaHoraria contestacaoCargaHoraria;
 
 	@Column(name = "fk_id_status")
 	private Status status;
@@ -99,7 +102,7 @@ public class Atividade implements Serializable {
 	public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
 			Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor, Competencia competencia,
 			Complexidade complexidade, List<Comentario> comentarios, Certificado certificado,
-			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, List<Contestacao> contestacoes,
+			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, Contestacao contestacao, ContestacaoCargaHoraria contestacaoCargaHoraria,
 			Status status) {
 		super();
 		this.id = id;
@@ -117,7 +120,8 @@ public class Atividade implements Serializable {
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
 		this.anexos = anexos;
-		this.contestacoes = contestacoes;
+		this.contestacao = contestacao;
+		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
 		this.status = status;
 	}
 
@@ -241,12 +245,20 @@ public class Atividade implements Serializable {
 		this.anexos = anexos;
 	}
 
-	public List<Contestacao> getContestacoes() {
-		return contestacoes;
+	public Contestacao getContestacao() {
+		return contestacao;
 	}
 
-	public void setContestacoes(List<Contestacao> contestacoes) {
-		this.contestacoes = contestacoes;
+	public void setContestacao(Contestacao contestacao) {
+		this.contestacao = contestacao;
+	}
+
+	public ContestacaoCargaHoraria getContestacaoCargaHoraria() {
+		return contestacaoCargaHoraria;
+	}
+
+	public void setContestacaoCargaHoraria(ContestacaoCargaHoraria contestacaoCargaHoraria) {
+		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
 	}
 
 	public Status getStatus() {
@@ -263,12 +275,24 @@ public class Atividade implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Atividade [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", dataCriacao=" + dataCriacao
-				+ ", dataLimiteCandidatura=" + dataLimiteCandidatura + ", dataConclusao=" + dataConclusao + ", projeto="
-				+ projeto + ", autor=" + autor + ", executor=" + executor + ", competencia=" + competencia
-				+ ", complexidade=" + complexidade + ", comentarios=" + comentarios + ", certificado=" + certificado
-				+ ", relatorioDeConclusao=" + relatorioDeConclusao + ", anexos=" + anexos + ", contestacoes="
-				+ contestacoes + ", status=" + status + "]";
+		return "Atividade [id=" + getId() 
+				+ ", nome=" + getNome() 
+				+ ", descricao=" + getDescricao() 
+				+ ", dataCriacao=" + getDataCriacao()
+				+ ", dataLimiteCandidatura=" + getDataLimiteCandidatura() 
+				+ ", dataConclusao=" + getDataConclusao() 
+				+ ", projeto=" + getProjeto() 
+				+ ", autor=" + getAutor() 
+				+ ", executor=" + getExecutor() 
+				+ ", competencia=" + getCompetencia()
+				+ ", complexidade=" + getComplexidade() 
+				+ ", comentarios=" + getComentarios() 
+				+ ", certificado=" + getCertificado()
+				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao() 
+				+ ", anexos=" + getAnexos() 
+				+ ", contestacao=" + getContestacao() 
+				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria() 
+				+ ", status=" + getStatus() + "]";
 	}
 
 }

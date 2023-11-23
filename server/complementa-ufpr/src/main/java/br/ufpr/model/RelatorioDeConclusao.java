@@ -28,8 +28,6 @@ public class RelatorioDeConclusao implements Serializable{
 
     @OneToMany(mappedBy = "relatorioDeConclusao", fetch = FetchType.LAZY)
     private List<Anexo> anexos;
-
-    
     
     public RelatorioDeConclusao() {
 		super();
