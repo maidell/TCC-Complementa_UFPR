@@ -50,7 +50,7 @@ public class AuthREST {
 		} catch (Exception e) {
 			System.err.println("Erro ao validar login:" + e.toString());
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class AuthREST {
 		} catch (Exception e) {
 			System.err.println("Erro ao validar senha:" + e.toString());
 			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 	

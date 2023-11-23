@@ -42,10 +42,6 @@ export class AtividadeService {
     return this.httpClient.post<Atividade>(this.BASE_URL + 'atividades/', JSON.stringify(atividade), this.httpOptions);
   }
 
-  autocadastrarAtividade(atividade: Atividade): Observable<Atividade> {
-    return this.httpClient.post<Atividade>(this.BASE_URL + 'autocadastro', JSON.stringify(atividade), this.httpOptions);
-  }
-
   buscarAtividadePorId(id: number): Observable<Atividade> {
     return this.httpClient.get<Atividade>(this.BASE_URL + 'atividades/' + id, this.httpOptions);
   }

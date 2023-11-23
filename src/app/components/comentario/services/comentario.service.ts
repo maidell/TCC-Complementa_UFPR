@@ -25,8 +25,8 @@ export class ComentarioService {
     return this.httpClient.get<Comentario[]>(this.BASE_URL + 'comentarios/', this.httpOptions);
   }
 
-  inserirComentario(comentario: Comentario): Observable<Comentario> {
-    return this.httpClient.post<Comentario>(this.BASE_URL + 'comentarios/', JSON.stringify(comentario), this.httpOptions);
+  inserirComentario(comentario: Comentario, id: number): Observable<Comentario> {
+    return this.httpClient.post<Comentario>(this.BASE_URL + 'comentarios/' + id, JSON.stringify(comentario), this.httpOptions);
   }
 
   buscarComentarioPorId(id: number): Observable<Comentario> {

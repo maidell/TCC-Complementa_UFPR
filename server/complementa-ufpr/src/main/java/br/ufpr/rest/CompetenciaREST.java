@@ -46,7 +46,7 @@ public class CompetenciaREST {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CompetenciaDTO> buscaPorId(@PathVariable String id) {
+	public ResponseEntity<CompetenciaDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Competencia> competencia = repo.findById(id);
 		if (competencia.isEmpty()) {
@@ -60,33 +60,34 @@ public class CompetenciaREST {
 	public ResponseEntity<CompetenciaDTO> inserirCompetencia(@RequestBody Competencia competencia) {
 
 		try {
-			Competencia cpt = repo.save(competencia);
+			Competencia cpt = repo.save(mapper.map(competencia, Competencia.class));
 			Optional<Competencia> cptOpt = repo.findById(cpt.getId().toString());
 			if (!cptOpt.isPresent()) {
 				throw new Exception("Criação da competencia não foi realizada com sucesso");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(cptOpt.get(), CompetenciaDTO.class));
 		} catch (Exception e) {
+			System.err.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CompetenciaDTO> alterarCompetencia(@PathVariable("id") String id, @RequestBody Competencia competencia) {
+	public ResponseEntity<CompetenciaDTO> alterarCompetencia(@PathVariable("id") Long id, @RequestBody Competencia competencia) {
 		Optional<Competencia> cpt = repo.findById(id);
 
 		if (cpt.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			competencia.setId(Long.parseLong(id));
-			repo.save(competencia);
+			competencia.setId(id);
+			repo.save(mapper.map(competencia, Competencia.class));
 			cpt = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(cpt.get(), CompetenciaDTO.class));
 		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerCompetencia(@PathVariable("id") String id) {
+	public ResponseEntity<?> removerCompetencia(@PathVariable("id") Long id) {
 
 		Optional<Competencia> competencia = repo.findById(id);
 		if (competencia.isEmpty()) {

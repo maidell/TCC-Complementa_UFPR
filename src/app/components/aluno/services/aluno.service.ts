@@ -59,7 +59,7 @@ export class AlunoService {
   }
 
   listarTodosCursos(): Observable<Graduacao[]> {
-    return this.httpClient.get<Graduacao[]>(this.BASE_URL + 'graduacoes/', this.httpOptions);
+    return this.httpClient.get<Graduacao[]>(this.BASE_URL + 'graduacoes/autocadastro', this.httpOptions);
   }
 
 }

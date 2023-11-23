@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.ComentarioDTO;
+import br.ufpr.model.Atividade;
 import br.ufpr.model.Comentario;
+import br.ufpr.repository.AtividadeRepository;
 import br.ufpr.repository.ComentarioRepository;
 
 @CrossOrigin
@@ -30,6 +32,9 @@ public class ComentarioREST {
 	@Autowired
 	private ComentarioRepository repo;
 
+	@Autowired
+	private AtividadeRepository atRepo;
+	
 	@Autowired
 	private ModelMapper mapper;
 
@@ -56,17 +61,22 @@ public class ComentarioREST {
 		}
 	}
 
-	@PostMapping
-	public ResponseEntity<ComentarioDTO> inserirComentario(@RequestBody Comentario comentario) {
+	@PostMapping("/{id}")
+	public ResponseEntity<ComentarioDTO> inserirComentario(@PathVariable Long id, @RequestBody Comentario comentario) {
 
 		try {
-			Comentario cmt = repo.save(comentario);
-			Optional<Comentario> cmtOpt = repo.findById(cmt.getId().toString());
+			Optional<Atividade> atv = atRepo.findById(id);
+			if (!atv.isPresent()) {
+				throw new Exception("Criação do comentário não foi realizada com sucesso");
+			}
+			Comentario cmt = repo.save(mapper.map(comentario, Comentario.class));
+			Optional<Comentario> cmtOpt = repo.findById(cmt.getId());
 			if (!cmtOpt.isPresent()) {
 				throw new Exception("Criação do comentário não foi realizada com sucesso");
 			}
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(cmtOpt.get(), ComentarioDTO.class));
 		} catch (Exception e) {
+			System.err.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
@@ -79,7 +89,7 @@ public class ComentarioREST {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			comentario.setId(id);
-			repo.save(comentario);
+			repo.save(mapper.map(comentario, Comentario.class));
 			cmt = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(cmt.get(), ComentarioDTO.class));
 		}

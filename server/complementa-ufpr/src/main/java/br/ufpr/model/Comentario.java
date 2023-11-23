@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class Comentario implements Serializable {
     @JoinColumn(name = "fk_id_usuario")
     private Usuario usuario;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_atividade")
     private Atividade atividade;
 

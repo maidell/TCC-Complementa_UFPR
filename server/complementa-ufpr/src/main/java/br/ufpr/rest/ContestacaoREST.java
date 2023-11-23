@@ -60,13 +60,14 @@ public class ContestacaoREST {
     public ResponseEntity<ContestacaoDTO> inserirContestacao(@RequestBody Contestacao contestacao) {
 
         try {
-            Contestacao contst = repo.save(contestacao);
+            Contestacao contst = repo.save(mapper.map(contestacao, Contestacao.class));
             Optional<Contestacao> contstOpt = repo.findById(contst.getId().toString());
             if (!contstOpt.isPresent()) {
                 throw new Exception("Criação da contestação não foi realizada com sucesso");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(contstOpt.get(), ContestacaoDTO.class));
         } catch (Exception e) {
+        	System.err.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -79,7 +80,7 @@ public class ContestacaoREST {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             contestacao.setId(Long.parseLong(id));
-            repo.save(contestacao);
+            repo.save(mapper.map(contestacao, Contestacao.class));
             contst = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(contst.get(), ContestacaoDTO.class));
         }

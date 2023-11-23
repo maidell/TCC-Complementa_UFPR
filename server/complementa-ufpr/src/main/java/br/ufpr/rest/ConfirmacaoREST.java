@@ -2,6 +2,7 @@ package br.ufpr.rest;
 
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class ConfirmacaoREST {
 	
 	@Autowired
 	private AlunoRepository repo;
+	
+	@Autowired
+    private ModelMapper mapper;
 
 	@GetMapping("/{email}")
 	public ResponseEntity<String> buscaPorEmaileAtiva(@PathVariable String email) {
@@ -34,7 +38,7 @@ public class ConfirmacaoREST {
 				return ResponseEntity.status(HttpStatus.LOCKED).body("Cadastro já está ativo");
 			}
 			aluno.setAtivo(true);
-			repo.save(aluno);
+			repo.save(mapper.map(aluno, Aluno.class));
 			aln = repo.findById(aluno.getId());
 			
 			if(aln.get().isAtivo()){

@@ -42,12 +42,16 @@ public class ComentarioDTO implements Serializable {
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }
+    
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
-    @Override
+	@Override
     public String toString() {
         return "Comentario [id=" + getId() + 
                ", usuario=" + getUsuario() + 
-               ", comentario ='" + getComentario() + '\'' +
+               ", comentario = " + getComentario() +
                "]";
     }
 }

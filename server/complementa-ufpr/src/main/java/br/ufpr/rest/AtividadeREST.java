@@ -69,6 +69,7 @@ public class AtividadeREST {
 			System.err.println(4);
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(atvOpt.get(), AtividadeDTO.class));
 		} catch (Exception e) {
+			System.err.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufpr.dto.ServidorDTO;
 import br.ufpr.helper.EmailService;
 import br.ufpr.helper.PasswordUtils;
+import br.ufpr.model.Orientador;
 import br.ufpr.model.Servidor;
 import br.ufpr.repository.ServidorRepository;
 
@@ -51,7 +52,7 @@ public class ServidorREST {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ServidorDTO> buscaPorId(@PathVariable String id) {
+	public ResponseEntity<ServidorDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Servidor> servidor = repo.findById(id);
 		if (servidor.isEmpty()) {
@@ -82,26 +83,33 @@ public class ServidorREST {
 			emailService.enviarEmail(srv.getEmail(), "Complementa UFPR - Cadastro", conteudoEmail);
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(srvOpt.get(), ServidorDTO.class));
 		} catch (Exception e) {
+			System.err.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ServidorDTO> alterarServidor(@PathVariable("id") String id, @RequestBody Servidor servidor) {
+	public ResponseEntity<ServidorDTO> alterarServidor(@PathVariable("id") Long id, @RequestBody Servidor servidor) {
 		Optional<Servidor> srv = repo.findById(id);
 
 		if (srv.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			servidor.setId(Long.parseLong(id));
-			repo.save(servidor);
+			Servidor newSrv = srv.get();
+			newSrv.setNome(servidor.getNome());
+			newSrv.setTelefone(servidor.getTelefone());
+			newSrv.setMatricula(servidor.getMatricula());
+			if (servidor.getSenha() != null && !servidor.getSenha().isEmpty()) {
+				newSrv.setSenha(PasswordUtils.hashPassword(servidor.getSenha(), newSrv.getSalt()));
+			}
+			repo.save(mapper.map(newSrv, Servidor.class));
 			srv = repo.findById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(srv.get(), ServidorDTO.class));
 		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerServidor(@PathVariable("id") String id) {
+	public ResponseEntity<?> removerServidor(@PathVariable("id") Long id) {
 
 		Optional<Servidor> servidor = repo.findById(id);
 		if (servidor.isEmpty()) {

@@ -5,6 +5,7 @@ import { Usuario, Login } from 'src/app/shared';
 import { ApiResponseLogin } from 'src/app/interfaces/api-response-login';
 
 const LS_CHAVE: string = 'usuarioLogado';
+const LS_TOKEN_CHAVE: string = 'x-access-token';
 
 @Injectable({
   providedIn: 'root',
@@ -34,9 +35,14 @@ export class LoginService {
     localStorage[LS_CHAVE] = JSON.stringify(usuario);
   }
 
+  public getToken(): string | null {
+    return localStorage.getItem(LS_TOKEN_CHAVE);
+  }
+
   logout() {
     this.usuarioLogadoSubject.next(null);
-    delete localStorage[LS_CHAVE];
+    localStorage.removeItem(LS_CHAVE);
+    localStorage.removeItem(LS_TOKEN_CHAVE);
     this.httpClient.post<ApiResponseLogin>(this.BASE_URL + '/logout', this.httpOptions).subscribe();
   }
 
@@ -45,8 +51,10 @@ export class LoginService {
       .pipe(
         map(response => {
           const usuario = response.data;
-          if (usuario) {
+          const token = response.token;
+          if (usuario && token) {
             this.usuarioLogado = usuario;
+            localStorage.setItem(LS_TOKEN_CHAVE, token);
             this.usuarioLogadoSubject.next(usuario);
           }
           return usuario;

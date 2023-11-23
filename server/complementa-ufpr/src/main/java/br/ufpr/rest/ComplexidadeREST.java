@@ -60,13 +60,14 @@ public class ComplexidadeREST {
     public ResponseEntity<ComplexidadeDTO> inserirComplexidade(@RequestBody Complexidade complexidade) {
 
         try {
-            Complexidade cmplx = repo.save(complexidade);
+            Complexidade cmplx = repo.save(mapper.map(complexidade, Complexidade.class));
             Optional<Complexidade> cmplxOpt = repo.findById(cmplx.getId().toString());
             if (!cmplxOpt.isPresent()) {
                 throw new Exception("Criação da complexidade não foi realizada com sucesso");
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(cmplxOpt.get(), ComplexidadeDTO.class));
         } catch (Exception e) {
+        	System.err.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -79,7 +80,7 @@ public class ComplexidadeREST {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             complexidade.setId(Long.parseLong(id));
-            repo.save(complexidade);
+            repo.save(mapper.map(complexidade, Complexidade.class));
             cmplx = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(cmplx.get(), ComplexidadeDTO.class));
         }
