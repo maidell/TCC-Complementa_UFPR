@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../auth/services/login.service';
-import { ServidoresComponent } from '../servidores/servidores.component';
+import { ServidoresComponent } from 'src/app/components/pages';
 import { MatDialog } from '@angular/material/dialog';
 
 

@@ -14,6 +14,7 @@ import { CompetenciasTableComponent } from './competencias-table/competencias-ta
 import { CompetenciasDialogComponent } from './competencias-dialog/competencias-dialog.component';
 import { GraduacoesTableComponent } from './graduacoes-table/graduacoes-table.component';
 import { GraduacoesDialogComponent } from './graduacoes-dialog/graduacoes-dialog.component';
+import { WarningComponent } from './warning/warning.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { GraduacoesDialogComponent } from './graduacoes-dialog/graduacoes-dialog
     CompetenciasTableComponent,
     CompetenciasDialogComponent,
     GraduacoesTableComponent,
-    GraduacoesDialogComponent
+    GraduacoesDialogComponent,
+    WarningComponent
   ],
   imports: [
     CommonModule,
@@ -47,7 +49,8 @@ import { GraduacoesDialogComponent } from './graduacoes-dialog/graduacoes-dialog
     CompetenciasTableComponent,
     CompetenciasDialogComponent,
     GraduacoesTableComponent,
-    GraduacoesDialogComponent
+    GraduacoesDialogComponent,
+    WarningComponent
   ]
 })
 export class CardsModule { }

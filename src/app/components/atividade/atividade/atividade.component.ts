@@ -9,10 +9,10 @@ import { ToastrService } from 'ngx-toastr';
 import { jsPDF } from "jspdf";
 import { AtividadeService } from '../services/atividade.service';
 import { LoginService } from '../../auth/services/login.service';
-import { ComentarioService } from '../../comentario/services/comentario.service';
-import { OrientadorService } from '../../orientador/services/orientador.service';
+import { ComentarioService } from '../../../services/comentario/services/comentario.service';
+import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { Anexo } from 'src/app/shared/models/anexo.model';
-import { AnexoService } from '../../anexo/services/anexo.service';
+import { AnexoService } from '../../../services/anexo/services/anexo.service';
 import { Atividade, Usuario } from 'src/app/shared';
 import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
 import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
@@ -33,11 +33,11 @@ export class AtividadeComponent {
   atividade: Atividade = new Atividade();
   contestacao: ContestacaoCargaHoraria = new ContestacaoCargaHoraria();
   relatorioConclusao: RelatorioDeConclusao = new RelatorioDeConclusao();
-  
+
   exampleResponse=[
     {
       id: 1,
-      nome: "Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste", 
+      nome: "Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste",
       status: "Finalizada", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
       descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
       dataCriacao: "2023-10-27T00:00:00.000-03:00",
@@ -60,12 +60,12 @@ export class AtividadeComponent {
     {id: 4}
   ];
 
-  
+
   usuarioLogado: Usuario = new Usuario();
   onlineUserId=1;
 
-  estado: string =this.exampleResponse[0].status; 
-  
+  estado: string =this.exampleResponse[0].status;
+
   canApproveContest=true; // pode ou não aprovar a contestação
   isReadingContest=false;
 
@@ -106,7 +106,7 @@ export class AtividadeComponent {
   commentsFormWidth='0';
 
   projectName="Nome do Projeto";
-  
+
   descriptionLabel="Descrição da Atividade";
 
   hoursOffered='';
@@ -160,7 +160,7 @@ export class AtividadeComponent {
   isReadingReport=false;
 
 
-  
+
   file_store!: FileList;
   file_list: Array<string> = [];
 
@@ -176,7 +176,7 @@ export class AtividadeComponent {
     public orientadorService: OrientadorService,
     public anexoService: AnexoService
     ){
-    
+
     }
 
 
@@ -199,7 +199,7 @@ export class AtividadeComponent {
       return "100vw";
     } else  {
       return "80vw";
-    } 
+    }
   }
 //controle de dados do header e do conteudo
   setHeaderContent(){
@@ -212,9 +212,9 @@ export class AtividadeComponent {
         this.firstButtonColor='linear-gradient(#559958, #418856)';
         this.displaySecondHeaderButton='none';
         this.firstButtonWidth='100%';
-        
+
         break;
-      case 'Aberta': 
+      case 'Aberta':
         this.statusButtonColor='linear-gradient(#3473A3, #5B7BA5';
 
         if(this.canUserEdit()){
@@ -230,9 +230,9 @@ export class AtividadeComponent {
 
 
         this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
-        
+
         break;
-      case 'Em Execução': 
+      case 'Em Execução':
         this.statusButtonColor='linear-gradient(#DEB345, #C99614)';
 
         if(this.canUserEdit()){
@@ -243,7 +243,7 @@ export class AtividadeComponent {
             this.firstHeaderButton='Finalizar';
             this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
             this.displaySecondHeaderButton='none';
-        
+
           } else {
             this.displayFirstHeaderButton='none';
             this.displaySecondHeaderButton='none';
@@ -273,7 +273,7 @@ export class AtividadeComponent {
         this.statusButtonColor='linear-gradient(#CC6E00, #D95409)';
         console.log("entrou no case certo");
 
-          
+
           if (this.canApproveContest){
 
             if(this.isReadingContest){
@@ -281,7 +281,7 @@ export class AtividadeComponent {
               this.firstHeaderButton='Aprovar';
               this.firstButtonColor='linear-gradient(#318B35, #297E42)';
               this.displaySecondHeaderButton='';
-              
+
               this.secondHeaderButton='Recusar';
               this.secondButtonColor='linear-gradient(#CC6E00, #D95409)';
             } else {
@@ -295,7 +295,7 @@ export class AtividadeComponent {
             this.displayFirstHeaderButton='none';
             this.displaySecondHeaderButton='none';
           }
-        
+
 
 
 
@@ -322,7 +322,7 @@ export class AtividadeComponent {
         this.competences.setValue(this.exampleResponse[0].competencia);
 
         this.activityForm.get('complexities')?.setValue(this.exampleResponse[0].complexidade);
-        
+
         this.candidatureDate.setValue(this.exampleResponse[0].dataLimiteCandidatura);
         this.submitDate.setValue(this.exampleResponse[0].dataConclusao);
         this.contestDate.setValue(this.exampleResponse[0].dataContestacao);
@@ -340,7 +340,7 @@ export class AtividadeComponent {
         this.competences.setValue(this.exampleResponse[0].competencia);
 
         this.activityForm.get('complexities')?.setValue(this.exampleResponse[0].complexidade);
-        
+
         this.candidatureDate.setValue(this.exampleResponse[0].dataLimiteCandidatura);
         this.submitDate.setValue(this.exampleResponse[0].dataConclusao);
         this.contestDate.setValue(this.exampleResponse[0].dataContestacao);
@@ -430,7 +430,7 @@ export class AtividadeComponent {
         break;
 
     }
-    
+
   }
 
   secondButtonFunction(){
@@ -489,7 +489,7 @@ export class AtividadeComponent {
 
 
   addComment(f: NgForm){
-    
+
     var commentContent: string =f.value.commentInput;
     if(commentContent!= ''){
       var newComment={name:"Teste 1", content:commentContent}
@@ -554,15 +554,15 @@ export class AtividadeComponent {
         console.error('Erro ao enviar arquivo', error);
       }
     );
-    
+
     this.isEditing=false;
     // substituir daqui pra baixo pela função de enviar pro banco
 
     this.exampleResponse[0].descricao=this.description.value;
     this.exampleResponse[0].status='Aberta';
-    
+
     this.setContent(); // essa sai também
-  
+
     this.setHeaderContent(); // essa fica
   }
 
@@ -578,7 +578,7 @@ export class AtividadeComponent {
   disputeHours(){
     console.log("entrou na função de contestar carga horária");
     this.disputingHours=true;
-    
+
     this.projectName="Contestação de Carga Horária";
     this.descriptionLabel="Descrição da Contestação de Carga Horária";
     this.disputedHoursValue.setValue("4 a 8 horas");
@@ -691,7 +691,7 @@ export class AtividadeComponent {
       disputedHoursValue:"",
       proposedHours:""
     });
-    
+
 
   }
 
@@ -735,8 +735,8 @@ generateCerticate(){
   this.doc.text("Nome do Orientador", 150,174,{align:"center"});
 
   this.doc.save("certificado.pdf");
-  //Por sua participação e conclusão na atividade [nome da atividade] 
-  //contribuindo para o desenvolvimento do projeto 
+  //Por sua participação e conclusão na atividade [nome da atividade]
+  //contribuindo para o desenvolvimento do projeto
   //[nome do projeto] disponível na plataforma Complementa UFPR, tendo duração de [xx] horas.
 }
 

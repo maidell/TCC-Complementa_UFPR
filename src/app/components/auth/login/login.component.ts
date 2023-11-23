@@ -3,7 +3,7 @@ import { NgForm, FormControl, ReactiveFormsModule, FormBuilder, FormGroup, Valid
 import { ActivatedRoute, Router } from '@angular/router';
 import { Login, Usuario} from 'src/app/shared';
 import { LoginService } from '../services/login.service';
-import { AutocadastroComponent } from '../../aluno/autocadastro/autocadastro.component';
+import { AutocadastroComponent } from '../../pages/autocadastro/autocadastro.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         this.leftColumn=12;
         this.rightColumn=0;
         this.fullHeight= window.innerHeight;
-        
+
       } else if (window.innerWidth<=768) {
         this.leftColumn=5;
         this.rightColumn=7;
@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
         this.rightColumn=9;
       }
   }
-  
+
   logar(): void {
     this.loading = true;
     if (this.formLogin.valid) {
@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
       return "100vw";
     } else  {
       return "80vw";
-    } 
+    }
   }
 
 }
