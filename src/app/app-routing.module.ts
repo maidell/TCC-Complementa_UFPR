@@ -1,23 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeAlunoComponent } from './components/aluno/home-aluno/home-aluno.component';
-import { AutocadastroComponent } from './components/aluno/autocadastro/autocadastro.component';
-import { HomeUsuarioComponent } from './components/usuario/home-usuario/home-usuario.component';
-import { EditarAlunoComponent } from './components/aluno/editar-aluno/editar-aluno.component';
+import { AutocadastroComponent } from './components/pages/autocadastro/autocadastro.component';
+import { EditarAlunoComponent } from './components/pages/editar-aluno/editar-aluno.component';
 import { LoginRoutes } from './components/auth/auth-routing.module';
-import { DashAdminComponent } from './components/admin/dash-admin/dash-admin.component';
-import { DashboardComponent } from './components/layout/dashboard/dashboard.component';
-import { ProjetosComponent } from './components/layout/projetos/projetos.component';
-import { AtividadesComponent } from './components/layout/atividades/atividades.component';
-import { ContestacoesComponent } from './components/layout/contestacoes/contestacoes.component';
-import { GraduacoesComponent } from './components/layout/graduacoes/graduacoes.component';
-import { Competencia, Complexidade } from './shared';
-import { ComplexidadesComponent } from './components/layout/complexidades/complexidades.component';
-import { ServidoresComponent } from './components/layout/servidores/servidores.component';
-import { MeuPerfilComponent } from './components/layout/meu-perfil/meu-perfil.component';
-import { CompetenciasComponent } from './components/layout/competencias/competencias.component';
+import * as pages from './components/pages';
 import { ModifyCardComponent } from './components/layout/cards/modify-card/modify-card.component';
-import { CadastroDeUsuariosComponent } from './components/admin/cadastro-de-usuarios/cadastro-de-usuarios.component';
+import { CadastroDeUsuariosComponent } from './components/pages/cadastro-de-usuarios/cadastro-de-usuarios.component';
 import { AtividadeComponent } from './components/atividade/atividade/atividade.component';
 
 const routes: Routes = [
@@ -29,10 +17,6 @@ const routes: Routes = [
   {
     path: 'aluno',
     redirectTo: 'aluno/home'
-  },
-  {
-    path: 'aluno/home',
-    component: HomeAlunoComponent
   },
   {
     path: 'aluno/editar', //removi o :id
@@ -51,56 +35,48 @@ const routes: Routes = [
     redirectTo: 'admin/home'
   },
   {
-    path: 'admin/home',
-    component: HomeUsuarioComponent
-  },
-  {
-    path: 'dash-admin',
-    component: DashAdminComponent
-  },
-  {
     path: 'admin/cadastro/usuarios',
     component: CadastroDeUsuariosComponent
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    component: pages.DashboardComponent
   },
   {
     path: 'projetos/listar',
-    component: ProjetosComponent
+    component: pages.ProjetosComponent
   },
   {
     path: 'atividades/listar',
-    component: AtividadesComponent
+    component: pages.AtividadesComponent
   },
   {
     path: 'contestacoes/listar',
-    component: ContestacoesComponent
+    component: pages.ContestacoesComponent
   },
   {
     path: 'graduacoes/listar',
-    component: GraduacoesComponent
+    component: pages.GraduacoesComponent
   },
   {
     path: 'competencias/listar',
-    component: CompetenciasComponent
+    component: pages.CompetenciasComponent
   },
   {
     path: 'complexidades/listar',
-    component: ComplexidadesComponent
+    component: pages.ComplexidadesComponent
   },
   {
     path: 'servidores',
-    component: ServidoresComponent
+    component: pages.ServidoresComponent
   },
   {
     path: 'servidores/listar',
-    component: ServidoresComponent
+    component: pages.ServidoresComponent
   },
   {
     path: 'meu-perfil',
-    component: MeuPerfilComponent
+    component: pages.MeuPerfilComponent
   },
   {
     path: 'teste',

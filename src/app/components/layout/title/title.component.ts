@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { TitleService } from '../../title.service';
+import { TitleService } from '../../../services/title/title.service';
 
 @Component({
   selector: 'app-title',

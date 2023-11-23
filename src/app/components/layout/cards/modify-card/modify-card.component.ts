@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ServidoresComponent } from '../../servidores/servidores.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Competencia, Complexidade, Graduacao } from 'src/app/shared';
 import { MatTableDataSource } from '@angular/material/table';
+import { ServidoresComponent } from 'src/app/components/pages';
 
 @Component({
   selector: 'app-modify-card',
