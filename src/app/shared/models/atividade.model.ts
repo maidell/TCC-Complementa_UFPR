@@ -7,6 +7,7 @@ import { Contestacao } from "./contestacao.model";
 import { Projeto } from "./projeto.model";
 import { RelatorioDeConclusao } from "./relatorio-de-conclusao.model";
 import { Usuario } from "./usuario.model";
+import { ContestacaoCargaHoraria } from "./contestacao-carga-horaria.model";
 
 export class Atividade {
   public id?: number;
@@ -24,7 +25,8 @@ export class Atividade {
   public certificado?: Certificado;
   public relatorioDeConclusao?: RelatorioDeConclusao;
   public anexos?: Anexo[];
-  public contestacoes?: Contestacao[];
+  public contestacao?: Contestacao;
+  public contestacaoCargaHoraria?: ContestacaoCargaHoraria;
   public status: string = ""; 
 
   constructor(
@@ -43,7 +45,8 @@ export class Atividade {
     certificado?: Certificado,
     relatorioDeConclusao?: RelatorioDeConclusao,
     anexos?: Anexo[],
-    contestacoes?: Contestacao[],
+    contestacao?: Contestacao,
+    contestacaoCargaHoraria?: ContestacaoCargaHoraria,
     status?: string
   ) {
     if (id) this.id = id;
@@ -61,7 +64,8 @@ export class Atividade {
     if (certificado) this.certificado = certificado;
     if (relatorioDeConclusao) this.relatorioDeConclusao = relatorioDeConclusao;
     if (anexos) this.anexos = anexos;
-    if (contestacoes) this.contestacoes = contestacoes;
+    if (contestacao) this.contestacao = contestacao;
+    if (contestacaoCargaHoraria) this.contestacaoCargaHoraria = contestacaoCargaHoraria;
     if (status) this.status = status;
   }
 }

@@ -20,7 +20,7 @@ const routes: Routes = [
     redirectTo: 'aluno/home'
   },
   {
-    path: 'aluno/editar',
+    path: 'aluno',
     component: DashboardComponent
   },
   {

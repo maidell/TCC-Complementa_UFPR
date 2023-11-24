@@ -1,10 +1,10 @@
-import { Component, ElementRef, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit, Inject } from '@angular/core';
 import { FormControl, FormControlName, FormGroup } from '@angular/forms';
 import { NgForm, FormBuilder } from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { DatePipe, formatDate } from '@angular/common';
 import { DownloadService } from '../download.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { jsPDF } from "jspdf";
 import { AtividadeService } from '../services/atividade.service';
@@ -13,10 +13,11 @@ import { ComentarioService } from '../../../services/comentario/services/comenta
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { Anexo } from 'src/app/shared/models/anexo.model';
 import { AnexoService } from '../../../services/anexo/services/anexo.service';
-import { Atividade, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Certificado, Comentario, Competencia, Complexidade, Contestacao, Coordenador, Graduacao, Monitor, Orientador, Projeto, Servidor, Usuario } from 'src/app/shared';
 import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
 import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
 import { Router } from '@angular/router';
+import { inject } from '@angular/core/testing';
 
 
 @Component({
@@ -25,34 +26,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./atividade.component.scss']
 })
 export class AtividadeComponent {
+
   doc = new jsPDF({
     orientation:"landscape",
     unit:"mm"
   });
 
-  atividade: Atividade = new Atividade();
+  
+
+  atividade = new Atividade();
   contestacao: ContestacaoCargaHoraria = new ContestacaoCargaHoraria();
   relatorioConclusao: RelatorioDeConclusao = new RelatorioDeConclusao();
 
-  exampleResponse=[
-    {
-      id: 1,
-      nome: "Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste",
-      status: "Finalizada", // Nova, Aberta, Em Execução, Carga Horária Contestada, Execução Contestada, Finalizada
-      descricao: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
-      dataCriacao: "2023-10-27T00:00:00.000-03:00",
-      dataLimiteCandidatura: "2023-10-28T00:00:00.000-03:00",
-      dataContestacao: null,
-      dataConclusao: "2023-10-28T00:00:00.000-03:00",
-      competencia: ["Competência 1", "Competência 2"],
-      complexidade: "Média",
-      comentarios: null,
-      certificado: null,
-      relatorioDeConclusao: "teste",
-      anexos:[
-        {name:'logo complementa light.svg', path:'../assets/plugins/images/logo_complementa_light.svg' }
-      ]
-  }];
+
 
   allowedUsers=[
     {id:1},
@@ -64,9 +50,8 @@ export class AtividadeComponent {
   usuarioLogado: Usuario = new Usuario();
   onlineUserId=1;
 
-  estado: string =this.exampleResponse[0].status;
+  estado!: string;
 
-  canApproveContest=true; // pode ou não aprovar a contestação
   isReadingContest=false;
 
   isEditing=false;
@@ -111,7 +96,7 @@ export class AtividadeComponent {
 
   hoursOffered='';
 
-  data={
+  somethingData={
     description:"",
     competences:[""],
     complexity:"",
@@ -174,24 +159,29 @@ export class AtividadeComponent {
     public loginService: LoginService,
     public comentarioService: ComentarioService,
     public orientadorService: OrientadorService,
-    public anexoService: AnexoService
+    public anexoService: AnexoService,
+    @Inject(MAT_DIALOG_DATA) public data: Atividade
     ){
-
+      this.atividade=data ?? new Atividade();
     }
 
 
-
-  ngOnInit(){
+ngOnInit(){
     if (!this.loginService.usuarioLogado){
       this.router.navigate([`/login`]);
     }
     this.usuarioLogado = this.loginService.usuarioLogado;
-    // if (this.usuarioLogado.papel !== 'ALUNO' && this.usuarioLogado.papel !== 'ADMIN') {
-    //   this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
-    // }
+     if (this.usuarioLogado.papel !== 'ALUNO' && this.usuarioLogado.papel !== 'ADMIN') {
+       this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
+     }
+
     this.setHeaderContent();
     this.setContent();
+    
+    
   }
+
+
 
 
   dialogWidth(){
@@ -201,10 +191,12 @@ export class AtividadeComponent {
       return "80vw";
     }
   }
+
+  
 //controle de dados do header e do conteudo
   setHeaderContent(){
-    switch (this.estado){
-      case 'Nova':  // tela de criação de atividades
+    switch (this.atividade.status){
+      case '':  // tela de criação de atividades
         this.statusButtonColor='linear-gradient(#3473a3,#5b7ba5)';
         this.displayStatus=false;
         this.buttonsMarginTop='3%';
@@ -214,7 +206,7 @@ export class AtividadeComponent {
         this.firstButtonWidth='100%';
 
         break;
-      case 'Aberta':
+      case 'ABERTA':
         this.statusButtonColor='linear-gradient(#3473A3, #5B7BA5';
 
         if(this.canUserEdit()){
@@ -223,21 +215,27 @@ export class AtividadeComponent {
           this.secondButtonColor='linear-gradient(#CC6E00,#D95409)';
 
         } else {
-          this.firstHeaderButton='Candidatar-se';
-          this.firstButtonWidth='100%';
-          this.displaySecondHeaderButton='none';
+          if(this.usuarioLogado.papel==='ALUNO'){
+            this.firstHeaderButton='Candidatar-se';
+            this.firstButtonWidth='100%';
+            this.displaySecondHeaderButton='none';
+          } else {
+            this.displayFirstHeaderButton='none';
+            this.displaySecondHeaderButton='none';
+          }
+
         }
 
 
         this.firstButtonColor='linear-gradient(#2494D3,#0076D0)';
 
         break;
-      case 'Em Execução':
+      case 'EM_EXECUCAO':
         this.statusButtonColor='linear-gradient(#DEB345, #C99614)';
 
         if(this.canUserEdit()){
 
-          if(this.exampleResponse[0].relatorioDeConclusao!=null){
+          if(this.atividade.relatorioDeConclusao!=null){
             this.showInfoToastr("Essa atividade possui um relatório de Conclusão. Clique em \"Finalizar\" para visualizar");
             this.firstButtonWidth='100%';
             this.firstHeaderButton='Finalizar';
@@ -251,7 +249,7 @@ export class AtividadeComponent {
 
         } else {
 
-          if(this.exampleResponse[0].relatorioDeConclusao!=null){
+          if(this.atividade.relatorioDeConclusao!=null){
             this.displayFirstHeaderButton='none';
             this.displaySecondHeaderButton='none';
 
@@ -269,12 +267,12 @@ export class AtividadeComponent {
         }
 
         break;
-      case 'Carga Horária Contestada': case 'Execução Contestada':
+      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA':
         this.statusButtonColor='linear-gradient(#CC6E00, #D95409)';
-        console.log("entrou no case certo");
+        
 
 
-          if (this.canApproveContest){
+          if (this.canApproveContest()){
 
             if(this.isReadingContest){
               this.firstButtonWidth='';
@@ -300,7 +298,7 @@ export class AtividadeComponent {
 
 
         break;
-      case 'Finalizada':
+      case 'FINALIZADA':
         this.statusButtonColor='linear-gradient(#318B35, #297E42)';
         this.secondHeaderButton='Gerar Certificado';
         this.displayTimestamp='none';
@@ -312,55 +310,54 @@ export class AtividadeComponent {
   }
 
   setContent(){
-    switch(this.estado){
-      case 'Nova':
+    switch(this.atividade.status){
+      case null:
         this.activityForm.enabled;
         this.isDisabled=false;
         break;
-      case 'Aberta':
-        this.description.setValue(this.exampleResponse[0].descricao);
-        this.competences.setValue(this.exampleResponse[0].competencia);
+      case 'ABERTA':
+        this.description.setValue(this.atividade.descricao);
+        this.competences.setValue(this.atividade.competencia);
 
-        this.activityForm.get('complexities')?.setValue(this.exampleResponse[0].complexidade);
+        if(this.atividade.complexidade?.nome!=undefined){
+          this.activityForm.get('complexities')?.setValue(this.atividade.complexidade.nome);
+        }
+        
 
-        this.candidatureDate.setValue(this.exampleResponse[0].dataLimiteCandidatura);
-        this.submitDate.setValue(this.exampleResponse[0].dataConclusao);
-        this.contestDate.setValue(this.exampleResponse[0].dataContestacao);
+        this.candidatureDate.setValue(this.atividade.dataLimiteCandidatura);
+        this.submitDate.setValue(this.atividade.dataConclusao);
+        this.contestDate.setValue(this.atividade.contestacao?.dataContestacao);
 
         this.displayComments='none';
         this.activityForm.disable();
 
         break;
-      case 'Em Execução':
+      case 'EM_EXECUCAO':
 
         this.activityFormWidth='65%';
         this.commentsFormWidth='35%';
         this.displayComments='';
-        this.description.setValue(this.exampleResponse[0].descricao);
-        this.competences.setValue(this.exampleResponse[0].competencia);
+        this.description.setValue(this.atividade.descricao);
+        this.competences.setValue(this.atividade.competencia);
 
-        this.activityForm.get('complexities')?.setValue(this.exampleResponse[0].complexidade);
+        if(this.atividade.complexidade?.nome!=undefined){
+          this.activityForm.get('complexities')?.setValue(this.atividade.complexidade.nome);
+        }
 
-        this.candidatureDate.setValue(this.exampleResponse[0].dataLimiteCandidatura);
-        this.submitDate.setValue(this.exampleResponse[0].dataConclusao);
-        this.contestDate.setValue(this.exampleResponse[0].dataContestacao);
+        this.candidatureDate.setValue(this.atividade.dataLimiteCandidatura);
+        this.submitDate.setValue(this.atividade.dataConclusao);
+        this.contestDate.setValue(this.atividade.contestacao?.dataContestacao);
 
         this.activityForm.disable();
 
-        if(this.canUserEdit() && this.exampleResponse[0].relatorioDeConclusao!=null){
+        if(this.canUserEdit() && this.atividade.relatorioDeConclusao!=null){
           this.comments.push({name:"Admin", content: "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais"});
         }
 
         break;
-      case 'Carga Horária Contestada':
+      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA':
           this.activityForm.disable();
           this.displayComments='';
-        break;
-      case 'Execução Contestada':
-        break;
-      case 'Finalizada':
-        this.activityForm.disable();
-        this.displayComments='';
         break;
     }
 
@@ -368,11 +365,11 @@ export class AtividadeComponent {
 
 // primeiro e segundo botão
   firstButtonFunction(){
-    switch(this.estado){
-      case "Nova":
+    switch (this.atividade.status){
+      case "NOVA":
         this.saveActivity();
       break;
-      case "Aberta":
+      case "ABERTA":
 
         if(!this.canUserEdit()){
           this.registerCandidature();
@@ -383,25 +380,24 @@ export class AtividadeComponent {
         }
       break;
 
-      case "Em Execução":
-        console.log("entrou no case em execução");
+      case "EM_EXECUCAO":
+        
 
         if (!this.canUserEdit()){
-          console.log("entrou no if (!this.canUserEdit()");
+          
           if (!this.fillingReport){
             this.fillReport();
           } else {
             if(this.disputingHours){
               this.sendHoursDispute();
             } else {
-
               this.sendFinalReport();
             }
           }
 
         } else {
 
-          if (this.exampleResponse[0].relatorioDeConclusao!=null){
+          if (this.atividade.relatorioDeConclusao!=null){
 
             if(this.isReadingReport){
               this.approveReport();
@@ -418,15 +414,15 @@ export class AtividadeComponent {
 
         }
       break;
-      case "Carga Horária Contestada": case "Execução Contestada":
-        if(this.canApproveContest){
+      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA':
+
+        if(this.canApproveContest()){
           if(!this.isReadingContest){
             this.readContest();
           } else {
             this.approveContest();
           }
         }
-
         break;
 
     }
@@ -434,8 +430,8 @@ export class AtividadeComponent {
   }
 
   secondButtonFunction(){
-    switch (this.estado){
-      case "Aberta": //CASE PRONTO
+    switch (this.atividade.status){
+      case "ABERTA": //CASE PRONTO
         if (this.canUserEdit()){
           if(!this.isEditing){
             this.editActivity();
@@ -446,7 +442,7 @@ export class AtividadeComponent {
           }
         }
         break;
-      case "Em Execução":
+      case "EM_EXECUCAO":
 
         if(this.fillingReport){
           this.disputeHours();
@@ -460,15 +456,17 @@ export class AtividadeComponent {
           }
         }
         break;
-        case "Carga Horária Contestada": case "Execução Contestada":
+        case "CARGA_HORARIA_CONTESTADA": case "EXECUCAO_CONTESTADA":
           if(this.isReadingContest){
             this.refuseContest();
 
           }
 
         break;
-        case "Finalizada":
-          this.generateCerticate();
+        case "FINALIZADA":
+          if(this.usuarioLogado===this.atividade.executor){
+            this.generateCerticate();
+          }
           break;
     }
 
@@ -484,8 +482,6 @@ export class AtividadeComponent {
     this.toastr.success("Candidatura registrada com sucesso!");
     this.onNoClick();
   }
-
-
 
 
   addComment(f: NgForm){
@@ -527,7 +523,7 @@ export class AtividadeComponent {
     if (this.canUserEdit()){
       this.isDisabled=false;
       this.activityForm.enable();
-      this.data={
+      this.somethingData={
         description:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis semper sem sed semper. Quisque tincidunt ligula et sapien consectetur mattis. Nullam viverra nibh justo, sit amet faucibus sapien bibendum sit amet. Sed non sem aliquet, viverra eros sit amet, tincidunt enim. Vivamus velit dolor, volutpat eget semper et, fermentum nec odio. Curabitur et convallis elit, ut elementum ligula. Vestibulum pretium lorem nisl, in porttitor nibh bibendum laoreet. Morbi feugiat, massa sit amet molestie cursus, mi quam consequat erat, sit amet convallis diam turpis nec quam. Fusce congue, arcu et pharetra mattis, lectus mi mattis augue, sed gravida orci ligula et nulla. Suspendisse pretium ligula ante, et finibus lacus varius eu. Maecenas mollis risus at augue mollis, ac convallis urna vestibulum. Pellentesque at nisl interdum, faucibus leo rhoncus, dapibus mauris. Aliquam eget est vitae nisl finibus tristique. Cras nec nisl posuere, tristique augue sed, accumsan neque. Aliquam mollis dui quis condimentum vulputate. Fusce et nibh id diam tempor egestas a sit amet neque.",
         competences:["Competência 1", "Competência 2", "Competência 3"],
         complexity:"Média",
@@ -558,16 +554,22 @@ export class AtividadeComponent {
     this.isEditing=false;
     // substituir daqui pra baixo pela função de enviar pro banco
 
-    this.exampleResponse[0].descricao=this.description.value;
-    this.exampleResponse[0].status='Aberta';
 
     this.setContent(); // essa sai também
 
     this.setHeaderContent(); // essa fica
   }
 
-  canUserEdit(){
-    if (this.allowedUsers.some(user => user.id === this.onlineUserId)){
+  canUserEdit() {
+
+  
+    // Verifica se this.usuarioLogado é igual ao autor, orientador, servidoresOrientadores ou monitores
+    if (
+      this.usuarioLogado === this.atividade.autor ||
+      this.usuarioLogado === this.atividade.projeto?.orientador ||
+      this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado) ||
+      this.atividade.projeto?.monitores?.some(monitor => monitor === this.usuarioLogado)
+    ) {
       return true;
     } else {
       return false;
@@ -594,7 +596,6 @@ export class AtividadeComponent {
 
   //Contestação de Execução
   disputeExecution(){
-    console.log("entrou na função de contestar execução");
     this.disputingExecution=true;
     this.activityForm.enable();
     this.displaySecondLine='none';
@@ -611,6 +612,16 @@ export class AtividadeComponent {
   }
 
   //leitura e aprovação da contestação
+  canApproveContest(){
+    if(this.usuarioLogado === this.atividade.projeto?.orientador ||
+    this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado)){
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   readContest(){
     this.projectName="Contestação";
     this.descriptionLabel="Descrição da Contestação";
@@ -731,7 +742,7 @@ generateCerticate(){
   this.doc.setFontSize(12);
   this.doc.text(fullGrr,150,110,{align: "center"});
   this.doc.setFontSize(18);
-  this.doc.text("Por sua participação e conclusão da atividade " + this.exampleResponse[0].nome + " contribuindo para o desenvolvimento do projeto "+ this.projectName + " disponível na plataforma Complementa UFPR, tendo duração de 12 horas", 150,130,{align: "center", maxWidth:180});
+  this.doc.text("Por sua participação e conclusão da atividade " + this.atividade.executor + " contribuindo para o desenvolvimento do projeto "+ this.projectName + " disponível na plataforma Complementa UFPR, tendo duração de 12 horas", 150,130,{align: "center", maxWidth:180});
   this.doc.text("Nome do Orientador", 150,174,{align:"center"});
 
   this.doc.save("certificado.pdf");

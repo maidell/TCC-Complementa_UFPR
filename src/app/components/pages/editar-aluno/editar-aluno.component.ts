@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Aluno, Graduacao, Login, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Graduacao, Login, Usuario } from 'src/app/shared';
 import { AlunoService } from '../../../services/aluno/services/aluno.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, forkJoin } from 'rxjs';
@@ -39,6 +39,9 @@ export class EditarAlunoComponent implements OnInit {
   filteredOptions!: Observable<Graduacao[]>;
   hide: boolean = true;
 
+  //APAGAR APAGAR APAGAR
+  atividade!: Atividade;
+
   constructor(
     private router: Router,
     private alunoService: AlunoService,
@@ -51,7 +54,7 @@ export class EditarAlunoComponent implements OnInit {
   ngOnInit(): void {
     this.usuarioLogado = this.loginService.usuarioLogado;
     if (this.usuarioLogado.papel !== 'ALUNO' && this.usuarioLogado.papel !== 'ADMIN') {
-      this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
+     this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
     }
     forkJoin({
       aluno: this.instanciarAluno(this.usuarioLogado.id),
@@ -152,9 +155,11 @@ export class EditarAlunoComponent implements OnInit {
 
   /* CÓDIGO PRA TESTAR O COMPONENTE DE ATIVIDADE. EXCLUIR DAQUI PRA BAIXO QUANDO FOR PRA PRD*/
 
-  openDialog() {
+  openDialog(atividade: Atividade) {
+
     const dialogRef = this.dialog.open(AtividadeComponent, {
-      maxWidth: this.dialogWidth()
+      maxWidth: this.dialogWidth(),
+      data: atividade,
     });
 
     dialogRef.afterClosed().subscribe(result => {
