@@ -415,7 +415,7 @@ app.get('/graduacoes/:id', verifyJWT, (req, res, next) => {
     servicesProxy(req, res, next);
   })
 
-app.put('/graduacoes', verifyJWT, (req, res, next) => {
+app.put('/graduacoes/:id', verifyJWT, (req, res, next) => {
   const graduacaoId = req.params.id;
   console.log(`Roteando PUT de http://localhost:${PORT}/graduacoes/${graduacaoId} para http://localhost:5000/graduacoes/${graduacaoId}`);
   servicesProxy(req, res, next);

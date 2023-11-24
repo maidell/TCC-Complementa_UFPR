@@ -14,20 +14,10 @@
 				<form [formGroup]="gradForm">
 					<div>
 					<div class="input-form">
-						                        
 						<mat-form-field  class="nomeDoCurso">
 							<mat-label>Nome</mat-label>
 							<input placeholder="Competência" matInput formControlName="nome" [formControl]="nome">
 						</mat-form-field>
-                        <mat-form-field  class="complexidade">
-							<mat-label>Complexidade</mat-label>
-							<input placeholder="Complexidade" matInput formControlName="complexidadeId" [formControl]="complexidadeId">
-						</mat-form-field>
-                        <mat-form-field  class="graduacao">
-                            <mat-label>Graduação</mat-label>
-                            <input placeholder="Graduação" matInput formControlName="graduacaoId" [formControl]="graduacaoId">
-                        </mat-form-field>
-						
 					</div>
 						<div class="buttons">
 							<button mat-flat-button class="save-button" (click)="saveComplexity()">Salvar</button>

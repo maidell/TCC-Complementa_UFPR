@@ -4,17 +4,21 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CompetenciasDialogComponent } from '../competencias-dialog/competencias-dialog.component';
+import { Competencia, Graduacao } from 'src/app/shared';
+import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
 
 @Component({
   selector: 'app-competencias-table',
   templateUrl: './competencias-table.component.html',
   styleUrls: ['./competencias-table.component.scss']
 })
-export class CompetenciasTableComponent<T> implements OnInit{
+export class CompetenciasTableComponent<T> implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+    public graduacaoService: GraduacaoService
+  ) { }
 
   ngOnInit(): void {
     this.displayedColumns = [];
@@ -33,8 +37,9 @@ export class CompetenciasTableComponent<T> implements OnInit{
   @Input() dataSource!: MatTableDataSource<T>;
   @Input() button!: string;
   @Input() colorButtonOne?: string;
-  @Input() columns!: {title: string, suffix?: string, key: string}[];
+  @Input() columns!: { title: string, suffix?: string, key: string }[];
   @Input() display!: string;
+  @Input() graduacao!: Graduacao;
   displayedColumns!: string[];
 
   applyFilter(event: Event) {
@@ -46,10 +51,28 @@ export class CompetenciasTableComponent<T> implements OnInit{
     }
   }
 
-  openDialog() {
-    this.dialog.open(CompetenciasDialogComponent, {
-      minWidth: '40rem',
-    });
+  adicionarCompetencia() {
+    this.openDialog(new Competencia);
   }
+
+  openDialog(competencia: Competencia) {
+    const dialogRef = this.dialog.open(CompetenciasDialogComponent, {
+      minWidth: '40rem',
+      data: {
+        competencia: competencia,
+        graduacao: this.graduacao
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      () => {
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      }
+    )
+  }
+
+
+
 
 }

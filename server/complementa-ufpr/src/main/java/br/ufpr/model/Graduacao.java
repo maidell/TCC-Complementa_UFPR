@@ -3,6 +3,7 @@ package br.ufpr.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,7 +33,7 @@ public class Graduacao implements Serializable{
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Servidor> servidoresCoordenadores;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Competencia> competencias;
 
     public Graduacao() {

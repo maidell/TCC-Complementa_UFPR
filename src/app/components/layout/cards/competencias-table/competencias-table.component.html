@@ -1,20 +1,25 @@
+
+<div class="table-header">
+	<button mat-raised-button color="colorButtonOne" (click)="adicionarCompetencia()">
+		<mat-icon>add</mat-icon> Adicionar Competência
+	</button>
+</div>
 <mat-form-field>
 	<mat-label>Filter</mat-label>
 	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
 	<mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
-
 <div class="mat-elevation-z8">
 	<mat-table [dataSource]="dataSource!" matSort>
-
 		<ng-container *ngFor="let column of columns" matColumnDef="{{column.key}}">
 			<mat-header-cell class="{{display}}" *matHeaderCellDef mat-sort-header> {{column.title}} </mat-header-cell>
-			<mat-cell *matCellDef="let row">  {{row[column.key]}} {{column.suffix}}</mat-cell>
+			<mat-cell *matCellDef="let row"> {{row[column.key]}} {{column.suffix}}</mat-cell>
 		</ng-container>
 
 		<ng-container matColumnDef="button">
 			<mat-header-cell *matHeaderCellDef mat-sort-header> </mat-header-cell>
-			<mat-cell *matCellDef="let row"> <button (click)="openDialog()"mat-raised-button class="button custom-button {{colorButtonOne}}">
+			<mat-cell *matCellDef="let row"> <button (click)="openDialog(row)" mat-raised-button
+					class="button custom-button {{colorButtonOne}}">
 					{{button}}
 				</button> </mat-cell>
 		</ng-container>

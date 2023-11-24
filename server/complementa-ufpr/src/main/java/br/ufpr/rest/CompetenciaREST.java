@@ -61,7 +61,7 @@ public class CompetenciaREST {
 
 		try {
 			Competencia cpt = repo.save(mapper.map(competencia, Competencia.class));
-			Optional<Competencia> cptOpt = repo.findById(cpt.getId().toString());
+			Optional<Competencia> cptOpt = repo.findById(cpt.getId());
 			if (!cptOpt.isPresent()) {
 				throw new Exception("Criação da competencia não foi realizada com sucesso");
 			}

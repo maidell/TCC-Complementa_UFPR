@@ -36,9 +36,9 @@ export class CompetenciasComponent implements OnInit {
       this.router.navigate([`login`]);
     }
     this.usuarioLogado = this.loginService.usuarioLogado;
-    // if (this.usuarioLogado.papel !== 'COORDENADOR') {
-    //   this.router.navigate([`${this.usuarioLogado.papel}`]);
-    // } //descomentar quando finalizar
+    if (this.usuarioLogado.papel !== 'COORDENADOR') {
+      this.router.navigate([`${this.usuarioLogado.papel}`]);
+    }
     this.dataSource = new MatTableDataSource<Competencia>(this.competencias);
   }
   columns: { title: string, key: string }[] = [
@@ -71,6 +71,5 @@ export class CompetenciasComponent implements OnInit {
       }
     );
   }
-
 
 }
