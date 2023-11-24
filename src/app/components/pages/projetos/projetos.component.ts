@@ -5,6 +5,7 @@ import { Orientador } from 'src/app/shared';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-projetos',
@@ -67,7 +68,9 @@ export class ProjetosComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Projeto>;
-  constructor(private titleService: TitleService, private changeDetectorRef: ChangeDetectorRef) { }
+
+  constructor(private router: Router,
+    private titleService: TitleService, private changeDetectorRef: ChangeDetectorRef) { }
 
   applyFilter(event: Event) {
     this.inputValue = (event.target as HTMLInputElement).value;
@@ -86,6 +89,8 @@ export class ProjetosComponent implements OnInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.obs = this.dataSource.connect();
   }
+  buttonNew: string = "Novo projeto!";
+  adicionarProjeto(){}
 
   ngOnDestroy() {
     if (this.dataSource) {
@@ -104,6 +109,12 @@ export class ProjetosComponent implements OnInit, OnDestroy {
   TitleWarning: string = "Aviso";
   Description: string = "Para cadastrar um novo projeto converse com seu orientador!";
   Button: string = "Saiba mais";
+
+  //navigate to /projeto/teste
+
+  abrirProjeto(){
+    this.router.navigate(['/projeto/teste']);
+  }
 
 }
 

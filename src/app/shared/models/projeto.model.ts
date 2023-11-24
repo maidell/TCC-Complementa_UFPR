@@ -8,7 +8,8 @@ export class Projeto {
   public nome: string = "";
   public status?: string = "";
   public tipo?: string = "";
-  public descricao?: string = "";
+  public objetivoGeral?: string = "";
+  public objetivosEspecificos?: string = "";
   public orientador?: Orientador;
   public alunos?: Aluno[];
   public monitores?: Monitor[];
@@ -17,14 +18,16 @@ export class Projeto {
   constructor(
     id?: number,
     nome?: string,
-    descricao?: string,
+    objetivoGeral?: string,
+    objetivosEspecificos?: string,
     orientador?: Orientador,
     alunos?: Aluno[],
     monitores?: Monitor[]
   ) {
     if (id) this.id = id;
     if (nome) this.nome = nome;
-    if (descricao) this.descricao = descricao;
+    if (objetivoGeral) this.objetivoGeral = objetivoGeral;
+    if (objetivosEspecificos) this.objetivosEspecificos = objetivosEspecificos;
     if (orientador) this.orientador = orientador;
     if (alunos) this.alunos = alunos;
     if (monitores) this.monitores = monitores;

@@ -1,5 +1,11 @@
 <div class="cards-projects">
 	<div class="let-of-cards" *ngIf="hasProjects()">
+		<div class="table-header">
+			<button mat-raised-button color="primary" (click)="adicionarProjeto()"
+				class="button custom-button">
+				{{buttonNew}}
+			</button>
+		</div>
 		<mat-form-field>
 			<mat-label>Filter</mat-label>
 			<input matInput (keyup)="applyFilter($event)" #input>
@@ -7,10 +13,27 @@
 		</mat-form-field>
 		<ng-container *ngIf="(obs | async) as projetos">
 			<ng-container *ngIf="projetos.length > 0; else noActivities">
-				<app-rect-card *ngFor="let projeto of projetos" [nome]="projeto.nome" [status]="projeto.status!" [firstLabel]="tipoLabel" [id]="projeto.id!"
-				[firstValue]="projeto.tipo!" [secondLabel]="cursoLabel" [secondValue]="projeto.curso!.nome"
-				[thirdLabel]="orientadorLabel" [thirdValue]="projeto.orientador!.nome"
-				[nameButtonRect]="buttonOne">
+				<app-rect-card *ngFor="let projeto of projetos"
+				[nome]="projeto.nome"
+				[status]="projeto.status!"
+				[firstLabel]="tipoLabel"
+				[id]="projeto.id!"
+
+				[firstValue]="projeto.tipo!"
+				[secondLabel]="cursoLabel"
+				[secondValue]="projeto.curso!.nome"
+
+				[thirdLabel]="orientadorLabel"
+				[thirdValue]="projeto.orientador!.nome"
+
+				[nameButtonRect]="buttonOne"
+				[buttonColor]="'btn-green'"
+				(clickButtonRect)="abrirProjeto()"
+
+				
+				[showSecondButton]="false"
+
+				>
 				</app-rect-card>
 			</ng-container>
 		</ng-container>

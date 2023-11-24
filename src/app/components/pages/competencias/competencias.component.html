@@ -1,11 +1,16 @@
 <div class="table-source-body">
-	
+
 	<ng-container *ngIf="!hasObjects()">
-		<app-warning [Description]="'Nenhuma competência cadastrada'"></app-warning>
+		<app-warning
+		[Description]="'Nenhuma competência cadastrada'"></app-warning>
 	</ng-container>
 
 	<div class="table-source" *ngIf="hasObjects()">
-		<app-competencias-table [graduacao]="graduacao" [dataSource]="dataSource" [columns]="columns" [button]="button"></app-competencias-table>
+		<app-competencias-table
+		[graduacao]="graduacao"
+		[dataSource]="dataSource"
+		[columns]="columns"
+		[button]="button"></app-competencias-table>
 	</div>
 
 </div>
