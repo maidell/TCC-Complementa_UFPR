@@ -1,7 +1,9 @@
 <!-- botao de Adicionar complexidade -->
-<button mat-raised-button color="primary" (click)="openDialog()" class="button custom-button {{colorButtonOne}}">
-	{{buttonNew}}
-</button>
+<!-- <div class="table-header">
+	<button mat-raised-button color="primary" (click)="adicionarGraduacao()" class="button custom-button {{colorButtonOne}}">
+		{{buttonNew}}
+	</button>
+</div> -->
 <mat-form-field>
 	<mat-label>Filter</mat-label>
 	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
@@ -18,7 +20,7 @@
 
 		<ng-container matColumnDef="button">
 			<mat-header-cell *matHeaderCellDef mat-sort-header> </mat-header-cell>
-			<mat-cell *matCellDef="let row"> <button (click)="openDialog()"mat-raised-button class="button custom-button {{colorButtonOne}}">
+			<mat-cell *matCellDef="let row"> <button (click)="openDialog(row)"mat-raised-button class="button custom-button {{colorButtonOne}}">
 					{{button}}
 				</button> </mat-cell>
 		</ng-container>

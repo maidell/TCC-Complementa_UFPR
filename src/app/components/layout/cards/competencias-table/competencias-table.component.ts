@@ -16,6 +16,8 @@ export class CompetenciasTableComponent<T> implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  buttonNew: string = "Nova Competência";
+
   constructor(public dialog: MatDialog,
     public graduacaoService: GraduacaoService
   ) { }
@@ -63,13 +65,6 @@ export class CompetenciasTableComponent<T> implements OnInit {
         graduacao: this.graduacao
       }
     });
-    dialogRef.afterClosed().subscribe(
-      () => {
-        if (this.dataSource.paginator) {
-          this.dataSource.paginator.firstPage();
-        }
-      }
-    )
   }
 
 

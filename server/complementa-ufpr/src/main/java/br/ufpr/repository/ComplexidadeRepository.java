@@ -8,7 +8,7 @@ import br.ufpr.model.Complexidade;
 
 public interface ComplexidadeRepository extends JpaRepository<Complexidade, Long> {
 	
-	Optional<Complexidade> findById(String id);
+	Optional<Complexidade> findById(Long id);
 	
     public long count();
     

@@ -53,7 +53,7 @@ export class CompetenciasDialogComponent implements OnInit{
     nome: new FormControl(this.competencia?.nome ?? '')
   });
 
-  saveComplexity(){
+  saveCompetence(){
     this.competencia.nome = this.nome.value;
     if(this.competencia.id){
       this.atualizarCompetencia(this.competencia);
@@ -62,7 +62,7 @@ export class CompetenciasDialogComponent implements OnInit{
     }
   }
   
-  deleteComplexity(){
+  deleteCompetence(){
     this.graduacao.competencias = this.graduacao.competencias.filter(comp => comp.id !== this.competencia.id);
       this.atualizarGraduacaoAntes(this.graduacao).subscribe(() => {
         this.deletarCompetencia(this.competencia).subscribe(() => {
@@ -75,6 +75,7 @@ export class CompetenciasDialogComponent implements OnInit{
         this.toastr.error("Erro ao atualizar graduação");
         console.log("Erro ao atualizar graduação: ", err);
       });
+      this.dataSource = new MatTableDataSource(this.graduacao.competencias);
     }
   
   //close dialog

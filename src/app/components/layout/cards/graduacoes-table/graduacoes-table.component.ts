@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { Graduacao } from 'src/app/shared';
 
 @Component({
   selector: 'app-graduacoes-table',
@@ -46,9 +47,12 @@ export class GraduacoesTableComponent<T> implements OnInit{
     }
   }
 
-  openDialog() {
-    this.dialog.open(GraduacoesDialogComponent, {
+  openDialog(graduacao: Graduacao) {
+    const dialogRef = this.dialog.open(GraduacoesDialogComponent, {
       minWidth: '40rem',
+      data: {
+        graduacao: graduacao
+      }
     });
   }
 

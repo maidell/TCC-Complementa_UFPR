@@ -35,18 +35,22 @@ public class Graduacao implements Serializable{
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Competencia> competencias;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Complexidade> complexidades;
 
     public Graduacao() {
     }
 
 	public Graduacao(Long id, String nome, Orientador coordenador, List<Servidor> servidoresCoordenadores,
-			List<Competencia> competencias) {
+			List<Competencia> competencias, List<Complexidade> complexidades) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.coordenador = coordenador;
 		this.servidoresCoordenadores = servidoresCoordenadores;
 		this.competencias = competencias;
+		this.complexidades = complexidades;
 	}
 
 	public Long getId() {
@@ -88,6 +92,14 @@ public class Graduacao implements Serializable{
 	public void setCompetencias(List<Competencia> competencias) {
 		this.competencias = competencias;
 	}
+	
+	public List<Complexidade> getComplexidades() {
+		return complexidades;
+	}
+
+	public void setComplexidades(List<Complexidade> complexidades) {
+		this.complexidades = complexidades;
+	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -96,7 +108,8 @@ public class Graduacao implements Serializable{
     @Override
     public String toString() {
         return "Graduacao [id=" + getId() + ", nome=" + getNome() + ", coordenador=" + getCoordenador() +
-        		", servidoresCoordenadores=" + getServidoresCoordenadores() + ", competencias=" + getCompetencias() + "]";
+        		", servidoresCoordenadores=" + getServidoresCoordenadores() + 
+        		", competencias=" + getCompetencias() + ", complexidades=" + getComplexidades() + "]";
     }
 
 }
