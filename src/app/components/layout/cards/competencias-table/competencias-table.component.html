@@ -1,9 +1,8 @@
-
 <div class="table-header">
-	<button mat-raised-button color="colorButtonOne" (click)="adicionarCompetencia()">
-		<mat-icon>add</mat-icon> Adicionar Competência
+	<button mat-raised-button color="primary" (click)="adicionarCompetencia()" class="button custom-button {{colorButtonOne}}">
+		{{buttonNew}}
 	</button>
-</div>
+</div>	
 <mat-form-field>
 	<mat-label>Filter</mat-label>
 	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>

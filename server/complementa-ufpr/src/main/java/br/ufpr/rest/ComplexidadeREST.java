@@ -46,7 +46,7 @@ public class ComplexidadeREST {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ComplexidadeDTO> buscaPorId(@PathVariable String id) {
+    public ResponseEntity<ComplexidadeDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<Complexidade> complexidade = repo.findById(id);
         if (complexidade.isEmpty()) {
@@ -60,8 +60,8 @@ public class ComplexidadeREST {
     public ResponseEntity<ComplexidadeDTO> inserirComplexidade(@RequestBody Complexidade complexidade) {
 
         try {
-            Complexidade cmplx = repo.save(mapper.map(complexidade, Complexidade.class));
-            Optional<Complexidade> cmplxOpt = repo.findById(cmplx.getId().toString());
+        	Complexidade cmplx = repo.save(mapper.map(complexidade, Complexidade.class));
+            Optional<Complexidade> cmplxOpt = repo.findById(cmplx.getId());
             if (!cmplxOpt.isPresent()) {
                 throw new Exception("Criação da complexidade não foi realizada com sucesso");
             }
@@ -73,13 +73,13 @@ public class ComplexidadeREST {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ComplexidadeDTO> alterarComplexidade(@PathVariable("id") String id, @RequestBody Complexidade complexidade) {
+    public ResponseEntity<ComplexidadeDTO> alterarComplexidade(@PathVariable("id") Long id, @RequestBody Complexidade complexidade) {
         Optional<Complexidade> cmplx = repo.findById(id);
 
         if (cmplx.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
-            complexidade.setId(Long.parseLong(id));
+            complexidade.setId(id);
             repo.save(mapper.map(complexidade, Complexidade.class));
             cmplx = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(cmplx.get(), ComplexidadeDTO.class));
@@ -87,7 +87,7 @@ public class ComplexidadeREST {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerComplexidade(@PathVariable("id") String id) {
+    public ResponseEntity<?> removerComplexidade(@PathVariable("id") Long id) {
 
         Optional<Complexidade> complexidade = repo.findById(id);
         if (complexidade.isEmpty()) {

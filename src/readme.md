@@ -20,7 +20,7 @@ Rode: ```docker ps```
  pra garantir que deu certo
 
 0. Rode o seguinte comando no terminal:<br>
-```sudo docker run -p 5432:5432 --name postgreSQL -e POSTGRES_PASSWORD=postgres -d postgres```
+```sudo docker run -p 5432:5432 --name postgreSQL -e POSTGRES_PASSWORD="postgres" -d postgres postgres```
 
 1. Configure o arquivo `.env` usando o modelo fornecido em `.env.example`. Siga os passos:
 

@@ -3,6 +3,11 @@ package br.ufpr.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import br.ufpr.model.Competencia;
+import br.ufpr.model.Complexidade;
+import br.ufpr.model.Orientador;
+import br.ufpr.model.Servidor;
+
 public class GraduacaoDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -11,17 +16,22 @@ public class GraduacaoDTO implements Serializable {
     private String nome;
     private List<ServidorDTO> servidoresCoordenadores;
     private List<CompetenciaDTO> competencias;
+    private List<ComplexidadeDTO> complexidades;
 
     public GraduacaoDTO() {
     }
 
-    public GraduacaoDTO(Long id, String nome, OrientadorDTO coordenador, List<CompetenciaDTO> competencias) {
-        this.id = id;
-        this.nome = nome;
-        this.competencias = competencias;
-    }
+    public GraduacaoDTO(Long id, String nome, List<ServidorDTO> servidoresCoordenadores,
+			List<CompetenciaDTO> competencias, List<ComplexidadeDTO> complexidades) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.servidoresCoordenadores = servidoresCoordenadores;
+		this.competencias = competencias;
+		this.complexidades = complexidades;
+	}
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
     
@@ -45,10 +55,6 @@ public class GraduacaoDTO implements Serializable {
 		this.servidoresCoordenadores = servidoresCoordenadores;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public List<CompetenciaDTO> getCompetencias() {
         return competencias;
     }
@@ -57,11 +63,24 @@ public class GraduacaoDTO implements Serializable {
         this.competencias = competencias;
     }
     
-    @Override
+    public List<ComplexidadeDTO> getComplexidades() {
+		return complexidades;
+	}
+
+	public void setComplexidades(List<ComplexidadeDTO> complexidades) {
+		this.complexidades = complexidades;
+	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
     public String toString() {
         return "GraduacaoDTO [id=" + getId() + ", nome=" + getNome() +
         		", servidoresCoordenadores=" + getServidoresCoordenadores() +
-        		", competencias=" + getCompetencias() + "]";
+        		", competencias=" + getCompetencias() +
+        		", complexidades=" + getComplexidades() + "]";
     }
 
 }

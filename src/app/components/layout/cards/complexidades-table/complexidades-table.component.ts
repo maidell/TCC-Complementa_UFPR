@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ComplexidadesDialogComponent } from '../complexidades-dialog/complexidades-dialog.component';
+import { Complexidade, Graduacao } from 'src/app/shared';
+import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
 @Component({
   selector: 'app-complexidades-table',
   templateUrl: './complexidades-table.component.html',
@@ -15,7 +17,9 @@ export class ComplexidadesTableComponent<T> implements OnInit{
 
   buttonNew: string = "Nova Complexidade";
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+    public graduacaoService: GraduacaoService
+    ) { }
 
   ngOnInit(): void {
     this.displayedColumns = [];
@@ -36,6 +40,7 @@ export class ComplexidadesTableComponent<T> implements OnInit{
   @Input() colorButtonOne?: string;
   @Input() columns!: {title: string, suffix?: string, key: string}[];
   @Input() display!: string;
+  @Input() graduacao!: Graduacao;
   displayedColumns!: string[];
 
   applyFilter(event: Event) {
@@ -47,10 +52,20 @@ export class ComplexidadesTableComponent<T> implements OnInit{
     }
   }
 
-  openDialog() {
-    this.dialog.open(ComplexidadesDialogComponent, {
-      width: '40rem',
-    });
+  adicionarComplexidade() {
+    this.openDialog(new Complexidade);
   }
 
+  openDialog(complexidade: Complexidade) {
+    const dialogRef = this.dialog.open(ComplexidadesDialogComponent, {
+      minWidth: '40rem',
+      data: {
+        complexidade: complexidade,
+        graduacao: this.graduacao
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    })
+  }
 }

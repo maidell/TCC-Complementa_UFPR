@@ -4,6 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { Graduacao } from 'src/app/shared';
+import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
 
 @Component({
   selector: 'app-graduacoes-table',
@@ -14,7 +16,9 @@ export class GraduacoesTableComponent<T> implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+    public graduacaoService: GraduacaoService
+    ) { }
   buttonNew: string = "Nova Graduação";
   ngOnInit(): void {
     this.displayedColumns = [];
@@ -46,10 +50,20 @@ export class GraduacoesTableComponent<T> implements OnInit{
     }
   }
 
-  openDialog() {
-    this.dialog.open(GraduacoesDialogComponent, {
+  adicionarGraduacao() {
+    this.openDialog(new Graduacao());
+  }
+
+  openDialog(graduacao: Graduacao) {
+    const dialogRef = this.dialog.open(GraduacoesDialogComponent, {
       minWidth: '40rem',
+      data: {
+        graduacao: graduacao
+      }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    })
   }
 
 }
