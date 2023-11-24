@@ -7,6 +7,19 @@
 	justify-content: center;
 }
 
+
+.custom-button {
+	background: linear-gradient(180deg, #2494D3, #0076D0) !important;
+	color: white !important;
+	border-radius: 20px;
+	margin-left: 15px;
+}
+
+.custom-button:hover {
+	background: linear-gradient(90deg, #0076D0, #2494D3);
+	color: white;
+}
+
 mat-paginator {
 	background-color: transparent !important;
 }

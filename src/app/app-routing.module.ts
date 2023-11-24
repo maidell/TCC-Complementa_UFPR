@@ -8,6 +8,7 @@ import { ModifyCardComponent } from './components/layout/cards/modify-card/modif
 import { CadastroDeUsuariosComponent } from './components/pages/cadastro-de-usuarios/cadastro-de-usuarios.component';
 import { AtividadeComponent } from './components/atividade/atividade/atividade.component';
 import { DashboardComponent } from './components/pages';
+import { ProjetoComponent } from './components/projeto/projeto.component';
 
 const routes: Routes = [
   {
@@ -90,6 +91,10 @@ const routes: Routes = [
   {
     path: 'atividade/detalhes',
     component: AtividadeComponent
+  },
+  {
+    path: 'projeto/teste',
+    component: ProjetoComponent
   },
 
   ...LoginRoutes

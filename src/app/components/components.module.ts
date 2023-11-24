@@ -7,10 +7,13 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
 import { AtividadeModule } from './atividade/atividade.module';
 import { OrientadorModule } from '../services/orientador/orientador.module';
 import { ServidorModule } from '../services/servidor/servidor.module';
+import { ProjetoComponent } from './projeto/projeto.component';
 
 
 @NgModule({
   declarations: [
+  
+    ProjetoComponent
   ],
   imports: [
     CommonModule,
