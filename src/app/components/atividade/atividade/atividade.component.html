@@ -7,11 +7,11 @@
         <div class="left-items">
             <div class="status" *ngIf="displayStatus">
                 <button mat-flat-button class="status-button"
-                    [ngStyle]="{'background-image': statusButtonColor}">{{estado}}</button>
-                <h6 [ngStyle]="{'display': displayTimestamp}">Criada em {{this.exampleResponse[0].dataCriacao | date:'dd/MM/yyyy'}}</h6>
+                    [ngStyle]="{'background-image': statusButtonColor}">{{atividade.status}}</button>
+                <h6 [ngStyle]="{'display': displayTimestamp}">Criada em {{atividade.dataCriacao | date:'dd/MM/yyyy'}}</h6>
             </div>
             <div class="activity-header-data">
-                <div *ngIf="estado!='Nova' ; else newActivity">
+                <div *ngIf="atividade.status!=''; else newActivity">
                     <div class="project-name">{{projectName}}</div>
                     <div class="activity-name">Nome da Atividade</div>
                 </div>
@@ -24,7 +24,7 @@
                 </ng-template>
             </div>
         </div>
-        <div class="buttons" [ngStyle]="{'margin-top': buttonsMarginTop}">
+        <div class="buttons">
             <button mat-flat-button class="header-button"
                 [ngStyle]="{'display': displayFirstHeaderButton, 'background-image': firstButtonColor, 'width':firstButtonWidth}"
                 (click)="firstButtonFunction()">{{firstHeaderButton}}</button>
@@ -51,7 +51,7 @@
                     </mat-form-field>
                     <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
-                        <mat-select value={{this.exampleResponse[0].complexidade}} formControlName="complexities" [formControl]="complexities">
+                        <mat-select value={{atividade.complexidade}} formControlName="complexities" [formControl]="complexities">
                             <mat-option *ngFor="let c of exampleComplexities" [value]="c">{{c}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -71,8 +71,8 @@
                     </mat-form-field>
                         <button mat-flat-button color="primary" [matMenuTriggerFor]="attachments" class="attachments" *ngIf="estado!='Nova'">Ver Anexos</button>
                         <mat-menu #attachments="matMenu" yPosition="above">
-                            <div *ngFor="let a of exampleResponse[0].anexos">
-                                <button mat-menu-item (click)="download(a.path,a.name)">{{a.name}}</button>
+                            <div *ngFor="let a of atividade.anexos">
+                                <button mat-menu-item (click)="download(a.filePath, a.fileName)">{{a.fileName}}</button>
                             </div>
                         </mat-menu>
                         <mat-form-field class="attachment-field" *ngIf="estado==='Nova'">
