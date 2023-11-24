@@ -23,7 +23,7 @@ export class ComplexidadesDialogComponent {
   cargaHorariaMinima: FormControl = new FormControl();
   cargaHorariaMaxima: FormControl = new FormControl();
   graduacao!: Graduacao;
-  complexidades: Complexidade [] = []
+  complexidades: Complexidade[] = []
 
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Complexidade>;
@@ -33,17 +33,16 @@ export class ComplexidadesDialogComponent {
     public complexidadeService: ComplexidadeService,
     private changeDetectorRef: ChangeDetectorRef,
     public toastr: ToastrService
-    )
-     {
-      if (data) {
-        this.complexidade = data.complexidade ?? new Complexidade;
-        this.graduacao = data.graduacao ?? new Graduacao;
-      } else {
-        this.cancel();
-      }
-      if(this.graduacao){
-        this.cancel();
-      }
+  ) {
+    if (data) {
+      this.complexidade = data.complexidade ?? new Complexidade;
+      this.graduacao = data.graduacao ?? new Graduacao;
+    } else {
+      this.cancel();
+    }
+    if (!this.graduacao) {
+      this.cancel();
+    }
 
   }
 
@@ -61,37 +60,40 @@ export class ComplexidadesDialogComponent {
     cargaHorariaMaxima: new FormControl(this.complexidade?.cargaHorariaMaxima ?? 0)
   });
 
-  saveComplexity(){
+  saveComplexity() {
     this.complexidade.nome = this.nome.value;
-    if(this.complexidade.id){
+    if (this.complexidade.id) {
       this.atualizarComplexidade(this.complexidade);
-    }else{
+    } else {
       this.salvarComplexidade(this.complexidade);
     }
+    this.changeDetectorRef.detectChanges();
+    window.location.reload();
   }
-  
-  deleteComplexity(){
+
+  deleteComplexity() {
     this.graduacao.complexidades = this.graduacao.complexidades.filter(comp => comp.id !== this.complexidade.id);
-      this.atualizarGraduacaoAntes(this.graduacao).subscribe(() => {
-        this.deletarComplexidade(this.complexidade).subscribe(() => {
-          this.toastr.success("Complexidade deletada!");
-        }, (err) => {
-          this.toastr.error("Erro ao deletar competência");
-          console.log("Erro ao deletar competência: ", err);
-        });
+    this.atualizarGraduacaoAntes(this.graduacao).subscribe(() => {
+      this.deletarComplexidade(this.complexidade).subscribe(() => {
+        this.toastr.success("Complexidade deletada!");
       }, (err) => {
-        this.toastr.error("Erro ao atualizar graduação");
-        console.log("Erro ao atualizar graduação: ", err);
+        this.toastr.error("Erro ao deletar competência");
+        console.log("Erro ao deletar competência: ", err);
       });
-      this.dataSource = new MatTableDataSource(this.graduacao.complexidades);
-    }
+    }, (err) => {
+      this.toastr.error("Erro ao atualizar graduação");
+      console.log("Erro ao atualizar graduação: ", err);
+    });
+    this.changeDetectorRef.detectChanges();
+    window.location.reload();
+  }
 
   //close dialog
-  cancel(){
-    
+  cancel() {
+
   }
 
-  salvarComplexidade(complexidade: Complexidade){
+  salvarComplexidade(complexidade: Complexidade) {
     this.complexidadeService.inserirComplexidade(complexidade).subscribe(
       (res) => {
         this.complexidade = res;
@@ -106,7 +108,7 @@ export class ComplexidadesDialogComponent {
     )
   }
 
-  atualizarComplexidade(complexidade: Complexidade){
+  atualizarComplexidade(complexidade: Complexidade) {
     this.complexidadeService.atualizarComplexidade(complexidade).subscribe(
       (res) => {
         this.complexidade = res;
@@ -128,7 +130,7 @@ export class ComplexidadesDialogComponent {
     return this.complexidadeService.removerComplexidade(complexidade.id);
   }
 
-  atualizarGraduacao(graduacao: Graduacao){
+  atualizarGraduacao(graduacao: Graduacao) {
     this.graduacaoService.atualizarGraduacao(graduacao).subscribe(
       (res) => {
         this.graduacao = res;

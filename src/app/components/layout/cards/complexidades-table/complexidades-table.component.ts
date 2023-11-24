@@ -64,5 +64,8 @@ export class ComplexidadesTableComponent<T> implements OnInit{
         graduacao: this.graduacao
       }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    })
   }
 }

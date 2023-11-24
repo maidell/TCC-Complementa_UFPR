@@ -3,8 +3,10 @@ import { ChangeDetectorRef, Component, Inject, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { Competencia, Coordenador, Graduacao } from 'src/app/shared';
+import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
+import { Graduacao, Orientador } from 'src/app/shared';
 
 @Component({
   selector: 'app-graduacoes-dialog',
@@ -12,32 +14,88 @@ import { Competencia, Coordenador, Graduacao } from 'src/app/shared';
   styleUrls: ['./graduacoes-dialog.component.scss']
 })
 export class GraduacoesDialogComponent  {
-  @ViewChild('formCompetencia') formAluno!: NgForm;
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
+
+  id: FormControl = new FormControl();
+  nome: FormControl = new FormControl();
+  coordenador: FormControl = new FormControl();
+  graduacao!: Graduacao;
+  coordenadores: Orientador[] = [];
   
-  graduacoes: Graduacao[] = [];
- 
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Graduacao>;
-  constructor(@Inject(DIALOG_DATA) public data: Graduacao, private changeDetectorRef: ChangeDetectorRef) {
-    this.dataSource = new MatTableDataSource(this.graduacoes);
+  constructor(@Inject(DIALOG_DATA) public data: any,
+   private changeDetectorRef: ChangeDetectorRef,
+   public graduacaoService: GraduacaoService,
+    public toastr: ToastrService
+    ) {
+      if (data) {
+        this.graduacao = data.graduacao ?? new Graduacao;
+      }
   }
+
   gradForm = new FormGroup({
-    id: new FormControl({ value: '', disabled: true }),
-    nomeDoCurso: new FormControl(['']),
-    coordenador: new FormControl(),
+    id: new FormControl(this.graduacao.id),
+    nomeDoCurso: new FormControl(this.graduacao.nome),
+    coordenador: new FormControl(this.graduacao.coordenador),
     
   });
 
-  id: FormControl = new FormControl();
-  nomeDoCurso: FormControl = new FormControl();
-  coordenador: FormControl = new FormControl();
+  saveGraduation(){
+    this.graduacao.id = this.id.value;
+    this.graduacao.nome = this.nome.value;
+    this.graduacao.coordenador = this.coordenador.value;
+    if(this.graduacao.id){
+      this.atualizarGraduacao(this.graduacao).subscribe(
+        (res: Graduacao) => {
+          this.graduacao = res;
+          this.toastr.success('Graduacao atualizada com sucesso!');
+        },
+        (err) => {
+          this.toastr.error('Erro ao atualizar Graduacao!');
+          console.log('Erro ao atualizar Graduacao!', err);
+        }
+      );
+    }else{
+      this.salvarGraduacao(this.graduacao).subscribe(
+        (res: Graduacao) => {
+          this.graduacao = res;
+          this.toastr.success('Graduacao salva com sucesso!');
+        },
+        (err) => {
+          this.toastr.error('Erro ao salvar Graduacao!');
+          console.log('Erro ao salvar Graduacao!', err);
+        }
+      );
+    }
+    this.changeDetectorRef.detectChanges();
+      window.location.reload();
+  }
+  
+  deleteGraduation(){
+    this.changeDetectorRef.detectChanges();
+      window.location.reload();
+      }
 
-
-  saveComplexity(){}
-  deleteComplexity(){}
   //close dialog
   cancel(){
     
   }
+
+  salvarGraduacao(graduacao: Graduacao): Observable<any> {
+    return this.graduacaoService.inserirGraduacao(graduacao);
+  }
+
+  atualizarGraduacao(graduacao: Graduacao): Observable<any> {
+    return this.graduacaoService.atualizarGraduacao(graduacao);
+  }
+
+  removerGraduacao(graduacao: Graduacao): Observable<any> {
+    return this.graduacaoService.removerGraduacao(graduacao.id);
+  }
+
+  buscarGraduacao(graduacao: Graduacao): Observable<any> {
+    return this.graduacaoService.buscarGraduacaoPorId(graduacao.id);
+  }
+
 }

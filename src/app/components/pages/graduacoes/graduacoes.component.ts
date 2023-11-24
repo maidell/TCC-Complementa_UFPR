@@ -18,7 +18,8 @@ export class GraduacoesComponent implements OnInit {
   button: string = "Detalhes!";
   usuarioLogado: Usuario = new Usuario();
   graduacao: Graduacao = new Graduacao();
-  orientador: Orientador = new Orientador()
+  coordenador: Orientador = new Orientador()
+  graduacoes: Graduacao[] = [];
 
   constructor(
     private titleService: TitleService,
@@ -54,8 +55,6 @@ export class GraduacoesComponent implements OnInit {
     this.dataSource = new MatTableDataSource<Graduacao>(this.graduacoes);
   }
 
-  graduacoes: Graduacao[] = []
-
   hasObjects(): boolean {
     return this.graduacoes.length > 0;
   }
@@ -76,9 +75,10 @@ export class GraduacoesComponent implements OnInit {
   instanciarCoordenador(): void {
     this.orientadorService.buscarOrientadorPorId(this.usuarioLogado.id).subscribe(
       (res: Orientador) => {
-        this.orientador = res;
-        this.graduacao = this.orientador.graduacao;
-        console.log(this.orientador)
+        this.coordenador = res;
+        this.graduacao = this.coordenador.graduacao;
+        this.graduacoes.push(this.graduacao);
+        console.log(this.coordenador)
       },
       (error) => {
         this.toastr.error("Erro ao instanciar graduação");

@@ -20,7 +20,7 @@
                           </mat-form-field>                          
 						<mat-form-field  class="nomeDoCurso">
 							<mat-label>Nome do Curso</mat-label>
-							<input placeholder="Nome do Curso" matInput formControlName="nomeDoCurso" [formControl]="nomeDoCurso">
+							<input placeholder="Nome do Curso" matInput formControlName="nomeDoCurso" [formControl]="nome">
 						</mat-form-field>
 						<mat-form-field  class="coordenador">
 							<mat-label>Coordenador</mat-label>
@@ -28,8 +28,8 @@
 						</mat-form-field>
 					</div>
 						<div class="buttons">
-							<button mat-flat-button class="save-button" (click)="saveComplexity()">Salvar</button>
-							<button mat-flat-button class="delete-button" (click)="deleteComplexity()">Excluir</button>
+							<button mat-flat-button class="save-button" (click)="saveGraduation()">Salvar</button>
+							<button mat-flat-button class="delete-button" (click)="deleteGraduation()">Excluir</button>
 							<button mat-flat-button mat-dialog-close class="cancel-button" (click)="cancel()">Cancelar</button>
 						</div>
 					</div>

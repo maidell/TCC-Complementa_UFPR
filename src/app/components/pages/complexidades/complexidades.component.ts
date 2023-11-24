@@ -42,7 +42,7 @@ export class ComplexidadesComponent implements OnInit{
   }
   columns: { title: string, suffix?: string, key: string }[] = [
     { title: "Complexidade", key: 'nome' },
-    { title: "ID da complexidade", key: 'id' },
+    // { title: "ID da complexidade", key: 'id' },
     { title: "Carga horária mínima", key: 'cargaHorariaMinima', suffix: 'horas'},
     { title: "Carga horária máxima", key: 'cargaHorariaMaxima', suffix: 'horas' },
   ];

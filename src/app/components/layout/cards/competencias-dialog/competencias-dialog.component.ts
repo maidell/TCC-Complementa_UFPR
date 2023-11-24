@@ -60,6 +60,10 @@ export class CompetenciasDialogComponent implements OnInit{
     }else{
       this.salvarCompetencia(this.competencia);
     }
+    this.changeDetectorRef.detectChanges();
+    window.location.reload();
+    this.changeDetectorRef.detectChanges();
+      window.location.reload();
   }
   
   deleteCompetence(){
@@ -75,11 +79,12 @@ export class CompetenciasDialogComponent implements OnInit{
         this.toastr.error("Erro ao atualizar graduação");
         console.log("Erro ao atualizar graduação: ", err);
       });
-      this.dataSource = new MatTableDataSource(this.graduacao.competencias);
+      this.changeDetectorRef.detectChanges();
+      window.location.reload();
     }
   
   //close dialog
-  cancel(){
+  cancel(){    
   }
 
   salvarCompetencia(competencia: Competencia){

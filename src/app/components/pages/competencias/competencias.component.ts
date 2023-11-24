@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TitleService } from '../../../services/title/title.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Competencia, Complexidade, Graduacao, Orientador, Usuario } from 'src/app/shared';
+import { Competencia, Graduacao, Orientador, Usuario } from 'src/app/shared';
 import { MatTableDataSource } from '@angular/material/table';
 import { LoginService } from '../../auth/services/login.service';
 import { Router } from '@angular/router';
