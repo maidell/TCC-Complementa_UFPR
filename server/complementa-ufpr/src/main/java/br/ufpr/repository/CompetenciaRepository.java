@@ -8,7 +8,7 @@ import br.ufpr.model.Competencia;
 
 public interface CompetenciaRepository extends JpaRepository<Competencia, Long> {
 	
-	Optional<Competencia> findById(String id);
+	Optional<Competencia> findById(Long id);
 	
     public long count();
     
