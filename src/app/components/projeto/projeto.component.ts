@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Projeto, Usuario } from 'src/app/shared';
+import { Atividade, Projeto, Usuario } from 'src/app/shared';
 import { LoginService } from '../auth/services/login.service';
 
 @Component({
@@ -12,7 +12,11 @@ import { LoginService } from '../auth/services/login.service';
   styleUrls: ['./projeto.component.scss']
 })
 export class ProjetoComponent implements OnInit{
-  imgAtv = "assets/plugins/images/atvImg.png"
+  imgAtv = "assets/plugins/images/atvImg.svg";
+  isViewMode = false;
+
+  tituloAtividade = "biding com nome da atv";
+  executor = "biding com nome do executor";
 
   projectForm = new FormGroup({
     id: new FormControl(''),
@@ -52,7 +56,7 @@ export class ProjetoComponent implements OnInit{
     private loginService: LoginService,
 
   ) { }
-  
+
   usuarioLogado: Usuario = new Usuario();
   ngOnInit() {
     if (!this.loginService.usuarioLogado) {
@@ -64,6 +68,7 @@ export class ProjetoComponent implements OnInit{
   }
   salvar() { }
   cancelar() { }
+  criarAtividade() { }
   setContent () {
     this.id.setValue(this.projeto?.id);
     this.nome.setValue(this.projeto?.nome);
@@ -77,6 +82,7 @@ export class ProjetoComponent implements OnInit{
     this.curso.setValue(this.projeto?.curso);
   }
 }
+
 
 
 
