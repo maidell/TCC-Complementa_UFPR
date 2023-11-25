@@ -3,7 +3,7 @@ mat-card, mat-card-content{
 	height: 100%;
 	@media screen and (max-width: 800px) {
 		height: 100%;
-		
+
 	}
 }
 
@@ -45,8 +45,14 @@ mat-card, mat-card-content{
 		}
 	}
 }
-.form-left, .form-right {
+.form-left {
 	display: flex;
+	flex:0.47;
+	flex-direction: column;
+}
+.form-right {
+	display: flex;
+	flex:0.53;
 	flex-direction: column;
 }
 
