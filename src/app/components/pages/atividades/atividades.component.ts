@@ -4,6 +4,12 @@ import { Atividade } from 'src/app/shared';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { AtividadeService } from '../../atividade/services/atividade.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { LoginService } from '../../auth/services/login.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AtividadeComponent } from '../../atividade/atividade/atividade.component';
 
 
 @Component({
@@ -12,69 +18,40 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./atividades.component.scss']
 })
 export class AtividadesComponent implements OnInit, OnDestroy {
-  inputValue: string = '';
-  atividades: Atividade[] = [
 
-    {
-      id: 1,
-      nome: "Nome da Atividade",
-      status: "Em aberto",
-      dataCriacao: new Date("2021-11-12"),
-      dataLimiteCandidatura: new Date("2021-01-01"),
-      dataConclusao: new Date("2021-01-01"),
-    },
-    {
-      id: 2,
-      nome: "Projeto de Marketing",
-      status: "Em andamento",
-      dataCriacao: new Date("2022-03-13"),
-      dataLimiteCandidatura: new Date("2022-06-30"),
-      dataConclusao: new Date("2022-07-15")
-    },
-    {
-      id: 3,
-      nome: "Relatório de Vendas",
-      status: "Concluído",
-      dataCriacao: new Date("2022-08-01"),
-      dataLimiteCandidatura: new Date("2022-09-15"),
-      dataConclusao: new Date("2022-09-20")
-    },
-    {
-      id: 4,
-      nome: "Treinamento de Equipe",
-      status: "Pendente",
-      dataCriacao: new Date("2023-05-10"),
-      dataLimiteCandidatura: new Date("2023-06-20"),
-      dataConclusao: new Date("2023-06-30")
-    },
-    {
-      id: 5,
-      nome: "Reunião de Equipe",
-      status: "Agendado",
-      dataCriacao: new Date("2023-11-10"),
-      dataLimiteCandidatura: new Date("2023-11-10"),
-      dataConclusao: new Date("2023-11-11")
-    },
-    {
-      id: 6,
-      nome: "Projeto de Desenvolvimento",
-      status: "Atrasado",
-      dataCriacao: new Date("2022-03-01"),
-      dataLimiteCandidatura: new Date("2022-12-30"),
-      dataConclusao: new Date("2023-01-15")
-    }];
+  inputValue: string = '';
+  atividades: Atividade[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Atividade>;
-  constructor(private titleService: TitleService, private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(
+    private titleService: TitleService,
+    private changeDetectorRef: ChangeDetectorRef,
+    public atividadeService: AtividadeService,
+    public router: Router,
+    public toastr: ToastrService,
+    public loginService: LoginService,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Atividades');
-    this.dataSource = new MatTableDataSource<Atividade>(this.atividades);
-    this.changeDetectorRef.detectChanges();
-    this.dataSource.paginator = this.paginator;
-    this.obs = this.dataSource.connect();
+    this.instanciarAtividades().subscribe(
+      (response: Atividade[]) => {
+        this.atividades = response;
+        this.toastr.success("Atividades recebidas com sucesso!")
+        console.log("Atividades recebidas com sucesso!", this.atividades);
+        this.titleService.setTitle('Atividades');
+        this.dataSource = new MatTableDataSource<Atividade>(this.atividades);
+        this.changeDetectorRef.detectChanges();
+        this.dataSource.paginator = this.paginator;
+        this.obs = this.dataSource.connect();
+      },
+      (error: any) => {
+        this.toastr.error("Erro ao listar atividades")
+        console.log("Erro ao listar atividades", error);
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -96,7 +73,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     return this.atividades.length > 0;
   }
 
-  buttonOne:string = "Detalhes!";
+  buttonOne: string = "Detalhes!";
   dataCriacaoLabel: string = "Data de Criação";
   dataLimiteCandidaturaLabel: string = "Data de Limite para Candidatura";
   dataConclusaoLabel: string = "Data de Conclusão";
@@ -106,6 +83,31 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   Description: string = "Verificar texto para apresentar de acordo com a role, no figma!";
   Button: string = "Saiba mais";
 
+  instanciarAtividades(): Observable<Atividade[]>{
+    return this.atividadeService.listarTodosAtividades();
+  }
+
+  openDialog(atividade: Atividade) {
+    const dialogRef = this.dialog.open(AtividadeComponent, {
+      maxWidth: this.dialogWidth(),
+      data: atividade
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  formatarData(data: Date): string {
+    return new Intl.DateTimeFormat('pt-BR').format(data);
+  }
+
+  dialogWidth() {
+    if (window.innerWidth <= 768) {
+      return "100vw";
+    } else {
+      return "80vw";
+    }
+  }
 
 
 

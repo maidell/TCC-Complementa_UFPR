@@ -7,7 +7,7 @@
         <div class="left-items">
             <div class="status" *ngIf="displayStatus">
                 <button mat-flat-button class="status-button"
-                    [ngStyle]="{'background-image': statusButtonColor}">{{atividade.status}}</button>
+                    [ngStyle]="{'background-image': statusButtonColor}">{{atividade.status.replace("_"," ")}}</button>
                 <h6 [ngStyle]="{'display': displayTimestamp}">Criada em {{atividade.dataCriacao | date:'dd/MM/yyyy'}}</h6>
             </div>
             <div class="activity-header-data">
@@ -123,8 +123,8 @@
             <div class="comment-panel">
                 <div *ngFor="let c of comments" class="comment">
                     <div class="comment-content">
-                        <div class="commentor">{{c.name}}</div>
-                        <div class="comment-text">{{c.content}}</div>
+                        <!-- <div class="commentor">{{c.name}}</div>
+                        <div class="comment-text">{{c.content}}</div> -->
                     </div>
                 </div>
             </div>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.AtividadeDTO;
+import br.ufpr.dto.AtividadeSimplesDTO;
 import br.ufpr.model.Atividade;
 import br.ufpr.repository.AtividadeRepository;
 
@@ -34,7 +35,7 @@ public class AtividadeREST {
 	private ModelMapper mapper;
 
 	@GetMapping
-	public ResponseEntity<List<AtividadeDTO>> obterTodasAtividades() {
+	public ResponseEntity<List<AtividadeSimplesDTO>> obterTodasAtividades() {
 
 		List<Atividade> lista = repo.findAll();
 
@@ -42,7 +43,7 @@ public class AtividadeREST {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(lista.stream().map(e -> mapper.map(e, AtividadeDTO.class)).collect(Collectors.toList()));
+				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
 
 	}
 
