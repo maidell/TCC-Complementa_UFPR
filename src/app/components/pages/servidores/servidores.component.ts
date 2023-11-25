@@ -23,9 +23,8 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   usuarioLogado: Usuario = new Usuario;
   coordenador: Coordenador = new Coordenador;
   graduacao: Graduacao = new Graduacao;
-  idCoord: number = 48;
-  idGrad: number = 12;
-
+  idGrad!: number;
+  idCoord!: number;
   servidoresCoordenadores: ServidorCoordenador[] = [];
 
   servidores: Servidor[] = [];
@@ -35,7 +34,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Servidor>;
   constructor(
-    // @Inject(DIALOG_DATA) public data: any,
+    @Inject(DIALOG_DATA) public data: any,
     private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
     private loginService: LoginService,
@@ -46,6 +45,10 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   ) {
     if (!this.loginService.usuarioLogado) {
       this.router.navigate([`login`]);
+    }
+    if(data){
+      this.idGrad = data.idGrad;
+      this.idCoord = data.idCoord;
     }
     this.dataSource = new MatTableDataSource(this.servidores);
   }
@@ -77,6 +80,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
       this.servidores = this.filtrarServidores(this.servidores, this.orientadores, this.graduacao);
       this.verificarServidoresCoordenadores(this.servidores);
       this.dataSource.data = this.servidores;
+      this.changeDetectorRef.detectChanges();
     });
   }
 
@@ -131,6 +135,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
       }
     );
     this.dataSource.data = this.servidores;
+    this.changeDetectorRef.detectChanges();
    }
 
    removerServidor(servidor: Servidor): void {
@@ -142,6 +147,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
         this.toastr.info("Servidor removido!");
         this.servidoresCoordenadores = response.servidoresCoordenadores;
         this.verificarServidoresCoordenadores(this.servidores);
+        this.dataSource.data = this.servidores;
         },
       (error) => {
         this.toastr.error("Erro ao cadastrar servidor");
@@ -149,7 +155,8 @@ export class ServidoresComponent implements OnInit, OnDestroy {
       }
     );
     this.dataSource.data = this.servidores;
-   }
+    this.changeDetectorRef.detectChanges();
+    }
 
   verificarServidoresCoordenadores(servidores: Servidor[]): void {
     const servidoresCoordenadoresIds = this.servidoresCoordenadores.map(servidor => servidor.id);

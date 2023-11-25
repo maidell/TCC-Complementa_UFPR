@@ -1,14 +1,8 @@
-<div class="container">
-    <div class="row">
-        <div class="square">
-            <div class="card">
-                <img [src]="imageUrl" alt="Card Image">
-                <div class="card-body">
-                    <h2>{{ title }}</h2>
-                    <p>{{ description }}</p>
-                    <a routerLink="/link2" class="btn btn-primary">mudar</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<mat-card class="card">
+    <img [src]="imageUrl" alt="Card Image">
+    <mat-card-content>
+        <h2>{{ title }}</h2>
+        <p>{{ description }}</p>
+        <button mat-raised-button color="primary" (click)="onButtonClick()">{{ buttonText }}</button>
+    </mat-card-content>
+</mat-card>

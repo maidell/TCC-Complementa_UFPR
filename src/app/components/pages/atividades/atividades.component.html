@@ -9,13 +9,14 @@
 			<ng-container *ngIf="atividades.length > 0; else noActivities">
 				<app-rect-card *ngFor="let atividade of atividades" [nome]="atividade.nome" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel"
-					[firstValue]="atividade.dataCriacao.toLocaleDateString('pt-BR',{timeZone: 'UTC'})"
+					[firstValue]="formatarData(atividade.dataCriacao)"
 					[secondLabel]="dataLimiteCandidaturaLabel"
-					[secondValue]="atividade.dataLimiteCandidatura.toLocaleDateString('pt-BR',{timeZone: 'UTC'})"
+					[secondValue]="atividade.dataLimiteCandidatura"
 					[thirdLabel]="dataConclusaoLabel"
-					[thirdValue]="atividade.dataConclusao.toLocaleDateString('pt-BR',{timeZone: 'UTC'})"
+					[thirdValue]="atividade.dataConclusao"
 					[nameButtonRect]="buttonOne"
 					[showSecondButton]="false"
+					(clickButtonRect)="openDialog(atividade)"
 					>
 
 				</app-rect-card>

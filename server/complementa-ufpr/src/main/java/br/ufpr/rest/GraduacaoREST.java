@@ -74,7 +74,7 @@ public class GraduacaoREST {
 
     @PostMapping
     public ResponseEntity<GraduacaoDTO> inserirGraduacao(@RequestBody Graduacao graduacao) {
-
+    	
         try {
             Graduacao grad = repo.save(mapper.map(graduacao, Graduacao.class));
             Optional<Graduacao> gradOpt = repo.findById(grad.getId());

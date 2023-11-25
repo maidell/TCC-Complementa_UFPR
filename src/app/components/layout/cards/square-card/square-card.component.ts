@@ -9,4 +9,8 @@ export class SquareCardComponent {
   @Input() title: string = '';
   @Input() description: string = '';
   @Input() imageUrl: string = '';
+  @Input() buttonText: string = '';
+  onButtonClick() {
+    alert('Hello');
+  }
 }

@@ -100,6 +100,7 @@ public class OrientadorREST {
 			newOri.setTelefone(orientador.getTelefone());
 			newOri.setMatricula(orientador.getMatricula());
 			newOri.setGraduacao(orientador.getGraduacao());
+			newOri.setPapel(orientador.getPapel());
 			if (orientador.getSenha() != null && !orientador.getSenha().isEmpty()) {
 				newOri.setSenha(PasswordUtils.hashPassword(orientador.getSenha(), newOri.getSalt()));
 			}
