@@ -1,5 +1,4 @@
 import { Aluno } from "./aluno.model";
-import { Graduacao } from "./graduacao.model";
 import { Monitor } from "./monitor.model";
 import { Orientador } from "./orientador.model";
 
@@ -13,8 +12,7 @@ export class Projeto {
   public orientador?: Orientador;
   public alunos?: Aluno[];
   public monitores?: Monitor[];
-  public curso?: Graduacao;
-
+  
   constructor(
     id?: number,
     nome?: string,

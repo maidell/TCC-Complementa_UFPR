@@ -25,13 +25,16 @@ public class Projeto {
     @Column(name = "nome_projeto")
     private String nome;
 
-    @Column(name = "descricao_projeto")
-    private String descricao;
+    @Column(name = "objetivo_geral_projeto")
+    private String objetivoGeral;
+    
+    @Column(name = "objetivos_especificos_projeto")
+    private String objetivosEspecificos;
 
     @ManyToOne
     @JoinColumn(name = "id_orientador")
     private Orientador orientador;
-
+    
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "projeto_aluno",
@@ -51,10 +54,11 @@ public class Projeto {
     public Projeto() {
     }
 
-    public Projeto(Long id, String nome, String descricao, Orientador orientador, List<Aluno> alunos, List<Aluno> monitores) {
+    public Projeto(Long id, String nome, String objetivoGeral, String objetivosEspecificos, Orientador orientador, List<Aluno> alunos, List<Aluno> monitores) {
         this.id = id;
         this.nome = nome;
-        this.descricao = descricao;
+        this.objetivoGeral = objetivoGeral;
+        this.objetivosEspecificos = objetivosEspecificos;
         this.orientador = orientador;
         this.alunos = alunos;
         this.monitores = monitores;
@@ -76,15 +80,23 @@ public class Projeto {
         this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
+        public String getObjetivoGeral() {
+		return objetivoGeral;
+	}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	public void setObjetivoGeral(String objetivoGeral) {
+		this.objetivoGeral = objetivoGeral;
+	}
 
-    public Orientador getOrientador() {
+	public String getObjetivosEspecificos() {
+		return objetivosEspecificos;
+	}
+
+	public void setObjetivosEspecificos(String objetivosEspecificos) {
+		this.objetivosEspecificos = objetivosEspecificos;
+	}
+
+	public Orientador getOrientador() {
         return orientador;
     }
 
@@ -107,4 +119,17 @@ public class Projeto {
     public void setMonitores(List<Aluno> monitores) {
         this.monitores = monitores;
     }
+    
+    @Override
+    public String toString() {
+        return "ProjetoDTO [id=" + getId() +
+                ", nome='" + getNome() + '\'' +
+                ", objetivoGeral='" + getObjetivoGeral() + '\'' +
+                ", objetivosEspecificos='" + getObjetivosEspecificos() + '\'' +
+                ", orientador=" + getOrientador() +
+                ", alunos=" + getAlunos() +
+                ", monitores=" + getMonitores() +
+                "]";
+    }
+
 }

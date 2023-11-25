@@ -25,6 +25,6 @@ public class CertificadoDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "CertificadoDTO [id=" + id + "]";
+        return "CertificadoDTO [id=" + getId() + "]";
     }
 }

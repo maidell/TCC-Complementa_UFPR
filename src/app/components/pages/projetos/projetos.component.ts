@@ -14,56 +14,7 @@ import { Router } from '@angular/router';
 })
 export class ProjetosComponent implements OnInit, OnDestroy {
   inputValue: string = '';
-  projetos: Projeto[] = [
-    {
-      id: 1,
-      nome: "Nome do Projeto",
-      status: "Aberto",
-      tipo: "Extensão",
-      curso: new Graduacao(0, "ADS"),
-      orientador: new Orientador(0, "Rafaela")
-    },
-    {
-      id: 2,
-      nome: "Projeto de Marketing",
-      status: "Fechado",
-      tipo: "TCC",
-      curso: new Graduacao(0, "ADS"),
-      orientador: new Orientador(0, "Rafaela")
-    },
-    {
-      id: 3,
-      nome: "Relatório de Vendas",
-      status: "Fechado",
-      tipo: "Mestrado",
-      curso: new Graduacao(0, "ADS"),
-      orientador: new Orientador(0, "Rafaela")
-    },
-    {
-      id: 4,
-      nome: "Treinamento de Equipe",
-      status: "Fechado",
-      tipo: "Doutorado",
-      curso: new Graduacao(0, "ADS"),
-      orientador: new Orientador(0, "Rafaela")
-    },
-    {
-      id: 5,
-      nome: "Reunião de Equipe",
-      status: "Fechado",
-      tipo: "Outros",
-      curso: new Graduacao(0, "ADS"),
-      orientador: new Orientador(0, "Rafaela")
-    },
-    {
-      id: 6,
-      nome: "Projeto de Desenvolvimento",
-      status: "Aberto",
-      tipo: "TCC",
-      curso: new Graduacao(0, "ADS"),
-      orientador: new Orientador(0, "Rafaela")
-    }
-  ]
+  projetos: Projeto[] = []
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   obs!: Observable<any>;

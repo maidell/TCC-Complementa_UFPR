@@ -9,7 +9,8 @@ public class ProjetoDTO implements Serializable {
 
     private Long id;
     private String nome;
-    private String descricao;
+    private String objetivoGeral;
+    private String objetivosEspecificos;
     private OrientadorDTO orientador;
     private List<AlunoDTO> alunos;
     private List<AlunoDTO> monitores;
@@ -17,11 +18,12 @@ public class ProjetoDTO implements Serializable {
     public ProjetoDTO() {
     }
 
-    public ProjetoDTO(Long id, String nome, String descricao, OrientadorDTO orientador,
+    public ProjetoDTO(Long id, String nome, String objetivoGeral, String objetivosEspecificos, OrientadorDTO orientador,
             List<AlunoDTO> alunos, List<AlunoDTO> monitores) {
         this.id = id;
         this.nome = nome;
-        this.descricao = descricao;
+        this.objetivoGeral = objetivoGeral;
+        this.objetivosEspecificos = objetivosEspecificos;
         this.orientador = orientador;
         this.alunos = alunos;
         this.monitores = monitores;
@@ -43,15 +45,23 @@ public class ProjetoDTO implements Serializable {
         this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
+    public String getObjetivoGeral() {
+		return objetivoGeral;
+	}
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	public void setObjetivoGeral(String objetivoGeral) {
+		this.objetivoGeral = objetivoGeral;
+	}
 
-    public OrientadorDTO getOrientador() {
+	public String getObjetivosEspecificos() {
+		return objetivosEspecificos;
+	}
+
+	public void setObjetivosEspecificos(String objetivosEspecificos) {
+		this.objetivosEspecificos = objetivosEspecificos;
+	}
+
+	public OrientadorDTO getOrientador() {
         return orientador;
     }
 
@@ -74,12 +84,17 @@ public class ProjetoDTO implements Serializable {
     public void setMonitores(List<AlunoDTO> monitores) {
         this.monitores = monitores;
     }
-
+    
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+    
     @Override
     public String toString() {
-        return "ProjetoDTO [id=" + getId() +
+        return "Projeto [id=" + getId() +
                 ", nome='" + getNome() + '\'' +
-                ", descricao='" + getDescricao() + '\'' +
+                ", objetivoGeral='" + getObjetivoGeral() + '\'' +
+                ", objetivosEspecificos='" + getObjetivosEspecificos() + '\'' +
                 ", orientador=" + getOrientador() +
                 ", alunos=" + getAlunos() +
                 ", monitores=" + getMonitores() +

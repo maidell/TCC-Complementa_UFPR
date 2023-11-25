@@ -93,7 +93,7 @@ const routes: Routes = [
     component: AtividadeComponent
   },
   {
-    path: 'projeto/teste',
+    path: 'projetos/detalhes/:id',
     component: ProjetoComponent
   },
 
