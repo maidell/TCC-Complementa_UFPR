@@ -62,6 +62,8 @@ export class ComplexidadesDialogComponent {
 
   saveComplexity() {
     this.complexidade.nome = this.nome.value;
+    this.complexidade.cargaHorariaMaxima = this.cargaHorariaMaxima.value;
+    this.complexidade.cargaHorariaMinima = this.cargaHorariaMinima.value;
     if (this.complexidade.id) {
       this.atualizarComplexidade(this.complexidade);
     } else {
