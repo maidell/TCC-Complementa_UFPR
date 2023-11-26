@@ -3,9 +3,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Atividade, Projeto, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Monitor, Projeto, Usuario } from 'src/app/shared';
 import { LoginService } from '../auth/services/login.service';
 import { ProjetoService } from './services/projeto.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-projeto',
@@ -17,6 +18,8 @@ export class ProjetoComponent implements OnInit{
   isViewMode = false;
   idParam!: number;
   projeto: Projeto = new Projeto();
+  alunos: Aluno[] = [];
+  monitores: Monitor[] = [];
   tituloAtividade = "biding com nome da atv";
   executor = "biding com nome do executor";
 
@@ -27,11 +30,14 @@ export class ProjetoComponent implements OnInit{
     private loginService: LoginService,
     private projetoService: ProjetoService,
     private route: ActivatedRoute
-  ) { 
+  ) {
 
   }
 
   usuarioLogado: Usuario = new Usuario();
+  inputValue: string = '';
+
+
   ngOnInit() {
     if (!this.loginService.usuarioLogado) {
       this.router.navigate([`/login`]);
@@ -42,6 +48,7 @@ export class ProjetoComponent implements OnInit{
     this.setContent();
   }
 
+  
   projectForm = new FormGroup({
     id: new FormControl(this.projeto?.id ?? ''),
     nome: new FormControl(this.projeto?.nome ?? ''),
@@ -55,46 +62,62 @@ export class ProjetoComponent implements OnInit{
   });
 
   // FormControl pra poder acessar o valor digitado no input
-  id: FormControl = new FormControl();
-  nome: FormControl = new FormControl();
-  status: FormControl = new FormControl();
-  tipo: FormControl = new FormControl();
-  objetivoGeral: FormControl = new FormControl();
-  objetivosEspecificos: FormControl = new FormControl();
-  orientador: FormControl = new FormControl();
-  alunos: FormControl = new FormControl();
-  monitores: FormControl = new FormControl();
-  curso: FormControl = new FormControl();
 
-  // Seção de formulário como já definido...
 
-  salvar() { }
-  cancelar() { }
-  criarAtividade() { }
-  setContent () {
-    this.id.setValue(this.projeto?.id);
-    this.nome.setValue(this.projeto?.nome);
-    this.status.setValue(this.projeto?.status);
-    this.tipo.setValue(this.projeto?.tipo);
-    this.objetivoGeral.setValue(this.projeto?.objetivoGeral);
-    this.objetivosEspecificos.setValue(this.projeto?.objetivosEspecificos);
-    this.orientador.setValue(this.projeto?.orientador);
-    this.alunos.setValue(this.projeto?.alunos);
-    this.monitores.setValue(this.projeto?.monitores);
-  }
 
-  instanciarProjeto(){
+
+
+    instanciarProjeto() {
+      this.idParam = +this.route.snapshot.params['id'];
+
       this.projetoService.buscarProjetoPorId(this.idParam).subscribe(
         (res: Projeto) => {
           this.projeto = res;
           this.toastr.success(res.nome);
+          console.log("Projeto instanciado com sucesso", res);
+
+          // Criar FormGroup e definir FormControl após obter os dados do projeto
+          this.projectForm = new FormGroup({
+            id: new FormControl(this.projeto?.id ?? ''),
+            nome: new FormControl(this.projeto?.nome ?? ''),
+            status: new FormControl(this.projeto?.status ?? ''),
+            tipo: new FormControl(this.projeto?.tipo ?? ''),
+            objetivoGeral: new FormControl(this.projeto?.objetivoGeral ?? ''),
+            objetivosEspecificos: new FormControl(this.projeto?.objetivosEspecificos ?? ''),
+            orientador: new FormControl(this.projeto?.orientador ?? ''),
+            alunos: new FormControl(this.projeto?.alunos ?? ''),
+            monitores: new FormControl(this.projeto?.monitores ?? '')
+          });
+
+          // Definir os valores dos FormControl após criar o FormGroup
+          this.setContent();
         },
         (err) => {
           console.log("Erro ao instanciar projeto", err);
           this.toastr.error("Erro ao instanciar projeto");
         }
       );
-  }
+    }
+
+    setContent() {
+      // Definir os valores dos FormControl após criar o FormGroup
+      this.projectForm.patchValue({
+        id: this.projeto?.id,
+        nome: this.projeto?.nome,
+        status: this.projeto?.status,
+        tipo: this.projeto?.tipo,
+        objetivoGeral: this.projeto?.objetivoGeral,
+        objetivosEspecificos: this.projeto?.objetivosEspecificos,
+        orientador: this.projeto?.orientador,
+        alunos: this.projeto?.alunos,
+        monitores: this.projeto?.monitores,
+       // alunos: this.projeto.alunos!.map((aluno: Aluno) => aluno.id)
+
+      });
+    }
+  salvar() { }
+  cancelar() { }
+  criarAtividade() { }
 }
 
 

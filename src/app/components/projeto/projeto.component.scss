@@ -58,10 +58,23 @@ mat-card, mat-card-content{
 
 .form-inside-right {
 	display: flex;
-	flex-direction: row;
-	&>*:nth-child(2) {
-		margin-left: 15px;
+	justify-content: space-between;
+	&>*{
+		flex:1;
+		margin-right: 15px;
+
+		&:nth-child(2){
+			margin-right: 0px;
+		}
 	}
+	@media(max-width: 300px) {
+		flex-direction: column;
+		&>*{
+			margin-right: 0px;
+			margin-bottom: 15px;
+		}
+	}
+
 
 }
 mat-card-title{

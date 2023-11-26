@@ -2,6 +2,7 @@ import { Graduacao } from "./graduacao.model";
 import { Usuario } from "./usuario.model";
 
 export class Aluno extends Usuario {
+  [x: string]: any;
   public grr: string = "";
   public graduacao!: Graduacao;
 
