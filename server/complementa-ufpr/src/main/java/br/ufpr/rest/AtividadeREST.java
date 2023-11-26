@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufpr.dto.AtividadeDTO;
 import br.ufpr.dto.AtividadeSimplesDTO;
 import br.ufpr.model.Atividade;
+import br.ufpr.model.Projeto;
 import br.ufpr.repository.AtividadeRepository;
+import br.ufpr.repository.ProjetoRepository;
 
 @CrossOrigin
 @RestController
@@ -30,6 +32,9 @@ public class AtividadeREST {
 
 	@Autowired
 	private AtividadeRepository repo;
+	
+	@Autowired
+	private ProjetoRepository repoProj;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -39,6 +44,22 @@ public class AtividadeREST {
 
 		List<Atividade> lista = repo.findAll();
 
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
+
+	}
+	
+	@GetMapping("/projetos/{id}")
+	public ResponseEntity<List<AtividadeSimplesDTO>> obterTodasAtividadesPeloProjeto(@PathVariable("id") long id) {
+		
+		Optional<Projeto> proj = repoProj.findById(id); 
+		if(proj.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		List<Atividade> lista = repo.findAllByProjeto(proj.get());
 		if (lista.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
