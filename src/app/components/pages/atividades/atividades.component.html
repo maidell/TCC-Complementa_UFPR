@@ -9,7 +9,7 @@
 			<ng-container *ngIf="atividades.length > 0; else noActivities">
 				<app-rect-card *ngFor="let atividade of atividades" [nome]="atividade.nome" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel"
-					[firstValue]="formatarData(atividade.dataCriacao)"
+					[firstValue]="atividade.dataCriacao"
 					[secondLabel]="dataLimiteCandidaturaLabel"
 					[secondValue]="atividade.dataLimiteCandidatura"
 					[thirdLabel]="dataConclusaoLabel"

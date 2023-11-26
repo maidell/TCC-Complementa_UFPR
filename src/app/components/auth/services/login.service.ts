@@ -44,6 +44,7 @@ export class LoginService {
     localStorage.removeItem(LS_CHAVE);
     localStorage.removeItem(LS_TOKEN_CHAVE);
     this.httpClient.post<ApiResponseLogin>(this.BASE_URL + '/logout', this.httpOptions).subscribe();
+    window.location.reload();
   }
 
   login(login: Login): Observable<Usuario> {

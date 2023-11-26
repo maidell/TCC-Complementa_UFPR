@@ -19,8 +19,12 @@ export class AtividadeService {
 
   constructor(private httpClient: HttpClient) { }
 
-  listarTodosAtividades(): Observable<Atividade[]> {
+  listarTodasAtividades(): Observable<Atividade[]> {
     return this.httpClient.get<Atividade[]>(this.BASE_URL + 'atividades/', this.httpOptions);
+  }
+
+  listarTodasAtividadesDeProjeto(id: number): Observable<Atividade[]> {
+    return this.httpClient.get<Atividade[]>(this.BASE_URL + 'atividades/projetos/' + id, this.httpOptions);
   }
 
   inserirAtividade(atividade: Atividade): Observable<Atividade> {
