@@ -1,7 +1,7 @@
 require("dotenv-safe").config();
 const cors = require("cors");
 const jwt = require('jsonwebtoken');
-var http = require('http');
+var https = require('https');
 const express = require('express')
 const httpProxy = require('express-http-proxy')
 var cookieParser = require('cookie-parser');
@@ -10,6 +10,7 @@ const helmet = require('helmet');
 
 //Configuração da porta
 const PORT = process.env.PORT;
+const API_HOST = 'https://complementa-ufpr-f6abf4461f5d.herokuapp.com'
 const app = express();
 
 app.use(cors());
@@ -19,7 +20,7 @@ app.use(bodyParser.json());
 app.use(helmet());
 app.use(cookieParser());
 
-const servicesProxy = httpProxy('http://localhost:5000');
+const servicesProxy = httpProxy(API_HOST);
 
 function verifyJWT(req, res, next) {
 
@@ -37,7 +38,7 @@ function verifyJWT(req, res, next) {
   });
 }
 
-const authServiceProxy = httpProxy('http://localhost:5000', {
+const authServiceProxy = httpProxy(API_HOST, {
 
   proxyReqBodyDecorator: function (bodyContent, srcReq) {
     try {
@@ -70,20 +71,12 @@ const authServiceProxy = httpProxy('http://localhost:5000', {
         const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
           expiresIn: "2 days",
         });
-        let objRet = {
-          id: objBody.id,
-          nome: objBody.nome,
-          email: objBody.email,
-          telefone: objBody.telefone,
-          papel: objBody.papel
-        };
-        console.log(objRet.email);
-        return (
-          userRes
-            .status(200)
-            // .json({ auth: true, token: token, data: objBody });
-            .json({ auth: true, token: token, data: objRet })
-        );
+  
+        const filteredData = filterCircularProperties(objBody);
+  
+        return userRes
+          .status(200)
+          .json({ auth: true, token: token, data: filteredData });
       } else {
         return userRes.status(401).json({ message: "Login inválido!" });
       }
@@ -94,36 +87,56 @@ const authServiceProxy = httpProxy('http://localhost:5000', {
   }
 });
 
+function filterCircularProperties(obj) {
+  const seen = new WeakSet();
+
+  function filter(obj) {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key) && typeof obj[key] === 'object' && obj[key] !== null) {
+        if (seen.has(obj[key])) {
+          delete obj[key];
+        } else {
+          seen.add(obj[key]);
+          filter(obj[key]);
+        }
+      }
+    }
+  }
+
+  filter(obj);
+  return obj;
+}
+
 //===============================================================================================================================
 console.log(`Iniciando configurações de rotas`)
 //===============================================================================================================================
 console.log(`Configurando rotas de Aluno`)
 
 app.post('/alunos', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/alunos para http://localhost:5000/alunos`);
+  console.log(`Roteando POST de http://localhost:${PORT}/alunos para ${API_HOST}/alunos`);
   servicesProxy(req, res, next);
 })
 
 app.get('/alunos/:id', verifyJWT, (req, res, next) => {
   const alunoId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/alunos/${alunoId} para http://localhost:5000/alunos/${alunoId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/alunos/${alunoId} para ${API_HOST}/alunos/${alunoId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/alunos', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/alunos para http://localhost:5000/alunos`);
+  console.log(`Roteando GET de http://localhost:${PORT}/alunos para ${API_HOST}/alunos`);
   servicesProxy(req, res, next);
 })
 
 app.put('/alunos/:id', verifyJWT, (req, res, next) => {
   const alunoId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/alunos/${alunoId} para http://localhost:5000/alunos/${alunoId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/alunos/${alunoId} para ${API_HOST}/alunos/${alunoId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/alunos/:id', verifyJWT, (req, res, next) => {
   const alunoId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/alunos/${alunoId} para http://localhost:5000/alunos/${alunoId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/alunos/${alunoId} para ${API_HOST}/alunos/${alunoId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
@@ -131,201 +144,201 @@ console.log(`Configurando rotas de Anexo`)
 
 app.post('/anexos/atividades/upload/:atividadeId', verifyJWT, (req, res, next) => {
   const atividadeId = req.params.id;
-  console.log(`Roteando POST de http://localhost:${PORT}/anexos/atividades/upload/${atividadeId} para http://localhost:5000/anexos/atividades/upload/${atividadeId}`);
+  console.log(`Roteando POST de http://localhost:${PORT}/anexos/atividades/upload/${atividadeId} para ${API_HOST}/anexos/atividades/upload/${atividadeId}`);
   servicesProxy(req, res, next);
 })
 
 app.post('/anexos/relatorios/upload/:relatorioId', verifyJWT, (req, res, next) => {
   const relatorioId = req.params.id;
-  console.log(`Roteando POST de http://localhost:${PORT}/anexos/relatorios/upload/${relatorioId} para http://localhost:5000/anexos/relatorios/upload/${relatorioId}`);
+  console.log(`Roteando POST de http://localhost:${PORT}/anexos/relatorios/upload/${relatorioId} para ${API_HOST}/anexos/relatorios/upload/${relatorioId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/anexos/download/:id', verifyJWT, (req, res, next) => {
   const anexoId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/anexos/download/${anexoId} para http://localhost:5000/anexos/download/${anexoId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/anexos/download/${anexoId} para ${API_HOST}/anexos/download/${anexoId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/anexos/:id', verifyJWT, (req, res, next) => {
   const anexoId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/anexos/${anexoId} para http://localhost:5000/anexos/${anexoId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/anexos/${anexoId} para ${API_HOST}/anexos/${anexoId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/anexos/:id', verifyJWT, (req, res, next) => {
   const anexoId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/anexos/${anexoId} para http://localhost:5000/anexos/${anexoId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/anexos/${anexoId} para ${API_HOST}/anexos/${anexoId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Atividade`)
 
 app.post('/atividades', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/atividades para http://localhost:5000/atividades`);
+  console.log(`Roteando POST de http://localhost:${PORT}/atividades para ${API_HOST}/atividades`);
   servicesProxy(req, res, next);
 })
 
 app.get('/atividades/:id', verifyJWT, (req, res, next) => {
   const atividadeId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/atividades/${atividadeId} para http://localhost:5000/atividades/${atividadeId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/${atividadeId} para ${API_HOST}/atividades/${atividadeId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/atividades/projetos/:id', verifyJWT, (req, res, next) => {
   const projetoId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/atividades/projetos/${projetoId} para http://localhost:5000/atividades/projetos/${projetoId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/projetos/${projetoId} para ${API_HOST}/atividades/projetos/${projetoId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/atividades', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/atividades para http://localhost:5000/atividades`);
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades para ${API_HOST}/atividades`);
   servicesProxy(req, res, next);
 })
 
 app.put('/atividades/:id', verifyJWT, (req, res, next) => {
   const atividadeId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/atividades/${atividadeId} para http://localhost:5000/atividades/${atividadeId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/atividades/${atividadeId} para ${API_HOST}/atividades/${atividadeId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/atividades/:id', verifyJWT, (req, res, next) => {
   const atividadeId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/atividades/${atividadeId} para http://localhost:5000/atividades/${atividadeId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/atividades/${atividadeId} para ${API_HOST}/atividades/${atividadeId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Autenticação`)
 
 app.post('/authPassword', (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/authPassword para http://localhost:5000/authPassword`);
+  console.log(`Roteando POST de http://localhost:${PORT}/authPassword para ${API_HOST}/authPassword`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Autocadastro`)
 
 app.post('/autocadastro', (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/autocadastro para http://localhost:5000/autocadastro`);
+  console.log(`Roteando POST de http://localhost:${PORT}/autocadastro para ${API_HOST}/autocadastro`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Certificado`)
 
 app.post('/certificados', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/certificados para http://localhost:5000/certificados`);
+  console.log(`Roteando POST de http://localhost:${PORT}/certificados para ${API_HOST}/certificados`);
   servicesProxy(req, res, next);
 })
 
 app.get('/certificados/:id', verifyJWT, (req, res, next) => {
   const certificadoId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/certificados/${certificadoId} para http://localhost:5000/certificados/${certificadoId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/certificados/${certificadoId} para ${API_HOST}/certificados/${certificadoId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/certificados', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/certificados para http://localhost:5000/certificados`);
+  console.log(`Roteando GET de http://localhost:${PORT}/certificados para ${API_HOST}/certificados`);
   servicesProxy(req, res, next);
 })
 
 app.put('/certificados/:id', verifyJWT, (req, res, next) => {
   const certificadoId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/certificados/${certificadoId} para http://localhost:5000/certificados/${certificadoId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/certificados/${certificadoId} para ${API_HOST}/certificados/${certificadoId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/certificados/:id', verifyJWT, (req, res, next) => {
   const certificadoId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/certificados/${certificadoId} para http://localhost:5000/certificados/${certificadoId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/certificados/${certificadoId} para ${API_HOST}/certificados/${certificadoId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Comentario`)
 
 app.post('/comentarios', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/comentarios para http://localhost:5000/comentarios`);
+  console.log(`Roteando POST de http://localhost:${PORT}/comentarios para ${API_HOST}/comentarios`);
   servicesProxy(req, res, next);
 })
 
 app.get('/comentarios/:id', verifyJWT, (req, res, next) => {
   const comentarioId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/comentarios/${comentarioId} para http://localhost:5000/comentarios/${comentarioId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/comentarios/${comentarioId} para ${API_HOST}/comentarios/${comentarioId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/comentarios', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/comentarios para http://localhost:5000/comentarios`);
+  console.log(`Roteando GET de http://localhost:${PORT}/comentarios para ${API_HOST}/comentarios`);
   servicesProxy(req, res, next);
 })
 
 app.put('/comentarios/:id', verifyJWT, (req, res, next) => {
   const comentarioId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/comentarios/${comentarioId} para http://localhost:5000/comentarios/${comentarioId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/comentarios/${comentarioId} para ${API_HOST}/comentarios/${comentarioId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/comentarios/:id', verifyJWT, (req, res, next) => {
   const comentarioId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/comentarios/${comentarioId} para http://localhost:5000/comentarios/${comentarioId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/comentarios/${comentarioId} para ${API_HOST}/comentarios/${comentarioId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Competencia`)
 
 app.post('/competencias', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/competencias para http://localhost:5000/competencias`);
+  console.log(`Roteando POST de http://localhost:${PORT}/competencias para ${API_HOST}/competencias`);
   servicesProxy(req, res, next);
 })
 
 app.get('/competencias/:id', verifyJWT, (req, res, next) => {
   const competenciaId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/competencias/${competenciaId} para http://localhost:5000/competencias/${competenciaId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/competencias/${competenciaId} para ${API_HOST}/competencias/${competenciaId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/competencias', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/competencias para http://localhost:5000/competencias`);
+  console.log(`Roteando GET de http://localhost:${PORT}/competencias para ${API_HOST}/competencias`);
   servicesProxy(req, res, next);
 })
 
 app.put('/competencias/:id', verifyJWT, (req, res, next) => {
   const competenciaId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/competencias/${competenciaId} para http://localhost:5000/competencias/${competenciaId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/competencias/${competenciaId} para ${API_HOST}/competencias/${competenciaId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/competencias/:id', verifyJWT, (req, res, next) => {
   const competenciaId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/competencias/${competenciaId} para http://localhost:5000/competencias/${competenciaId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/competencias/${competenciaId} para ${API_HOST}/competencias/${competenciaId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Complexidade`)
 
 app.post('/complexidades', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/complexidades para http://localhost:5000/complexidades`);
+  console.log(`Roteando POST de http://localhost:${PORT}/complexidades para ${API_HOST}/complexidades`);
   servicesProxy(req, res, next);
 })
 
 app.get('/complexidades/:id', verifyJWT, (req, res, next) => {
   const complexidadeId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/complexidades/${complexidadeId} para http://localhost:5000/complexidades/${complexidadeId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/complexidades/${complexidadeId} para ${API_HOST}/complexidades/${complexidadeId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/complexidades', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/complexidades para http://localhost:5000/complexidades`);
+  console.log(`Roteando GET de http://localhost:${PORT}/complexidades para ${API_HOST}/complexidades`);
   servicesProxy(req, res, next);
 })
 
 app.put('/complexidades/:id', verifyJWT, (req, res, next) => {
   const complexidadeId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/complexidades/${complexidadeId} para http://localhost:5000/complexidades/${complexidadeId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/complexidades/${complexidadeId} para ${API_HOST}/complexidades/${complexidadeId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/complexidades/:id', verifyJWT, (req, res, next) => {
   const complexidadeId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/complexidades/${complexidadeId} para http://localhost:5000/complexidades/${complexidadeId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/complexidades/${complexidadeId} para ${API_HOST}/complexidades/${complexidadeId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
@@ -333,264 +346,264 @@ console.log(`Configurando rotas de Confirmacao`)
 
 app.get('/confirmacao/:email', (req, res, next) => {
   const email = req.params.email;
-  console.log(`Roteando PUT de http://localhost:${PORT}/confirmacao/${email} para http://localhost:5000/confirmacao/${email}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/confirmacao/${email} para ${API_HOST}/confirmacao/${email}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de ContestacaoCargaHoraria`)
 
 app.post('/contestacoes-carga-horaria', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/contestacoes-carga-horaria para http://localhost:5000/contestacoes-carga-horaria`);
+  console.log(`Roteando POST de http://localhost:${PORT}/contestacoes-carga-horaria para ${API_HOST}/contestacoes-carga-horaria`);
   servicesProxy(req, res, next);
 })
 
 app.get('/contestacoes-carga-horaria/:id', verifyJWT, (req, res, next) => {
   const contestacaoCargaHorariaId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes-carga-horaria/${contestacaoCargaHorariaId} para http://localhost:5000/contestacoes-carga-horaria/${contestacaoCargaHorariaId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes-carga-horaria/${contestacaoCargaHorariaId} para ${API_HOST}/contestacoes-carga-horaria/${contestacaoCargaHorariaId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/contestacoes-carga-horaria', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes-carga-horaria para http://localhost:5000/contestacoes-carga-horaria`);
+  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes-carga-horaria para ${API_HOST}/contestacoes-carga-horaria`);
   servicesProxy(req, res, next);
 })
 
 app.put('/contestacoes-carga-horaria/:id', verifyJWT, (req, res, next) => {
   const contestacaoCargaHorariaId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/contestacoes-carga-horaria/${contestacaoCargaHorariaId} para http://localhost:5000/contestacoes-carga-horaria/${contestacaoCargaHorariaId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/contestacoes-carga-horaria/${contestacaoCargaHorariaId} para ${API_HOST}/contestacoes-carga-horaria/${contestacaoCargaHorariaId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/contestacoes-carga-horaria/:id', verifyJWT, (req, res, next) => {
   const contestacaoCargaHorariaId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/contestacoes-carga-horaria/${contestacaoCargaHorariaId} para http://localhost:5000/contestacoes-carga-horaria/${contestacaoCargaHorariaId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/contestacoes-carga-horaria/${contestacaoCargaHorariaId} para ${API_HOST}/contestacoes-carga-horaria/${contestacaoCargaHorariaId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Contestacao`)
 
 app.post('/contestacoes', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/contestacoes para http://localhost:5000/contestacoes`);
+  console.log(`Roteando POST de http://localhost:${PORT}/contestacoes para ${API_HOST}/contestacoes`);
   servicesProxy(req, res, next);
 })
 
 app.get('/contestacoes/:id', verifyJWT, (req, res, next) => {
   const contestacaoId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes/${contestacaoId} para http://localhost:5000/contestacoes/${contestacaoId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes/${contestacaoId} para ${API_HOST}/contestacoes/${contestacaoId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/contestacoes', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes para http://localhost:5000/contestacoes`);
+  console.log(`Roteando GET de http://localhost:${PORT}/contestacoes para ${API_HOST}/contestacoes`);
   servicesProxy(req, res, next);
 })
 
 app.put('/contestacoes/:id', verifyJWT, (req, res, next) => {
   const contestacaoId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/contestacoes/${contestacaoId} para http://localhost:5000/contestacoes/${contestacaoId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/contestacoes/${contestacaoId} para ${API_HOST}/contestacoes/${contestacaoId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/contestacoes/:id', verifyJWT, (req, res, next) => {
   const contestacaoId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/contestacoes/${contestacaoId} para http://localhost:5000/contestacoes/${contestacaoId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/contestacoes/${contestacaoId} para ${API_HOST}/contestacoes/${contestacaoId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Graduacao`)
 
 app.post('/graduacoes', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+  console.log(`Roteando POST de http://localhost:${PORT}/graduacoes para ${API_HOST}/graduacoes`);
   servicesProxy(req, res, next);
 })
 
 app.get('/graduacoes/autocadastro', (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/graduacoes/autocadastro para http://localhost:5000/graduacoes/autocadastro`);
+  console.log(`Roteando GET de http://localhost:${PORT}/graduacoes/autocadastro para ${API_HOST}/graduacoes/autocadastro`);
   servicesProxy(req, res, next);
 })
 
 app.get('/graduacoes', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+  console.log(`Roteando GET de http://localhost:${PORT}/graduacoes para ${API_HOST}/graduacoes`);
   servicesProxy(req, res, next);
 })
 
 app.get('/graduacoes/:id', verifyJWT, (req, res, next) => {
     const graduacaoId = req.params.id;
     console.log(graduacaoId);
-    console.log(`Roteando GET de http://localhost:${PORT}/graduacoes/${graduacaoId} para http://localhost:5000/graduacoes/${graduacaoId}`);
+    console.log(`Roteando GET de http://localhost:${PORT}/graduacoes/${graduacaoId} para ${API_HOST}/graduacoes/${graduacaoId}`);
     servicesProxy(req, res, next);
   })
 
 app.put('/graduacoes/:id', verifyJWT, (req, res, next) => {
   const graduacaoId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/graduacoes/${graduacaoId} para http://localhost:5000/graduacoes/${graduacaoId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/graduacoes/${graduacaoId} para ${API_HOST}/graduacoes/${graduacaoId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/graduacoes', verifyJWT, (req, res, next) => {
-  console.log(`Roteando DELETE de http://localhost:${PORT}/graduacoes para http://localhost:5000/graduacoes`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/graduacoes para ${API_HOST}/graduacoes`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Login`)
 
 app.post('/login', (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/login para http://localhost:5000/login`);
+  console.log(`Roteando POST de http://localhost:${PORT}/login para ${API_HOST}/login`);
   authServiceProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Logout`)
 
 app.post('/logout', function (req, res) {
-  console.log(`Roteando POST de http://localhost:${PORT}/logout para http://localhost:5000/logout`);
+  console.log(`Roteando POST de http://localhost:${PORT}/logout para ${API_HOST}/logout`);
   res.json({ auth: false, token: null });
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Orientador`)
 
 app.post('/orientadores', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/orientadores para http://localhost:5000/orientadores`);
+  console.log(`Roteando POST de http://localhost:${PORT}/orientadores para ${API_HOST}/orientadores`);
   servicesProxy(req, res, next);
 })
 
 app.get('/orientadores/:id', verifyJWT, (req, res, next) => {
   const orientadorId = req.params.id;
   console.log(orientadorId);
-  console.log(`Roteando GET de http://localhost:${PORT}/orientadores/${orientadorId} para http://localhost:5000/orientadores/${orientadorId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/orientadores/${orientadorId} para ${API_HOST}/orientadores/${orientadorId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/orientadores', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/orientadores para http://localhost:5000/orientadores`);
+  console.log(`Roteando GET de http://localhost:${PORT}/orientadores para ${API_HOST}/orientadores`);
   servicesProxy(req, res, next);
 })
 
 app.put('/orientadores/:id', verifyJWT, (req, res, next) => {
   const orientadorId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/orientadores/${orientadorId} para http://localhost:5000/orientadores/${orientadorId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/orientadores/${orientadorId} para ${API_HOST}/orientadores/${orientadorId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/orientadores', verifyJWT, (req, res, next) => {
-  console.log(`Roteando DELETE de http://localhost:${PORT}/orientadores para http://localhost:5000/orientadores`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/orientadores para ${API_HOST}/orientadores`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Projeto`)
 
 app.post('/projetos', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/projetos para http://localhost:5000/projetos`);
+  console.log(`Roteando POST de http://localhost:${PORT}/projetos para ${API_HOST}/projetos`);
   servicesProxy(req, res, next);
 })
 
 app.get('/projetos/:id', verifyJWT, (req, res, next) => {
   const projetoId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/projetos/${projetoId} para http://localhost:5000/projetos/${projetoId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/projetos/${projetoId} para ${API_HOST}/projetos/${projetoId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/projetos', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/projetos para http://localhost:5000/projetos`);
+  console.log(`Roteando GET de http://localhost:${PORT}/projetos para ${API_HOST}/projetos`);
   servicesProxy(req, res, next);
 })
 
 app.put('/projetos/:id', verifyJWT, (req, res, next) => {
   const projetoId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/projetos/${projetoId} para http://localhost:5000/projetos/${projetoId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/projetos/${projetoId} para ${API_HOST}/projetos/${projetoId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/projetos/:id', verifyJWT, (req, res, next) => {
   const projetoId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/projetos/${projetoId} para http://localhost:5000/projetos/${projetoId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/projetos/${projetoId} para ${API_HOST}/projetos/${projetoId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de RelatorioDeConclusao`)
 
 app.post('/relatorios-de-conclusao', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/relatorios-de-conclusao para http://localhost:5000/relatorios-de-conclusao`);
+  console.log(`Roteando POST de http://localhost:${PORT}/relatorios-de-conclusao para ${API_HOST}/relatorios-de-conclusao`);
   servicesProxy(req, res, next);
 })
 
 app.get('/relatorios-de-conclusao/:id', verifyJWT, (req, res, next) => {
   const relatorioId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/relatorios-de-conclusao/${relatorioId} para http://localhost:5000/relatorios-de-conclusao/${relatorioId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/relatorios-de-conclusao/${relatorioId} para ${API_HOST}/relatorios-de-conclusao/${relatorioId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/relatorios-de-conclusao', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/relatorios-de-conclusao para http://localhost:5000/relatorios-de-conclusao`);
+  console.log(`Roteando GET de http://localhost:${PORT}/relatorios-de-conclusao para ${API_HOST}/relatorios-de-conclusao`);
   servicesProxy(req, res, next);
 })
 
 app.put('/relatorios-de-conclusao/:id', verifyJWT, (req, res, next) => {
   const relatorioId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/relatorios-de-conclusao/${relatorioId} para http://localhost:5000/relatorios-de-conclusao/${relatorioId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/relatorios-de-conclusao/${relatorioId} para ${API_HOST}/relatorios-de-conclusao/${relatorioId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/relatorios-de-conclusao/:id', verifyJWT, (req, res, next) => {
   const relatorioId = req.params.id;
-  console.log(`Roteando DELETE de http://localhost:${PORT}/relatorios-de-conclusao/${relatorioId} para http://localhost:5000/relatorios-de-conclusao/${relatorioId}`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/relatorios-de-conclusao/${relatorioId} para ${API_HOST}/relatorios-de-conclusao/${relatorioId}`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Servidor`)
 
 app.post('/servidores', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/servidores para http://localhost:5000/servidores`);
+  console.log(`Roteando POST de http://localhost:${PORT}/servidores para ${API_HOST}/servidores`);
   servicesProxy(req, res, next);
 })
 
 app.get('/servidores/:id', verifyJWT, (req, res, next) => {
   const servidorId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/servidores/${servidorId} para http://localhost:5000/servidores/${servidorId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/servidores/${servidorId} para ${API_HOST}/servidores/${servidorId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/servidores', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/servidores para http://localhost:5000/servidores`);
+  console.log(`Roteando GET de http://localhost:${PORT}/servidores para ${API_HOST}/servidores`);
   servicesProxy(req, res, next);
 })
 
 app.put('/servidores/:id', verifyJWT, (req, res, next) => {
   const servidorId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/servidores/${servidorId} para http://localhost:5000/servidores/${servidorId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/servidores/${servidorId} para ${API_HOST}/servidores/${servidorId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/servidores', verifyJWT, (req, res, next) => {
-  console.log(`Roteando DELETE de http://localhost:${PORT}/servidores para http://localhost:5000/servidores`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/servidores para ${API_HOST}/servidores`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================
 console.log(`Configurando rotas de Usuario`)
 
 app.post('/usuarios', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/usuarios para http://localhost:5000/usuarios`);
+  console.log(`Roteando POST de http://localhost:${PORT}/usuarios para ${API_HOST}/usuarios`);
   servicesProxy(req, res, next);
 })
 
 app.get('/usuarios/:id', verifyJWT, (req, res, next) => {
   const usuarioId = req.params.id;
-  console.log(`Roteando GET de http://localhost:${PORT}/usuarios/${usuarioId} para http://localhost:5000/usuarios/${usuarioId}`);
+  console.log(`Roteando GET de http://localhost:${PORT}/usuarios/${usuarioId} para ${API_HOST}/usuarios/${usuarioId}`);
   servicesProxy(req, res, next);
 })
 
 app.get('/usuarios', verifyJWT, (req, res, next) => {
-  console.log(`Roteando GET de http://localhost:${PORT}/usuarios para http://localhost:5000/usuarios`);
+  console.log(`Roteando GET de http://localhost:${PORT}/usuarios para ${API_HOST}/usuarios`);
   servicesProxy(req, res, next);
 })
 
 app.put('/usuarios/:id', verifyJWT, (req, res, next) => {
   const usuarioId = req.params.id;
-  console.log(`Roteando PUT de http://localhost:${PORT}/usuarios/${usuarioId} para http://localhost:5000/usuarios/${usuarioId}`);
+  console.log(`Roteando PUT de http://localhost:${PORT}/usuarios/${usuarioId} para ${API_HOST}/usuarios/${usuarioId}`);
   servicesProxy(req, res, next);
 })
 
 app.delete('/usuarios', verifyJWT, (req, res, next) => {
-  console.log(`Roteando DELETE de http://localhost:${PORT}/usuarios para http://localhost:5000/usuarios`);
+  console.log(`Roteando DELETE de http://localhost:${PORT}/usuarios para ${API_HOST}/usuarios`);
   servicesProxy(req, res, next);
 })
 //===============================================================================================================================

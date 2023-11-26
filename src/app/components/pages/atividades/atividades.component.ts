@@ -84,7 +84,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   Button: string = "Saiba mais";
 
   instanciarAtividades(): Observable<Atividade[]>{
-    return this.atividadeService.listarTodosAtividades();
+    return this.atividadeService.listarTodasAtividades();
   }
 
   openDialog(atividade: Atividade) {
@@ -108,9 +108,5 @@ export class AtividadesComponent implements OnInit, OnDestroy {
       return "80vw";
     }
   }
-
-
-
-
 
 }

@@ -1,6 +1,7 @@
 package br.ufpr.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -39,6 +40,9 @@ public class Graduacao implements Serializable{
     
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Complexidade> complexidades;
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+	private List<Atividade> atividades = new ArrayList<>();
 
     public Graduacao() {
     }
