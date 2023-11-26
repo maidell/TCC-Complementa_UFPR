@@ -7,6 +7,7 @@ import { Aluno, Atividade, Monitor, Projeto, Usuario } from 'src/app/shared';
 import { LoginService } from '../auth/services/login.service';
 import { ProjetoService } from './services/projeto.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { TitleService } from 'src/app/services/title/title.service';
 
 @Component({
   selector: 'app-projeto',
@@ -29,7 +30,8 @@ export class ProjetoComponent implements OnInit{
     private toastr: ToastrService,
     private loginService: LoginService,
     private projetoService: ProjetoService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private title: TitleService
   ) {
 
   }
@@ -46,9 +48,10 @@ export class ProjetoComponent implements OnInit{
     this.idParam = +this.route.snapshot.params['id'];
     this.instanciarProjeto();
     this.setContent();
+    this.title.setTitle("Detalhes do projeto");
+    //seta o titulo do projeto com o nome do projeto
   }
 
-  
   projectForm = new FormGroup({
     id: new FormControl(this.projeto?.id ?? ''),
     nome: new FormControl(this.projeto?.nome ?? ''),
