@@ -807,11 +807,13 @@ export class AtividadeComponent implements OnInit{
 
   instanciarAtividade(id: number | undefined) {
     if (id === undefined) {
+      this.showErrorToastr("Erro ao instanciar Atividade");
       console.error("Erro ao instanciar Atividade");
     } else {
       this.atividadeService.buscarAtividadePorId(id).subscribe(
         (response: Atividade) => {
           this.atividade = response;
+          this.showSuccessToastr("Atividade completa instanciada")
         },
         (error: any) => {
           this.toastr.error("Erro ao instanciar Atividade");
