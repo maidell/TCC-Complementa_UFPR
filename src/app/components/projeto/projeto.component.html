@@ -1,4 +1,14 @@
 <div class="cardGeral">
+	<div class="lateraldireita">
+		<div class="card-square">
+			<app-square-card [title]="'Lista de alunos nesse projeto'" (buttonCallback)="openDialog()"
+				[description]="''" [buttonText]="'dd'"></app-square-card>
+		</div>
+		<div class="card-square">
+			<app-square-card [title]="'Lista de alunos nesse projeto'" [description]="''"
+				[buttonText]="'dd'"></app-square-card>
+		</div>
+	</div>
 	<div class="formulario-column">
 		<div class="formulario-row">
 			<form [formGroup]="projectForm" class="formula">
@@ -20,20 +30,6 @@
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
-					<mat-form-field>
-						<mat-label>Objetivo Geral</mat-label>
-						<textarea matInput formControlName="objetivoGeral" placeholder="Objetivo Geral"></textarea>
-					</mat-form-field>
-				</div>
-				<div class="form-right">
-					<mat-form-field>
-						<mat-label>Alunos</mat-label>
-						<mat-select formControlName="alunos" multiple>
-							<mat-option *ngFor="let aluno of projeto.alunos" [value]="aluno.id">
-								{{aluno.nome}} - GRR{{ aluno.grr }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
 					<div class="form-inside-right">
 						<mat-form-field>
 							<mat-label>Orientador</mat-label>
@@ -46,9 +42,24 @@
 						</mat-form-field>
 					</div>
 
+				</div>
+				<div class="form-right">
+					<!-- <mat-form-field>
+						<mat-label>Alunos</mat-label>
+						<mat-select formControlName="alunos" multiple>
+							<mat-option *ngFor="let aluno of projeto.alunos" [value]="aluno.id">
+								{{aluno.nome}} - GRR{{ aluno.grr }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field> -->
+					<mat-form-field>
+						<mat-label>Objetivo Geral</mat-label>
+						<input matInput formControlName="objetivoGeral" placeholder="Objetivo Geral">					</mat-form-field>
+
+
 					<mat-form-field>
 						<mat-label>Objetivos Específicos</mat-label>
-						<textarea matInput formControlName="objetivosEspecificos"
+						<textarea rows="4" matInput formControlName="objetivosEspecificos"
 							placeholder="Objetivos Específicos"></textarea>
 					</mat-form-field>
 				</div>
@@ -74,15 +85,6 @@
 	</div>
 
 	<!-- ngIf botoes só aparecem se for na tela de edição do projeto ou criação do projeto -->
-	<div class="lateraldireita">
-		<div class="card-square">
-			<app-square-card [title]="'Lista de alunos nesse projeto'" [description]="''"
-				[buttonText]="'dd'"></app-square-card>
-		</div>
-		<div class="card-square">
-			<app-square-card [title]="'Lista de alunos nesse projeto'" [description]="''"
-				[buttonText]="'dd'"></app-square-card>
-		</div>
-	</div>
+
 
 </div>

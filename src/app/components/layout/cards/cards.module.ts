@@ -50,7 +50,7 @@ import { WarningComponent } from './warning/warning.component';
     CompetenciasDialogComponent,
     GraduacoesTableComponent,
     GraduacoesDialogComponent,
-    WarningComponent
+    WarningComponent,
   ]
 })
 export class CardsModule { }

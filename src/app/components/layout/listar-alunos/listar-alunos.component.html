@@ -1,0 +1,34 @@
+<mat-form-field>
+	<mat-label>Pesquisar aluno</mat-label>
+	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Maria" #input>
+	<mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+	<mat-table [dataSource]="dataSource!" matSort>
+
+		<ng-container *ngFor="let column of columns" matColumnDef="{{column.key}}">
+			<mat-header-cell class="{{display}}" *matHeaderCellDef mat-sort-header> {{column.title}} </mat-header-cell>
+			<mat-cell *matCellDef="let row"> {{row[column.key]}} {{column.suffix}}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="button">
+			<mat-header-cell *matHeaderCellDef mat-sort-header> </mat-header-cell>
+			<mat-cell *matCellDef="let row"> <button (click)="adicionarAoProjeto" mat-raised-button
+					class="button custom-button {{colorButtonOne}}">
+					{{buttonOne}}
+				</button> </mat-cell>
+		</ng-container>
+
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="4">Nenhuma contestação da atividade "{{input.value}}" pesquisada foi
+				encontrada</td>
+		</tr>
+
+		<mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+	</mat-table>
+
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>

@@ -1,0 +1,104 @@
+.close {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+}
+
+.close-button {
+	border: none;
+	background-color: white;
+}
+
+.close-button-icon {
+	color: red;
+	font-weight: bold;
+}
+
+.let-of-cards {
+	display: flex;
+	flex-direction: column;
+	padding: 0 15px;
+}
+
+.title-card,
+.filter {
+	padding: 0 15+24px;
+}
+
+.servidor-class,
+mat-dialog-content {
+	padding-top: 0 !important;
+}
+
+app-rect-card {
+	margin-bottom: 15px !important;
+}
+
+app-warning {
+	width: 50%;
+	display: block;
+	margin: 0 auto;
+}
+
+.custom-button {
+	background: linear-gradient(180deg, #2494D3, #0076D0) !important;
+	color: white !important;
+	border-radius: 20px;
+	margin-left: 15px;
+
+
+}
+
+.custom-button:hover {
+	background: linear-gradient(90deg, #0076D0, #2494D3);
+	color: white;
+}
+
+mat-row:nth-child(even) {
+	background-color: #DCE6EC
+}
+
+mat-row:nth-child(odd) {
+	background-color: #C9D4DB
+}
+
+.mat-column-button {
+	align-items: center;
+	justify-content: flex-end;
+}
+
+mat-form-field {
+	width: 100%;
+
+}
+
+mat-cell {
+	height: 40px
+}
+
+mat-paginator {
+	background: transparent !important;
+}
+
+mat-header-cell {
+	font-weight: 600;
+	color: #333333;
+	font-size: 16px;
+	padding: 10px 16px;
+	text-align: left;
+	border-bottom: 1px solid #E5E5E5;
+}
+
+.table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	color: #E5E5E5
+}
+
+.table-header button {
+	margin-left: 8px;
+	background-color: forestgreen;
+}

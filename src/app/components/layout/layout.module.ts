@@ -9,6 +9,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CardsModule } from './cards/cards.module';
 import { WarningComponent } from './cards/warning/warning.component';
 import { TitleComponent } from './title/title.component';
+import { ListarAlunosComponent } from './listar-alunos/listar-alunos.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { TitleComponent } from './title/title.component';
     UserDetailsComponent,
     NavbarComponent,
     TitleComponent,
+    ListarAlunosComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +31,7 @@ import { TitleComponent } from './title/title.component';
     UserDetailsComponent,
     NavbarComponent,
     TitleComponent,
+    ListarAlunosComponent,
   ]
 })
 export class LayoutModule { }
