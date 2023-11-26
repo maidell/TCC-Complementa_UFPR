@@ -1,27 +1,49 @@
-# ComplementaUfpr
+## Executando o Projeto
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.3.
+### First step: <br>
+Run ```npm install```
 
-## Development server
+### Front-End | Angular
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Para iniciar o servidor Angular, execute o seguinte comando no terminal:
+```ng serve```
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Back-End | SpringBoot
 
-## Build
+Pra iniciar o docker
+```docker ps -a```<br>
+Copia o id do container que tu vai usar<br>
+Rode:
+```docker start <numero copiado>```<br>
+Rode: ```docker ps```
+ pra garantir que deu certo
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+0. Rode o seguinte comando no terminal:<br>
+```sudo docker run -p 5432:5432 --name postgreSQL -e POSTGRES_PASSWORD="postgres" -d postgres postgres```
 
-## Running unit tests
+1. Configure o arquivo `.env` usando o modelo fornecido em `.env.example`. Siga os passos:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+   - Navegue até o caminho: `poc_complementa_ufpr/api-gateway/
+   - Ctrl+c | Ctrl+v do arquivo `.env.example`.
+   - Abra o arquivo `.env` e altere as seguintes variáveis:
 
-## Running end-to-end tests
+     ```
+     ACCESS_TOKEN_SECRET="<coloque qualquer coisa aqui entre aspas duplas>"
+     REFRESH_TOKEN_SECRET="<coloque qualquer coisa aqui entre aspas duplas>"
+     ```
+2. No caminho `poc_complementa_ufpr/server/complementa-ufpr/src/main/java/br/ufpr/`, siga estas etapas:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- Clique com o botão direito do mouse em `ComplementaUfprApplication.java`.
+- Selecione a opção "Run Java" para iniciar o servidor back-end.
+  #### * Se for rodar direto no terminal, seguindo o mesmo caminho é so rodar o comando:
+  ```
+  /usr/bin/env /usr/lib/jvm/java-11-openjdk-amd64/bin/java @/tmp/cp_296p3sivn2c6de6izrvlaf1v2.argfile br.ufpr.ComplementaUfprApplication
+  ```
 
-## Further help
+3. No terminal, dentro da pasta `/api-gateway`, execute o seguinte comando para iniciar o servidor back-end:
+<br>```node gateway.js```<br>
+* Se algo falhar, rode: ```npm install dotenv-safe```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+Se nada der certo chama o Guibor no whatsapp!
