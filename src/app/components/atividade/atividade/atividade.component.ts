@@ -34,8 +34,14 @@ export class AtividadeComponent {
 
 
   atividade = new Atividade();
+  project: Projeto = new Projeto();
+  orientador: Orientador = new Orientador();
+  graduacao: Graduacao = new Graduacao();
   contestacao: ContestacaoCargaHoraria = new ContestacaoCargaHoraria();
   relatorioConclusao: RelatorioDeConclusao = new RelatorioDeConclusao();
+  comentarios: Comentario[] = [];
+  complexidades: Complexidade[] = [];
+  competencias: Competencia[] = [];
 
 
   usuarioSistema: Usuario = new Usuario(undefined, "Admin", undefined, undefined, undefined, undefined);
@@ -85,8 +91,6 @@ export class AtividadeComponent {
   displaySecondLine = '';
   displayDates = '';
 
-  comments: Comentario[] = [];
-
   activityFormWidth = '100%';
   commentsFormWidth = '0';
 
@@ -104,9 +108,6 @@ export class AtividadeComponent {
     submitLimitDate: "",
     contestDate: ""
   };
-
-  exampleComplexities = ['Simples', 'Média', 'Complexa'];
-
 
   commentForm!: FormGroup;
 
@@ -171,9 +172,6 @@ export class AtividadeComponent {
       this.router.navigate([`/login`]);
     }
     this.usuarioLogado = this.loginService.usuarioLogado;
-    if (this.usuarioLogado.papel !== 'ALUNO' && this.usuarioLogado.papel !== 'ADMIN') {
-      this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
-    }
     this.instanciarAtividade(this.atividade.id);
     this.setHeaderContent();
     this.setContent();
@@ -351,7 +349,7 @@ export class AtividadeComponent {
 
         if (this.canUserEdit() && this.atividade.relatorioDeConclusao != null) {
           this.comentarioSistema.mensagem = "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais";
-          this.comments.push();
+          this.comentarios.push();
         }
 
         break;
@@ -797,7 +795,13 @@ export class AtividadeComponent {
   }
 
   atribuirValores(atividade: Atividade){
-    // this.comments = atividade.comentarios;
+    console.log(atividade.comentarios);
+    this.project = atividade.projeto ?? new Projeto;
+    this.orientador = this.project.orientador ?? new Orientador;
+    this.graduacao = this.orientador.graduacao;
+    this.complexidades = this.graduacao.complexidades ?? [];
+    this.competencias = this.graduacao.competencias ?? [];
+    this.comentarios = atividade.comentarios ?? [];
   }
 
   instanciarAtividade(id: number | undefined) {

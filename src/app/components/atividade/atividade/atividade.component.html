@@ -46,13 +46,14 @@
                 <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
                     <mat-form-field class="competences">
                         <mat-label>Competências</mat-label>
-                        <input matInput formControlName="competences" [formControl]="competences">
-
+                        <mat-select [(value)]="atividade.competencia" formControlName="competences" [formControl]="competences">
+                            <mat-option *ngFor="let c of competencias" [value]="c">{{c.nome}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                     <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
-                        <mat-select value={{atividade.complexidade}} formControlName="complexities" [formControl]="complexities">
-                            <mat-option *ngFor="let c of exampleComplexities" [value]="c">{{c}}</mat-option>
+                        <mat-select [(value)]="atividade.complexidade" formControlName="complexities" [formControl]="complexities">
+                            <mat-option *ngFor="let c of complexidades" [value]="c">{{c.nome}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -121,10 +122,10 @@
         </div>
         <div class="comments" [ngStyle]="{'display': displayComments}">
             <div class="comment-panel">
-                <div *ngFor="let c of comments" class="comment">
+                <div *ngFor="let c of comentarios" class="comment">
                     <div class="comment-content">
-                        <!-- <div class="commentor">{{c.name}}</div>
-                        <div class="comment-text">{{c.content}}</div> -->
+                        <div class="commentor">{{c.usuario.nome}}</div>
+                        <div class="comment-text">{{c.mensagem}}</div>
                     </div>
                 </div>
             </div>
