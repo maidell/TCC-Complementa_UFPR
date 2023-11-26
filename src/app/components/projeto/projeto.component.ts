@@ -8,6 +8,7 @@ import { LoginService } from '../auth/services/login.service';
 import { ProjetoService } from './services/projeto.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TitleService } from 'src/app/services/title/title.service';
+import { AtividadeService } from '../atividade/services/atividade.service';
 
 @Component({
   selector: 'app-projeto',
@@ -23,6 +24,8 @@ export class ProjetoComponent implements OnInit{
   monitores: Monitor[] = [];
   tituloAtividade = "biding com nome da atv";
   executor = "biding com nome do executor";
+  atividades: Atividade[] = [];
+  buttonText = "Detalhes";
 
   constructor(
     private router: Router,
@@ -31,7 +34,8 @@ export class ProjetoComponent implements OnInit{
     private loginService: LoginService,
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
-    private title: TitleService
+    private title: TitleService,
+    private atividadeService: AtividadeService
   ) {
 
   }
@@ -49,6 +53,7 @@ export class ProjetoComponent implements OnInit{
     this.instanciarProjeto();
     this.setContent();
     this.title.setTitle("Detalhes do projeto");
+    this.instanciarAtividades();
     //seta o titulo do projeto com o nome do projeto
   }
 
@@ -65,11 +70,6 @@ export class ProjetoComponent implements OnInit{
   });
 
   // FormControl pra poder acessar o valor digitado no input
-
-
-
-
-
     instanciarProjeto() {
       this.idParam = +this.route.snapshot.params['id'];
 
@@ -102,6 +102,24 @@ export class ProjetoComponent implements OnInit{
       );
     }
 
+  instanciarAtividades(): Observable<Atividade[]> {
+    // // usa o toastr pra mostrar que a atividade foi instanciada
+    this.atividadeService.listarTodasAtividadesDeProjeto(this.idParam).subscribe(
+      (res: Atividade[]) => {
+        this.atividades = res;
+        this.toastr.success("Atividades recebidas com sucesso!");
+        console.log("Atividades recebidas com sucesso!", res);
+        return res;
+      },
+      (err) => {
+        this.toastr.error("Erro ao listar atividades");
+        console.log("Erro ao listar atividades", err);
+        return err;
+      }
+    );
+    return new BehaviorSubject<Atividade[]>([]);
+  }
+
     setContent() {
       // Definir os valores dos FormControl após criar o FormGroup
       this.projectForm.patchValue({
@@ -121,6 +139,8 @@ export class ProjetoComponent implements OnInit{
   salvar() { }
   cancelar() { }
   criarAtividade() { }
+  editarAtividade() { }
+  novaAtividade() { }
 }
 
 
