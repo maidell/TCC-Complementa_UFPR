@@ -44,16 +44,39 @@ export class ProjetoComponent implements OnInit {
   openDialog() {
 
     try {
-      this.dialog.open(ListarAlunosComponent, {
-        width: this.dialogWidth(),
+      const dialogRef = this.dialog.open(ListarAlunosComponent, {
+        width: this.getDialogWidth(),
+        data: {
+          projeto: this.projeto
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
       });
     } catch (error) {
       console.error('Erro ao abrir o diálogo:', error);
     }
   }
 
-  dialogWidth(): string {
-    return '60%'; // Por exemplo, definindo uma largura fixa de 500px
+  getDialogWidth(): string {
+    //seta dinamicamente o tamanho do dialog
+    let dialogWidth = '600px';
+    if (window.innerWidth < 600) {
+      dialogWidth = '90vw';
+    }
+    else if (window.innerWidth < 960) {
+      dialogWidth = '80vw';
+    }
+    else if (window.innerWidth < 1280) {
+      dialogWidth = '60vw';
+    }
+    else if (window.innerWidth < 1920) {
+      dialogWidth = '40vw';
+    }
+    else {
+      dialogWidth = '30vw';
+    }
+    return dialogWidth;
   }
 
   usuarioLogado: Usuario = new Usuario();

@@ -26,37 +26,23 @@
 	padding: 0 15+24px;
 }
 
-.servidor-class,
-mat-dialog-content {
-	padding-top: 0 !important;
-}
-
-app-rect-card {
-	margin-bottom: 15px !important;
-}
-
-app-warning {
-	width: 50%;
-	display: block;
-	margin: 0 auto;
-}
 
 .custom-button {
-	background: linear-gradient(180deg, #2494D3, #0076D0) !important;
+	background: linear-gradient(#318b35, #297e42);
 	color: white !important;
 	border-radius: 20px;
-	margin-left: 15px;
-
-
 }
 
 .custom-button:hover {
-	background: linear-gradient(90deg, #0076D0, #2494D3);
+	background: linear-gradient(#318b35, #297e42);
 	color: white;
 }
 
 mat-row:nth-child(even) {
 	background-color: #DCE6EC
+}
+.ng-container-button{
+	width: 100px;
 }
 
 mat-row:nth-child(odd) {
@@ -74,7 +60,37 @@ mat-form-field {
 }
 
 mat-cell {
-	height: 40px
+	//deixa a celula com o tamanho do texto
+	white-space: nowrap;
+
+}
+
+// //segunda celula da linha ocupa 50% da largura
+// mat-cell:nth-child(2) {
+// 	flex: 0 0 50%;
+// }
+// //terceira celula da linha ocupa 35% da largura
+// mat-cell:nth-child(3) {
+// 	flex: 0 0 35%;
+// }
+// //primeira celula da linha ocupa 15% da largura
+// mat-cell:nth-child(1) {
+// 	flex: 0 0 15%;
+// }
+/* Estilizando a célula para posicionar o sufixo */
+.combined-content {
+	display: flex;
+	align-items: center;
+}
+
+/* Estilizando o sufixo para ajustar o espaçamento */
+.suffix {
+	margin-left: 4px;
+	/* Altere conforme necessário para o espaçamento desejado */
+	color: #999;
+	/* Altere a cor conforme necessário */
+	font-style: italic;
+	/* Adicione estilos adicionais conforme desejado */
 }
 
 mat-paginator {
@@ -101,4 +117,18 @@ mat-header-cell {
 .table-header button {
 	margin-left: 8px;
 	background-color: forestgreen;
+}
+
+.custom-buttonTwo {
+	background: linear-gradient(#9A2525, #A32121);
+	color: white !important;
+	border-radius: 20px;
+	margin-left: 15px;
+	width: fit-content;
+	padding: 0;
+	margin: 0;
+}
+.custom-buttonTwo:hover {
+	background: linear-gradient(#9A2525, #A32121);
+	color: white;
 }
