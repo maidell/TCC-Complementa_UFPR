@@ -172,6 +172,12 @@ app.get('/atividades/:id', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+app.get('/atividades/projetos/:id', verifyJWT, (req, res, next) => {
+  const projetoId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/projetos/${projetoId} para http://localhost:5000/atividades/projetos/${projetoId}`);
+  servicesProxy(req, res, next);
+})
+
 app.get('/atividades', verifyJWT, (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/atividades para http://localhost:5000/atividades`);
   servicesProxy(req, res, next);

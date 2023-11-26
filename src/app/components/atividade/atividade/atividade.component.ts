@@ -1,10 +1,9 @@
-import { Component, ElementRef, Input, ViewChild, AfterViewInit, Inject } from '@angular/core';
-import { FormControl, FormControlName, FormGroup } from '@angular/forms';
-import { NgForm, FormBuilder } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { DatePipe, formatDate } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { DownloadService } from '../download.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { jsPDF } from "jspdf";
 import { AtividadeService } from '../services/atividade.service';
@@ -13,18 +12,18 @@ import { ComentarioService } from '../../../services/comentario/services/comenta
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { Anexo } from 'src/app/shared/models/anexo.model';
 import { AnexoService } from '../../../services/anexo/services/anexo.service';
-import { Aluno, Atividade, Certificado, Comentario, Competencia, Complexidade, Contestacao, Coordenador, Graduacao, Monitor, Orientador, Projeto, Servidor, Usuario } from 'src/app/shared';
+import { Atividade, Comentario, Competencia, Complexidade, Graduacao, Orientador, Projeto, Usuario } from 'src/app/shared';
 import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
 import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
 import { Router } from '@angular/router';
-import { inject } from '@angular/core/testing';
+
 
 @Component({
   selector: 'app-atividade',
   templateUrl: './atividade.component.html',
   styleUrls: ['./atividade.component.scss']
 })
-export class AtividadeComponent {
+export class AtividadeComponent implements OnInit{
 
   doc = new jsPDF({
     orientation: "landscape",
@@ -115,24 +114,24 @@ export class AtividadeComponent {
 
   // esse formgroup serve pra ativar e desativar o form de acordo com o estado. precisa ter os formcontrols dentro senão quebra
   activityForm = new FormGroup({
-    description: new FormControl(""),
-    competences: new FormControl(['']),
-    complexities: new FormControl(''),
-    candidatureDate: new FormControl,
-    submitDate: new FormControl,
-    contestDate: new FormControl,
-    disputedHoursValue: new FormControl,
-    proposedHours: new FormControl
+    description: new FormControl(),
+    competences: new FormControl(),
+    complexities: new FormControl(),
+    candidatureDate: new FormControl(),
+    submitDate: new FormControl(),
+    contestDate: new FormControl(),
+    disputedHoursValue: new FormControl(),
+    proposedHours: new FormControl()
   });
 
   // FormControl pra poder acessar o valor digitado no input
-  description: FormControl = new FormControl("");
-  competences: FormControl = new FormControl(['']);
-  complexities: FormControl = new FormControl('');
+  description: FormControl = new FormControl();
+  competences: FormControl = new FormControl();
+  complexities: FormControl = new FormControl()
   candidatureDate: FormControl = new FormControl();
   submitDate: FormControl = new FormControl();
   contestDate: FormControl = new FormControl();
-  uploadFile: FormControl = new FormControl("");
+  uploadFile: FormControl = new FormControl();
 
 
   disputedHoursValue: FormControl = new FormControl("");
@@ -163,7 +162,10 @@ export class AtividadeComponent {
     public anexoService: AnexoService,
     @Inject(MAT_DIALOG_DATA) public data: Atividade
   ) {
-    this.atividade = data ?? new Atividade();
+    if(data){
+      this.instanciarAtividade(data.id);
+    }
+    
   }
 
 
@@ -172,7 +174,6 @@ export class AtividadeComponent {
       this.router.navigate([`/login`]);
     }
     this.usuarioLogado = this.loginService.usuarioLogado;
-    this.instanciarAtividade(this.atividade.id);
     this.setHeaderContent();
     this.setContent();
 
