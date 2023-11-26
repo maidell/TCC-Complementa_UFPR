@@ -6,15 +6,15 @@
     <mat-card-content class="info-container">
         <div class="info-item">
             <div class="label">{{ firstLabel }}</div>
-            <div class="value">{{ firstValue | date:'dd/MM/yyyy' }}</div>
+            <div class="value">{{ firstValue }}</div>
         </div>
         <div class="info-item">
             <div class="label">{{ secondLabel }}</div>
-            <div class="value">{{ secondValue | date:'dd/MM/yyyy' }}</div>
+            <div class="value">{{ secondValue }}</div>
         </div>
         <div class="info-item">
             <div class="label">{{ thirdLabel }}</div>
-            <div class="value">{{ thirdValue | date:'dd/MM/yyyy' }}</div>
+            <div class="value">{{ thirdValue }}</div>
         </div>
         <div *ngIf="showButton">
             <button mat-raised-button class="button custom-button {{buttonColor}}" (click)="onButtonClick()">

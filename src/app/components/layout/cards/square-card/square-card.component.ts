@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-square-card',
@@ -10,7 +10,10 @@ export class SquareCardComponent {
   @Input() description: string = '';
   @Input() imageUrl: string = '';
   @Input() buttonText: string = '';
+  @Output() buttonCallback = new EventEmitter<any>();
   onButtonClick() {
-    alert('Hello');
+
+      this.buttonCallback.emit();
+    
   }
 }

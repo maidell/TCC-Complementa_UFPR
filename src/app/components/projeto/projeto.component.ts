@@ -3,22 +3,31 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Atividade, Projeto, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Graduacao, Monitor, Projeto, Usuario } from 'src/app/shared';
 import { LoginService } from '../auth/services/login.service';
 import { ProjetoService } from './services/projeto.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { TitleService } from 'src/app/services/title/title.service';
+import { AtividadeService } from '../atividade/services/atividade.service';
+import { ServidoresComponent } from '../pages';
+import { ListarAlunosComponent } from '../layout/listar-alunos/listar-alunos.component';
 
 @Component({
   selector: 'app-projeto',
   templateUrl: './projeto.component.html',
   styleUrls: ['./projeto.component.scss']
 })
-export class ProjetoComponent implements OnInit{
+export class ProjetoComponent implements OnInit {
   imgAtv = "assets/plugins/images/atvImg.svg";
   isViewMode = false;
   idParam!: number;
   projeto: Projeto = new Projeto();
+  alunos: Aluno[] = [];
+  monitores: Monitor[] = [];
   tituloAtividade = "biding com nome da atv";
   executor = "biding com nome do executor";
+  atividades: Atividade[] = [];
+  buttonText = "Detalhes";
 
   constructor(
     private router: Router,
@@ -26,12 +35,54 @@ export class ProjetoComponent implements OnInit{
     private toastr: ToastrService,
     private loginService: LoginService,
     private projetoService: ProjetoService,
-    private route: ActivatedRoute
-  ) { 
+    private route: ActivatedRoute,
+    private title: TitleService,
+    private atividadeService: AtividadeService
+  ) {
 
+  }
+  openDialog() {
+
+    try {
+      const dialogRef = this.dialog.open(ListarAlunosComponent, {
+        width: this.getDialogWidth(),
+        data: {
+          projeto: this.projeto
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    } catch (error) {
+      console.error('Erro ao abrir o diálogo:', error);
+    }
+  }
+
+  getDialogWidth(): string {
+    //seta dinamicamente o tamanho do dialog
+    let dialogWidth = '600px';
+    if (window.innerWidth < 600) {
+      dialogWidth = '90vw';
+    }
+    else if (window.innerWidth < 960) {
+      dialogWidth = '80vw';
+    }
+    else if (window.innerWidth < 1280) {
+      dialogWidth = '60vw';
+    }
+    else if (window.innerWidth < 1920) {
+      dialogWidth = '40vw';
+    }
+    else {
+      dialogWidth = '30vw';
+    }
+    return dialogWidth;
   }
 
   usuarioLogado: Usuario = new Usuario();
+  inputValue: string = '';
+
+
   ngOnInit() {
     if (!this.loginService.usuarioLogado) {
       this.router.navigate([`/login`]);
@@ -40,7 +91,11 @@ export class ProjetoComponent implements OnInit{
     this.idParam = +this.route.snapshot.params['id'];
     this.instanciarProjeto();
     this.setContent();
+    this.title.setTitle("Detalhes do projeto");
+    this.instanciarAtividades();
+    //seta o titulo do projeto com o nome do projeto
   }
+
 
   projectForm = new FormGroup({
     id: new FormControl(this.projeto?.id ?? ''),
@@ -55,46 +110,77 @@ export class ProjetoComponent implements OnInit{
   });
 
   // FormControl pra poder acessar o valor digitado no input
-  id: FormControl = new FormControl();
-  nome: FormControl = new FormControl();
-  status: FormControl = new FormControl();
-  tipo: FormControl = new FormControl();
-  objetivoGeral: FormControl = new FormControl();
-  objetivosEspecificos: FormControl = new FormControl();
-  orientador: FormControl = new FormControl();
-  alunos: FormControl = new FormControl();
-  monitores: FormControl = new FormControl();
-  curso: FormControl = new FormControl();
+  instanciarProjeto() {
+    this.idParam = +this.route.snapshot.params['id'];
 
-  // Seção de formulário como já definido...
+    this.projetoService.buscarProjetoPorId(this.idParam).subscribe(
+      (res: Projeto) => {
+        this.projeto = res;
+        this.toastr.success(res.nome);
+        console.log("Projeto instanciado com sucesso", res);
 
+        // Criar FormGroup e definir FormControl após obter os dados do projeto
+        this.projectForm = new FormGroup({
+          id: new FormControl(this.projeto?.id ?? ''),
+          nome: new FormControl(this.projeto?.nome ?? ''),
+          status: new FormControl(this.projeto?.status ?? ''),
+          tipo: new FormControl(this.projeto?.tipo ?? ''),
+          objetivoGeral: new FormControl(this.projeto?.objetivoGeral ?? ''),
+          objetivosEspecificos: new FormControl(this.projeto?.objetivosEspecificos ?? ''),
+          orientador: new FormControl(this.projeto?.orientador ?? ''),
+          alunos: new FormControl(this.projeto?.alunos ?? ''),
+          monitores: new FormControl(this.projeto?.monitores ?? '')
+        });
+
+        // Definir os valores dos FormControl após criar o FormGroup
+        this.setContent();
+      },
+      (err) => {
+        console.log("Erro ao instanciar projeto", err);
+        this.toastr.error("Erro ao instanciar projeto");
+      }
+    );
+  }
+
+  instanciarAtividades(): Observable<Atividade[]> {
+    // // usa o toastr pra mostrar que a atividade foi instanciada
+    this.atividadeService.listarTodasAtividadesDeProjeto(this.idParam).subscribe(
+      (res: Atividade[]) => {
+        this.atividades = res;
+        this.toastr.success("Atividades recebidas com sucesso!");
+        console.log("Atividades recebidas com sucesso!", res);
+        return res;
+      },
+      (err) => {
+        this.toastr.error("Erro ao listar atividades");
+        console.log("Erro ao listar atividades", err);
+        return err;
+      }
+    );
+    return new BehaviorSubject<Atividade[]>([]);
+  }
+
+  setContent() {
+    // Definir os valores dos FormControl após criar o FormGroup
+    this.projectForm.patchValue({
+      id: this.projeto?.id,
+      nome: this.projeto?.nome,
+      status: this.projeto?.status,
+      tipo: this.projeto?.tipo,
+      objetivoGeral: this.projeto?.objetivoGeral,
+      objetivosEspecificos: this.projeto?.objetivosEspecificos,
+      orientador: this.projeto?.orientador,
+      alunos: this.projeto?.alunos,
+      monitores: this.projeto?.monitores,
+      // alunos: this.projeto.alunos!.map((aluno: Aluno) => aluno.id)
+
+    });
+  }
   salvar() { }
   cancelar() { }
   criarAtividade() { }
-  setContent () {
-    this.id.setValue(this.projeto?.id);
-    this.nome.setValue(this.projeto?.nome);
-    this.status.setValue(this.projeto?.status);
-    this.tipo.setValue(this.projeto?.tipo);
-    this.objetivoGeral.setValue(this.projeto?.objetivoGeral);
-    this.objetivosEspecificos.setValue(this.projeto?.objetivosEspecificos);
-    this.orientador.setValue(this.projeto?.orientador);
-    this.alunos.setValue(this.projeto?.alunos);
-    this.monitores.setValue(this.projeto?.monitores);
-  }
-
-  instanciarProjeto(){
-      this.projetoService.buscarProjetoPorId(this.idParam).subscribe(
-        (res: Projeto) => {
-          this.projeto = res;
-          this.toastr.success(res.nome);
-        },
-        (err) => {
-          console.log("Erro ao instanciar projeto", err);
-          this.toastr.error("Erro ao instanciar projeto");
-        }
-      );
-  }
+  editarAtividade() { }
+  novaAtividade() { }
 }
 
 

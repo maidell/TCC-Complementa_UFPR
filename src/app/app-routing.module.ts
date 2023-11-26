@@ -9,6 +9,7 @@ import { CadastroDeUsuariosComponent } from './components/pages/cadastro-de-usua
 import { AtividadeComponent } from './components/atividade/atividade/atividade.component';
 import { DashboardComponent } from './components/pages';
 import { ProjetoComponent } from './components/projeto/projeto.component';
+import { ListarAlunosComponent } from './components/layout/listar-alunos/listar-alunos.component';
 
 const routes: Routes = [
   {

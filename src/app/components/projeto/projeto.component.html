@@ -1,71 +1,90 @@
-<div class="close">
-	<button mat-dialog-close class="close-button"><mat-icon class="close-button-icon">close</mat-icon></button>
-</div>
-
-<mat-card>
-	<mat-card-title class="mat-card-subtitle">Projeto</mat-card-title>
-	<mat-card-content>
-		<!-- formulario com detalhes do projeto -->
-
-		<form [formGroup]="projectForm" class="formulario">
-			<div class="form-left">
-				<mat-form-field>
-					<mat-label>Nome do Projeto</mat-label>
-					<input matInput formControlName="nome" placeholder="Nome do Projeto">
-				</mat-form-field>
-				<!-- <mat-form-field>
+<div class="cardGeral">
+	<div class="lateraldireita">
+		<div class="card-square">
+			<app-square-card [title]="'Lista de alunos nesse projeto'" (buttonCallback)="openDialog()"
+				[description]="''" [buttonText]="'dd'"></app-square-card>
+		</div>
+		<div class="card-square">
+			<app-square-card [title]="'Lista de alunos nesse projeto'" [description]="''"
+				[buttonText]="'dd'"></app-square-card>
+		</div>
+	</div>
+	<div class="formulario-column">
+		<div class="formulario-row">
+			<form [formGroup]="projectForm" class="formula">
+				<div class="form-left">
+					<!-- preencher campo nome do porjeto e a variavel title para fazer o twoway data biding -->
+					<mat-form-field>
+						<mat-label>Nome do Projeto</mat-label>
+						<input [(ngModel)]="projeto.nome" matInput formControlName="nome" placeholder="Nome do Projeto">
+					</mat-form-field>
+					<!-- <mat-form-field>
 					<mat-label>Status</mat-label>
 					<input matInput formControlName="status" placeholder="Status">
 				</mat-form-field> -->
-				<mat-form-field>
-					<mat-label>Curso</mat-label>
-					<input matInput formControlName="curso" placeholder="Curso">
-				</mat-form-field>
-				<mat-form-field>
-					<mat-label>Objetivo Geral</mat-label>
-					<textarea matInput formControlName="objetivoGeral" placeholder="Objetivo Geral"></textarea>
-				</mat-form-field>
-			</div>
-			<div class="form-right">
-				<mat-form-field>
-					<mat-label>Alunos</mat-label>
-					<input matInput formControlName="alunos" placeholder="Alunos">
-				</mat-form-field>
-				<div class="form-inside-right">
 					<mat-form-field>
-						<mat-label>Orientador</mat-label>
-						<input matInput formControlName="" placeholder="Orientador">
+						<mat-label>Monitores</mat-label>
+						<mat-select formControlName="monitores" multiple>
+							<mat-option *ngFor="let monitor of projeto.monitores" [value]="monitor.id">
+								{{ monitor.nome }}- GRR{{ monitor.grr }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
+					<div class="form-inside-right">
+						<mat-form-field>
+							<mat-label>Orientador</mat-label>
+							<input matInput formControlName="orientador" placeholder="Orientador">
+						</mat-form-field>
+
+						<mat-form-field>
+							<mat-label>Tipo</mat-label>
+							<input matInput formControlName="tipo" placeholder="Tipo">
+						</mat-form-field>
+					</div>
+
+				</div>
+				<div class="form-right">
+					<mat-form-field>
+						<mat-label>Alunos</mat-label>
+						<mat-select formControlName="alunos" multiple>
+							<mat-option *ngFor="let aluno of projeto.alunos" [value]="aluno.id">
+								{{aluno.nome}} - GRR{{ aluno.grr }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<mat-form-field>
+						<mat-label>Objetivo Geral</mat-label>
+						<input matInput formControlName="objetivoGeral" placeholder="Objetivo Geral">					</mat-form-field>
+
 
 					<mat-form-field>
-						<mat-label>Tipo</mat-label>
-						<input matInput formControlName="tipo" placeholder="Tipo">
+						<mat-label>Objetivos Específicos</mat-label>
+						<textarea rows="4" matInput formControlName="objetivosEspecificos"
+							placeholder="Objetivos Específicos"></textarea>
 					</mat-form-field>
 				</div>
-
-				<mat-form-field>
-					<mat-label>Objetivos Específicos</mat-label>
-					<textarea matInput formControlName="objetivosEspecificos"
-						placeholder="Objetivos Específicos"></textarea>
-				</mat-form-field>
-			</div>
-		</form>
-
-		<!-- ngIf botoes só aparecem se for na tela de edição do projeto ou criação do projeto -->
-		<div *ngIf="!isViewMode">
+			</form>
+		</div>
+		<div class="buttons" *ngIf="!isViewMode">
 			<button mat-raised-button color="primary" (click)="salvar()">Salvar</button>
 			<button mat-button (click)="cancelar()">Cancelar</button>
 		</div>
-		<h1>Atividades</h1>
-		<div class="atividades">
+		<div class="atividades-card">
+			<div class="atvHead">
+				<h1>Atividades</h1>
+				<button mat-raised-button color="primary" (click)="novaAtividade()">Nova Atividade</button>
+			</div>
+			<div class="atividades">
+				<div class="atividade" *ngFor="let atividade of atividades" (click)="editarAtividade()">
+					<app-square-card [title]="atividade.nome!" [description]="atividade.status!" [buttonText]="buttonText"
+						[imageUrl]="imgAtv"></app-square-card>
+				</div>
 
-			<app-square-card [title]="'Nova Atividade'" [description]="'Clique para criar uma nova atividade'"
-				[imageUrl]="imgAtv" [buttonText]="'Criar'" (buttonClick)="criarAtividade()"></app-square-card>
-			<!-- instancia de app-square-card que redireciona para os detalhes de uma atividade existente usa ngfor para criar uma lista de atividades -->
-			<!-- <div *ngFor="let atividade of atividades"> -->
-
-			<app-square-card [title]="tituloAtividade" [description]="executor"
-				[imageUrl]="imgAtv"></app-square-card>
+			</div>
 		</div>
-	</mat-card-content>
-</mat-card>
+	</div>
+
+	<!-- ngIf botoes só aparecem se for na tela de edição do projeto ou criação do projeto -->
+
+
+</div>

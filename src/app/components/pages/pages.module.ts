@@ -34,7 +34,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     CompetenciasComponent,
     AutocadastroComponent,
     EditarAlunoComponent,
-    CadastroDeUsuariosComponent
+    CadastroDeUsuariosComponent,
   ],
   imports: [
     CommonModule,

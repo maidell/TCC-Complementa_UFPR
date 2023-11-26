@@ -7,13 +7,12 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
 import { AtividadeModule } from './atividade/atividade.module';
 import { OrientadorModule } from '../services/orientador/orientador.module';
 import { ServidorModule } from '../services/servidor/servidor.module';
-import { ProjetoComponent } from './projeto/projeto.component';
-
+import { ProjetoModule } from './projeto/projeto.module';
 
 @NgModule({
   declarations: [
-  
-    ProjetoComponent
+
+
   ],
   imports: [
     CommonModule,
@@ -23,7 +22,8 @@ import { ProjetoComponent } from './projeto/projeto.component';
     MaterialStylesModule,
     AtividadeModule,
     OrientadorModule,
-    ServidorModule
+    ServidorModule,
+    ProjetoModule
   ],
 
 })
