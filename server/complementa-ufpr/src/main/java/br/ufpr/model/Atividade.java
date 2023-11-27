@@ -58,7 +58,7 @@ public class Atividade implements Serializable {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_executor")
-	private Usuario executor;
+	private Aluno executor;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "competencia_id")
@@ -192,11 +192,11 @@ public class Atividade implements Serializable {
 		this.autor = autor;
 	}
 
-	public Usuario getExecutor() {
+	public Aluno getExecutor() {
 		return executor;
 	}
 
-	public void setExecutor(Usuario executor) {
+	public void setExecutor(Aluno executor) {
 		this.executor = executor;
 	}
 

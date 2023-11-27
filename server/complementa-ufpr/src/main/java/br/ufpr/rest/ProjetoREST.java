@@ -44,7 +44,18 @@ public class ProjetoREST {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(lista.stream().map(e -> mapper.map(e, ProjetoDTO.class)).collect(Collectors.toList()));
     }
+    
+    @GetMapping("/usuarios/{id}")
+    public ResponseEntity<List<ProjetoDTO>> obterTodosProjetosPorIntegrante(@PathVariable Long id) {
 
+        List<Projeto> lista = repo.findAllByUserId(id);
+        if (lista.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(lista.stream().map(e -> mapper.map(e, ProjetoDTO.class)).collect(Collectors.toList()));
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<ProjetoDTO> buscaPorId(@PathVariable Long id) {
 

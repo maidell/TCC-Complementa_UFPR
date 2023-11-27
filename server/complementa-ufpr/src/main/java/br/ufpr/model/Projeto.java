@@ -50,11 +50,14 @@ public class Projeto {
             inverseJoinColumns = @JoinColumn(name = "id_monitor")
     )
     private List<Aluno> monitores;
-
+    
+    @Column(name = "tipo")
+    private Tipo tipo;
+    
     public Projeto() {
     }
 
-    public Projeto(Long id, String nome, String objetivoGeral, String objetivosEspecificos, Orientador orientador, List<Aluno> alunos, List<Aluno> monitores) {
+    public Projeto(Long id, String nome, String objetivoGeral, String objetivosEspecificos, Orientador orientador, List<Aluno> alunos, List<Aluno> monitores, Tipo tipo) {
         this.id = id;
         this.nome = nome;
         this.objetivoGeral = objetivoGeral;
@@ -62,6 +65,7 @@ public class Projeto {
         this.orientador = orientador;
         this.alunos = alunos;
         this.monitores = monitores;
+        this.tipo = tipo;
     }
 
     public Long getId() {
@@ -120,15 +124,25 @@ public class Projeto {
         this.monitores = monitores;
     }
     
-    @Override
+    
+    public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+
+	@Override
     public String toString() {
-        return "ProjetoDTO [id=" + getId() +
+        return "Projeto [id=" + getId() +
                 ", nome='" + getNome() + '\'' +
                 ", objetivoGeral='" + getObjetivoGeral() + '\'' +
                 ", objetivosEspecificos='" + getObjetivosEspecificos() + '\'' +
                 ", orientador=" + getOrientador() +
                 ", alunos=" + getAlunos() +
                 ", monitores=" + getMonitores() +
+                ", tipo=" + getTipo() +
                 "]";
     }
 

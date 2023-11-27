@@ -192,6 +192,24 @@ app.get('/atividades/projetos/:id', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+app.get('/atividades/alunos/:id', verifyJWT, (req, res, next) => {
+  const projetoId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/alunos/${projetoId} para ${API_HOST}/atividades/alunos/${projetoId}`);
+  servicesProxy(req, res, next);
+})
+
+app.get('/atividades/usuarios/:id', verifyJWT, (req, res, next) => {
+  const usuarioId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/usuarios/${usuarioId} para ${API_HOST}/atividades/usuarios/${usuarioId}`);
+  servicesProxy(req, res, next);
+})
+
+app.get('/atividades/graduacoes/:id', verifyJWT, (req, res, next) => {
+  const graduacaoId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/graduacoes/${graduacaoId} para ${API_HOST}/atividades/graduacoes/${graduacaoId}`);
+  servicesProxy(req, res, next);
+})
+
 app.get('/atividades', verifyJWT, (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/atividades para ${API_HOST}/atividades`);
   servicesProxy(req, res, next);
@@ -233,6 +251,12 @@ app.post('/certificados', verifyJWT, (req, res, next) => {
 app.get('/certificados/:id', verifyJWT, (req, res, next) => {
   const certificadoId = req.params.id;
   console.log(`Roteando GET de http://localhost:${PORT}/certificados/${certificadoId} para ${API_HOST}/certificados/${certificadoId}`);
+  servicesProxy(req, res, next);
+})
+
+app.get('/certificados/consultas/:hash', verifyJWT, (req, res, next) => {
+  const certificadoHash = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/certificados/consultas/${certificadoHash} para ${API_HOST}/certificados/consultas/${certificadoHash}`);
   servicesProxy(req, res, next);
 })
 
@@ -494,6 +518,12 @@ console.log(`Configurando rotas de Projeto`)
 
 app.post('/projetos', verifyJWT, (req, res, next) => {
   console.log(`Roteando POST de http://localhost:${PORT}/projetos para ${API_HOST}/projetos`);
+  servicesProxy(req, res, next);
+})
+
+app.get('/projetos/usuarios/:id', verifyJWT, (req, res, next) => {
+  const usuarioId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/projetos/usuarios/${usuarioId} para ${API_HOST}/projetos/usuarios/${usuarioId}`);
   servicesProxy(req, res, next);
 })
 

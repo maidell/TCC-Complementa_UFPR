@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.CertificadoDTO;
+import br.ufpr.helper.CertificadoHasher;
 import br.ufpr.model.Certificado;
 import br.ufpr.repository.CertificadoRepository;
 
@@ -46,7 +47,7 @@ public class CertificadoREST {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CertificadoDTO> buscaPorId(@PathVariable String id) {
+	public ResponseEntity<CertificadoDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Certificado> certificado = repo.findById(id);
 		if (certificado.isEmpty()) {
@@ -56,14 +57,25 @@ public class CertificadoREST {
 		}
 	}
 	
-	//TODO criar método para gerar hash de identificação
+	@GetMapping("/consultas/{hash}")
+	public ResponseEntity<CertificadoDTO> buscaPorHash(@PathVariable String hash) {
 
+		Optional<Certificado> certificado = repo.findByHash(hash);
+		if (certificado.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(certificado.get(), CertificadoDTO.class));
+		}
+	}
+	
 	@PostMapping
 	public ResponseEntity<CertificadoDTO> inserirCertificado(@RequestBody Certificado certificado) {
-		
+		Certificado crt = mapper.map(certificado, Certificado.class);
+		crt.setSalt(CertificadoHasher.generateSalt());
+		crt.setHash(CertificadoHasher.hashCertificate(certificado, crt.getSalt()));
 		try {
-			Certificado crt = repo.save(mapper.map(certificado, Certificado.class));
-			Optional<Certificado> crtOpt = repo.findById(crt.getId().toString());
+			crt = repo.save(crt);
+			Optional<Certificado> crtOpt = repo.findById(crt.getId());
 			if (!crtOpt.isPresent()) {
 				throw new Exception("Criação do certificado não foi realizada com sucesso");
 			}
@@ -75,7 +87,7 @@ public class CertificadoREST {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CertificadoDTO> alterarCertificado(@PathVariable("id") String id, @RequestBody Certificado certificado) {
+	public ResponseEntity<CertificadoDTO> alterarCertificado(@PathVariable("id") Long id, @RequestBody Certificado certificado) {
 		Optional<Certificado> crt = repo.findById(id);
 
 		if (crt.isEmpty()) {
@@ -89,7 +101,7 @@ public class CertificadoREST {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerCertificado(@PathVariable("id") String id) {
+	public ResponseEntity<?> removerCertificado(@PathVariable("id") Long id) {
 
 		Optional<Certificado> certificado = repo.findById(id);
 		if (certificado.isEmpty()) {
