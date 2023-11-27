@@ -8,10 +8,10 @@
       <mat-icon>home</mat-icon><span> Página Inicial</span>
   </a>
   <ng-container *ngIf="checkRole('ADMIN')">
-    <a routerLink="/projetos" href="#" class="list-group-item list-group-item-action py-2 ripple">
+    <a routerLink="/projetos/listar" href="#" class="list-group-item list-group-item-action py-2 ripple">
         <mat-icon>hub</mat-icon><span> Projetos</span>
     </a>
-    <a routerLink="/atividades" href="#" class="list-group-item list-group-item-action py-2 ripple">
+    <a routerLink="/atividades/listar" href="#" class="list-group-item list-group-item-action py-2 ripple">
         <mat-icon>article</mat-icon><span> Atividades</span>
     </a>
     <a routerLink="/graduacoes/listar" href="#" class="list-group-item list-group-item-action py-2 ripple">
