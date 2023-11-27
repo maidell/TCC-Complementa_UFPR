@@ -39,6 +39,10 @@ export class AtividadeService {
     return this.httpClient.get<Atividade[]>(this.BASE_URL + 'atividades/graduacoes/' + id, this.httpOptions);
   }
 
+  listarTodasAtividadesPorOrientador(id: number): Observable<Atividade[]> {
+    return this.httpClient.get<Atividade[]>(this.BASE_URL + 'atividades/orientadores/' + id, this.httpOptions);
+  }
+
   inserirAtividade(atividade: Atividade): Observable<Atividade> {
     return this.httpClient.post<Atividade>(this.BASE_URL + 'atividades/', JSON.stringify(atividade), this.httpOptions);
   }
