@@ -28,11 +28,7 @@ export class NavbarComponent {
 
   openDialog() {
     const dialogRef = this.dialog.open(ServidoresComponent, {
-      minWidth: '50%',
-      data: {
-        idGrad: this.graduacao.id,
-        idCoord: this.graduacao.coordenador.id
-      }
+      minWidth: '50%'
     });
     dialogRef.afterClosed().subscribe(result => {
       this.ngOnInit();
