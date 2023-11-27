@@ -1,12 +1,28 @@
 <div class="cardGeral">
 	<div class="lateraldireita">
 		<div class="card-square">
-			<app-square-card [title]="'Lista de alunos nesse projeto'" (buttonCallback)="openDialog()"
-				[description]="''" [buttonText]="'dd'"></app-square-card>
+			<button mat-raised-button color="primary" (click)="openDialogAluno()">Gerenciar Alunos</button>
+			<mat-card>
+				<mat-card-title>Alunos nesse projeto:</mat-card-title>
+
+				<mat-card-content>
+					<ul>
+						<li *ngFor="let aluno of projeto.alunos">{{aluno.nome}}</li>
+					</ul>
+				</mat-card-content>
+			</mat-card>
 		</div>
 		<div class="card-square">
-			<app-square-card [title]="'Lista de alunos nesse projeto'" [description]="''"
-				[buttonText]="'dd'"></app-square-card>
+			<button mat-raised-button color="primary" (click)="openDialogMonitor()">Gerenciar Monitores</button>
+			<mat-card>
+				<mat-card-title>Monitores nesse projeto:</mat-card-title>
+
+				<mat-card-content>
+					<ul>
+						<li *ngFor="let monitor of projeto.monitores">{{monitor.nome}}</li>
+					</ul>
+				</mat-card-content>
+			</mat-card>
 		</div>
 	</div>
 	<div class="formulario-column">
@@ -22,39 +38,48 @@
 					<mat-label>Status</mat-label>
 					<input matInput formControlName="status" placeholder="Status">
 				</mat-form-field> -->
-					<mat-form-field>
+					<!-- <mat-form-field>
 						<mat-label>Monitores</mat-label>
 						<mat-select formControlName="monitores" multiple>
 							<mat-option *ngFor="let monitor of projeto.monitores" [value]="monitor.id">
 								{{ monitor.nome }}- GRR{{ monitor.grr }}
 							</mat-option>
 						</mat-select>
+					</mat-form-field> -->
+					<mat-form-field>
+					<mat-label>Orientador</mat-label>
+					<mat-select formControlName="orientador" multiple>
+						<mat-option [value]="projeto.orientador?.id">
+							{{projeto.orientador?.nome}}
+						</mat-option>
+					</mat-select>
 					</mat-form-field>
-					<div class="form-inside-right">
-						<mat-form-field>
+					<!-- <div class="form-inside-right"> -->
+						<!-- <mat-form-field>
 							<mat-label>Orientador</mat-label>
-							<input matInput formControlName="orientador" placeholder="Orientador">
-						</mat-form-field>
+							<input matInput [(ngModel)]="orientador.nome" formControlName="orientador"
+								placeholder="Orientador">
+						</mat-form-field> -->
 
 						<mat-form-field>
 							<mat-label>Tipo</mat-label>
 							<input matInput formControlName="tipo" placeholder="Tipo">
 						</mat-form-field>
-					</div>
+					<!-- </div> -->
 
 				</div>
 				<div class="form-right">
-					<mat-form-field>
+					<!-- <mat-form-field>
 						<mat-label>Alunos</mat-label>
 						<mat-select formControlName="alunos" multiple>
 							<mat-option *ngFor="let aluno of projeto.alunos" [value]="aluno.id">
 								{{aluno.nome}} - GRR{{ aluno.grr }}
 							</mat-option>
 						</mat-select>
-					</mat-form-field>
+					</mat-form-field> -->
 					<mat-form-field>
 						<mat-label>Objetivo Geral</mat-label>
-						<input matInput formControlName="objetivoGeral" placeholder="Objetivo Geral">					</mat-form-field>
+						<input matInput formControlName="objetivoGeral" placeholder="Objetivo Geral"> </mat-form-field>
 
 
 					<mat-form-field>
@@ -76,8 +101,8 @@
 			</div>
 			<div class="atividades">
 				<div class="atividade" *ngFor="let atividade of atividades" (click)="editarAtividade()">
-					<app-square-card [title]="atividade.nome!" [description]="atividade.status!" [buttonText]="buttonText"
-						[imageUrl]="imgAtv"></app-square-card>
+					<app-square-card [title]="atividade.nome!" [description]="atividade.status!"
+						[buttonText]="buttonText" [imageUrl]="imgAtv"></app-square-card>
 				</div>
 
 			</div>

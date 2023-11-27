@@ -72,9 +72,9 @@ const authServiceProxy = httpProxy(API_HOST, {
         const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
           expiresIn: "2 days",
         });
-  
+
         const filteredData = filterCircularProperties(objBody);
-  
+
         return userRes
           .status(200)
           .json({ auth: true, token: token, data: filteredData });

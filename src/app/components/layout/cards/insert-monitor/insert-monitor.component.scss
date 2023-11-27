@@ -41,7 +41,8 @@
 mat-row:nth-child(even) {
 	background-color: #DCE6EC
 }
-.ng-container-button{
+
+.ng-container-button {
 	width: 100px;
 }
 
@@ -128,6 +129,7 @@ mat-header-cell {
 	padding: 0;
 	margin: 0;
 }
+
 .custom-buttonTwo:hover {
 	background: linear-gradient(#9A2525, #A32121);
 	color: white;
