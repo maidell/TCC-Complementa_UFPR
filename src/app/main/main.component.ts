@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -18,7 +18,8 @@ export class MainComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
