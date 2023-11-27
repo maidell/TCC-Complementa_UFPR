@@ -18,6 +18,8 @@ import { IConfig } from 'ngx-mask';
 import { AutocadastroComponent } from '../pages/autocadastro/autocadastro.component';
 import { EditarAlunoComponent } from '../pages/editar-aluno/editar-aluno.component';
 import { CadastroDeUsuariosComponent } from './cadastro-de-usuarios/cadastro-de-usuarios.component';
+import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
+import { EditarUsuariosComponent } from './editar-usuarios/editar-usuarios.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -35,6 +37,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     AutocadastroComponent,
     EditarAlunoComponent,
     CadastroDeUsuariosComponent,
+    ConfirmacaoComponent,
+    EditarUsuariosComponent,
   ],
   imports: [
     CommonModule,

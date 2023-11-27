@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TitleService } from '../../../services/title/title.service';
-import { Graduacao, Projeto } from 'src/app/shared';
+import { Aluno, Graduacao, Projeto } from 'src/app/shared';
 import { Orientador } from 'src/app/shared';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
@@ -66,6 +66,9 @@ export class ProjetosComponent implements OnInit, OnDestroy {
   abrirProjeto(){
     this.router.navigate(['/projeto/teste']);
   }
+
+  projeto: Projeto = new Projeto();
+
 
 }
 

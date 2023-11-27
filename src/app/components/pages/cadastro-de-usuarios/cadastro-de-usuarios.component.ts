@@ -61,6 +61,9 @@ export class CadastroDeUsuariosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (!this.loginService.usuarioLogado) {
+      this.router.navigate([`login`]);
+    }
     this.usuarioLogado = this.loginService.usuarioLogado;
     if (this.usuarioLogado.papel !== 'ADMIN') {
       this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);

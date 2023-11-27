@@ -34,7 +34,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Servidor>;
   constructor(
-    @Inject(DIALOG_DATA) public data: any,
+    // @Inject(DIALOG_DATA) public data: any,
     private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
     private loginService: LoginService,
@@ -46,10 +46,10 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     if (!this.loginService.usuarioLogado) {
       this.router.navigate([`login`]);
     }
-    if(data){
-      this.idGrad = data.idGrad;
-      this.idCoord = data.idCoord;
-    }
+    // if(data){
+    //   this.idGrad = data.idGrad;
+    //   this.idCoord = data.idCoord;
+    // }
     this.dataSource = new MatTableDataSource(this.servidores);
   }
 
@@ -68,19 +68,23 @@ export class ServidoresComponent implements OnInit, OnDestroy {
       coord: this.instanciarCoordenador(this.idCoord),
       servidores: this.listarServidores(),
       orientadores: this.listarOrientadores()
+
     }).subscribe(({ graduacao, coord, servidores, orientadores }) => {
       if (servidores && orientadores) {
+
         this.coordenador = coord;
         this.graduacao = graduacao;
         this.servidores = servidores;
         this.orientadores = orientadores;
         this.servidoresCoordenadores = graduacao.servidoresCoordenadores;
+
       }
 
       this.servidores = this.filtrarServidores(this.servidores, this.orientadores, this.graduacao);
       this.verificarServidoresCoordenadores(this.servidores);
       this.dataSource.data = this.servidores;
       this.changeDetectorRef.detectChanges();
+
     });
   }
 
@@ -163,6 +167,8 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     servidores.forEach(servidor => {
       if (servidoresCoordenadoresIds.includes(servidor.id)) {
         servidor.incluido = true;
+      } else {
+        servidor.incluido = false;
       }
     });
     this.servidores = servidores;

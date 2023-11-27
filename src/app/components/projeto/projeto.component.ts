@@ -181,6 +181,20 @@ export class ProjetoComponent implements OnInit {
   criarAtividade() { }
   editarAtividade() { }
   novaAtividade() { }
+
+
+  adicionarAlunosEMonitores(alunosDoProjeto: Aluno[]) {
+    let alunos : Aluno[] = [];
+    let monitores : Aluno[] = [];
+
+      alunos = alunosDoProjeto.filter(aluno => aluno.papel !== "Monitor");
+      monitores = alunosDoProjeto.filter(aluno => aluno.papel === "Monitor");
+    
+    this.projeto.alunos = alunos;
+    this.projeto.monitores = monitores;
+      
+  }
+
 }
 
 
