@@ -23,11 +23,13 @@ import br.ufpr.dto.AtividadeSimplesDTO;
 import br.ufpr.model.Aluno;
 import br.ufpr.model.Atividade;
 import br.ufpr.model.Graduacao;
+import br.ufpr.model.Orientador;
 import br.ufpr.model.Projeto;
 import br.ufpr.model.Usuario;
 import br.ufpr.repository.AlunoRepository;
 import br.ufpr.repository.AtividadeRepository;
 import br.ufpr.repository.GraduacaoRepository;
+import br.ufpr.repository.OrientadorRepository;
 import br.ufpr.repository.ProjetoRepository;
 import br.ufpr.repository.UsuarioRepository;
 
@@ -50,6 +52,9 @@ public class AtividadeREST {
 	
 	@Autowired
 	private UsuarioRepository repoUsu;
+	
+	@Autowired
+	private OrientadorRepository repoOri;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -91,6 +96,21 @@ public class AtividadeREST {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
 		List<Atividade> lista = repo.findAllByExecutor(alu.get());
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
+	}
+	
+	@GetMapping("/orientadores/{id}")
+	public ResponseEntity<List<AtividadeSimplesDTO>> obterAtividadesPorOrientador(@PathVariable("id") Long id) {
+		
+		Optional<Orientador> ori = repoOri.findById(id); 
+		if(!ori.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		List<Atividade> lista = repo.findAllByOrientadorId(ori.get().getId());
 		if (lista.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}

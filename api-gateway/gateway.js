@@ -210,6 +210,12 @@ app.get('/atividades/graduacoes/:id', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+app.get('/atividades/orientadores/:id', verifyJWT, (req, res, next) => {
+  const orientadorId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/orientadores/${orientadorId} para ${API_HOST}/atividades/orientadores/${orientadorId}`);
+  servicesProxy(req, res, next);
+})
+
 app.get('/atividades', verifyJWT, (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/atividades para ${API_HOST}/atividades`);
   servicesProxy(req, res, next);
