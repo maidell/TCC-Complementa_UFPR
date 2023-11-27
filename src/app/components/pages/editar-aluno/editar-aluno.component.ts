@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Aluno, Graduacao, Login, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Graduacao, Login, Usuario } from 'src/app/shared';
 import { AlunoService } from '../../../services/aluno/services/aluno.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, forkJoin } from 'rxjs';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { AtividadeComponent } from '../../atividade/atividade/atividade.component';
 import { LoginService } from '../../auth/services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { GraduacaoService } from '../../../services/graduacao/services/graduacao.service';
+import { AtividadeService } from '../../atividade/services/atividade.service';
 
 
 @Component({
@@ -38,11 +40,15 @@ export class EditarAlunoComponent implements OnInit {
   filteredOptions!: Observable<Graduacao[]>;
   hide: boolean = true;
 
+  //APAGAR APAGAR APAGAR
+  atividade!: Atividade;
+
   constructor(
     private router: Router,
     private alunoService: AlunoService,
     private loginService: LoginService,
     private graduacaoService: GraduacaoService,
+    private atividadeService: AtividadeService,
     public dialog: MatDialog,
     public toastr: ToastrService
   ) { }
@@ -64,7 +70,7 @@ export class EditarAlunoComponent implements OnInit {
 
       this.syncGraduacao();
     });
-
+    this.instanciarAtividade();
   }
 
   instanciarAluno(id: number): Observable<Aluno> {
@@ -146,6 +152,35 @@ export class EditarAlunoComponent implements OnInit {
     const matchedGraduacao = this.options.find(op => op.id === this.aluno.graduacao.id);
     if (matchedGraduacao) {
       this.graduacao = matchedGraduacao;
+    }
+  }
+
+  /* CÓDIGO PRA TESTAR O COMPONENTE DE ATIVIDADE. EXCLUIR DAQUI PRA BAIXO QUANDO FOR PRA PRD*/
+
+  instanciarAtividade(){
+    this.atividadeService.buscarAtividadePorId(2).subscribe(
+      (response: Atividade) => { this.atividade = response; this.toastr.success("Atividade Carregada");}
+    );
+  };
+
+  openDialog(atividade: Atividade) {
+
+    const dialogRef = this.dialog.open(AtividadeComponent, {
+      maxWidth: this.dialogWidth(),
+      data: atividade,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+
+  dialogWidth() {
+    if (window.innerWidth <= 768) {
+      return "100vw";
+    } else {
+      return "80vw";
     }
   }
 
