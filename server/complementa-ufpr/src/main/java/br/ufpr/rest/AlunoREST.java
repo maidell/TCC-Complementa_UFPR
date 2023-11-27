@@ -88,6 +88,8 @@ public class AlunoREST {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
+	
+	
 
 	@PutMapping("/{id}")
 	public ResponseEntity<AlunoDTO> alterarAluno(@PathVariable("id") long id, @RequestBody Aluno aluno) {

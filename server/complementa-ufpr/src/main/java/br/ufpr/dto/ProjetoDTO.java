@@ -3,6 +3,8 @@ package br.ufpr.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import br.ufpr.model.Tipo;
+
 public class ProjetoDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,12 +16,13 @@ public class ProjetoDTO implements Serializable {
     private OrientadorDTO orientador;
     private List<AlunoDTO> alunos;
     private List<AlunoDTO> monitores;
+    private Tipo tipo;
 
     public ProjetoDTO() {
     }
 
     public ProjetoDTO(Long id, String nome, String objetivoGeral, String objetivosEspecificos, OrientadorDTO orientador,
-            List<AlunoDTO> alunos, List<AlunoDTO> monitores) {
+            List<AlunoDTO> alunos, List<AlunoDTO> monitores, Tipo tipo) {
         this.id = id;
         this.nome = nome;
         this.objetivoGeral = objetivoGeral;
@@ -27,6 +30,7 @@ public class ProjetoDTO implements Serializable {
         this.orientador = orientador;
         this.alunos = alunos;
         this.monitores = monitores;
+        this.tipo = tipo;
     }
 
     public Long getId() {
@@ -85,11 +89,19 @@ public class ProjetoDTO implements Serializable {
         this.monitores = monitores;
     }
     
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
     
-    @Override
+	@Override
     public String toString() {
         return "Projeto [id=" + getId() +
                 ", nome='" + getNome() + '\'' +
@@ -98,7 +110,8 @@ public class ProjetoDTO implements Serializable {
                 ", orientador=" + getOrientador() +
                 ", alunos=" + getAlunos() +
                 ", monitores=" + getMonitores() +
+                ", tipo=" + getTipo() +
                 "]";
-    }
-
+	}
+	
 }

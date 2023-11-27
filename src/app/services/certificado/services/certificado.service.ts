@@ -31,6 +31,10 @@ export class CertificadoService {
     return this.httpClient.get<Certificado>(this.BASE_URL + 'certificados/' + id, this.httpOptions);
   }
 
+  buscarCertificadoPorHash(hash: string): Observable<Certificado> {
+    return this.httpClient.get<Certificado>(this.BASE_URL + 'certificados/consultas/' + hash, this.httpOptions);
+  }
+
   atualizarCertificado(certificado: Certificado): Observable<Certificado> {
     return this.httpClient.put<Certificado>(this.BASE_URL + 'certificados/' + certificado.id, JSON.stringify(certificado), this.httpOptions);
   }

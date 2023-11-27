@@ -22,6 +22,10 @@ export class ProjetoService {
     return this.httpClient.get<Projeto[]>(this.BASE_URL + 'projetos/', this.httpOptions);
   }
 
+  listarTodosProjetosPorIdUsuario(id: number): Observable<Projeto[]> {
+    return this.httpClient.get<Projeto[]>(this.BASE_URL + 'projetos/usuarios/' + id, this.httpOptions);
+  }
+
   inserirProjeto(orientador: Projeto): Observable<Projeto> {
     return this.httpClient.post<Projeto>(this.BASE_URL + 'projetos/', JSON.stringify(orientador), this.httpOptions);
   }

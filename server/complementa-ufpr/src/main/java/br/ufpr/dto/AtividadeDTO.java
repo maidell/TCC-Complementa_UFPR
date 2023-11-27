@@ -18,7 +18,7 @@ public class AtividadeDTO implements Serializable {
 	private Date dataConclusao;
 	private ProjetoDTO projeto;
 	private UsuarioDTO autor;
-	private UsuarioDTO executor;
+	private AlunoDTO executor;
 	private CompetenciaDTO competencia;
 	private ComplexidadeDTO complexidade;
 	private List<ComentarioDTO> comentarios = new ArrayList<>();
@@ -33,7 +33,7 @@ public class AtividadeDTO implements Serializable {
 	}
 
 	public AtividadeDTO(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
-			Date dataConclusao, ProjetoDTO projeto, UsuarioDTO autor, UsuarioDTO executor, CompetenciaDTO competencia,
+			Date dataConclusao, ProjetoDTO projeto, UsuarioDTO autor, AlunoDTO executor, CompetenciaDTO competencia,
 			ComplexidadeDTO complexidade, List<ComentarioDTO> comentarios, CertificadoDTO certificado,
 			RelatorioDeConclusaoDTO relatorioDeConclusao, List<AnexoDTO> anexos, ContestacaoDTO contestacao,
 			ContestacaoCargaHorariaDTO contestacaoCargaHoraria, Status status) {
@@ -122,11 +122,11 @@ public class AtividadeDTO implements Serializable {
 		this.autor = autor;
 	}
 
-	public UsuarioDTO getExecutor() {
+	public AlunoDTO getExecutor() {
 		return executor;
 	}
 
-	public void setExecutor(UsuarioDTO executor) {
+	public void setExecutor(AlunoDTO executor) {
 		this.executor = executor;
 	}
 

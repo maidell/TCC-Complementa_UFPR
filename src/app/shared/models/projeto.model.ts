@@ -16,6 +16,7 @@ export class Projeto {
   constructor(
     id?: number,
     nome?: string,
+    tipo?: string,
     objetivoGeral?: string,
     objetivosEspecificos?: string,
     orientador?: Orientador,
@@ -24,6 +25,7 @@ export class Projeto {
   ) {
     if (id) this.id = id;
     if (nome) this.nome = nome;
+    if (tipo) this.tipo = tipo;
     if (objetivoGeral) this.objetivoGeral = objetivoGeral;
     if (objetivosEspecificos) this.objetivosEspecificos = objetivosEspecificos;
     if (orientador) this.orientador = orientador;
