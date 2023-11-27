@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Aluno, Atividade, Graduacao, Monitor, Projeto, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Graduacao, Monitor, Orientador, Projeto, Usuario } from 'src/app/shared';
 import { LoginService } from '../auth/services/login.service';
 import { ProjetoService } from './services/projeto.service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -11,6 +11,7 @@ import { TitleService } from 'src/app/services/title/title.service';
 import { AtividadeService } from '../atividade/services/atividade.service';
 import { ServidoresComponent } from '../pages';
 import { ListarAlunosComponent } from '../layout/listar-alunos/listar-alunos.component';
+import { InsertMonitorComponent } from '../layout/cards/insert-monitor/insert-monitor.component';
 
 @Component({
   selector: 'app-projeto',
@@ -22,6 +23,7 @@ export class ProjetoComponent implements OnInit {
   isViewMode = false;
   idParam!: number;
   projeto: Projeto = new Projeto();
+  orientador: Orientador = new Orientador();
   alunos: Aluno[] = [];
   monitores: Monitor[] = [];
   tituloAtividade = "biding com nome da atv";
@@ -41,7 +43,23 @@ export class ProjetoComponent implements OnInit {
   ) {
 
   }
-  openDialog() {
+  openDialogMonitor(){
+    try {
+      const dialogRef = this.dialog.open(InsertMonitorComponent, {
+        width: this.getDialogWidth(),
+        data: {
+          projeto: this.projeto
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    } catch (error) {
+      console.error('Erro ao abrir o diálogo:', error);
+    }
+  }
+
+  openDialogAluno() {
 
     try {
       const dialogRef = this.dialog.open(ListarAlunosComponent, {
@@ -176,6 +194,8 @@ export class ProjetoComponent implements OnInit {
 
     });
   }
+
+
   salvar() { }
   cancelar() { }
   criarAtividade() { }

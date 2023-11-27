@@ -15,6 +15,7 @@ import { CompetenciasDialogComponent } from './competencias-dialog/competencias-
 import { GraduacoesTableComponent } from './graduacoes-table/graduacoes-table.component';
 import { GraduacoesDialogComponent } from './graduacoes-dialog/graduacoes-dialog.component';
 import { WarningComponent } from './warning/warning.component';
+import { InsertMonitorComponent } from './insert-monitor/insert-monitor.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { WarningComponent } from './warning/warning.component';
     CompetenciasDialogComponent,
     GraduacoesTableComponent,
     GraduacoesDialogComponent,
-    WarningComponent
+    WarningComponent,
+    InsertMonitorComponent
   ],
   imports: [
     CommonModule,
