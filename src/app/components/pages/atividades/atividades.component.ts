@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AtividadeComponent } from '../../atividade/atividade/atividade.component';
 import { AlunoService } from 'src/app/services/aluno/services/aluno.service';
 import { OrientadorService } from 'src/app/services/orientador/services/orientador.service';
-
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-atividades',
@@ -22,8 +22,12 @@ import { OrientadorService } from 'src/app/services/orientador/services/orientad
 export class AtividadesComponent implements OnInit, OnDestroy {
 
   inputValue: string = '';
+  inputValueDisp: string = '';
+  inputValueEmEx: string = '';
+  inputValueEx: string = '';
+  inputValueOri: string = '';
   atividades: Atividade[] = [];
-  usuarioLogado?: Usuario;
+  usuarioLogado: Usuario = new Usuario();
   aluno?: Aluno;
   orientador?: Orientador;
   atividadesDisponiveis: Atividade[] = [];
@@ -32,9 +36,20 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   atividadesExecutadas: Atividade[] = [];
   atividadesOrientadas: Atividade[] = [];
 
+  datePipe!: DatePipe;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  obs!: Observable<any>;
+  obs!: Observable<Atividade[]>;
+  obsDisp!: Observable<Atividade[]>;
+  obsEmEx!: Observable<Atividade[]>;
+  obsEx!: Observable<Atividade[]>;
+  obsOri!: Observable<Atividade[]>;
   dataSource!: MatTableDataSource<Atividade>;
+  dataSourceAtvDisp!: MatTableDataSource<Atividade>;
+  dataSourceAtvEmEx!: MatTableDataSource<Atividade>;
+  dataSourceAtvEx!: MatTableDataSource<Atividade>;
+  dataSourceAtvOri!: MatTableDataSource<Atividade>;
+
   constructor(
     private titleService: TitleService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -54,14 +69,20 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     } else {
       this.instanciarAtividadesPorPapel(this.usuarioLogado);
     }
-
+    this.titleService.setTitle("Atividades");
   }
 
   ngOnDestroy() {
     if (this.dataSource) {
       this.dataSource.disconnect();
+      this.dataSourceAtvDisp.disconnect();
+      this.dataSourceAtvEmEx.disconnect();
+      this.dataSourceAtvEx.disconnect();
+      this.dataSourceAtvOri.disconnect();
     }
   }
+
+
 
   applyFilter(event: Event) {
     this.inputValue = (event.target as HTMLInputElement).value;
@@ -72,8 +93,49 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     }
   }
 
+  applyFilterDisp(event: Event) {
+    this.inputValueDisp = (event.target as HTMLInputElement).value;
+    const filterValue = this.inputValueDisp.replace(/\s+/g, ' ').trim().toLowerCase();
+    this.dataSourceAtvDisp.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceAtvDisp.paginator) {
+      this.dataSourceAtvDisp.paginator.firstPage();
+    }
+  }
+
+  applyFilterEmEx(event: Event) {
+    this.inputValueEmEx = (event.target as HTMLInputElement).value;
+    const filterValue = this.inputValueEmEx.replace(/\s+/g, ' ').trim().toLowerCase();
+    this.dataSourceAtvEmEx.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceAtvEmEx.paginator) {
+      this.dataSourceAtvEmEx.paginator.firstPage();
+    }
+  }
+
+  applyFilterEx(event: Event) {
+    this.inputValueEx = (event.target as HTMLInputElement).value;
+    const filterValue = this.inputValueEx.replace(/\s+/g, ' ').trim().toLowerCase();
+    this.dataSourceAtvEx.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceAtvEx.paginator) {
+      this.dataSourceAtvEx.paginator.firstPage();
+    }
+  }
+
+  applyFilterOri(event: Event) {
+    this.inputValueOri = (event.target as HTMLInputElement).value;
+    const filterValue = this.inputValueOri.replace(/\s+/g, ' ').trim().toLowerCase();
+    this.dataSourceAtvOri.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceAtvOri.paginator) {
+      this.dataSourceAtvOri.paginator.firstPage();
+    }
+  }
+
   hasActivities(): boolean {
-    return this.atividades.length > 0;
+    return this.atividades.length > 0
+          || this.atividadesDisponiveis.length > 0
+          || this.atividadesEmExecucao.length > 0
+          || this.atividadesExecutadas.length > 0
+          || this.atividadesOrientadas.length > 0        
+    ;
   }
 
   buttonOne: string = "Detalhes!";
@@ -98,11 +160,18 @@ export class AtividadesComponent implements OnInit, OnDestroy {
             }).subscribe(({ atividadesDisponiveis, atividadesExecutante }) => {
               if (atividadesDisponiveis) {
                 this.atividadesDisponiveis = atividadesDisponiveis;
+                this.dataSourceAtvDisp = new MatTableDataSource(this.atividadesDisponiveis);
+                this.toastr.success("Atividades Disponíveis Carregadas");
+                console.log('Atividades Disponíveis:', atividadesDisponiveis);
               }
               if (atividadesExecutante) {
                 this.atividadesExecutante = atividadesExecutante;
+                this.toastr.success("Atividades Executante Carregadas");
+                console.log('Atividades Executante:', atividadesExecutante);
               }
               this.separarPorStatus();
+              this.changeDetectorRef.detectChanges();
+              
             }
             )
             },
@@ -119,6 +188,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
             this.instanciarAtividadesPorOrientador(res.id).subscribe(
                 (res: Atividade[]) => {
                   this.atividadesOrientadas = res;
+                  this.dataSourceAtvOri = new MatTableDataSource(this.atividadesOrientadas);
+                  this.toastr.success("Atividades Orientadas Carregadas");
                 }
             )
             },
@@ -138,9 +209,13 @@ export class AtividadesComponent implements OnInit, OnDestroy {
             }).subscribe(({ atividadesDisponiveis, atividadesOrientadas }) => {
               if (atividadesDisponiveis) {
                 this.atividadesDisponiveis = atividadesDisponiveis;
+                this.dataSourceAtvDisp = new MatTableDataSource(this.atividadesDisponiveis);
+                this.toastr.success("Atividades Disponíveis Carregadas");
               }
               if (atividadesOrientadas) {
                 this.atividadesOrientadas = atividadesOrientadas;
+                this.dataSourceAtvOri = new MatTableDataSource(this.atividadesOrientadas);
+                this.toastr.success("Atividades Orientadas Carregadas");
               }
             }
             )
@@ -150,10 +225,13 @@ export class AtividadesComponent implements OnInit, OnDestroy {
             this.toastr.error("Erro ao instanciar coordenador");
           });
         break;
-      };
-      default: {
+      }
+      case 'ADMIN': 
+      case 'SERVIDOR': {
         this.instanciarAtividades().subscribe(
           (res: Atividade[]) => {
+            this.atividades = res;
+            this.dataSource = new MatTableDataSource(this.atividades);
           },
           (error) => {
             console.log("Erro ao listar atividades", error);
@@ -173,6 +251,10 @@ export class AtividadesComponent implements OnInit, OnDestroy {
         this.atividadesEmExecucao.push(atividade);
       }
     }
+    this.dataSourceAtvEx = new MatTableDataSource(this.atividadesExecutadas);
+    this.toastr.success("Atividades Executadas Carregadas");
+    this.dataSourceAtvEmEx = new MatTableDataSource(this.atividadesEmExecucao);
+    this.toastr.success("Atividades Em Execução Carregadas");
   }
 
   instanciarAtividades(): Observable<Atividade[]> {

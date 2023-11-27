@@ -1,29 +1,132 @@
 <div class="cards-atvs">
-	<div class="let-of-cards" *ngIf="hasActivities()">
+	
+	<div class="let-of-cards" *ngIf="hasActivities() && usuarioLogado.papel === 'ADMIN'">
+		<h2>Todas as Atividades</h2>
 		<mat-form-field>
 			<mat-label>Pesquisar</mat-label>
 			<input matInput (keyup)="applyFilter($event)" #input>
 			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obs | async) as atividades">
-			<ng-container *ngIf="atividades.length > 0; else noActivities">
-				<app-rect-card *ngFor="let atividade of atividades" [nome]="atividade.nome" [status]="atividade.status"
-					[firstLabel]="dataCriacaoLabel"
-					[firstValue]="atividade.dataCriacao"
-					[secondLabel]="dataLimiteCandidaturaLabel"
-					[secondValue]="atividade.dataLimiteCandidatura"
-					[thirdLabel]="dataConclusaoLabel"
-					[thirdValue]="atividade.dataConclusao"
-					[nameButtonRect]="buttonOne"
-					[showSecondButton]="false"
-					(clickButtonRect)="openDialog(atividade)"
-					>
+			<ng-container *ngIf="atividades.length > 0">
+				<app-rect-card *ngFor="let atividade of atividades"
+				 [nome]="(atividade.nome) ? atividade.nome.toString() : ''" 
+				 [status]="atividade.status"
+					[firstLabel]="dataCriacaoLabel || ''" 
+					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''" 
+					[secondLabel]="dataLimiteCandidaturaLabel || ''" 
+					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[thirdLabel]="dataConclusaoLabel || ''" 
+					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
 
 				</app-rect-card>
 			</ng-container>
 		</ng-container>
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 	</div>
+	<!-- Lista para as roles 'ALUNO' e 'COORDENADOR' -->
+	<div class="let-of-cards" *ngIf="hasActivities() && (usuarioLogado.papel === 'ALUNO' || usuarioLogado.papel === 'COORDENADOR')">
+		<h2>Atividades Disponíveis</h2>
+		<mat-form-field>
+			<mat-label>Pesquisar</mat-label>
+			<input matInput (keyup)="applyFilterDisp($event)" #input>
+			<mat-icon matSuffix>search</mat-icon>
+		</mat-form-field>
+		<ng-container *ngIf="(obsDisp | async) as atividadesDisponiveis">
+			<ng-container *ngIf="atividadesDisponiveis.length > 0">
+				<app-rect-card *ngFor="let atividade of atividadesDisponiveis"
+					[nome]="(atividade.nome) ? atividade.nome : '' " [status]="atividade.status"
+					[firstLabel]="dataCriacaoLabel || ''"
+					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[secondLabel]="dataLimiteCandidaturaLabel || ''"
+					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[thirdLabel]="dataConclusaoLabel || ''"
+					[thirdValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
+				</app-rect-card>
+			</ng-container>
+		</ng-container>
+		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+	</div>
+
+	<!-- Lista para a role 'ALUNO' -->
+	<div class="let-of-cards" *ngIf="hasActivities() && usuarioLogado.papel === 'ALUNO'">
+		<h2>Atividades em Execução</h2>
+		<mat-form-field>
+			<mat-label>Pesquisar</mat-label>
+			<input matInput (keyup)="applyFilterEmEx($event)" #input>
+			<mat-icon matSuffix>search</mat-icon>
+		</mat-form-field>
+		<ng-container *ngIf="(obsEmEx | async) as atividadesEmExecucao">
+			<ng-container *ngIf="atividadesEmExecucao.length > 0">
+				<app-rect-card *ngFor="let atividade of atividadesEmExecucao"
+					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
+					[firstLabel]="dataCriacaoLabel || ''"
+					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[secondLabel]="dataLimiteCandidaturaLabel || ''"
+					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[thirdLabel]="dataConclusaoLabel || ''"
+					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
+				</app-rect-card>
+			</ng-container>
+		</ng-container>
+		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+	</div>
+
+	<div class="let-of-cards" *ngIf="hasActivities() && usuarioLogado.papel === 'ALUNO'">
+		<h2>Atividades Executadas</h2>
+		<mat-form-field>
+			<mat-label>Pesquisar</mat-label>
+			<input matInput (keyup)="applyFilterEx($event)" #input>
+			<mat-icon matSuffix>search</mat-icon>
+		</mat-form-field>
+		<ng-container *ngIf="(obsEx | async) as atividadesExecutadas">
+			<ng-container *ngIf="atividadesExecutadas.length > 0">
+				<app-rect-card *ngFor="let atividade of atividadesExecutadas"
+					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
+					[firstLabel]="dataCriacaoLabel || ''"
+					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[secondLabel]="dataLimiteCandidaturaLabel || ''"
+					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[thirdLabel]="dataConclusaoLabel || ''"
+					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
+				</app-rect-card>
+			</ng-container>
+		</ng-container>
+		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+	</div>
+
+
+	<!-- Lista para as roles 'ORIENTADOR' e 'COORDENADOR' -->
+	<div class="let-of-cards"
+		*ngIf="hasActivities() && (usuarioLogado.papel === 'ORIENTADOR' || usuarioLogado.papel === 'COORDENADOR')">
+		<h2>Atividades Orientadas</h2>
+		<mat-form-field>
+			<mat-label>Pesquisar</mat-label>
+			<input matInput (keyup)="applyFilterOri($event)" #input>
+			<mat-icon matSuffix>search</mat-icon>
+		</mat-form-field>
+		<ng-container *ngIf="(obsOri | async) as atividadesOrientadas">
+			<ng-container *ngIf="atividadesOrientadas.length > 0">
+				<app-rect-card *ngFor="let atividade of atividadesOrientadas"
+					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
+					[firstLabel]="dataCriacaoLabel || ''"
+					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[secondLabel]="dataLimiteCandidaturaLabel || ''"
+					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[thirdLabel]="dataConclusaoLabel || ''"
+					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
+				</app-rect-card>
+			</ng-container>
+		</ng-container>
+		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+	</div>
+
+
 	<ng-template #noActivities>
 		<div class="warning-card" *ngIf="inputValue && inputValue.length > 0">
 			<app-warning [Description]="'A atividade \'' + inputValue + '\' não foi encontrada'"></app-warning>
