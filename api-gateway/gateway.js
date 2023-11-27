@@ -10,7 +10,8 @@ const helmet = require('helmet');
 
 //Configuração da porta
 const PORT = process.env.PORT;
-const API_HOST = 'https://complementa-ufpr-f6abf4461f5d.herokuapp.com'
+//const API_HOST = 'https://complementa-ufpr-f6abf4461f5d.herokuapp.com'
+const API_HOST = 'http://localhost:5000'
 const app = express();
 
 app.use(cors());
@@ -71,9 +72,9 @@ const authServiceProxy = httpProxy(API_HOST, {
         const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
           expiresIn: "2 days",
         });
-  
+
         const filteredData = filterCircularProperties(objBody);
-  
+
         return userRes
           .status(200)
           .json({ auth: true, token: token, data: filteredData });
