@@ -36,6 +36,7 @@ export class AtividadeComponent implements OnInit{
 
 
   atividade = new Atividade();
+  complexidadeAtividade = new Complexidade();
   project: Projeto = new Projeto();
   orientador: Orientador = new Orientador();
   graduacao: Graduacao = new Graduacao();
@@ -129,7 +130,8 @@ export class AtividadeComponent implements OnInit{
   description: FormControl = new FormControl();
   courses: FormControl = new FormControl([]);
   competences: FormControl = new FormControl();
-  complexities: FormControl = new FormControl()
+  complexities: FormControl = new FormControl();
+  complexityName: FormControl = new FormControl();
   candidatureDate: FormControl = new FormControl();
   submitDate: FormControl = new FormControl();
   contestDate: FormControl = new FormControl();
@@ -170,7 +172,7 @@ export class AtividadeComponent implements OnInit{
   ) {
     if(data.atividade){
       this.atividade=data.atividade;
-      
+      this.complexidadeAtividade=data.atividade.complexidade;
     }
     if (data.projeto){
       this.project = data.projeto;
@@ -188,7 +190,9 @@ export class AtividadeComponent implements OnInit{
       complexidades: this.listarComplexidades()
     }).subscribe(({cursos, complexidades}) => {
         this.options=cursos;
+        console.log("entrou no subscribe");
         this.complexidades=complexidades;
+        console.log("populou as complexidades");
     });
 
     this.usuarioLogado = this.loginService.usuarioLogado;
@@ -335,12 +339,11 @@ export class AtividadeComponent implements OnInit{
         this.isDisabled = false;
         break;
       case 'ABERTA':
+        this.activityForm.disable();
         this.description.setValue(this.atividade.descricao);
         this.competences.setValue(this.atividade.competencia);
-
-        if (this.atividade.complexidade?.nome != undefined) {
-          this.activityForm.get('complexities')?.setValue(this.atividade.complexidade.nome);
-        }
+        
+        console.log(this.atividade.complexidade?.nome);
 
 
         this.candidatureDate.setValue(this.atividade.dataLimiteCandidatura);
@@ -348,7 +351,7 @@ export class AtividadeComponent implements OnInit{
         this.contestDate.setValue(this.atividade.contestacao?.dataContestacao);
 
         this.displayComments = 'none';
-        this.activityForm.disable();
+
 
         break;
       case 'EM_EXECUCAO':
@@ -500,7 +503,6 @@ export class AtividadeComponent implements OnInit{
 
   saveActivity() {
 
-    //this.onNoClick();
     if(this.description.value===null || this.courses.value === null || this.activityForm.get('complexities')?.value===null || this.candidatureDate.value===null || this.submitDate.value===null){
       console.log(this.file_store);
       this.showErrorToastr("Preencha todos os campos antes de salvar!");
@@ -588,16 +590,16 @@ export class AtividadeComponent implements OnInit{
 
   //Edição
   editActivity() {
-    this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
     this.isEditing = true;
-    if (this.canUserEdit()) {
+    this.setContent();
+    this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
       this.isDisabled = false;
       this.activityForm.enable();
       this.firstHeaderButton = 'Salvar';
       this.firstButtonColor = 'linear-gradient(#559958, #418856)';
       this.secondHeaderButton = "Cancelar";
       this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)';
-    }
+
   }
 
   saveEdit() {
@@ -626,7 +628,7 @@ export class AtividadeComponent implements OnInit{
 
 
     // Verifica se this.usuarioLogado é igual ao autor, orientador, servidoresOrientadores ou monitores
-    if (
+   /** if (
       this.usuarioLogado === this.atividade.autor ||
       this.usuarioLogado === this.atividade.projeto?.orientador ||
       this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado) ||
@@ -635,7 +637,8 @@ export class AtividadeComponent implements OnInit{
       return true;
     } else {
       return false;
-    }
+    }*/
+    return true;
   }
 
   // Carga Horária
@@ -886,6 +889,10 @@ export class AtividadeComponent implements OnInit{
         }
       );
     }
+  }
+
+  compareComplexidades(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }
 

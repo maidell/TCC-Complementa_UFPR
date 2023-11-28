@@ -65,10 +65,17 @@
                             <mat-option *ngFor="let c of competencias" [value]="c">{{c.nome}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field class="complexities">
+                    <mat-form-field class="complexities" *ngIf="atividade.status==='' || isEditing">
                         <mat-label>Complexidade</mat-label>
-                        <mat-select [(value)]="atividade.complexidade" formControlName="complexities" [formControl]="complexities">
-                            <mat-option *ngFor="let c of complexidades" [value]="c">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
+                        <mat-select [(value)]="complexidadeAtividade" formControlName="complexities" [formControl]="complexities" [compareWith]="compareComplexidades">
+                            <mat-option *ngFor="let c of complexidades" [value]="c" [formControl]="complexityName">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+                    <mat-form-field class="complexities" *ngIf=" !isEditing">
+                        <mat-label>Complexidade</mat-label>
+                        <mat-select [ngModel]="complexidadeAtividade" formControlName="complexities" [formControl]="complexities">
+                            <mat-option  [formControl]="complexityName" [value]="complexidadeAtividade">{{complexidadeAtividade.nome}} ({{complexidadeAtividade.cargaHorariaMinima}}h - {{complexidadeAtividade.cargaHorariaMaxima}}h)</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
