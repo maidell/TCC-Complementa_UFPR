@@ -216,6 +216,18 @@ app.get('/atividades/orientadores/:id', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
+app.get('/atividades/contestacoes/:id', verifyJWT, (req, res, next) => {
+  const id = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/contestacoes/${id} para ${API_HOST}/atividades/contestacoes/${id}`);
+  servicesProxy(req, res, next);
+})
+
+app.get('/atividades/contestacoes-carga-horaria/:id', verifyJWT, (req, res, next) => {
+  const id = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/contestacoes-carga-horaria/${id} para ${API_HOST}/atividades/contestacoes-carga-horaria/${id}`);
+  servicesProxy(req, res, next);
+})
+
 app.get('/atividades', verifyJWT, (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/atividades para ${API_HOST}/atividades`);
   servicesProxy(req, res, next);
