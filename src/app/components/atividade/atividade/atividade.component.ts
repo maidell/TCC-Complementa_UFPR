@@ -193,6 +193,7 @@ export class AtividadeComponent implements OnInit{
         console.log("entrou no subscribe");
         this.complexidades=complexidades;
         console.log("populou as complexidades");
+        this.syncComplexidade();
     });
 
     this.usuarioLogado = this.loginService.usuarioLogado;
@@ -456,6 +457,13 @@ export class AtividadeComponent implements OnInit{
 
     }
 
+  }
+
+  syncComplexidade() {
+    const matchedComplexidade = this.complexidades.find(cp => cp.id === this.atividade.complexidade?.id);
+    if (matchedComplexidade) {
+      this.complexidadeAtividade = matchedComplexidade;
+    }
   }
 
   secondButtonFunction() {
