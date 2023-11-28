@@ -13,12 +13,14 @@
             <div class="activity-header-data">
                 <div *ngIf="!displayActivityHeaderData">
                     <div class="project-name">{{project.nome}}</div>
-                    <div class="activity-name">{{atividade.nome}}</div>
+                    <div class="activity-name" *ngIf="!fillingReport">{{atividade.nome}}</div>
+                    <div class="activity-name" *ngIf="fillingReport && !disputingHours">Relatório de Conclusão</div>
+                    <div class="activity-name" *ngIf="disputingHours">Contestação</div>
                 </div>
                 <div *ngIf="displayActivityHeaderData">
                     <h5>{{project.nome}}</h5>
                     <mat-form-field class="activity-field">
-                        <mat-label>Nome da Atividade</mat-label>
+                        <mat-label >{{activityNameLabel}}</mat-label>
                         <input matInput class="activity-field-inner" [formControl]="activityName">
                     </mat-form-field>
                 </div>

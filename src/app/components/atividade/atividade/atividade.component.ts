@@ -66,6 +66,7 @@ export class AtividadeComponent implements OnInit{
   disputingExecution = false;
   readingHoursDispute = false;
   displayActivityHeaderData = false;
+  activityNameLabel='Nome da Atividade';
 
   displayStatus = true;
 
@@ -204,6 +205,7 @@ export class AtividadeComponent implements OnInit{
     console.log("graduacoes:" + this.atividade.graduacoes);
     this.setHeaderContent();
     this.setContent();
+
     console.log(this.atividade);
     console.log(this.project);
 
@@ -227,6 +229,7 @@ export class AtividadeComponent implements OnInit{
       case '':  // tela de criação de atividades
         this.statusButtonColor = 'linear-gradient(#3473a3,#5b7ba5)';
         this.displayStatus = false;
+        this.displayActivityHeaderData=true;
         this.buttonsMarginTop = '3%';
         this.firstHeaderButton = 'Salvar';
         this.firstButtonColor = 'linear-gradient(#559958, #418856)';
@@ -262,6 +265,7 @@ export class AtividadeComponent implements OnInit{
         this.statusButtonColor = 'linear-gradient(#DEB345, #C99614)';
 
         if (this.canUserEdit()) {
+
 
           if (this.atividade.relatorioDeConclusao != null) {
             this.showInfoToastr("Essa atividade possui um relatório de Conclusão. Clique em \"Finalizar\" para visualizar");
@@ -592,10 +596,18 @@ export class AtividadeComponent implements OnInit{
   addComment(f: NgForm) {
 
     var commentContent: string = f.value.commentInput;
-    if (commentContent != '') {
-      // var newComment: Comentario = { name: "Teste 1", content: commentContent }
-      // this.comments.push(newComment);
-      this.commentValue = '';
+    let idAtividade = this.atividade.id;
+    console.log(idAtividade);
+    if (commentContent != '' && idAtividade) {
+      let comentario=  new Comentario(undefined,this.usuarioLogado,commentContent);
+      this.comentarioService.inserirComentario(comentario,idAtividade).subscribe(
+        (res: Comentario)=> {
+          this.showSuccessToastr("comentario inserido");
+          this.comentarios.push(res);
+          this.commentValue = '';
+        }
+      );
+
     }
   }
 
@@ -641,6 +653,7 @@ export class AtividadeComponent implements OnInit{
       console.log(this.file_store);
       this.showErrorToastr("Preencha todos os campos antes de salvar!");
     } else {
+
       let novaAtividade = this.atividade;
       novaAtividade.nome = this.activityName.value;
       novaAtividade.descricao = this.description.value;
@@ -682,7 +695,7 @@ export class AtividadeComponent implements OnInit{
     } else {
       return false;
     }*/
-    return true;
+    return false;
   }
 
   // Carga Horária
