@@ -16,6 +16,9 @@ import { Atividade, Comentario, Competencia, Complexidade, Graduacao, Orientador
 import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
 import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
 import { Router } from '@angular/router';
+import { Observable, forkJoin } from 'rxjs';
+import { GraduacaoService } from '../../../services/graduacao/services/graduacao.service';
+import { ComplexidadeService } from 'src/app/services/complexidade/services/complexidade.service';
 
 
 @Component({
@@ -48,11 +51,6 @@ export class AtividadeComponent implements OnInit{
 
 
 
-  allowedUsers = [
-    { id: 1 },
-    { id: 3 },
-    { id: 4 }
-  ];
 
 
   usuarioLogado: Usuario = new Usuario();
@@ -84,6 +82,7 @@ export class AtividadeComponent implements OnInit{
   displaySecondHeaderButton = '';
 
   displayTimestamp = '';
+
   isDisabled = true;
 
   displayComments = 'none';
@@ -115,6 +114,7 @@ export class AtividadeComponent implements OnInit{
   // esse formgroup serve pra ativar e desativar o form de acordo com o estado. precisa ter os formcontrols dentro senão quebra
   activityForm = new FormGroup({
     description: new FormControl(),
+    courses: new FormControl(),
     competences: new FormControl(),
     complexities: new FormControl(),
     candidatureDate: new FormControl(),
@@ -125,7 +125,9 @@ export class AtividadeComponent implements OnInit{
   });
 
   // FormControl pra poder acessar o valor digitado no input
+  activityName: FormControl = new FormControl();
   description: FormControl = new FormControl();
+  courses: FormControl = new FormControl([]);
   competences: FormControl = new FormControl();
   complexities: FormControl = new FormControl()
   candidatureDate: FormControl = new FormControl();
@@ -149,21 +151,29 @@ export class AtividadeComponent implements OnInit{
   file_store!: FileList;
   file_list: Array<string> = [];
 
+  options: Graduacao[] = [];
+
 
   constructor(
     private router: Router,
     private downloadService: DownloadService,
     public dialog: MatDialogRef<AtividadeComponent>,
     private toastr: ToastrService,
+    public complexidadeService: ComplexidadeService,
     public atividadeService: AtividadeService,
+    private graduacaoService: GraduacaoService,
     public loginService: LoginService,
     public comentarioService: ComentarioService,
     public orientadorService: OrientadorService,
     public anexoService: AnexoService,
-    @Inject(MAT_DIALOG_DATA) public data: Atividade
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    if(data){
-      this.instanciarAtividade(data.id);
+    if(data.atividade){
+      this.atividade=data.atividade;
+      
+    }
+    if (data.projeto){
+      this.project = data.projeto;
     }
     
   }
@@ -173,9 +183,20 @@ export class AtividadeComponent implements OnInit{
     if (!this.loginService.usuarioLogado) {
       this.router.navigate([`/login`]);
     }
+    forkJoin({
+      cursos: this.listarCursos(),
+      complexidades: this.listarComplexidades()
+    }).subscribe(({cursos, complexidades}) => {
+        this.options=cursos;
+        this.complexidades=complexidades;
+    });
+
     this.usuarioLogado = this.loginService.usuarioLogado;
+
     this.setHeaderContent();
     this.setContent();
+    console.log(this.atividade);
+    console.log(this.project);
 
   }
 
@@ -309,7 +330,7 @@ export class AtividadeComponent implements OnInit{
 
   setContent() {
     switch (this.atividade.status) {
-      case null:
+      case '':
         this.activityForm.enabled;
         this.isDisabled = false;
         break;
@@ -332,11 +353,9 @@ export class AtividadeComponent implements OnInit{
         break;
       case 'EM_EXECUCAO':
 
-        this.activityFormWidth = '65%';
-        this.commentsFormWidth = '35%';
         this.displayComments = '';
         this.description.setValue(this.atividade.descricao);
-        this.competences.setValue(this.atividade.competencia);
+        this.competences.setValue(this.atividade.competencia?.nome);
 
         if (this.atividade.complexidade?.nome != undefined) {
           this.activityForm.get('complexities')?.setValue(this.atividade.complexidade.nome);
@@ -362,10 +381,18 @@ export class AtividadeComponent implements OnInit{
 
   }
 
+  listarCursos(): Observable<Graduacao[]> {
+    return this.graduacaoService.listarTodasGraduacoes();
+  }
+
+  listarComplexidades(): Observable<Complexidade[]> {
+    return this.complexidadeService.listarTodosComplexidades();
+  }
+
   // primeiro e segundo botão
   firstButtonFunction() {
     switch (this.atividade.status) {
-      case "NOVA":
+      case '':
         this.saveActivity();
         break;
       case "ABERTA":
@@ -472,8 +499,52 @@ export class AtividadeComponent implements OnInit{
   }
 
   saveActivity() {
-    this.showSuccessToastr("Atividade criada com sucesso!");
-    this.onNoClick();
+
+    //this.onNoClick();
+    if(this.description.value===null || this.courses.value === null || this.activityForm.get('complexities')?.value===null || this.candidatureDate.value===null || this.submitDate.value===null){
+      console.log(this.file_store);
+      this.showErrorToastr("Preencha todos os campos antes de salvar!");
+    } else {
+      let novaAtividade = new Atividade();
+      novaAtividade.status="ABERTA";
+      novaAtividade.nome = this.activityName.value;
+      novaAtividade.descricao = this.description.value;
+      novaAtividade.graduacoes = this.courses.value;
+      novaAtividade.complexidade = this.activityForm.get('complexities')?.value;
+      novaAtividade.dataLimiteCandidatura = this.candidatureDate.value;
+      novaAtividade.dataConclusao = this.submitDate.value;
+      novaAtividade.dataCriacao = new Date();
+      this.atividadeService.inserirAtividade(novaAtividade).subscribe(
+        (res: Atividade) => {
+          novaAtividade=res;
+          let id = novaAtividade.id;
+          console.log(id);
+          if (res.id){
+            for(let i=0;i< this.file_store.length;i++){
+              this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id);
+            }
+          }
+          this.showSuccessToastr("Atividade criada com Sucesso!");
+          this.onNoClick();
+        }
+
+      );
+
+
+
+
+      /**
+      for(let i=0;i<this.file_store.length;i++){
+        let anexo: Anexo = new Anexo();
+        anexo.atividade=this.atividade;
+        anexo.fileName=this.file_store[i].name;
+        anexo.
+      }*/
+      
+      
+    }
+    //let newActivity: Atividade = new Atividade(undefined,"atividade teste", "descricao teste",new Date("2023-11-27"),new Date("2023-12-01"), new Date("2023-12-31"),this.project );
+    //this.atividadeService.inserirAtividade()
   }
 
 
@@ -657,6 +728,7 @@ export class AtividadeComponent implements OnInit{
 
     this.activityForm.setValue({
       description: "",
+      courses:[""],
       competences: [""],
       complexities: "",
       candidatureDate: "",
@@ -685,6 +757,7 @@ export class AtividadeComponent implements OnInit{
 
     this.activityForm.setValue({
       description: "",
+      courses:[""],
       competences: [""],
       complexities: "",
       candidatureDate: "",
@@ -795,15 +868,7 @@ export class AtividadeComponent implements OnInit{
     );
   }
 
-  atribuirValores(atividade: Atividade){
-    console.log(atividade.comentarios);
-    this.project = atividade.projeto ?? new Projeto;
-    this.orientador = this.project.orientador ?? new Orientador;
-    this.graduacao = this.orientador.graduacao;
-    this.complexidades = this.graduacao.complexidades ?? [];
-    this.competencias = this.graduacao.competencias ?? [];
-    this.comentarios = atividade.comentarios ?? [];
-  }
+
 
   instanciarAtividade(id: number | undefined) {
     if (id === undefined) {

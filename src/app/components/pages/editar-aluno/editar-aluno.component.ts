@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Aluno, Atividade, Graduacao, Login, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Graduacao, Login, Projeto, Usuario } from 'src/app/shared';
 import { AlunoService } from '../../../services/aluno/services/aluno.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, forkJoin } from 'rxjs';
@@ -11,6 +11,7 @@ import { LoginService } from '../../auth/services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { GraduacaoService } from '../../../services/graduacao/services/graduacao.service';
 import { AtividadeService } from '../../atividade/services/atividade.service';
+import { ProjetoService } from '../../projeto/services/projeto.service';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class EditarAlunoComponent implements OnInit {
 
   //APAGAR APAGAR APAGAR
   atividade!: Atividade;
+  projeto!: Projeto;
 
   constructor(
     private router: Router,
@@ -49,6 +51,7 @@ export class EditarAlunoComponent implements OnInit {
     private loginService: LoginService,
     private graduacaoService: GraduacaoService,
     private atividadeService: AtividadeService,
+    private projetoService: ProjetoService,
     public dialog: MatDialog,
     public toastr: ToastrService
   ) { }
@@ -59,18 +62,25 @@ export class EditarAlunoComponent implements OnInit {
      this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
     }
     forkJoin({
-      aluno: this.instanciarAluno(this.usuarioLogado.id),
-      cursos: this.listarCursos()
-    }).subscribe(({ aluno, cursos }) => {
-      if (aluno) {
+      aluno: this.instanciarAluno(3),
+      //cursos: this.listarCursos(),
+      atividade: this.instanciarAtividade(37),
+      projeto: this.instanciarProjeto(1)
+    }).subscribe(({ aluno, /**cursos,*/ atividade, projeto }) => {
+      if (aluno && projeto) {
         this.alunoLogado = aluno;
         this.aluno = aluno;
+        this.atividade = atividade;
+        this.projeto = projeto;
+        this.toastr.info("Atividade Carregada");
+        console.log("atividade:", atividade);
+        console.log("this.atividade:", this.atividade);
       }
-      this.options = cursos;
+
+      //this.options = cursos;
 
       this.syncGraduacao();
     });
-    this.instanciarAtividade();
   }
 
   instanciarAluno(id: number): Observable<Aluno> {
@@ -157,17 +167,20 @@ export class EditarAlunoComponent implements OnInit {
 
   /* CÓDIGO PRA TESTAR O COMPONENTE DE ATIVIDADE. EXCLUIR DAQUI PRA BAIXO QUANDO FOR PRA PRD*/
 
-  instanciarAtividade(){
-    this.atividadeService.buscarAtividadePorId(2).subscribe(
-      (response: Atividade) => { this.atividade = response; this.toastr.success("Atividade Carregada");}
-    );
+  instanciarAtividade(id: number):Observable<Atividade>{
+    return this.atividadeService.buscarAtividadePorId(id);
+      
   };
 
-  openDialog(atividade: Atividade) {
+  instanciarProjeto(id: number): Observable<Projeto> {
+    return this.projetoService.buscarProjetoPorId(id);
+  }
+
+  openDialog(atividade: Atividade, projeto: Projeto) {
 
     const dialogRef = this.dialog.open(AtividadeComponent, {
       maxWidth: this.dialogWidth(),
-      data: atividade,
+      data: {atividade: atividade, projeto: projeto}
     });
 
     dialogRef.afterClosed().subscribe(result => {

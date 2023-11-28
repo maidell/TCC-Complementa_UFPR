@@ -12,14 +12,14 @@
             </div>
             <div class="activity-header-data">
                 <div *ngIf="atividade.status!=''; else newActivity">
-                    <div class="project-name">{{projectName}}</div>
-                    <div class="activity-name">Nome da Atividade</div>
+                    <div class="project-name">{{atividade.projeto?.nome}}</div>
+                    <div class="activity-name">{{atividade.nome}}</div>
                 </div>
                 <ng-template #newActivity>
-                    <h5>Nome do Projeto</h5>
+                    <!--<h5>Nome do Projeto</h5>-->
                     <mat-form-field class="activity-field">
                         <mat-label>Nome da Atividade</mat-label>
-                        <input matInput class="activity-field-inner">
+                        <input matInput class="activity-field-inner" [formControl]="activityName">
                     </mat-form-field>
                 </ng-template>
             </div>
@@ -40,11 +40,26 @@
                     <mat-form-field class="description">
                         <mat-label>{{descriptionLabel}}</mat-label>
                         <textarea matInput class="description-field" rows="15"
-                            formControlName="description" [formControl]="description"></textarea>
+                            formControlName="description" [formControl]="description" required></textarea>
+                        <mat-error *ngIf="description.errors?.['required']  && description.touched">
+                            A descrição é obrigatória!
+                        </mat-error>    
                     </mat-form-field>
                 </div>
                 <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
-                    <mat-form-field class="competences">
+
+                    <mat-form-field class="competences" *ngIf="!fillingReport">
+                        <mat-label>Cursos</mat-label>
+                        <mat-select [(ngModel)]="graduacao" name="curso" formControlName="courses" [formControl]="courses" required multiple>
+                          <mat-option *ngFor="let option of options" [value]="option">
+                            {{ option.nome }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="courses.errors?.['required'] && courses.touched">
+                          Seleção dos cursos é obrigatória!
+                        </mat-error>
+                      </mat-form-field>
+                    <mat-form-field class="competences" *ngIf="fillingReport">
                         <mat-label>Competências</mat-label>
                         <mat-select [(value)]="atividade.competencia" formControlName="competences" [formControl]="competences">
                             <mat-option *ngFor="let c of competencias" [value]="c">{{c.nome}}</mat-option>
@@ -53,7 +68,7 @@
                     <mat-form-field class="complexities">
                         <mat-label>Complexidade</mat-label>
                         <mat-select [(value)]="atividade.complexidade" formControlName="complexities" [formControl]="complexities">
-                            <mat-option *ngFor="let c of complexidades" [value]="c">{{c.nome}}</mat-option>
+                            <mat-option *ngFor="let c of complexidades" [value]="c">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -70,13 +85,13 @@
                         <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
-                        <button mat-flat-button color="primary" [matMenuTriggerFor]="attachments" class="attachments" *ngIf="estado!='Nova'">Ver Anexos</button>
+                        <button mat-flat-button color="primary" [matMenuTriggerFor]="attachments" class="attachments" *ngIf="atividade.status!=''">Ver Anexos</button>
                         <mat-menu #attachments="matMenu" yPosition="above">
                             <div *ngFor="let a of atividade.anexos">
                                 <button mat-menu-item (click)="download(a.filePath, a.fileName)">{{a.fileName}}</button>
                             </div>
                         </mat-menu>
-                        <mat-form-field class="attachment-field" *ngIf="estado==='Nova'">
+                        <mat-form-field class="attachment-field" *ngIf="atividade.status===''">
                             <mat-label>Anexar Arquivos</mat-label>
                             <button mat-icon-button matSuffix (click)="f_input.click()">
                         <mat-icon>attach_file</mat-icon>

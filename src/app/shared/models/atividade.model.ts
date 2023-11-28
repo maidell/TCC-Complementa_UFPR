@@ -8,6 +8,7 @@ import { Projeto } from "./projeto.model";
 import { RelatorioDeConclusao } from "./relatorio-de-conclusao.model";
 import { Usuario } from "./usuario.model";
 import { ContestacaoCargaHoraria } from "./contestacao-carga-horaria.model";
+import { Graduacao } from "./graduacao.model";
 
 export class Atividade {
   public id?: number;
@@ -20,6 +21,7 @@ export class Atividade {
   public autor?: Usuario; 
   public executor?: Usuario;
   public competencia?: Competencia;
+  public graduacoes?: Graduacao[];
   public complexidade?: Complexidade;
   public comentarios?: Comentario[];
   public certificado?: Certificado;
@@ -39,6 +41,7 @@ export class Atividade {
     projeto?: Projeto,
     autor?: Usuario,
     executor?: Usuario,
+    graduacoes?: Graduacao[],
     competencia?: Competencia,
     complexidade?: Complexidade,
     comentarios?: Comentario[],
@@ -58,6 +61,7 @@ export class Atividade {
     if (projeto) this.projeto = projeto;
     if (autor) this.autor = autor;
     if (executor) this.executor = executor;
+    if (graduacoes) this.graduacoes = graduacoes;
     if (competencia) this.competencia = competencia;
     if (complexidade) this.complexidade = complexidade;
     if (comentarios) this.comentarios = comentarios;
