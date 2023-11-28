@@ -11,17 +11,17 @@
                 <h6 [ngStyle]="{'display': displayTimestamp}">Criada em {{atividade.dataCriacao | date:'dd/MM/yyyy'}}</h6>
             </div>
             <div class="activity-header-data">
-                <div *ngIf="atividade.status!=''; else newActivity">
-                    <div class="project-name">{{atividade.projeto?.nome}}</div>
+                <div *ngIf="!displayActivityHeaderData">
+                    <div class="project-name">{{project.nome}}</div>
                     <div class="activity-name">{{atividade.nome}}</div>
                 </div>
-                <ng-template #newActivity>
-                    <!--<h5>Nome do Projeto</h5>-->
+                <div *ngIf="displayActivityHeaderData">
+                    <h5>{{project.nome}}</h5>
                     <mat-form-field class="activity-field">
                         <mat-label>Nome da Atividade</mat-label>
                         <input matInput class="activity-field-inner" [formControl]="activityName">
                     </mat-form-field>
-                </ng-template>
+                </div>
             </div>
         </div>
         <div class="buttons">
@@ -65,7 +65,6 @@
                             <mat-option *ngFor="let c of competencias" [value]="c">{{c.nome}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <!-- <mat-form-field class="complexities" *ngIf="atividade.status==='' || isEditing"> -->
                         <mat-form-field class="complexities" >
                         <mat-label>Complexidade</mat-label>
                         <mat-select [(value)]="complexidadeAtividade" formControlName="complexities" [formControl]="complexities" [compareWith]="compareComplexidades">
@@ -73,12 +72,6 @@
                         </mat-select>
 
                     </mat-form-field>
-                    <!-- <mat-form-field class="complexities" *ngIf=" !isEditing">
-                        <mat-label>Complexidade</mat-label>
-                        <mat-select [ngModel]="complexidadeAtividade" formControlName="complexities" [formControl]="complexities">
-                            <mat-option  [formControl]="complexityName" [value]="complexidadeAtividade">{{complexidadeAtividade.nome}} ({{complexidadeAtividade.cargaHorariaMinima}}h - {{complexidadeAtividade.cargaHorariaMaxima}}h)</mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
                 </div>
                 <div class="dates" [ngStyle]="{'display': displayDates}">
                     <mat-form-field class="date-picker" id="first">

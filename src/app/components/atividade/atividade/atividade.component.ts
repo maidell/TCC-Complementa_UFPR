@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -39,7 +39,7 @@ export class AtividadeComponent implements OnInit{
   complexidadeAtividade = new Complexidade();
   project: Projeto = new Projeto();
   orientador: Orientador = new Orientador();
-  graduacao: Graduacao = new Graduacao();
+  graduacao: Graduacao[] = [];
   contestacao: ContestacaoCargaHoraria = new ContestacaoCargaHoraria();
   relatorioConclusao: RelatorioDeConclusao = new RelatorioDeConclusao();
   comentarios: Comentario[] = [];
@@ -65,6 +65,7 @@ export class AtividadeComponent implements OnInit{
   disputingHours = false;
   disputingExecution = false;
   readingHoursDispute = false;
+  displayActivityHeaderData = false;
 
   displayStatus = true;
 
@@ -161,6 +162,7 @@ export class AtividadeComponent implements OnInit{
     private downloadService: DownloadService,
     public dialog: MatDialogRef<AtividadeComponent>,
     private toastr: ToastrService,
+    private changeDetectorRef: ChangeDetectorRef,
     public complexidadeService: ComplexidadeService,
     public atividadeService: AtividadeService,
     private graduacaoService: GraduacaoService,
@@ -187,17 +189,19 @@ export class AtividadeComponent implements OnInit{
     }
     forkJoin({
       cursos: this.listarCursos(),
-      complexidades: this.listarComplexidades()
+      complexidades: this.listarComplexidades(),
     }).subscribe(({cursos, complexidades}) => {
         this.options=cursos;
         console.log("entrou no subscribe");
         this.complexidades=complexidades;
         console.log("populou as complexidades");
         this.syncComplexidade();
+        console.log("saiu do sync complexidade");
+        //this.syncGraduacoes();
     });
 
     this.usuarioLogado = this.loginService.usuarioLogado;
-
+    console.log("graduacoes:" + this.atividade.graduacoes);
     this.setHeaderContent();
     this.setContent();
     console.log(this.atividade);
@@ -341,6 +345,7 @@ export class AtividadeComponent implements OnInit{
         break;
       case 'ABERTA':
         this.activityForm.disable();
+        this.activityName.setValue(this.atividade.nome);
         this.description.setValue(this.atividade.descricao);
         this.competences.setValue(this.atividade.competencia);
         
@@ -460,11 +465,30 @@ export class AtividadeComponent implements OnInit{
   }
 
   syncComplexidade() {
+    console.log("entrou no sync complexidade");
     const matchedComplexidade = this.complexidades.find(cp => cp.id === this.atividade.complexidade?.id);
     if (matchedComplexidade) {
       this.complexidadeAtividade = matchedComplexidade;
+      this.changeDetectorRef.detectChanges();
     }
   }
+
+
+  syncGraduacoes(){
+    console.log("entrou no sync graduacoes");
+    let matchedGraduacoes;
+    if(this.atividade.graduacoes){
+      for(let i= 0;i< this.atividade.graduacoes?.length;i++){
+        let novaGraduacao = this.atividade.graduacoes[i];
+        if(this.options.find(gd =>gd.id === novaGraduacao.id)){
+          this.graduacao.push(novaGraduacao);
+        }
+        this.changeDetectorRef.detectChanges();
+      } 
+
+    }
+  }
+
 
   secondButtonFunction() {
     switch (this.atividade.status) {
@@ -474,6 +498,7 @@ export class AtividadeComponent implements OnInit{
             this.editActivity();
           } else {
             this.isEditing = false;
+            this.displayActivityHeaderData=false;
             this.setHeaderContent();
             this.setContent();
           }
@@ -599,6 +624,7 @@ export class AtividadeComponent implements OnInit{
   //Edição
   editActivity() {
     this.isEditing = true;
+    this.displayActivityHeaderData=true;
     this.setContent();
     this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
       this.isDisabled = false;
@@ -611,12 +637,22 @@ export class AtividadeComponent implements OnInit{
   }
 
   saveEdit() {
-    //inserir os valores pulverizados dentro da instancia de atividade antes de enviar para a chamada do service
-
-    this.atividadeService.atualizarAtividade(this.atividade).subscribe(
-      (response: Atividade) => {
-        console.log('Atividade salva com sucesso', response);
-        this.showSuccessToastr("Atividade salva!");
+    if(this.description.value===null || this.courses.value === null || this.activityForm.get('complexities')?.value===null || this.candidatureDate.value===null || this.submitDate.value===null){
+      console.log(this.file_store);
+      this.showErrorToastr("Preencha todos os campos antes de salvar!");
+    } else {
+      let novaAtividade = this.atividade;
+      novaAtividade.nome = this.activityName.value;
+      novaAtividade.descricao = this.description.value;
+      novaAtividade.graduacoes = this.courses.value;
+      novaAtividade.complexidade = this.activityForm.get('complexities')?.value;
+      novaAtividade.dataLimiteCandidatura = this.candidatureDate.value;
+      novaAtividade.dataConclusao = this.submitDate.value;
+      novaAtividade.dataCriacao = new Date();
+      this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+        (response: Atividade) => {
+          console.log('Atividade salva com sucesso', response);
+          this.showSuccessToastr("Atividade salva!");
       },
       (error: any) => {
         console.error('Erro ao enviar arquivo', error);
@@ -624,12 +660,12 @@ export class AtividadeComponent implements OnInit{
     );
 
     this.isEditing = false;
-    // substituir daqui pra baixo pela função de enviar pro banco
-
-
+    this.displayActivityHeaderData=false;
     this.setContent(); // essa sai também
 
     this.setHeaderContent(); // essa fica
+
+    }
   }
 
   canUserEdit() {
