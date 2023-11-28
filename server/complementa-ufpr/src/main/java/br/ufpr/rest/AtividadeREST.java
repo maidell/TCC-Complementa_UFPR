@@ -1,5 +1,6 @@
 package br.ufpr.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,12 +26,14 @@ import br.ufpr.model.Atividade;
 import br.ufpr.model.Graduacao;
 import br.ufpr.model.Orientador;
 import br.ufpr.model.Projeto;
+import br.ufpr.model.Servidor;
 import br.ufpr.model.Usuario;
 import br.ufpr.repository.AlunoRepository;
 import br.ufpr.repository.AtividadeRepository;
 import br.ufpr.repository.GraduacaoRepository;
 import br.ufpr.repository.OrientadorRepository;
 import br.ufpr.repository.ProjetoRepository;
+import br.ufpr.repository.ServidorRepository;
 import br.ufpr.repository.UsuarioRepository;
 
 @CrossOrigin
@@ -55,6 +58,9 @@ public class AtividadeREST {
 	
 	@Autowired
 	private OrientadorRepository repoOri;
+	
+	@Autowired
+	private ServidorRepository repoSrv;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -114,6 +120,56 @@ public class AtividadeREST {
 		if (lista.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
+	}
+	
+	@GetMapping("/contestacoes/{id}")
+	public ResponseEntity<List<AtividadeSimplesDTO>> obterAtividadesPorContestadasPorId(@PathVariable("id") Long id) {
+		
+		List<Atividade> lista = new ArrayList<>();
+		
+		Optional<Orientador> ori = repoOri.findById(id); 
+		if(!ori.isPresent()) {
+			Optional<Servidor> srv = repoSrv.findById(id); 
+			if(!srv.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			}else {
+				lista = repo.findAllContestacaoByServidorId(id);
+			}
+		}else {
+			lista = repo.findAllContestacaoByCoordenadorId(id);
+		}
+		
+		if (lista.isEmpty()){
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
+	}
+	
+	@GetMapping("/contestacoes-carga-horaria/{id}")
+	public ResponseEntity<List<AtividadeSimplesDTO>> obterAtividadesPorContestadasCargaHorariaPorId(@PathVariable("id") Long id) {
+		
+		List<Atividade> lista = new ArrayList<>();
+		
+		Optional<Orientador> ori = repoOri.findById(id); 
+		if(!ori.isPresent()) {
+			Optional<Servidor> srv = repoSrv.findById(id); 
+			if(!srv.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			}else {
+				lista = repo.findAllContestacaoCargaHorariaByServidorId(id);
+			}
+		}else {
+			lista = repo.findAllContestacaoCargaHorariaByCoordenadorId(id);
+		}
+		
+		if (lista.isEmpty()){
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
 	}

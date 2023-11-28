@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import br.ufpr.model.Graduacao;
 import br.ufpr.model.Status;
 
 public class AtividadeDTO implements Serializable {
@@ -27,6 +29,7 @@ public class AtividadeDTO implements Serializable {
 	private List<AnexoDTO> anexos = new ArrayList<>();
 	private ContestacaoDTO contestacao;
 	private ContestacaoCargaHorariaDTO contestacaoCargaHoraria;
+	private List<GraduacaoSimplesDTO> graduacoes = new ArrayList<>();
 	private Status status;
 
 	public AtividadeDTO() {
@@ -36,7 +39,7 @@ public class AtividadeDTO implements Serializable {
 			Date dataConclusao, ProjetoDTO projeto, UsuarioDTO autor, AlunoDTO executor, CompetenciaDTO competencia,
 			ComplexidadeDTO complexidade, List<ComentarioDTO> comentarios, CertificadoDTO certificado,
 			RelatorioDeConclusaoDTO relatorioDeConclusao, List<AnexoDTO> anexos, ContestacaoDTO contestacao,
-			ContestacaoCargaHorariaDTO contestacaoCargaHoraria, Status status) {
+			ContestacaoCargaHorariaDTO contestacaoCargaHoraria, List<GraduacaoSimplesDTO> graduacoes, Status status) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -55,6 +58,7 @@ public class AtividadeDTO implements Serializable {
 		this.anexos = anexos;
 		this.contestacao = contestacao;
 		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
+		this.graduacoes = graduacoes;
 		this.status = status;
 	}
 
@@ -193,6 +197,14 @@ public class AtividadeDTO implements Serializable {
 		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
 	}
 	
+	public List<GraduacaoSimplesDTO> getGraduacoes() {
+		return graduacoes;
+	}
+
+	public void setGraduacoes(List<GraduacaoSimplesDTO> graduacoes) {
+		this.graduacoes = graduacoes;
+	}
+
 	public Status getStatus() {
 		return status;
 	}
@@ -223,7 +235,8 @@ public class AtividadeDTO implements Serializable {
 				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao() 
 				+ ", anexos=" + getAnexos() 
 				+ ", contestacao=" + getContestacao() 
-				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria() 
+				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria()
+				+ ", graduacoes=" + getGraduacoes() 
 				+ ", status=" + getStatus() + "]";
 	}
 

@@ -14,6 +14,7 @@ public class GraduacaoDTO implements Serializable {
 
     private Long id;
     private String nome;
+    private OrientadorSimplesDTO coordenador;
     private List<ServidorDTO> servidoresCoordenadores;
     private List<CompetenciaDTO> competencias;
     private List<ComplexidadeDTO> complexidades;
@@ -21,11 +22,12 @@ public class GraduacaoDTO implements Serializable {
     public GraduacaoDTO() {
     }
 
-    public GraduacaoDTO(Long id, String nome, List<ServidorDTO> servidoresCoordenadores,
+    public GraduacaoDTO(Long id, String nome, OrientadorSimplesDTO coordenador, List<ServidorDTO> servidoresCoordenadores,
 			List<CompetenciaDTO> competencias, List<ComplexidadeDTO> complexidades) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.coordenador = coordenador;
 		this.servidoresCoordenadores = servidoresCoordenadores;
 		this.competencias = competencias;
 		this.complexidades = complexidades;
@@ -46,8 +48,16 @@ public class GraduacaoDTO implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+    
+    public OrientadorSimplesDTO getCoordenador() {
+		return coordenador;
+	}
 
-    public List<ServidorDTO> getServidoresCoordenadores() {
+	public void setCoordenador(OrientadorSimplesDTO coordenador) {
+		this.coordenador = coordenador;
+	}
+
+	public List<ServidorDTO> getServidoresCoordenadores() {
 		return servidoresCoordenadores;
 	}
 
@@ -78,6 +88,7 @@ public class GraduacaoDTO implements Serializable {
 	@Override
     public String toString() {
         return "GraduacaoDTO [id=" + getId() + ", nome=" + getNome() +
+        		", coordenador=" + getCoordenador() +
         		", servidoresCoordenadores=" + getServidoresCoordenadores() +
         		", competencias=" + getCompetencias() +
         		", complexidades=" + getComplexidades() + "]";
