@@ -1,11 +1,12 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { ChangeDetectorRef, Component, Inject, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
 import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
+import { OrientadorService } from 'src/app/services/orientador/services/orientador.service';
 import { Graduacao, Orientador } from 'src/app/shared';
 
 @Component({
@@ -13,7 +14,7 @@ import { Graduacao, Orientador } from 'src/app/shared';
   templateUrl: './graduacoes-dialog.component.html',
   styleUrls: ['./graduacoes-dialog.component.scss']
 })
-export class GraduacoesDialogComponent  {
+export class GraduacoesDialogComponent implements OnInit {
   @ViewChild(MatAutocompleteTrigger) autoComplete!: MatAutocompleteTrigger;
 
   id: FormControl = new FormControl();
@@ -24,52 +25,122 @@ export class GraduacoesDialogComponent  {
   
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Graduacao>;
-  constructor(@Inject(DIALOG_DATA) public data: any,
+  constructor(@Inject(DIALOG_DATA) public data: Graduacao,
    private changeDetectorRef: ChangeDetectorRef,
    public graduacaoService: GraduacaoService,
+   public orientadorService: OrientadorService,
     public toastr: ToastrService
     ) {
       if (data) {
-        this.graduacao = data.graduacao ?? new Graduacao;
+        console.log(data);
+        this.graduacao = data;
       }
+  }
+  ngOnInit(): void {
+    forkJoin({
+      graduacao: this.buscarGraduacao(this.graduacao),
+      coordenadores: this.buscarTodosOsOrientadores(this.graduacao)
+    }).subscribe(({ graduacao, coordenadores }) => {
+      if (graduacao){
+        this.graduacao = graduacao;
+        this.id.setValue(graduacao.id);
+        this.nome.setValue(graduacao.nome);
+      } 
+      if(coordenadores) {
+      this.coordenadores = coordenadores;
+      this.coordenador.setValue(graduacao.coordenador);
+      this.syncCoordenador();
+      console.log(graduacao, coordenadores);
+      this.changeDetectorRef.detectChanges();
+      }
+    });
+  }
+
+  syncCoordenador() {
+    const matchedCoordenador = this.coordenadores.find(op => op.id === this.graduacao.coordenador.id);
+    if (matchedCoordenador) {
+      this.coordenador.setValue(matchedCoordenador);
+    }
   }
 
   gradForm = new FormGroup({
-    id: new FormControl(this.graduacao.id),
-    nomeDoCurso: new FormControl(this.graduacao.nome),
-    coordenador: new FormControl(this.graduacao.coordenador),
-    
+    nomeDoCurso: this.nome,
+    coordenador: this.coordenador,
   });
 
-  saveGraduation(){
-    this.graduacao.id = this.id.value;
+  saveGraduation() {
     this.graduacao.nome = this.nome.value;
-    this.graduacao.coordenador = this.coordenador.value;
-    if(this.graduacao.id){
+    if (this.graduacao.coordenador.id !== this.coordenador.value) {
+      this.atualizarPapeisOrientadores().subscribe(
+        () => {
+          this.graduacao.coordenador = this.coordenador.value;
+          this.salvarOuAtualizarGraduacao();
+        },
+        (err) => {
+          this.toastr.error('Erro ao atualizar os papéis dos orientadores: ' + err.message);
+          console.log('Erro ao atualizar os papéis dos orientadores!', err);
+        }
+      );
+    } else {
+      this.salvarOuAtualizarGraduacao();
+    }
+  }
+  
+  private salvarOuAtualizarGraduacao() {
+    if (this.graduacao.id) {
       this.atualizarGraduacao(this.graduacao).subscribe(
         (res: Graduacao) => {
           this.graduacao = res;
           this.toastr.success('Graduacao atualizada com sucesso!');
         },
         (err) => {
-          this.toastr.error('Erro ao atualizar Graduacao!');
+          this.toastr.error('Erro ao atualizar Graduacao: ' + err.message);
           console.log('Erro ao atualizar Graduacao!', err);
         }
       );
-    }else{
+    } else {
       this.salvarGraduacao(this.graduacao).subscribe(
         (res: Graduacao) => {
           this.graduacao = res;
           this.toastr.success('Graduacao salva com sucesso!');
+          
         },
         (err) => {
-          this.toastr.error('Erro ao salvar Graduacao!');
+          this.toastr.error('Erro ao salvar Graduacao: ' + err.message);
           console.log('Erro ao salvar Graduacao!', err);
         }
       );
     }
-    this.changeDetectorRef.detectChanges();
-      window.location.reload();
+  }
+  
+  atualizarPapeisOrientadores(): Observable<any> {
+    if (this.graduacao.coordenador) {
+      const observables: Observable<any>[] = [];
+  
+      const orientadorAntigo = this.graduacao.coordenador;
+      orientadorAntigo.papel = 'ORIENTADOR';
+      let cloneGraduacaoAntiga = new Graduacao();
+      cloneGraduacaoAntiga.id = this.graduacao.id;
+      orientadorAntigo.graduacao = cloneGraduacaoAntiga;
+      observables.push(this.atualizarOrientador(orientadorAntigo));
+  
+      const novoCoordenador = this.graduacao.coordenador;
+      novoCoordenador.papel = 'COORDENADOR';
+      let cloneGraduacaoNova = new Graduacao();
+      cloneGraduacaoNova.id = this.graduacao.id;
+      novoCoordenador.graduacao = cloneGraduacaoNova;
+      observables.push(this.atualizarOrientador(novoCoordenador));
+  
+      return forkJoin(observables).pipe(
+        catchError((err) => {
+          this.toastr.error('Erro ao atualizar os papéis dos orientadores: ' + err.message);
+          console.log('Erro ao atualizar os papéis dos orientadores!', err);
+          return throwError(err);
+        })
+      );
+    }
+  
+    return of(null); // Retorna um Observable vazio se não houver coordenador
   }
   
   deleteGraduation(){
@@ -77,7 +148,22 @@ export class GraduacoesDialogComponent  {
       window.location.reload();
       }
 
-  //close dialog
+      openDialog() {
+        if (this.graduacao) {
+          // this.graduacaoService.buscarGraduacaoPorId(graduacao.id).subscribe(
+          //   (res: Graduacao) => {
+          //     console.log("Res instanciado:", res);
+          //     const dialogRef = this.dialog.open(GraduacoesDialogComponent, {
+          //       minWidth: '40rem',
+          //       data: res
+          //     });
+          //     dialogRef.afterClosed().subscribe(result => {
+          //       this.ngOnInit();
+          //     });
+          //   }
+          // );
+        }
+      }
   cancel(){
     
   }
@@ -98,4 +184,12 @@ export class GraduacoesDialogComponent  {
     return this.graduacaoService.buscarGraduacaoPorId(graduacao.id);
   }
 
+  buscarTodosOsOrientadores(graduacao: Graduacao): Observable<Orientador[]>{
+    return this.orientadorService.listarTodosOrientadoresPorGraducao(graduacao.id);
+  }
+
+  atualizarOrientador(orientador: Orientador): Observable<Orientador> {
+    return this.orientadorService.atualizarOrientador(orientador);
+  }
+  
 }

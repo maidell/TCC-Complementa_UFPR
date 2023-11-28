@@ -55,7 +55,7 @@ public class ServidorREST {
 	public ResponseEntity<ServidorDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Servidor> servidor = repo.findById(id);
-		if (servidor.isEmpty()) {
+		if (!servidor.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(servidor.get(), ServidorDTO.class));
@@ -92,7 +92,7 @@ public class ServidorREST {
 	public ResponseEntity<ServidorDTO> alterarServidor(@PathVariable("id") Long id, @RequestBody Servidor servidor) {
 		Optional<Servidor> srv = repo.findById(id);
 
-		if (srv.isEmpty()) {
+		if (!srv.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			Servidor newSrv = srv.get();
@@ -112,7 +112,7 @@ public class ServidorREST {
 	public ResponseEntity<?> removerServidor(@PathVariable("id") Long id) {
 
 		Optional<Servidor> servidor = repo.findById(id);
-		if (servidor.isEmpty()) {
+		if (!servidor.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(servidor.get());

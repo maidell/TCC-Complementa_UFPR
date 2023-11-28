@@ -49,7 +49,7 @@ public class RelatorioDeConclusaoREST {
     public ResponseEntity<RelatorioDeConclusaoDTO> buscaPorId(@PathVariable String id) {
 
         Optional<RelatorioDeConclusao> relatorio = repo.findById(id);
-        if (relatorio.isEmpty()) {
+        if (!relatorio.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(relatorio.get(), RelatorioDeConclusaoDTO.class));
@@ -76,7 +76,7 @@ public class RelatorioDeConclusaoREST {
     public ResponseEntity<RelatorioDeConclusaoDTO> alterarRelatorio(@PathVariable("id") String id, @RequestBody RelatorioDeConclusao relatorio) {
         Optional<RelatorioDeConclusao> rlt = repo.findById(id);
 
-        if (rlt.isEmpty()) {
+        if (!rlt.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             relatorio.setId(Long.parseLong(id));
@@ -90,7 +90,7 @@ public class RelatorioDeConclusaoREST {
     public ResponseEntity<?> removerRelatorio(@PathVariable("id") String id) {
 
         Optional<RelatorioDeConclusao> relatorio = repo.findById(id);
-        if (relatorio.isEmpty()) {
+        if (!relatorio.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             repo.delete(relatorio.get());

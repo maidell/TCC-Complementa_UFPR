@@ -49,7 +49,7 @@ public class CompetenciaREST {
 	public ResponseEntity<CompetenciaDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Competencia> competencia = repo.findById(id);
-		if (competencia.isEmpty()) {
+		if (!competencia.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(competencia.get(), CompetenciaDTO.class));
@@ -76,7 +76,7 @@ public class CompetenciaREST {
 	public ResponseEntity<CompetenciaDTO> alterarCompetencia(@PathVariable("id") Long id, @RequestBody Competencia competencia) {
 		Optional<Competencia> cpt = repo.findById(id);
 
-		if (cpt.isEmpty()) {
+		if (!cpt.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			competencia.setId(id);
@@ -90,7 +90,7 @@ public class CompetenciaREST {
 	public ResponseEntity<?> removerCompetencia(@PathVariable("id") Long id) {
 
 		Optional<Competencia> competencia = repo.findById(id);
-		if (competencia.isEmpty()) {
+		if (!competencia.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(competencia.get());

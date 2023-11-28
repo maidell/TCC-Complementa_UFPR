@@ -93,6 +93,9 @@ public class Atividade implements Serializable {
 	
 	@ManyToMany(mappedBy = "atividades", fetch = FetchType.LAZY)
 	private List<Graduacao> graduacoes = new ArrayList<>();
+	
+	@ManyToMany(mappedBy = "atividades", fetch = FetchType.LAZY)
+	private List<Aluno> candidatos = new ArrayList<>();
 
 	public Atividade() {
 	}
@@ -105,7 +108,7 @@ public class Atividade implements Serializable {
 	public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
 			Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor, Competencia competencia,
 			Complexidade complexidade, List<Comentario> comentarios, Certificado certificado,
-			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, Contestacao contestacao, ContestacaoCargaHoraria contestacaoCargaHoraria,
+			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, List<Aluno> candidatos, Contestacao contestacao, ContestacaoCargaHoraria contestacaoCargaHoraria,
 			Status status) {
 		super();
 		this.id = id;
@@ -123,6 +126,7 @@ public class Atividade implements Serializable {
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
 		this.anexos = anexos;
+		this.candidatos = candidatos;
 		this.contestacao = contestacao;
 		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
 		this.status = status;
@@ -240,6 +244,22 @@ public class Atividade implements Serializable {
 		this.relatorioDeConclusao = relatorioDeConclusao;
 	}
 
+	public List<Graduacao> getGraduacoes() {
+		return graduacoes;
+	}
+
+	public void setGraduacoes(List<Graduacao> graduacoes) {
+		this.graduacoes = graduacoes;
+	}
+
+	public List<Aluno> getCandidatos() {
+		return candidatos;
+	}
+
+	public void setCandidatos(List<Aluno> candidatos) {
+		this.candidatos = candidatos;
+	}
+
 	public List<Anexo> getAnexos() {
 		return anexos;
 	}
@@ -292,7 +312,8 @@ public class Atividade implements Serializable {
 				+ ", comentarios=" + getComentarios() 
 				+ ", certificado=" + getCertificado()
 				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao() 
-				+ ", anexos=" + getAnexos() 
+				+ ", anexos=" + getAnexos()
+				+ ", candidatos=" + getCandidatos() 
 				+ ", contestacao=" + getContestacao() 
 				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria() 
 				+ ", status=" + getStatus() + "]";

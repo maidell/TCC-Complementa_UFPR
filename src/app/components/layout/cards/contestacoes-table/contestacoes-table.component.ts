@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ContestacoesDialogComponent } from '../contestacoes-dialog/contestacoes-dialog.component';
+import { Atividade } from 'src/app/shared';
 
 @Component({
   selector: 'app-contestacoes-table',
@@ -16,23 +18,18 @@ export class ContestacoesTableComponent<T> implements OnInit{
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.displayedColumns = [];
-    for (let column of this.columns) {
-      this.displayedColumns.push(column.key);
-    }
+    this.displayedColumns = this.columns.map(column => column.key);
     this.displayedColumns.push('button');
-    console.log(this.displayedColumns);
-    console.log(this.dataSource);
-
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  @Input() dataSource!: MatTableDataSource<T>;
+
+  @Input() dataSource!: MatTableDataSource<Atividade>;
   @Input() button!: string;
   @Input() colorButtonOne?: string;
-  @Input() columns!: {title: string, suffix?: string, key: string}[];
+  @Input() columns!: { title: string, suffix?: string, key: string }[];
   @Input() display!: string;
   displayedColumns!: string[];
 
@@ -45,10 +42,10 @@ export class ContestacoesTableComponent<T> implements OnInit{
     }
   }
 
-  openDialog() {
-    this.dialog.open(ContestacoesTableComponent, {
+  openDialog(atividade: Atividade) {
+    this.dialog.open(ContestacoesDialogComponent, {
       minWidth: '50%',
+      data: { atividade: atividade }
     });
   }
-
 }

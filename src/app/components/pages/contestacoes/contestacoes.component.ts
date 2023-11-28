@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from '../../auth/services/login.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { AtividadeService } from '../../atividade/services/atividade.service';
 import { Atividade, Usuario } from 'src/app/shared';
 
@@ -23,7 +23,7 @@ export class ContestacoesComponent implements OnInit {
           public router: Router,
           private atividadeService: AtividadeService
           ) {
-    this.dataSource = new MatTableDataSource<Atividade>(this.atividades);
+    this.dataSource = new MatTableDataSource<Atividade>(this.atividadesContestadas);
   }
   columns: { title: string, suffix?: string, key: string }[] = [
     { title: "Contestacao", key: 'nome' },
@@ -37,17 +37,35 @@ export class ContestacoesComponent implements OnInit {
       this.router.navigate([`login`]);
     }
     this.titleService.setTitle('Contestações');
-    this.instanciarContestacoes(this.usuarioLogado.id)
-    this.dataSource = new MatTableDataSource<Atividade>(this.atividades);
+    forkJoin({
+      contestacoes: this.instanciarContestacoes(this.usuarioLogado.id),
+      contestacoesCH : this.instanciarContestacoesCargaHoraria(this.usuarioLogado.id)
+    }).subscribe(({ contestacoes, contestacoesCH }) => {
+      if (contestacoes && contestacoesCH) {
+        if(contestacoes){
+          this.atividadesContestadas = contestacoes;
+        }
+        if(contestacoesCH){
+          this.atividadesCargaHorariaContestadas = contestacoesCH;
+        } 
+      }
+      this.dataSource = new MatTableDataSource<Atividade>(this.atividadesContestadas);
+    });
+    
   }
 
-  atividades: Atividade[] = [];
+  atividadesContestadas: Atividade[] = [];
+  atividadesCargaHorariaContestadas: Atividade[] = [];
 
   instanciarContestacoes(id: number): Observable<Atividade[]>{
     return this.atividadeService.listarTodasAtividadesContestadasPorIdServCoord(id);
   }
 
+  instanciarContestacoesCargaHoraria(id: number): Observable<Atividade[]>{
+    return this.atividadeService.listarTodasAtividadesCargaHorariaContestadasPorIdServCoord(id);
+  }
+
   hasObject(): boolean {
-    return this.atividades.length > 0;
+    return this.atividadesContestadas.length > 0;
   }
 }

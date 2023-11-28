@@ -30,7 +30,7 @@ public class ConfirmacaoREST {
 	public ResponseEntity<String> buscaPorEmaileAtiva(@PathVariable String email) {
 
 		Optional<Aluno> aln = repo.findByEmail(email);
-		if (aln.isEmpty()) {
+		if (!aln.isPresent()) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		} else {
 			Aluno aluno = aln.get();

@@ -42,4 +42,6 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long> {
 
 	@Query("SELECT a FROM Atividade a WHERE a.contestacao IS NOT NULL AND :servidorId IN (SELECT s.id FROM a.executor.graduacao.servidoresCoordenadores s)")
 	List<Atividade> findAllContestacaoByServidorId(@Param("servidorId") Long servidorId);
+	
+	
 }

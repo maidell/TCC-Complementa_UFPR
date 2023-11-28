@@ -49,7 +49,7 @@ public class ComplexidadeREST {
     public ResponseEntity<ComplexidadeDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<Complexidade> complexidade = repo.findById(id);
-        if (complexidade.isEmpty()) {
+        if (!complexidade.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(complexidade.get(), ComplexidadeDTO.class));
@@ -76,7 +76,7 @@ public class ComplexidadeREST {
     public ResponseEntity<ComplexidadeDTO> alterarComplexidade(@PathVariable("id") Long id, @RequestBody Complexidade complexidade) {
         Optional<Complexidade> cmplx = repo.findById(id);
 
-        if (cmplx.isEmpty()) {
+        if (!cmplx.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             complexidade.setId(id);
@@ -90,7 +90,7 @@ public class ComplexidadeREST {
     public ResponseEntity<?> removerComplexidade(@PathVariable("id") Long id) {
 
         Optional<Complexidade> complexidade = repo.findById(id);
-        if (complexidade.isEmpty()) {
+        if (!complexidade.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             repo.delete(complexidade.get());

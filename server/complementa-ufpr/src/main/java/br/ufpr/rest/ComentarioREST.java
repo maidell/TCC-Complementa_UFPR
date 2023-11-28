@@ -59,7 +59,7 @@ public class ComentarioREST {
 	public ResponseEntity<ComentarioDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Comentario> comentario = repo.findById(id);
-		if (comentario.isEmpty()) {
+		if (!comentario.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(comentario.get(), ComentarioDTO.class));
@@ -72,7 +72,7 @@ public class ComentarioREST {
 		try {
 			Optional<Atividade> atv = atRepo.findById(id);
 			Optional<Usuario> usu = usuRepo.findById(comentario.getUsuario().getId());
-			if (atv.isEmpty() && usu.isEmpty()) {
+			if (!atv.isPresent() && !usu.isPresent()) {
 				throw new Exception("Criação do comentário não foi realizada com sucesso");
 			}
 			Comentario cmt = mapper.map(comentario, Comentario.class);
@@ -93,7 +93,7 @@ public class ComentarioREST {
 	public ResponseEntity<ComentarioDTO> alterarComentario(@PathVariable("id") Long id, @RequestBody Comentario comentario) {
 		Optional<Comentario> cmt = repo.findById(id);
 
-		if (cmt.isEmpty()) {
+		if (!cmt.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			comentario.setId(id);
@@ -107,7 +107,7 @@ public class ComentarioREST {
 	public ResponseEntity<?> removerComentario(@PathVariable("id") Long id) {
 
 		Optional<Comentario> comentario = repo.findById(id);
-		if (comentario.isEmpty()) {
+		if (!comentario.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(comentario.get());

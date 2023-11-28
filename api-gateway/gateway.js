@@ -228,6 +228,13 @@ app.get('/atividades/contestacoes-carga-horaria/:id', verifyJWT, (req, res, next
   servicesProxy(req, res, next);
 })
 
+app.get('/atividades/candidaturas/alunos/:id', verifyJWT, (req, res, next) => {
+  const id = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/atividades/candidaturas/alunos/${id} para ${API_HOST}/atividades/candidaturas/alunos/${id}`);
+  servicesProxy(req, res, next);
+})
+
+
 app.get('/atividades', verifyJWT, (req, res, next) => {
   console.log(`Roteando GET de http://localhost:${PORT}/atividades para ${API_HOST}/atividades`);
   servicesProxy(req, res, next);
@@ -511,8 +518,13 @@ app.post('/orientadores', verifyJWT, (req, res, next) => {
 
 app.get('/orientadores/:id', verifyJWT, (req, res, next) => {
   const orientadorId = req.params.id;
-  console.log(orientadorId);
   console.log(`Roteando GET de http://localhost:${PORT}/orientadores/${orientadorId} para ${API_HOST}/orientadores/${orientadorId}`);
+  servicesProxy(req, res, next);
+})
+
+app.get('/orientadores/graduacoes/:id', verifyJWT, (req, res, next) => {
+  const graduacaoId = req.params.id;
+  console.log(`Roteando GET de http://localhost:${PORT}/orientadores/graduacoes/${graduacaoId} para ${API_HOST}/orientadores/graduacoes/${graduacaoId}`);
   servicesProxy(req, res, next);
 })
 

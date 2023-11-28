@@ -31,7 +31,7 @@ public class AuthREST {
 		try {
 			Optional<Usuario> usuOpt = repository.findByEmail(login.getEmail());
 
-			if (usuOpt.isEmpty()) {
+			if (!usuOpt.isPresent()) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}
 			Usuario usu = usuOpt.get();
@@ -60,7 +60,7 @@ public class AuthREST {
 		try {
 			Optional<Usuario> usuOpt = repository.findByEmail(login.getEmail());
 
-			if (usuOpt.isEmpty()) {
+			if (!usuOpt.isPresent()) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}
 			Usuario usu = usuOpt.get();

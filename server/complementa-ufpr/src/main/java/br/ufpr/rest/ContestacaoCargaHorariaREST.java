@@ -49,7 +49,7 @@ public class ContestacaoCargaHorariaREST {
     public ResponseEntity<ContestacaoCargaHorariaDTO> buscaPorId(@PathVariable String id) {
 
         Optional<ContestacaoCargaHoraria> contestacaoCargaHoraria = repo.findById(id);
-        if (contestacaoCargaHoraria.isEmpty()) {
+        if (!contestacaoCargaHoraria.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(contestacaoCargaHoraria.get(), ContestacaoCargaHorariaDTO.class));
@@ -76,7 +76,7 @@ public class ContestacaoCargaHorariaREST {
     public ResponseEntity<ContestacaoCargaHorariaDTO> alterarContestacaoCargaHoraria(@PathVariable("id") String id, @RequestBody ContestacaoCargaHoraria contestacaoCargaHoraria) {
         Optional<ContestacaoCargaHoraria> contstCarga = repo.findById(id);
 
-        if (contstCarga.isEmpty()) {
+        if (!contstCarga.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             contestacaoCargaHoraria.setId(Long.parseLong(id));
@@ -90,7 +90,7 @@ public class ContestacaoCargaHorariaREST {
     public ResponseEntity<?> removerContestacaoCargaHoraria(@PathVariable("id") String id) {
 
         Optional<ContestacaoCargaHoraria> contestacaoCargaHoraria = repo.findById(id);
-        if (contestacaoCargaHoraria.isEmpty()) {
+        if (!contestacaoCargaHoraria.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             repo.delete(contestacaoCargaHoraria.get());

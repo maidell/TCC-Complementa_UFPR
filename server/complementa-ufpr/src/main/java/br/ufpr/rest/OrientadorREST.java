@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufpr.dto.OrientadorDTO;
 import br.ufpr.helper.EmailService;
 import br.ufpr.helper.PasswordUtils;
+import br.ufpr.model.Graduacao;
 import br.ufpr.model.Orientador;
+import br.ufpr.model.Papel;
+import br.ufpr.repository.GraduacaoRepository;
 import br.ufpr.repository.OrientadorRepository;
 
 @CrossOrigin
@@ -37,6 +40,9 @@ public class OrientadorREST {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private GraduacaoRepository repoGrad;
 
 	@GetMapping
 	public ResponseEntity<List<OrientadorDTO>> obterTodosOrientadores() {
@@ -50,11 +56,27 @@ public class OrientadorREST {
 				.body(lista.stream().map(e -> mapper.map(e, OrientadorDTO.class)).collect(Collectors.toList()));
 	}
 
+	@GetMapping("/graduacoes/{id}")
+	public ResponseEntity<List<OrientadorDTO>> obterTodosOrientadoresPorIdGraduacao(@PathVariable Long id) {
+		
+		Optional<Graduacao> optGrad = repoGrad.findById(id);
+		if (!optGrad.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		List<Orientador> lista = repo.findAllByGraduacaoId(optGrad.get().getId());
+
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, OrientadorDTO.class)).collect(Collectors.toList()));
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<OrientadorDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Orientador> orientador = repo.findById(id);
-		if (orientador.isEmpty()) {
+		if (!orientador.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(orientador.get(), OrientadorDTO.class));
@@ -91,10 +113,18 @@ public class OrientadorREST {
 	public ResponseEntity<OrientadorDTO> alterarOrientador(@PathVariable("id") Long id,
 			@RequestBody Orientador orientador) {
 		Optional<Orientador> ori = repo.findById(id);
-
-		if (ori.isEmpty()) {
+		
+		if (!ori.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
+			Optional<Graduacao> optGrad = repoGrad.findById(orientador.getGraduacao().getId());
+			if(!optGrad.isPresent()) {
+				if(optGrad.get().getCoordenador().getId() == orientador.getId()){
+					orientador.setPapel(Papel.COORDENADOR);
+				}else {
+					orientador.setPapel(Papel.ORIENTADOR);
+				}
+			}
 			Orientador newOri = ori.get();
 			newOri.setNome(orientador.getNome());
 			newOri.setTelefone(orientador.getTelefone());
@@ -114,7 +144,7 @@ public class OrientadorREST {
 	public ResponseEntity<?> removerOrientador(@PathVariable("id") Long id) {
 
 		Optional<Orientador> orientador = repo.findById(id);
-		if (orientador.isEmpty()) {
+		if (!orientador.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(orientador.get());

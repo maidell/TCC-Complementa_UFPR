@@ -1,15 +1,15 @@
 package br.ufpr.dto;
 
-public class OrientadorDTO extends ServidorDTO{
+public class OrientadorGraduacaoDTO extends ServidorDTO{
 
     private static final long serialVersionUID = 1L;
 
     private GraduacaoSimplesDTO graduacao;
 
-    public OrientadorDTO() {
+    public OrientadorGraduacaoDTO() {
     }
 
-    public OrientadorDTO(Long id, String nome, String email, String telefone, String papel, String matricula, GraduacaoSimplesDTO graduacao) {
+    public OrientadorGraduacaoDTO(Long id, String nome, String email, String telefone, String papel, String matricula, GraduacaoSimplesDTO graduacao) {
         super(id, nome, email, telefone, papel, matricula);
         this.graduacao = graduacao;
     }
