@@ -49,7 +49,7 @@ public class ContestacaoREST {
     public ResponseEntity<ContestacaoDTO> buscaPorId(@PathVariable String id) {
 
         Optional<Contestacao> contestacao = repo.findById(id);
-        if (contestacao.isEmpty()) {
+        if (!contestacao.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(contestacao.get(), ContestacaoDTO.class));
@@ -76,7 +76,7 @@ public class ContestacaoREST {
     public ResponseEntity<ContestacaoDTO> alterarContestacao(@PathVariable("id") String id, @RequestBody Contestacao contestacao) {
         Optional<Contestacao> contst = repo.findById(id);
 
-        if (contst.isEmpty()) {
+        if (!contst.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             contestacao.setId(Long.parseLong(id));
@@ -90,7 +90,7 @@ public class ContestacaoREST {
     public ResponseEntity<?> removerContestacao(@PathVariable("id") String id) {
 
         Optional<Contestacao> contestacao = repo.findById(id);
-        if (contestacao.isEmpty()) {
+        if (!contestacao.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             repo.delete(contestacao.get());

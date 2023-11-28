@@ -60,7 +60,7 @@ public class ProjetoREST {
     public ResponseEntity<ProjetoDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<Projeto> projeto = repo.findById(id);
-        if (projeto.isEmpty()) {
+        if (!projeto.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(projeto.get(), ProjetoDTO.class));
@@ -87,7 +87,7 @@ public class ProjetoREST {
     public ResponseEntity<ProjetoDTO> alterarProjeto(@PathVariable("id") Long id, @RequestBody Projeto projeto) {
         Optional<Projeto> prj = repo.findById(id);
 
-        if (prj.isEmpty()) {
+        if (!prj.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             projeto.setId(id);
@@ -101,7 +101,7 @@ public class ProjetoREST {
     public ResponseEntity<?> removerProjeto(@PathVariable("id") Long id) {
 
         Optional<Projeto> projeto = repo.findById(id);
-        if (projeto.isEmpty()) {
+        if (!projeto.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             repo.delete(projeto.get());
