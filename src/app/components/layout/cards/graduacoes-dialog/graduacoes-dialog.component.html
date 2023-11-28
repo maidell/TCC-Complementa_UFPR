@@ -24,7 +24,11 @@
 						</mat-form-field>
 						<mat-form-field  class="coordenador">
 							<mat-label>Coordenador</mat-label>
-							<input  matInput placeholder="Coordenador" formControlName="coordenador" [formControl]="coordenador">
+							<mat-select placeholder="Coordenador" formControlName="coordenador" [formControl]="coordenador" required>
+								<mat-option *ngFor="let coordenador of coordenadores" [value]="coordenador">
+								  {{ coordenador.nome }}
+								</mat-option>
+							  </mat-select>
 						</mat-form-field>
 					</div>
 						<div class="buttons">

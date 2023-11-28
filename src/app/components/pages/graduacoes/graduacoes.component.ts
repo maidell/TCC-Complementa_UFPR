@@ -51,9 +51,7 @@ export class GraduacoesComponent implements OnInit {
       this.instanciarCoordenador();
     }
     this.titleService.setTitle('Graduacões');
-    
-    this.dataSource = new MatTableDataSource<Graduacao>(this.graduacoes);
-  }
+    }
 
   hasObjects(): boolean {
     return this.graduacoes.length > 0;

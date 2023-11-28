@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Graduacao } from 'src/app/shared';
 import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
+import { OrientadorService } from 'src/app/services/orientador/services/orientador.service';
 
 @Component({
   selector: 'app-graduacoes-table',
@@ -17,7 +18,8 @@ export class GraduacoesTableComponent<T> implements OnInit{
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(public dialog: MatDialog,
-    public graduacaoService: GraduacaoService
+    public graduacaoService: GraduacaoService,
+    public orientadorService: OrientadorService
     ) { }
   buttonNew: string = "Nova Graduação";
   ngOnInit(): void {
@@ -28,7 +30,7 @@ export class GraduacoesTableComponent<T> implements OnInit{
     this.displayedColumns.push('button');
     console.log(this.displayedColumns);
     console.log(this.dataSource);
-
+    
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -55,15 +57,21 @@ export class GraduacoesTableComponent<T> implements OnInit{
   }
 
   openDialog(graduacao: Graduacao) {
-    const dialogRef = this.dialog.open(GraduacoesDialogComponent, {
-      minWidth: '40rem',
-      data: {
-        graduacao: graduacao
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
-    })
+    console.log("Parametro OD:", graduacao.id);
+    if (graduacao.id) {
+      this.graduacaoService.buscarGraduacaoPorId(graduacao.id).subscribe(
+        (res: Graduacao) => {
+          console.log("Res instanciado:", res);
+          const dialogRef = this.dialog.open(GraduacoesDialogComponent, {
+            minWidth: '40rem',
+            data: res
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            this.ngOnInit();
+          });
+        }
+      );
+    }
   }
 
 }
