@@ -59,18 +59,22 @@ export class EditarAlunoComponent implements OnInit {
      this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
     }
     forkJoin({
-      aluno: this.instanciarAluno(this.usuarioLogado.id),
-      cursos: this.listarCursos()
-    }).subscribe(({ aluno, cursos }) => {
-      if (aluno) {
+      aluno: this.instanciarAluno(6),
+      cursos: this.listarCursos(),
+      atividade: this.instanciarAtividade(1)
+    }).subscribe(({ aluno, cursos, atividade }) => {
+      if (atividade && aluno) {
         this.alunoLogado = aluno;
         this.aluno = aluno;
+        this.atividade = atividade;
+        this.toastr.info("Atividade Carregada")
+        console.log("atividade:", atividade);
+        console.log("this.atividade:", this.atividade);
       }
       this.options = cursos;
 
       this.syncGraduacao();
     });
-    this.instanciarAtividade();
   }
 
   instanciarAluno(id: number): Observable<Aluno> {
@@ -157,10 +161,8 @@ export class EditarAlunoComponent implements OnInit {
 
   /* CÓDIGO PRA TESTAR O COMPONENTE DE ATIVIDADE. EXCLUIR DAQUI PRA BAIXO QUANDO FOR PRA PRD*/
 
-  instanciarAtividade(){
-    this.atividadeService.buscarAtividadePorId(2).subscribe(
-      (response: Atividade) => { this.atividade = response; this.toastr.success("Atividade Carregada");}
-    );
+  instanciarAtividade(id: number): Observable<Atividade>{
+    return this.atividadeService.buscarAtividadePorId(id);
   };
 
   openDialog(atividade: Atividade) {

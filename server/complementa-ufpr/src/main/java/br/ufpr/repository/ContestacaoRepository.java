@@ -8,4 +8,8 @@ import br.ufpr.model.Contestacao;
 
 public interface ContestacaoRepository extends JpaRepository<Contestacao, Long> {
     Optional<Contestacao> findById(String id);
+    
+    
+    
+
 }
