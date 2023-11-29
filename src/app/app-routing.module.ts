@@ -11,6 +11,7 @@ import { DashboardComponent } from './components/pages';
 import { ProjetoComponent } from './components/projeto/projeto.component';
 import { ListarAlunosComponent } from './components/layout/listar-alunos/listar-alunos.component';
 import { EditarUsuariosComponent } from './components/pages/editar-usuarios/editar-usuarios.component';
+import { ConfirmacaoComponent } from './components/pages/confirmacao/confirmacao.component';
 
 const routes: Routes = [
   {
@@ -121,6 +122,10 @@ const routes: Routes = [
   {
     path: 'projetos/detalhes/:id',
     component: ProjetoComponent
+  },
+  {
+    path: 'projetos/detalhes/:email',
+    component: ConfirmacaoComponent
   },
   
   ...LoginRoutes
