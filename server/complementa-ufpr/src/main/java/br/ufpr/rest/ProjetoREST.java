@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.dto.ProjetoDTO;
+import br.ufpr.model.Aluno;
 import br.ufpr.model.Projeto;
 import br.ufpr.repository.ProjetoRepository;
 
@@ -90,7 +91,8 @@ public class ProjetoREST {
         if (!prj.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
-            projeto.setId(id);
+        	Projeto newProj = prj.get();
+        	
             repo.save(mapper.map(projeto, Projeto.class));
             prj = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(prj.get(), ProjetoDTO.class));
@@ -108,5 +110,4 @@ public class ProjetoREST {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
     }
-   
 }

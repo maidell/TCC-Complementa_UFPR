@@ -76,7 +76,7 @@ export class EditarUsuariosComponent implements OnInit {
     this.idUsuario = this.route.snapshot.params['id'];
     if (this.usuarioLogado.papel !== "ADMIN") {
       this.toastr.info(this.usuarioLogado.papel);
-      if (String(this.usuarioLogado.id) !== String(this.idUsuario)) {
+      if (this.usuarioLogado.id != this.idUsuario) {
         this.router.navigate([""]); // está entrando nessa condição mesmo que o usuarioLogado.id seja o mesmo do query param
       } else {
         this.instanciarDetalhes(this.idUsuario);

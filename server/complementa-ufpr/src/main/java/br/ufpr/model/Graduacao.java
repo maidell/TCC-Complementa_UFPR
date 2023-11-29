@@ -35,10 +35,10 @@ public class Graduacao implements Serializable{
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Servidor> servidoresCoordenadores;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Competencia> competencias;
     
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Complexidade> complexidades;
     
     @ManyToMany(fetch = FetchType.LAZY)
