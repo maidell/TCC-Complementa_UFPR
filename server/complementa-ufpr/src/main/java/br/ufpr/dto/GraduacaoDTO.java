@@ -87,7 +87,7 @@ public class GraduacaoDTO implements Serializable {
 
 	@Override
     public String toString() {
-        return "GraduacaoDTO [id=" + getId() + ", nome=" + getNome() +
+        return "Graduacao [id=" + getId() + ", nome=" + getNome() +
         		", coordenador=" + getCoordenador() +
         		", servidoresCoordenadores=" + getServidoresCoordenadores() +
         		", competencias=" + getCompetencias() +

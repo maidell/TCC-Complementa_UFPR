@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -42,6 +44,11 @@ public class Graduacao implements Serializable{
     private List<Complexidade> complexidades;
     
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "graduacoes_atividades",
+            joinColumns = @JoinColumn(name = "graduacoes_id"),
+            inverseJoinColumns = @JoinColumn(name = "atividades_id")
+    )
 	private List<Atividade> atividades = new ArrayList<>();
 
     public Graduacao() {

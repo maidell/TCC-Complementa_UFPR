@@ -9,15 +9,13 @@ public class GraduacaoAlunoDTO implements Serializable {
 
     private Long id;
     private String nome;
-    private List<CompetenciaDTO> competencias;
-
+    
     public GraduacaoAlunoDTO() {
     }
 
-    public GraduacaoAlunoDTO(Long id, String nome, OrientadorDTO coordenador, List<CompetenciaDTO> competencias) {
+    public GraduacaoAlunoDTO(Long id, String nome, OrientadorDTO coordenador) {
         this.id = id;
         this.nome = nome;
-        this.competencias = competencias;
     }
 
     public Long getId() {
@@ -39,19 +37,10 @@ public class GraduacaoAlunoDTO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	public List<CompetenciaDTO> getCompetencias() {
-        return competencias;
-    }
-
-    public void setCompetencias(List<CompetenciaDTO> competencias) {
-        this.competencias = competencias;
-    }
     
     @Override
     public String toString() {
-        return "GraduacaoDTO [id=" + getId() + ", nome=" + getNome() +
-        		", competencias=" + getCompetencias() + "]";
+        return "GraduacaoDTO [id=" + getId() + ", nome=" + getNome() + "]";
     }
 
 }

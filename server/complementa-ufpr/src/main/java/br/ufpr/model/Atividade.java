@@ -91,7 +91,7 @@ public class Atividade implements Serializable {
 	
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "projeto_aluno",
+            name = "graduacoes_atividades",
             joinColumns = @JoinColumn(name = "atividades_id"),
             inverseJoinColumns = @JoinColumn(name = "graduacoes_id")
     )
