@@ -1,6 +1,6 @@
 <div class="cards-atvs">
 
-	<div class="let-of-cards" *ngIf="hasActivities() && usuarioLogado.papel === 'ADMIN'">
+	<div class="let-of-cards" *ngIf="usuarioLogado.papel === 'ADMIN'">
 		<h2>Todas as Atividades</h2>
 		<mat-form-field>
 			<mat-label>Pesquisar</mat-label>
@@ -26,7 +26,7 @@
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 	</div>
 	<!-- Lista para as roles 'ALUNO' e 'COORDENADOR' -->
-	<div class="let-of-cards" *ngIf="hasActivities() && (usuarioLogado.papel === 'ALUNO' || usuarioLogado.papel === 'COORDENADOR')">
+	<div class="let-of-cards" *ngIf="(usuarioLogado.papel === 'ALUNO' || usuarioLogado.papel === 'COORDENADOR')">
 		<h2>Atividades Disponíveis</h2>
 		<mat-form-field>
 			<mat-label>Pesquisar</mat-label>
@@ -51,7 +51,7 @@
 	</div>
 
 	<!-- Lista para a role 'ALUNO' -->
-	<div class="let-of-cards" *ngIf="hasActivities() && usuarioLogado.papel === 'ALUNO'">
+	<div class="let-of-cards" *ngIf="usuarioLogado.papel === 'ALUNO'">
 		<h2>Atividades em Execução</h2>
 		<mat-form-field>
 			<mat-label>Pesquisar</mat-label>
@@ -75,7 +75,7 @@
 		<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 	</div>
 
-	<div class="let-of-cards" *ngIf="hasActivities() && usuarioLogado.papel === 'ALUNO'">
+	<div class="let-of-cards" *ngIf="usuarioLogado.papel === 'ALUNO'">
 		<h2>Atividades Executadas</h2>
 		<mat-form-field>
 			<mat-label>Pesquisar</mat-label>
@@ -102,7 +102,7 @@
 
 	<!-- Lista para as roles 'ORIENTADOR' e 'COORDENADOR' -->
 	<div class="let-of-cards"
-		*ngIf="hasActivities() && (usuarioLogado.papel === 'ORIENTADOR' || usuarioLogado.papel === 'COORDENADOR')">
+		*ngIf="(usuarioLogado.papel === 'ORIENTADOR' || usuarioLogado.papel === 'COORDENADOR')">
 		<h2>Atividades Orientadas</h2>
 		<mat-form-field>
 			<mat-label>Pesquisar</mat-label>
