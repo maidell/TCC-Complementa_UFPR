@@ -77,7 +77,6 @@ export class ProjetoComponent implements OnInit {
   }
 
   getDialogWidth(): string {
-    //seta dinamicamente o tamanho do dialog
     let dialogWidth = '600px';
     if (window.innerWidth < 600) {
       dialogWidth = '90vw';
@@ -111,7 +110,6 @@ export class ProjetoComponent implements OnInit {
     this.setContent();
     this.title.setTitle("Detalhes do projeto");
     this.instanciarAtividades();
-    //seta o titulo do projeto com o nome do projeto
   }
 
 
@@ -209,10 +207,10 @@ export class ProjetoComponent implements OnInit {
 
       alunos = alunosDoProjeto.filter(aluno => aluno.papel !== "Monitor");
       monitores = alunosDoProjeto.filter(aluno => aluno.papel === "Monitor");
-    
+
     this.projeto.alunos = alunos;
     this.projeto.monitores = monitores;
-      
+
   }
 
 }

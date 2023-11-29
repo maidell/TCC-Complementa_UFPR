@@ -95,7 +95,9 @@
 			<button mat-button (click)="cancelar()">Cancelar</button>
 		</div>
 		<div class="atividades-card">
-			<div class="atvHead">
+			<!-- se for um projeto novo botão fica desabilittado -->
+
+			<div *ngIf="!projeto.id" class="atvHead">
 				<h1>Atividades</h1>
 				<button mat-raised-button color="primary" (click)="novaAtividade()">Nova Atividade</button>
 			</div>
