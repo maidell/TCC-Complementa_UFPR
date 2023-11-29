@@ -196,6 +196,7 @@ export class AtividadeComponent implements OnInit{
       this.project = data.projeto;
     }
 
+
   }
 
 
@@ -211,13 +212,9 @@ export class AtividadeComponent implements OnInit{
         console.log("entrou no subscribe");
         this.complexidades=complexidades;
         console.log("populou as complexidades");
-        this.syncComplexidade();
-        console.log("saiu do sync complexidade");
-        this.setHeaderContent();
-        console.log("saiu do set header");
-        this.setContent();
-        //this.syncGraduacoes();
 
+        this.setHeaderContent();
+        this.setContent();
     });
 
     this.usuarioLogado = this.loginService.usuarioLogado;
@@ -227,6 +224,8 @@ export class AtividadeComponent implements OnInit{
 
     console.log(this.atividade);
     console.log(this.project);
+
+
 
   }
 
@@ -274,7 +273,7 @@ export class AtividadeComponent implements OnInit{
           this.secondButtonColor = 'linear-gradient(#CC6E00,#D95409)';
 
         } else {
-          if (this.usuarioLogado.papel === 'ALUNO') {
+          if (this.usuarioLogado.papel === 'ALUNO' && this.usuarioLogado.id!=this.atividade.autor?.id) {
             this.firstHeaderButton = 'Candidatar-se';
             this.firstButtonWidth = '100%';
             this.displaySecondHeaderButton = 'none';
@@ -386,6 +385,7 @@ export class AtividadeComponent implements OnInit{
 
         console.log(this.atividade.complexidade?.nome);
         this.syncGraduacoes();
+        this.syncComplexidade();
 
 
         this.candidatureDate.setValue(this.atividade.dataLimiteCandidatura);
@@ -446,11 +446,15 @@ export class AtividadeComponent implements OnInit{
 
         if (!this.canUserEdit()) {
           this.registerCandidature(); //testar com guibor
+        } else {
+          if (this.isEditing) {
+            this.saveEdit(); //ok
+          } else {
+            this.viewCandidates();
+          }
         }
 
-        if (this.isEditing) {
-          this.saveEdit(); //ok
-        }
+
         break;
 
       case "EM_EXECUCAO":
@@ -626,6 +630,9 @@ export class AtividadeComponent implements OnInit{
     //this.atividadeService.inserirAtividade()
   }
 
+  viewCandidates(){
+
+  }
 
   registerCandidature() {
     this.atividade.candidatos?.push(this.usuarioLogado);
@@ -737,12 +744,13 @@ export class AtividadeComponent implements OnInit{
       let novaAtividade = this.atividade;
       novaAtividade.nome = this.activityName.value;
       novaAtividade.descricao = this.description.value;
-      novaAtividade.graduacoes = this.courses.value;
+      novaAtividade.graduacoes = this.activityForm.get('courses')?.value;
       novaAtividade.complexidade = this.activityForm.get('complexities')?.value;
       novaAtividade.dataLimiteCandidatura = this.candidatureDate.value;
       novaAtividade.dataConclusao = this.submitDate.value;
       novaAtividade.dataCriacao = new Date();
-      this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+      console.log(novaAtividade);
+      this.atividadeService.atualizarAtividade(novaAtividade).subscribe(
         (response: Atividade) => {
           console.log('Atividade salva com sucesso', response);
           this.showSuccessToastr("Atividade salva!");
