@@ -98,13 +98,10 @@
     <a routerLink="/atividades/listar" href="#" class="list-group-item list-group-item-action py-2 ripple">
         <mat-icon>article</mat-icon><span> Atividades</span>
     </a>
-    <a routerLink="/monitoria" href="#" class="list-group-item list-group-item-action py-2 ripple">
-        <mat-icon>school</mat-icon><span> Monitoria</span>
-    </a>
     <a routerLink="/contestacoes/listar" href="#" class="list-group-item list-group-item-action py-2 ripple">
         <mat-icon>warning</mat-icon><span> Contestações</span>
     </a>
-    <a [routerLink]="'/aluno/editar/' + usuarioLogado.id" href="#" class="list-group-item list-group-item-action py-2 ripple">
+    <a [routerLink]="'/alunos/editar/' + usuarioLogado.id" href="#" class="list-group-item list-group-item-action py-2 ripple">
         <mat-icon>person</mat-icon><span> Meu Perfil</span>
     </a>
 </ng-container>
