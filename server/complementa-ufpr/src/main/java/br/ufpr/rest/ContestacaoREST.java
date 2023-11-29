@@ -46,7 +46,7 @@ public class ContestacaoREST {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ContestacaoDTO> buscaPorId(@PathVariable String id) {
+    public ResponseEntity<ContestacaoDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<Contestacao> contestacao = repo.findById(id);
         if (!contestacao.isPresent()) {
@@ -61,7 +61,7 @@ public class ContestacaoREST {
 
         try {
             Contestacao contst = repo.save(mapper.map(contestacao, Contestacao.class));
-            Optional<Contestacao> contstOpt = repo.findById(contst.getId().toString());
+            Optional<Contestacao> contstOpt = repo.findById(contst.getId());
             if (!contstOpt.isPresent()) {
                 throw new Exception("Criação da contestação não foi realizada com sucesso");
             }
@@ -73,13 +73,13 @@ public class ContestacaoREST {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContestacaoDTO> alterarContestacao(@PathVariable("id") String id, @RequestBody Contestacao contestacao) {
+    public ResponseEntity<ContestacaoDTO> alterarContestacao(@PathVariable("id") Long id, @RequestBody Contestacao contestacao) {
         Optional<Contestacao> contst = repo.findById(id);
 
         if (!contst.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
-            contestacao.setId(Long.parseLong(id));
+            contestacao.setId(id);
             repo.save(mapper.map(contestacao, Contestacao.class));
             contst = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(contst.get(), ContestacaoDTO.class));
@@ -87,7 +87,7 @@ public class ContestacaoREST {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerContestacao(@PathVariable("id") String id) {
+    public ResponseEntity<?> removerContestacao(@PathVariable("id") Long id) {
 
         Optional<Contestacao> contestacao = repo.findById(id);
         if (!contestacao.isPresent()) {

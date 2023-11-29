@@ -207,6 +207,7 @@ export class AtividadeComponent implements OnInit{
         this.syncComplexidade();
         console.log("saiu do sync complexidade");
         this.setHeaderContent();
+        console.log("saiu do set header");
         this.setContent();
         //this.syncGraduacoes();
 
@@ -244,6 +245,7 @@ export class AtividadeComponent implements OnInit{
 
   //controle de dados do header e do conteudo
   setHeaderContent() {
+    console.log("entrou no set header");
     switch (this.atividade.status) {
       case '':  // tela de criação de atividades
         this.statusButtonColor = 'linear-gradient(#3473a3,#5b7ba5)';
@@ -281,12 +283,13 @@ export class AtividadeComponent implements OnInit{
 
         break;
       case 'EM_EXECUCAO':
+        console.log(this.atividade.relatorioDeConclusao);
         this.statusButtonColor = 'linear-gradient(#DEB345, #C99614)';
 
         if (this.canUserEdit()) {
 
 
-          if (this.atividade.relatorioDeConclusao != null) {
+          if (this.atividade.relatorioDeConclusao) {
             this.showInfoToastr("Essa atividade possui um relatório de Conclusão. Clique em \"Finalizar\" para visualizar");
             this.firstButtonWidth = '100%';
             this.firstHeaderButton = 'Finalizar';
@@ -300,7 +303,7 @@ export class AtividadeComponent implements OnInit{
 
         } else {
 
-          if (this.atividade.relatorioDeConclusao != null) {
+          if (this.atividade.relatorioDeConclusao) {
             this.displayFirstHeaderButton = 'none';
             this.displaySecondHeaderButton = 'none';
 
@@ -379,7 +382,6 @@ export class AtividadeComponent implements OnInit{
         this.displayComments = 'none';
         break;
       case 'EM_EXECUCAO':
-        console.log("CUEDIT: ", this.atividade.relatorioDeConclusao);
         this.displayComments = '';
         this.description.setValue(this.atividade.descricao);
         this.competences.setValue(this.atividade.competencia?.nome);
@@ -461,12 +463,12 @@ export class AtividadeComponent implements OnInit{
 
           if (this.atividade.relatorioDeConclusao != null) {
 
-            if (this.isReadingReport) {
+            if (this.isReadingReport && !this.disputingExecution) {
               this.approveReport(); //testar
-              if (this.disputingExecution) {
+            } else if (this.isReadingReport && this.disputingExecution){
                 this.sendExecutionDispute(); //testar
-              }
-            } else {
+
+            } else  {
               this.readConclusionReport(); 
             }
 
@@ -747,18 +749,39 @@ export class AtividadeComponent implements OnInit{
 
   canUserEdit() {
 
-
     // Verifica se this.usuarioLogado é igual ao autor, orientador, servidoresOrientadores ou monitores
-    if (
-      this.usuarioLogado === this.atividade.autor ||
-      this.usuarioLogado === this.atividade.projeto?.orientador ||
-      this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado) ||
-      this.atividade.projeto?.monitores?.some(monitor => monitor === this.usuarioLogado)
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    let usuarioLogado = this.usuarioLogado;
+    let autor = this.atividade.autor;
+    let orientador = this.atividade.projeto?.orientador;
+    var monitores = [] ;
+    if(this.atividade.projeto?.monitores){
+      for (let i = 0; i< this.atividade.projeto?.monitores?.length; i++){
+        monitores.push(this.atividade.projeto?.monitores[i].id);
+      }
+   }
+
+   
+   if (usuarioLogado.id===autor?.id || usuarioLogado.id === orientador?.id || monitores.some(monitor => monitor === usuarioLogado.id)){
+    console.log("true");
+    return true;
+   } else {
+    console.log("false");
+    return false;
+   }
+    
+
+    // if (
+    //   this.usuarioLogado === this.atividade.autor ||
+    //   this.usuarioLogado === this.atividade.projeto?.orientador ||
+    //   this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado) ||
+    //   this.atividade.projeto?.monitores?.some(monitor => monitor === this.usuarioLogado)
+    // ) {
+    //   console.log("retornou true");
+    //   return true;
+    // } else {
+    //   console.log("retornou false");
+    //   return false;
+    // }
   }
 
   // Carga Horária
@@ -999,7 +1022,7 @@ export class AtividadeComponent implements OnInit{
       description: "",
       courses:[""],
       competences: [""],
-      complexities: "",
+      complexities: "Simples (4h - 6h)",
       candidatureDate: "",
       submitDate: "",
       contestDate: "",
@@ -1007,6 +1030,7 @@ export class AtividadeComponent implements OnInit{
       proposedHours: "",
       complexitiesContest:""
     });
+    this.description.setValue(this.atividade.relatorioDeConclusao?.descricao);
 
 
   }
