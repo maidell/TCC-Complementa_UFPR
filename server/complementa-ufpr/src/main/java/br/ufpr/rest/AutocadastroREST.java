@@ -48,7 +48,7 @@ public class AutocadastroREST {
 			}
 			if (alnOpt.isPresent()) {
 				try {
-				String conteudoEmail = "Bem-vindo ao Complementa UFPR " + aluno.getNome() + "! \n \n Por favor, confirme seu e-mail clicando aqui: http://localhost:3000/confirmacao/" + URLEncoder.encode(aluno.getEmail(), StandardCharsets.UTF_8);
+				String conteudoEmail = "Bem-vindo ao Complementa UFPR " + aluno.getNome() + "! \n \n Por favor, confirme seu e-mail clicando aqui: http://localhost:4200/confirmacao/" + URLEncoder.encode(aluno.getEmail(), StandardCharsets.UTF_8);
 		        emailService.enviarEmail(aluno.getEmail(), "Confirmação de Email", conteudoEmail);
 				}catch(Exception e) {
 					System.err.println(e);

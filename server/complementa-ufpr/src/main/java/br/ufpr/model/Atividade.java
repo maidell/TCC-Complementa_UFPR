@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -88,7 +89,12 @@ public class Atividade implements Serializable {
 	@Column(name = "fk_id_status")
 	private Status status;
 	
-	@ManyToMany(mappedBy = "atividades", fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "graduacoes_atividades",
+            joinColumns = @JoinColumn(name = "atividades_id"),
+            inverseJoinColumns = @JoinColumn(name = "graduacoes_id")
+    )
 	private List<Graduacao> graduacoes = new ArrayList<>();
 	
 	@ManyToMany(mappedBy = "atividades", fetch = FetchType.LAZY)
