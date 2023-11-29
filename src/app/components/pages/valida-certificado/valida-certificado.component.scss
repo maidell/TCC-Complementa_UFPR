@@ -1,0 +1,22 @@
+.certificado{
+	margin-top: 20px;
+
+	margin-left: 20px;
+
+	height: 100%;
+}
+mat-card{
+	margin-right: 20px;
+}
+.validacao{
+	margin-left: 20px;
+}
+
+div, .certificado, mat-card{
+	background: transparent !important;
+}
+
+button{
+	margin-top: -22px;
+	background: linear-gradient(#CC6E00,#D95409);
+}

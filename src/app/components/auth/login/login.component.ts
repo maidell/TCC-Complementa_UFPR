@@ -6,6 +6,7 @@ import { LoginService } from '../services/login.service';
 import { AutocadastroComponent } from '../../pages/autocadastro/autocadastro.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { ValidaCertificadoComponent } from '../../pages';
 
 @Component({
   selector: 'app-login',
@@ -86,7 +87,8 @@ export class LoginComponent implements OnInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(AutocadastroComponent, {
-      maxWidth: this.dialogWidth()
+      width: '60rem',
+      height: '40rem'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -94,12 +96,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  dialogWidth(){
-    if (window.innerWidth<=768){
-      return "100vw";
-    } else  {
-      return "80vw";
-    }
-  }
+  openDialogCheck(){
+    const dialogRef = this.dialog.open(ValidaCertificadoComponent, {
+      width: '40rem',
+      height: '10rem'
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }

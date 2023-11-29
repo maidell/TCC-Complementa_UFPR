@@ -20,6 +20,7 @@ import { EditarAlunoComponent } from '../pages/editar-aluno/editar-aluno.compone
 import { CadastroDeUsuariosComponent } from './cadastro-de-usuarios/cadastro-de-usuarios.component';
 import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
 import { EditarUsuariosComponent } from './editar-usuarios/editar-usuarios.component';
+import { ValidaCertificadoComponent } from './valida-certificado/valida-certificado.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -39,6 +40,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     CadastroDeUsuariosComponent,
     ConfirmacaoComponent,
     EditarUsuariosComponent,
+    ValidaCertificadoComponent,
   ],
   imports: [
     CommonModule,
@@ -60,7 +62,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     CompetenciasComponent,
     AutocadastroComponent,
     EditarAlunoComponent,
-    CadastroDeUsuariosComponent
+    CadastroDeUsuariosComponent,
+    ValidaCertificadoComponent,
   ]
 })
 export class PagesModule { }
