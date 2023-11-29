@@ -372,7 +372,8 @@ export class AtividadeComponent implements OnInit{
     console.log("entrou no set content");
     switch (this.atividade.status) {
       case '':
-
+        this.activityForm.enable();
+        this.isDisabled=false;
         break;   
       case 'ABERTA':
         this.activityForm.disable();
@@ -381,6 +382,7 @@ export class AtividadeComponent implements OnInit{
         this.competences.setValue(this.atividade.competencia);
 
         console.log(this.atividade.complexidade?.nome);
+        this.syncGraduacoes();
 
 
         this.candidatureDate.setValue(this.atividade.dataLimiteCandidatura);
@@ -555,18 +557,20 @@ export class AtividadeComponent implements OnInit{
   }
 
 
-  syncGraduacoes(){
-    console.log("entrou no sync graduacoes");
-    let matchedGraduacoes;
-    if(this.atividade.graduacoes){
-      for(let i= 0;i< this.atividade.graduacoes?.length;i++){
-        let novaGraduacao = this.atividade.graduacoes[i];
-        if(this.options.find(gd =>gd.id === novaGraduacao.id)){
-          this.graduacao.push(novaGraduacao);
-        }
-        this.changeDetectorRef.detectChanges();
-      }
-
+  syncGraduacoes() {
+    console.log("Entrou no sync graduacoes");
+  
+    if (this.atividade.graduacoes) {
+      console.log(this.atividade.graduacoes);
+      const graduacoesSelecionadas = this.atividade.graduacoes.filter(grad => 
+        this.options.find(option => option.id === grad.id)
+      );
+  
+        console.log(graduacoesSelecionadas);
+      this.activityForm.get('courses')?.setValue(graduacoesSelecionadas);
+  
+      // Não é necessário chamar detectChanges manualmente na maioria dos casos
+      // this.changeDetectorRef.detectChanges();
     }
   }
 
@@ -585,6 +589,9 @@ export class AtividadeComponent implements OnInit{
       novaAtividade.dataLimiteCandidatura = this.candidatureDate.value;
       novaAtividade.dataConclusao = this.submitDate.value;
       novaAtividade.dataCriacao = new Date();
+      // console.log(this.activityForm.get('courses')?.value);
+      // console.log(this.courses.value);
+      console.log(novaAtividade);
 
       this.atividadeService.inserirAtividade(novaAtividade).subscribe(
         (res: Atividade) => {
@@ -1178,7 +1185,6 @@ export class AtividadeComponent implements OnInit{
   onNoClick(): void {
     this.dialog.close();
   }
-
 
 
 
