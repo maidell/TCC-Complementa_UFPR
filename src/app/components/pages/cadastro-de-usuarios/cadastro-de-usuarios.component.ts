@@ -13,6 +13,7 @@ import { ServidorService } from '../../../services/servidor/services/servidor.se
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { ToastrService } from 'ngx-toastr';
 import { GraduacaoService } from '../../../services/graduacao/services/graduacao.service';
+import { TitleService } from 'src/app/services/title/title.service';
 
 @Component({
   selector: 'app-cadastro-de-usuarios',
@@ -57,7 +58,8 @@ export class CadastroDeUsuariosComponent implements OnInit {
     private loginService: LoginService,
     private graduacaoService: GraduacaoService,
     public dialog: MatDialog,
-    public toastr: ToastrService
+    public toastr: ToastrService,
+    private titleService: TitleService
   ) { }
 
   ngOnInit(): void {
@@ -69,6 +71,7 @@ export class CadastroDeUsuariosComponent implements OnInit {
       this.router.navigate([`${this.loginService.usuarioLogado.papel}`]);
     }
     this.listarCursos()
+    this.titleService.setTitle('Cadastro de Usuários');
 
   }
 
