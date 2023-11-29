@@ -2,10 +2,57 @@
   <span class="title">Complementa UFPR - Horas Formativas</span>
 </mat-toolbar>
 
-<div class="cardsDash">
-      <app-square-card [imageUrl]="imgAprendaUsar" [title]="'Aprenda usar o Complementa'" [btncolor]="'btncolor'" [buttonText]="'Acessar'" (buttonCallback)="abrirAprendaUsar()" ></app-square-card>
-      <app-square-card [imageUrl]="imgAtvsMonitor" [title]="'Atividades Monitoradas'" [btncolor]="'btncolor'" [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeAtividadesMonitoradas()"></app-square-card>
-      <app-square-card [imageUrl]="imgContestacao" [title]="'Contestações'" [btncolor]="'btncolor'" [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeContestacoes()"></app-square-card>
-      <app-square-card [imageUrl]="imgSeusProjetos" [title]="'Seus Projetos'" [btncolor]="'btncolor'" [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeProjetos()"></app-square-card>
-      <app-square-card [imageUrl]="imgSuasAtvs" [title]="'Suas Atividades'" [btncolor]="'btncolor'" [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeAtividades()"></app-square-card>
+<div class="cardsDash" *ngIf="checkRole('ADMIN')">
+  <app-square-card [imageUrl]="imgAprendaUsar" [title]="'Aprenda a usar o Complementa'" [btncolor]="'btncolor'"
+    [buttonText]="'Acessar'" (buttonCallback)="abrirAprendaUsar()"></app-square-card>
+  <app-square-card [imageUrl]="imgContestacao" [title]="'Gerenciar Contestações'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeContestacoes()"></app-square-card>
+  <app-square-card [imageUrl]="imgSeusProjetos" [title]="'Gerenciar Projetos'" [btncolor]="'btncolor'"
+    [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeProjetos()"></app-square-card>
+  <app-square-card [imageUrl]="imgSuasAtvs" [title]="'Gerenciar Atividades'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeAtividades()"></app-square-card>
+</div>
+
+<div class="cardsDash" *ngIf="checkRole('ORIENTADOR')">
+  <app-square-card [imageUrl]="imgAprendaUsar" [title]="'Aprenda a usar o Complementa'" [btncolor]="'btncolor'"
+    [buttonText]="'Acessar'" (buttonCallback)="abrirAprendaUsar()"></app-square-card>
+    <app-square-card [imageUrl]="imgSuasAtvs" [title]="'Suas Atividades'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeAtividades()"></app-square-card>
+    <app-square-card [imageUrl]="imgSeusProjetos" [title]="'Seus Projetos'" [btncolor]="'btncolor'"
+      [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeProjetos()"></app-square-card>
+  <app-square-card [imageUrl]="imgContestacao" [title]="'Contestações'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeContestacoes()"></app-square-card>
+</div>
+
+<div class="cardsDash" *ngIf="checkRole('COORDENADOR')">
+  <app-square-card [imageUrl]="imgAprendaUsar" [title]="'Aprenda a usar o Complementa'" [btncolor]="'btncolor'"
+    [buttonText]="'Acessar'" (buttonCallback)="abrirAprendaUsar()"></app-square-card>
+    <app-square-card [imageUrl]="imgSuasAtvs" [title]="'Suas Atividades'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeAtividades()"></app-square-card>
+    <app-square-card [imageUrl]="imgSeusProjetos" [title]="'Seus Projetos'" [btncolor]="'btncolor'"
+      [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeProjetos()"></app-square-card>
+  <app-square-card [imageUrl]="imgContestacao" [title]="'Contestações'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeContestacoes()"></app-square-card>
+</div>
+
+<div class="cardsDash" *ngIf="checkRole('SERVIDOR')">
+  <app-square-card [imageUrl]="imgAprendaUsar" [title]="'Aprenda a usar o Complementa'" [btncolor]="'btncolor'"
+    [buttonText]="'Acessar'" (buttonCallback)="abrirAprendaUsar()"></app-square-card>
+    <app-square-card [imageUrl]="imgSuasAtvs" [title]="'Suas Atividades'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeAtividades()"></app-square-card>
+    <app-square-card [imageUrl]="imgSeusProjetos" [title]="'Seus Projetos'" [btncolor]="'btncolor'"
+      [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeProjetos()"></app-square-card>
+  <app-square-card [imageUrl]="imgContestacao" [title]="'Contestações'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeContestacoes()"></app-square-card>
+</div>
+
+<div class="cardsDash" *ngIf="checkRole('ALUNO')">
+  <app-square-card [imageUrl]="imgAprendaUsar" [title]="'Aprenda a usar o Complementa'" [btncolor]="'btncolor'"
+    [buttonText]="'Acessar'" (buttonCallback)="abrirAprendaUsar()"></app-square-card>
+    <app-square-card [imageUrl]="imgSuasAtvs" [title]="'Suas Atividades'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeAtividades()"></app-square-card>
+    <app-square-card [imageUrl]="imgSeusProjetos" [title]="'Seus Projetos'" [btncolor]="'btncolor'"
+      [buttonText]="'Acessar'" (buttonCallback)="abrirListaDeProjetos()"></app-square-card>
+  <app-square-card [imageUrl]="imgContestacao" [title]="'Contestações'" [btncolor]="'btncolor'" [buttonText]="'Acessar'"
+    (buttonCallback)="abrirListaDeContestacoes()"></app-square-card>
 </div>
