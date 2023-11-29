@@ -24,6 +24,11 @@ export class RectCardComponent{
   @Output() clickButtonRect = new EventEmitter<any>();
   @Output() clickSecondButtonRect = new EventEmitter<any>();
 
+  //se for data
+  @Input() firstValueDate!: string;
+  @Input() secondValueDate!: string;
+  @Input() thirdValueDate!: string;
+
   onButtonClick() {
     this.clickButtonRect.emit();
   }
