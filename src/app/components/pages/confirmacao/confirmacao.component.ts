@@ -8,26 +8,29 @@ import { ConfirmacaoService } from 'src/app/services/confirmacao/services/confir
   styleUrls: ['./confirmacao.component.scss']
 })
 export class ConfirmacaoComponent {
-  email?: string;
+  email?: string | null;
   response: string = 'Seu e-mail foi confirmado com sucesso!';
   remainingTime: number = 10;
   private timer: any;
 
-  constructor(private confirmacao: ConfirmacaoService, private router: Router, private route:ActivatedRoute) { }
+  constructor(
+    private confirmacao: ConfirmacaoService,
+    private router: Router,
+    private route:ActivatedRoute
+    ) { }
 
   ngOnInit() {
-    this.email = this.route.snapshot.queryParams['email'];
-    this.confirmacao.enviarConfirmacao(this.email!).subscribe(
-      (res) => {
-
-        this.startTimer();
-      },
-      (err) => {
-        this.response = err.error.message;
-      }
-    );
-    this.startTimer();
-
+    this.email = this.route.snapshot.paramMap.get('email');
+    if(this.email){
+      this.confirmacao.enviarConfirmacao(this.email!).subscribe(
+        (res: string) => {
+          this.startTimer();
+        }
+      );
+    }else{
+      this.response = 'E-mail não existe!'
+      this.startTimer();
+    }  
   }
 
   irParaLogin() {
