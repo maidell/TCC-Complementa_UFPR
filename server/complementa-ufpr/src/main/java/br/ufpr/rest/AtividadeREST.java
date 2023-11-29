@@ -229,7 +229,8 @@ public class AtividadeREST {
 		if (!atividade.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
-			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(atividade, AtividadeDTO.class));
+			Atividade atv = atividade.get(); 
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(atv, AtividadeDTO.class));
 		}
 	}
 
@@ -251,7 +252,7 @@ public class AtividadeREST {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<AtividadeDTO> alterarAtividade(@PathVariable("id") long id, @RequestBody Atividade atividade) {
+	public ResponseEntity<AtividadeDTO> alterarAtividade(@PathVariable("id") long id, @RequestBody AtividadeDTO atividade) {
 		Optional<Atividade> atv = repo.findById(id);
 
 		if (!atv.isPresent()) {
@@ -260,7 +261,7 @@ public class AtividadeREST {
 			atividade.setId(id);
 			repo.save(mapper.map(atividade, Atividade.class));
 			atv = repo.findById(id);
-			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(atv, AtividadeDTO.class));
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(atv.get(), AtividadeDTO.class));
 		}
 
 	}
