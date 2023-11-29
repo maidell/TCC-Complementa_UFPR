@@ -13,10 +13,21 @@ export class ConfirmacaoComponent {
   remainingTime: number = 10;
   private timer: any;
 
-  constructor(private router: Router) { }
+  constructor(private confirmacao: ConfirmacaoService, private router: Router, private route:ActivatedRoute) { }
 
   ngOnInit() {
+    this.email = this.route.snapshot.queryParams['email'];
+    this.confirmacao.enviarConfirmacao(this.email!).subscribe(
+      (res) => {
+
+        this.startTimer();
+      },
+      (err) => {
+        this.response = err.error.message;
+      }
+    );
     this.startTimer();
+
   }
 
   irParaLogin() {
