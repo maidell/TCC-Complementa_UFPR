@@ -111,12 +111,15 @@
                 </div>
                 <div *ngIf="disputingHours || readingHoursDispute" class="dispute-hours">
                     <mat-form-field class="hours-field">
-                        <mat-label>Carga Horária Oferecida</mat-label>
+                        <mat-label>Complexidade Oferecida</mat-label>
                         <input readonly [disabled]="true" matInput [formControl]="disputedHoursValue" formControlName="disputedHoursValue">
                     </mat-form-field>
-                    <mat-form-field class="hours-field">
-                        <mat-label>Carga Horária Proposta</mat-label>
-                        <input matInput type="number" [formControl]="proposedHours" formControlName="proposedHours">
+                    <mat-form-field class="hours-field" >
+                        <mat-label>Complexidade</mat-label>
+                        <mat-select formControlName="complexitiesContest" [formControl]="complexitiesContest">
+                            <mat-option *ngFor="let c of complexidades" [value]="c" [formControl]="complexityName">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
+                        </mat-select>
+
                     </mat-form-field>
                 </div>
                 <div class="conclusion-form" *ngIf="fillingReport && !disputingHours">

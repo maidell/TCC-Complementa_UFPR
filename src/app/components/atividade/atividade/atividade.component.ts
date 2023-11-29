@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Form, FormControl, FormGroup } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { DownloadService } from '../download.service';
@@ -12,13 +12,16 @@ import { ComentarioService } from '../../../services/comentario/services/comenta
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { Anexo } from 'src/app/shared/models/anexo.model';
 import { AnexoService } from '../../../services/anexo/services/anexo.service';
-import { Atividade, Comentario, Competencia, Complexidade, Graduacao, Orientador, Projeto, Usuario } from 'src/app/shared';
+import { Atividade, Comentario, Competencia, Complexidade, Contestacao, Graduacao, Orientador, Projeto, Usuario } from 'src/app/shared';
 import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
 import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
 import { Router } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { GraduacaoService } from '../../../services/graduacao/services/graduacao.service';
 import { ComplexidadeService } from 'src/app/services/complexidade/services/complexidade.service';
+import { RelatorioDeConclusaoService } from 'src/app/services/relatorio-de-conclusao/services/relatorio-de-conclusao.service';
+import { ContestacaoCargaHorariaService } from 'src/app/services/contestacao-carga-horaria/services/contestacao-carga-horaria.service';
+import { ContestacaoService } from 'src/app/services/contestacao/services/contestacao.service';
 
 
 @Component({
@@ -124,7 +127,8 @@ export class AtividadeComponent implements OnInit{
     submitDate: new FormControl(),
     contestDate: new FormControl(),
     disputedHoursValue: new FormControl(),
-    proposedHours: new FormControl()
+    proposedHours: new FormControl(),
+    complexitiesContest: new FormControl(),
   });
 
   // FormControl pra poder acessar o valor digitado no input
@@ -138,6 +142,7 @@ export class AtividadeComponent implements OnInit{
   submitDate: FormControl = new FormControl();
   contestDate: FormControl = new FormControl();
   uploadFile: FormControl = new FormControl();
+  complexitiesContest: FormControl = new FormControl();
 
 
   disputedHoursValue: FormControl = new FormControl("");
@@ -165,6 +170,9 @@ export class AtividadeComponent implements OnInit{
     private toastr: ToastrService,
     private changeDetectorRef: ChangeDetectorRef,
     public complexidadeService: ComplexidadeService,
+    public relatoriodeConclusaoService: RelatorioDeConclusaoService,
+    public contestacaoCargaHorariaService: ContestacaoCargaHorariaService,
+    public contestacaoExecucaoService: ContestacaoService,
     public atividadeService: AtividadeService,
     private graduacaoService: GraduacaoService,
     public loginService: LoginService,
@@ -211,16 +219,24 @@ export class AtividadeComponent implements OnInit{
 
   }
 
-
-
-
-  dialogWidth() {
-    if (window.innerWidth <= 768) {
-      return "100vw";
+  instanciarAtividade(id: number | undefined) {
+    if (id === undefined) {
+      this.showErrorToastr("Erro ao instanciar Atividade");
+      console.error("Erro ao instanciar Atividade");
     } else {
-      return "80vw";
+      this.atividadeService.buscarAtividadePorId(id).subscribe(
+        (response: Atividade) => {
+          this.atividade = response;
+          this.showSuccessToastr("Atividade completa instanciada")
+        },
+        (error: any) => {
+          this.toastr.error("Erro ao instanciar Atividade");
+          console.error("Erro ao instanciar Atividade: ", error);
+        }
+      );
     }
   }
+
 
 
   //controle de dados do header e do conteudo
@@ -406,16 +422,16 @@ export class AtividadeComponent implements OnInit{
   firstButtonFunction() {
     switch (this.atividade.status) {
       case '':
-        this.saveActivity();
+        this.saveActivity(); //ok
         break;
       case "ABERTA":
 
         if (!this.canUserEdit()) {
-          this.registerCandidature();
+          this.registerCandidature(); //testar com guibor
         }
 
         if (this.isEditing) {
-          this.saveEdit();
+          this.saveEdit(); //ok
         }
         break;
 
@@ -425,12 +441,12 @@ export class AtividadeComponent implements OnInit{
         if (!this.canUserEdit()) {
 
           if (!this.fillingReport) {
-            this.fillReport();
+            this.fillReport(); //ok
           } else {
             if (this.disputingHours) {
-              this.sendHoursDispute();
+              this.sendHoursDispute(); //testar com guibor
             } else {
-              this.sendFinalReport();
+              this.sendFinalReport(); //testar com guibor
             }
           }
 
@@ -439,12 +455,12 @@ export class AtividadeComponent implements OnInit{
           if (this.atividade.relatorioDeConclusao != null) {
 
             if (this.isReadingReport) {
-              this.approveReport();
+              this.approveReport(); //testar
               if (this.disputingExecution) {
-                this.sendExecutionDispute();
+                this.sendExecutionDispute(); //testar
               }
             } else {
-              this.readConclusionReport();
+              this.readConclusionReport(); 
             }
 
           } else {
@@ -457,9 +473,9 @@ export class AtividadeComponent implements OnInit{
 
         if (this.canApproveContest()) {
           if (!this.isReadingContest) {
-            this.readContest();
+            this.readContest(); // testar
           } else {
-            this.approveContest();
+            this.approveContest(); //testar
           }
         }
         break;
@@ -467,32 +483,6 @@ export class AtividadeComponent implements OnInit{
     }
 
   }
-
-  syncComplexidade() {
-    console.log("entrou no sync complexidade");
-    const matchedComplexidade = this.complexidades.find(cp => cp.id === this.atividade.complexidade?.id);
-    if (matchedComplexidade) {
-      this.complexidadeAtividade = matchedComplexidade;
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
-
-  syncGraduacoes(){
-    console.log("entrou no sync graduacoes");
-    let matchedGraduacoes;
-    if(this.atividade.graduacoes){
-      for(let i= 0;i< this.atividade.graduacoes?.length;i++){
-        let novaGraduacao = this.atividade.graduacoes[i];
-        if(this.options.find(gd =>gd.id === novaGraduacao.id)){
-          this.graduacao.push(novaGraduacao);
-        }
-        this.changeDetectorRef.detectChanges();
-      } 
-
-    }
-  }
-
 
   secondButtonFunction() {
     switch (this.atividade.status) {
@@ -538,6 +528,31 @@ export class AtividadeComponent implements OnInit{
 
   }
 
+  syncComplexidade() {
+    console.log("entrou no sync complexidade");
+    const matchedComplexidade = this.complexidades.find(cp => cp.id === this.atividade.complexidade?.id);
+    if (matchedComplexidade) {
+      this.complexidadeAtividade = matchedComplexidade;
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
+
+  syncGraduacoes(){
+    console.log("entrou no sync graduacoes");
+    let matchedGraduacoes;
+    if(this.atividade.graduacoes){
+      for(let i= 0;i< this.atividade.graduacoes?.length;i++){
+        let novaGraduacao = this.atividade.graduacoes[i];
+        if(this.options.find(gd =>gd.id === novaGraduacao.id)){
+          this.graduacao.push(novaGraduacao);
+        }
+        this.changeDetectorRef.detectChanges();
+      } 
+
+    }
+  }
+
   saveActivity() {
 
     if(this.description.value===null || this.courses.value === null || this.activityForm.get('complexities')?.value===null || this.candidatureDate.value===null || this.submitDate.value===null){
@@ -553,6 +568,7 @@ export class AtividadeComponent implements OnInit{
       novaAtividade.dataLimiteCandidatura = this.candidatureDate.value;
       novaAtividade.dataConclusao = this.submitDate.value;
       novaAtividade.dataCriacao = new Date();
+
       this.atividadeService.inserirAtividade(novaAtividade).subscribe(
         (res: Atividade) => {
           novaAtividade=res;
@@ -560,7 +576,7 @@ export class AtividadeComponent implements OnInit{
           console.log(id);
           if (res.id){
             for(let i=0;i< this.file_store.length;i++){
-              this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id);
+              this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id).subscribe;
             }
           }
           this.showSuccessToastr("Atividade criada com Sucesso!");
@@ -588,8 +604,13 @@ export class AtividadeComponent implements OnInit{
 
 
   registerCandidature() {
-    this.toastr.success("Candidatura registrada com sucesso!");
-    this.onNoClick();
+    this.atividade.candidatos?.push(this.usuarioLogado);
+    this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+      (res: Atividade) => {
+        this.toastr.success("Candidatura registrada com sucesso!");
+        this.onNoClick();
+      }
+    )
   }
 
 
@@ -629,6 +650,37 @@ export class AtividadeComponent implements OnInit{
 
   download(fileUrl: string, fileName: string): void {
     this.downloadService.downloadFile(fileUrl, fileName);
+  }
+
+  downloadAnexo(id: number, anexo: Anexo) {
+    this.anexoService.downloadAnexoPorId(id).subscribe(
+      (blob: Blob | MediaSource) => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = anexo.fileName;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      (error: any) => {
+        this.toastr.error('Erro ao baixar o arquivo');
+        console.error('Erro ao baixar o arquivo', error);
+      }
+    );
+  }
+
+  uploadAnexoRelatorio(file: File, anexo: Anexo, relatorioid: number) {
+    this.anexoService.inserirAnexoAtividade(file, relatorioid).subscribe(
+      (response: any) => {
+        console.log('Arquivo enviado com sucesso', response);
+      },
+      (error: any) => {
+        console.error('Erro ao enviar arquivo', error);
+      }
+    );
   }
 
 
@@ -705,15 +757,39 @@ export class AtividadeComponent implements OnInit{
 
     this.projectName = "Contestação de Carga Horária";
     this.descriptionLabel = "Descrição da Contestação de Carga Horária";
-    this.disputedHoursValue.setValue("4 a 8 horas");
+    this.disputedHoursValue.setValue(this.atividade.complexidade?.nome + " (" + this.atividade.complexidade?.cargaHorariaMinima + "h - " + this.atividade.complexidade?.cargaHorariaMaxima + "h)");
 
     this.setHeaderContent();
   }
 
-  sendHoursDispute() {
-    this.disputingHours = false;
-    this.toastr.success("Contestação de Complexidade Realizada com sucesso!");
-    this.onNoClick();
+  sendHoursDispute() { //falar com guibor sobre mudar model e DTO
+    if(this.atividade.complexidade === this.activityForm.get('complexitiesContest')?.value){
+      this.showErrorToastr("Complexidade Proposta não pode ser igual a complexidade original!");
+    } else {
+      let contestacaoHoras = new ContestacaoCargaHoraria();
+      contestacaoHoras.autor= this.usuarioLogado;
+      contestacaoHoras.descricao = this.description.value;
+      contestacaoHoras.dataContestacao=new Date();
+      contestacaoHoras.tipoContestacao="CARGA_HORARIA";
+      contestacaoHoras.status='ABERTA';
+      //contestacaoHoras.cargaHorariaOriginal=this.atividade.complexidade?.cargaHorariaMinima;
+      /**this.contestacaoCargaHorariaService.inserirContestacaoCargaHoraria(contestacaoHoras, undefined).subscribe( //guibor
+        (res: ContestacaoCargaHoraria) => {
+          this.atividade.contestacaoCargaHoraria=res;
+          this.atividade.status='CARGA_HORARIA_CONTESTADA';
+          this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+            (res: Atividade) => {
+              this.disputingHours = false;
+              this.toastr.success("Contestação de Complexidade Realizada com sucesso!");
+              this.onNoClick();
+            }
+          )
+        }
+      )*/
+
+    }
+
+
   }
 
   //Contestação de Execução
@@ -729,8 +805,26 @@ export class AtividadeComponent implements OnInit{
     this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)';
   }
 
-  sendExecutionDispute() {
-    this.toastr.warning("Contestação de Execução enviada");
+  sendExecutionDispute() { // ver tipo
+    let contestacaoExecucao = new Contestacao();
+    contestacaoExecucao.autor=this.usuarioLogado;
+    contestacaoExecucao.dataContestacao=new Date();
+    contestacaoExecucao.descricao=this.description.value;
+    contestacaoExecucao.tipoContestacao='EXECUCAO';
+    contestacaoExecucao.status='ABERTA';
+    this.contestacaoExecucaoService.inserirContestacao(contestacaoExecucao).subscribe(
+      (res: Contestacao) => {
+        this.atividade.status="EXECUCAO_CONTESTADA";
+        this.atividade.contestacao=res;
+        this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+          (res: Atividade) => {
+            this.toastr.warning("Contestação de Execução enviada");
+          }
+        )
+
+      }
+    )
+
   }
 
   //leitura e aprovação da contestação
@@ -758,15 +852,89 @@ export class AtividadeComponent implements OnInit{
   }
 
   approveContest() {
-    this.toastr.success("Contestação Aprovada!");
-    this.onNoClick();
-    this.isReadingContest = false;
-  }
+    if(this.atividade.status==='CARGA_HORARIA_CONTESTADA'){
+      let contestacao=this.atividade.contestacaoCargaHoraria;
+      this.contestacao.status='DEFERIDA';
+      if(contestacao){
+        this.contestacaoCargaHorariaService.atualizarContestacaoCargaHoraria(contestacao).subscribe(
+          (res: ContestacaoCargaHoraria) => {
+            this.atividade.contestacaoCargaHoraria=res;
+            this.atividade.status='FINALIZADA';
+            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+              (res: Atividade) => {
+                this.toastr.success("Contestação Aprovada!");
+                this.onNoClick();
+                this.isReadingContest = false;
+              }
+            )
+          }
+        )
+      }
+
+    } else if (this.atividade.status==='EXECUCAO_CONTESTADA'){
+      let contestacao=this.atividade.contestacaoCargaHoraria;
+      this.contestacao.status='DEFERIDA';
+      if(contestacao){
+        this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
+          (res: Contestacao) => {
+            this.atividade.contestacao=res;
+            this.atividade.status='FINALIZADA';
+            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+              (res: Atividade) => {
+                this.toastr.success("Contestação Aprovada!");
+                this.onNoClick();
+                this.isReadingContest = false;
+
+              }
+            )
+          }
+        )
+    }
+
+    }
+}
 
   refuseContest() {
-    this.toastr.warning("Contestação Recusada");
-    this.onNoClick();
-    this.isReadingContest = false;
+    if(this.atividade.status==='CARGA_HORARIA_CONTESTADA'){
+      let contestacao=this.atividade.contestacaoCargaHoraria;
+      this.contestacao.status='INDEFERIDA';
+      if(contestacao){
+        this.contestacaoCargaHorariaService.atualizarContestacaoCargaHoraria(contestacao).subscribe(
+          (res: ContestacaoCargaHoraria) => {
+            this.atividade.contestacaoCargaHoraria=res;
+            this.atividade.status='FINALIZADA';
+            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+              (res: Atividade) => {
+                this.toastr.warning("Contestação Recusada!");
+                this.onNoClick();
+                this.isReadingContest = false;
+
+              }
+            )
+          }
+        )
+      }
+
+    } else if (this.atividade.status==='EXECUCAO_CONTESTADA'){
+      let contestacao=this.atividade.contestacaoCargaHoraria;
+      this.contestacao.status='DEFERIDA';
+      if(contestacao){
+        this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
+          (res: Contestacao) => {
+            this.atividade.contestacao=res;
+            this.atividade.status='FINALIZADA';
+            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+              (res: Atividade) => {
+                this.toastr.warning("Contestação Recusada!");
+                this.onNoClick();
+                this.isReadingContest = false;
+
+              }
+            )
+          }
+        )
+    }
+    }
   }
 
 
@@ -796,6 +964,7 @@ export class AtividadeComponent implements OnInit{
       contestDate: "",
       disputedHoursValue: "",
       proposedHours: "",
+      complexitiesContest: ""
     });
 
 
@@ -824,7 +993,8 @@ export class AtividadeComponent implements OnInit{
       submitDate: "",
       contestDate: "",
       disputedHoursValue: "",
-      proposedHours: ""
+      proposedHours: "",
+      complexitiesContest:""
     });
 
 
@@ -845,13 +1015,42 @@ export class AtividadeComponent implements OnInit{
         console.log(this.file_store[i].name);
       }
     }
+
+    let relatorio = new RelatorioDeConclusao();
+    relatorio.descricao=this.description.value;
+
+    this.relatoriodeConclusaoService.inserirRelatorioDeConclusao(relatorio).subscribe(
+      (res: RelatorioDeConclusao) => {
+        let reportId= res.id;
+        if(reportId){
+          for(let i = 0; i< this.file_store.length;i++){
+            this.anexoService.inserirAnexoRelatorio(this.file_store[i],reportId).subscribe;
+          }
+          this.atividade.relatorioDeConclusao=res;
+          this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+            (res: Atividade) => {
+              this.showSuccessToastr("Relatório de Conclusão Enviado com Sucesso!");
+            }
+          );
+        }
+      }
+    )
+
+
     this.toastr.success("Relatório de Conclusão Enviado!");
     this.onNoClick();
   }
 
   approveReport() {
-    this.toastr.success("Atividade Concluída!");
-    this.onNoClick();
+    this.atividade.status='FINALIZADA';
+    this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+      (res: Atividade) => {
+        this.toastr.success("Atividade Concluída!");
+        this.onNoClick();
+      }
+    )
+
+
   }
 
   /** CERTIFICADO */
@@ -897,56 +1096,11 @@ export class AtividadeComponent implements OnInit{
     this.dialog.close();
   }
 
-  downloadAnexo(id: number, anexo: Anexo) {
-    this.anexoService.downloadAnexoPorId(id).subscribe(
-      (blob: Blob | MediaSource) => {
-        const url = window.URL.createObjectURL(blob);
-        window.open(url);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = anexo.fileName;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
-      },
-      (error: any) => {
-        this.toastr.error('Erro ao baixar o arquivo');
-        console.error('Erro ao baixar o arquivo', error);
-      }
-    );
-  }
-
-  uploadAnexoRelatorio(file: File, anexo: Anexo, relatorioid: number) {
-    this.anexoService.inserirAnexoAtividade(file, relatorioid).subscribe(
-      (response: any) => {
-        console.log('Arquivo enviado com sucesso', response);
-      },
-      (error: any) => {
-        console.error('Erro ao enviar arquivo', error);
-      }
-    );
-  }
 
 
 
-  instanciarAtividade(id: number | undefined) {
-    if (id === undefined) {
-      this.showErrorToastr("Erro ao instanciar Atividade");
-      console.error("Erro ao instanciar Atividade");
-    } else {
-      this.atividadeService.buscarAtividadePorId(id).subscribe(
-        (response: Atividade) => {
-          this.atividade = response;
-          this.showSuccessToastr("Atividade completa instanciada")
-        },
-        (error: any) => {
-          this.toastr.error("Erro ao instanciar Atividade");
-          console.error("Erro ao instanciar Atividade: ", error);
-        }
-      );
-    }
-  }
+
+
 
   compareComplexidades(c1: any, c2: any): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;

@@ -19,6 +19,7 @@ export class Atividade {
   public dataConclusao?: Date;
   public projeto?: Projeto;
   public autor?: Usuario; 
+  public candidatos?: Usuario[];
   public executor?: Usuario;
   public competencia?: Competencia;
   public graduacoes?: Graduacao[];
@@ -40,6 +41,7 @@ export class Atividade {
     dataConclusao?: Date,
     projeto?: Projeto,
     autor?: Usuario,
+    candidatos?: Usuario[],
     executor?: Usuario,
     graduacoes?: Graduacao[],
     competencia?: Competencia,
@@ -60,6 +62,7 @@ export class Atividade {
     if (dataConclusao) this.dataConclusao = dataConclusao;
     if (projeto) this.projeto = projeto;
     if (autor) this.autor = autor;
+    if (candidatos) this.candidatos = candidatos;
     if (executor) this.executor = executor;
     if (graduacoes) this.graduacoes = graduacoes;
     if (competencia) this.competencia = competencia;
