@@ -235,7 +235,7 @@ public class AtividadeREST {
 	}
 
 	@PostMapping
-	public ResponseEntity<AtividadeDTO> inserirAtividade(@RequestBody AtividadeDTO atividade) {
+	public ResponseEntity<AtividadeDTO> inserirAtividade(@RequestBody Atividade atividade) {
 
 		try {
 			Atividade atv = repo.save(mapper.map(atividade, Atividade.class));
@@ -252,7 +252,7 @@ public class AtividadeREST {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<AtividadeDTO> alterarAtividade(@PathVariable("id") long id, @RequestBody AtividadeDTO atividade) {
+	public ResponseEntity<AtividadeDTO> alterarAtividade(@PathVariable("id") long id, @RequestBody Atividade atividade) {
 		Optional<Atividade> atv = repo.findById(id);
 
 		if (!atv.isPresent()) {
