@@ -47,12 +47,13 @@ mat-header-cell {
 
 .table-header {
 	display: flex;
-	justify-content: space-between;
+	flex: end;
 	align-items: center;
 	margin-bottom: 10px;
 	color:#E5E5E5
+
   }
-  
+
   .table-header button {
 	margin-left: 8px;
 	background-color: forestgreen;

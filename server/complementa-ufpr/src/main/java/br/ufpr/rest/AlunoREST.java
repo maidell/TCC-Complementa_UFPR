@@ -55,13 +55,13 @@ public class AlunoREST {
 	public ResponseEntity<AlunoDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Aluno> aluno = repo.findById(id);
-		if (aluno.isEmpty()) {
+		if (!aluno.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(aluno.get(), AlunoDTO.class));
 		}
 	}
-
+	
 	@PostMapping
 	public ResponseEntity<AlunoDTO> inserirAluno(@RequestBody Aluno aluno) {
 
@@ -95,7 +95,7 @@ public class AlunoREST {
 	public ResponseEntity<AlunoDTO> alterarAluno(@PathVariable("id") long id, @RequestBody Aluno aluno) {
 		Optional<Aluno> aln = repo.findById(id);
 
-		if (aln.isEmpty()) {
+		if (!aln.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			Aluno newAln = aln.get();
@@ -115,7 +115,7 @@ public class AlunoREST {
 	public ResponseEntity<?> removerAluno(@PathVariable("id") long id) {
 
 		Optional<Aluno> aluno = repo.findById(id);
-		if (aluno.isEmpty()) {
+		if (!aluno.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(mapper.map(aluno.get(), Aluno.class));

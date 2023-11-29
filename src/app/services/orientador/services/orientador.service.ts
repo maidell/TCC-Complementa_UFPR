@@ -22,6 +22,10 @@ export class OrientadorService {
     return this.httpClient.get<Orientador[]>(this.BASE_URL + 'orientadores/', this.httpOptions);
   }
 
+  listarTodosOrientadoresPorGraducao(id: number): Observable<Orientador[]> {
+    return this.httpClient.get<Orientador[]>(this.BASE_URL + 'orientadores/graduacoes/' + id, this.httpOptions);
+  }
+
   inserirOrientador(orientador: Orientador): Observable<Orientador> {
     return this.httpClient.post<Orientador>(this.BASE_URL + 'orientadores/', JSON.stringify(orientador), this.httpOptions);
   }

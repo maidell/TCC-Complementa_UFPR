@@ -34,7 +34,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Servidor>;
   constructor(
-    // @Inject(DIALOG_DATA) public data: any,
+    @Inject(DIALOG_DATA) public data: any,
     private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
     private loginService: LoginService,
@@ -46,10 +46,10 @@ export class ServidoresComponent implements OnInit, OnDestroy {
     if (!this.loginService.usuarioLogado) {
       this.router.navigate([`login`]);
     }
-    // if(data){
-    //   this.idGrad = data.idGrad;
-    //   this.idCoord = data.idCoord;
-    // }
+    if(data){
+      this.idGrad = data.idGrad;
+      this.idCoord = data.idCoord;
+    }
     this.dataSource = new MatTableDataSource(this.servidores);
   }
 

@@ -8,11 +8,14 @@ import { AtividadeModule } from './atividade/atividade.module';
 import { OrientadorModule } from '../services/orientador/orientador.module';
 import { ServidorModule } from '../services/servidor/servidor.module';
 import { ProjetoModule } from './projeto/projeto.module';
+import { ListarUsuariosComponent } from './listar-usuarios/listar-usuarios.component';
 
 @NgModule({
   declarations: [
 
 
+  
+    ListarUsuariosComponent
   ],
   imports: [
     CommonModule,

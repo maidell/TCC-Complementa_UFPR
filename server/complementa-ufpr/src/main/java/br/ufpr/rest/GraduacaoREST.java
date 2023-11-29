@@ -62,7 +62,7 @@ public class GraduacaoREST {
     public ResponseEntity<GraduacaoDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<Graduacao> graduacao = repo.findById(id);
-        if (graduacao.isEmpty()) {
+        if (!graduacao.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
         	Graduacao grad = graduacao.get();
@@ -90,7 +90,7 @@ public class GraduacaoREST {
     public ResponseEntity<GraduacaoDTO> alterarGraduacao(@PathVariable("id") Long id, @RequestBody Graduacao graduacao) {
         Optional<Graduacao> grad = repo.findById(id);
 
-        if (grad.isEmpty()) {
+        if (!grad.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             graduacao.setId(id);
@@ -104,7 +104,7 @@ public class GraduacaoREST {
     public ResponseEntity<?> removerGraduacao(@PathVariable("id") Long id) {
 
         Optional<Graduacao> graduacao = repo.findById(id);
-        if (graduacao.isEmpty()) {
+        if (!graduacao.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             repo.delete(graduacao.get());

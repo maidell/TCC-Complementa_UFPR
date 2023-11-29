@@ -55,7 +55,7 @@ public class UsuarioREST {
 	public ResponseEntity<UsuarioDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Usuario> usuario = repo.findById(id);
-		if (usuario.isEmpty()) {
+		if (!usuario.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(usuario, UsuarioDTO.class));
@@ -97,7 +97,7 @@ public class UsuarioREST {
 	public ResponseEntity<UsuarioDTO> alterarUsuario(@PathVariable("id") long id, @RequestBody Usuario usuario) {
 		Optional<Usuario> usu = repo.findById(id);
 
-		if (usu.isEmpty()) {
+		if (!usu.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			Usuario newUsu = usu.get();
@@ -117,7 +117,7 @@ public class UsuarioREST {
 	public ResponseEntity<?> removerUsuario(@PathVariable("id") long id) {
 
 		Optional<Usuario> usuario = repo.findById(id);
-		if (usuario.isEmpty()) {
+		if (!usuario.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(mapper.map(usuario, Usuario.class));

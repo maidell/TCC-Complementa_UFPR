@@ -73,7 +73,7 @@ public class AnexoREST {
 	        anexo.setFileType(fileType);
 	        
 	        Optional<Atividade> atividade = atRepo.findById(atividadeId);
-			if (atividade.isEmpty()) {
+			if (!atividade.isPresent()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 			} else {
 	        anexo.setAtividade(new Atividade(atividadeId));
@@ -102,7 +102,7 @@ public class AnexoREST {
 	        anexo.setFileType(fileType);
 	        
 	        Optional<RelatorioDeConclusao> relatorio = rcRepo.findById(relatorioId);
-			if (relatorio.isEmpty()) {
+			if (!relatorio.isPresent()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 			} else {
 	        anexo.setRelatorioDeConclusao(new RelatorioDeConclusao(relatorioId));
@@ -121,7 +121,7 @@ public class AnexoREST {
     public ResponseEntity<Resource> downloadAnexo(@PathVariable Long id, HttpServletResponse response) {
         try {
             Optional<Anexo> anexoOpt = repo.findById(id);
-            if (anexoOpt.isEmpty()) {
+            if (!anexoOpt.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
@@ -150,7 +150,7 @@ public class AnexoREST {
 	public ResponseEntity<AnexoDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Anexo> anexo = repo.findById(id);
-		if (anexo.isEmpty()) {
+		if (!anexo.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(anexo.get(), AnexoDTO.class));
@@ -161,7 +161,7 @@ public class AnexoREST {
 	public ResponseEntity<?> removerAnexo(@PathVariable("id") Long id) {
 
 		Optional<Anexo> anexo = repo.findById(id);
-		if (anexo.isEmpty()) {
+		if (!anexo.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(anexo.get());

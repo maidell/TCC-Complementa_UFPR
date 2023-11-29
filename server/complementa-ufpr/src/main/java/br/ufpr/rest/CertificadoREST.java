@@ -50,7 +50,7 @@ public class CertificadoREST {
 	public ResponseEntity<CertificadoDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Certificado> certificado = repo.findById(id);
-		if (certificado.isEmpty()) {
+		if (!certificado.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(certificado.get(), CertificadoDTO.class));
@@ -61,7 +61,7 @@ public class CertificadoREST {
 	public ResponseEntity<CertificadoDTO> buscaPorHash(@PathVariable String hash) {
 
 		Optional<Certificado> certificado = repo.findByHash(hash);
-		if (certificado.isEmpty()) {
+		if (!certificado.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(certificado.get(), CertificadoDTO.class));
@@ -90,7 +90,7 @@ public class CertificadoREST {
 	public ResponseEntity<CertificadoDTO> alterarCertificado(@PathVariable("id") Long id, @RequestBody Certificado certificado) {
 		Optional<Certificado> crt = repo.findById(id);
 
-		if (crt.isEmpty()) {
+		if (!crt.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			certificado.setId(id);
@@ -104,7 +104,7 @@ public class CertificadoREST {
 	public ResponseEntity<?> removerCertificado(@PathVariable("id") Long id) {
 
 		Optional<Certificado> certificado = repo.findById(id);
-		if (certificado.isEmpty()) {
+		if (!certificado.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(certificado.get());

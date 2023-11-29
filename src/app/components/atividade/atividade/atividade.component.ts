@@ -401,7 +401,7 @@ export class AtividadeComponent implements OnInit{
         this.activityForm.disable();
 
         if (this.canUserEdit() && this.atividade.relatorioDeConclusao != null) {
-          this.comentarioSistema.mensagem = "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais";
+          this.comentarioSistema.comentario = "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais";
           this.comentarios.push();
         }
 
@@ -622,9 +622,13 @@ export class AtividadeComponent implements OnInit{
 
     var commentContent: string = f.value.commentInput;
     let idAtividade = this.atividade.id;
-    console.log(idAtividade);
+    
+    console.log(idAtividade, commentContent);
+    
     if (commentContent != '' && idAtividade) {
-      let comentario=  new Comentario(undefined,this.usuarioLogado,commentContent);
+      let comentario = new Comentario();
+      comentario.usuario = this.usuarioLogado;
+      comentario.comentario = commentContent;
       this.comentarioService.inserirComentario(comentario,idAtividade).subscribe(
         (res: Comentario)=> {
           this.showSuccessToastr("comentario inserido");
@@ -1008,19 +1012,19 @@ export class AtividadeComponent implements OnInit{
 
   sendFinalReport(): void {
 
-    var fd = new FormData();
-    this.file_list = [];
-    if (this.file_store) {
+    // var fd = new FormData();
+    // this.file_list = [];
+    // if (this.file_store) {
 
-      for (let i = 0; i < this.file_store.length; i++) {
-        fd.append("files", this.file_store[i], this.file_store[i].name);
-        this.file_list.push(this.file_store[i].name);
-      }
-      for (let i = 0; i < this.file_store.length; i++) {
-        console.log(this.file_store[i]);
-        console.log(this.file_store[i].name);
-      }
-    }
+    //   for (let i = 0; i < this.file_store.length; i++) {
+    //     fd.append("files", this.file_store[i], this.file_store[i].name);
+    //     this.file_list.push(this.file_store[i].name);
+    //   }
+    //   for (let i = 0; i < this.file_store.length; i++) {
+    //     console.log(this.file_store[i]);
+    //     console.log(this.file_store[i].name);
+    //   }
+    // }
 
     let relatorio = new RelatorioDeConclusao();
     relatorio.descricao=this.description.value;
@@ -1033,8 +1037,11 @@ export class AtividadeComponent implements OnInit{
             this.anexoService.inserirAnexoRelatorio(this.file_store[i],reportId).subscribe;
           }
           this.atividade.relatorioDeConclusao=res;
+          console.log("Relatorio de conclusao BS", this.atividade)
           this.atividadeService.atualizarAtividade(this.atividade).subscribe(
             (res: Atividade) => {
+              this.atividade = res;
+              console.log("Relatorio de conclusao AS", this.atividade)
               this.showSuccessToastr("Relatório de Conclusão Enviado com Sucesso!");
             }
           );

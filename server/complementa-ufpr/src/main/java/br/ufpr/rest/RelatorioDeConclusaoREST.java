@@ -46,10 +46,10 @@ public class RelatorioDeConclusaoREST {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RelatorioDeConclusaoDTO> buscaPorId(@PathVariable String id) {
+    public ResponseEntity<RelatorioDeConclusaoDTO> buscaPorId(@PathVariable Long id) {
 
         Optional<RelatorioDeConclusao> relatorio = repo.findById(id);
-        if (relatorio.isEmpty()) {
+        if (!relatorio.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(relatorio.get(), RelatorioDeConclusaoDTO.class));
@@ -61,7 +61,7 @@ public class RelatorioDeConclusaoREST {
 
         try {
             RelatorioDeConclusao rlt = repo.save(mapper.map(relatorio, RelatorioDeConclusao.class));
-            Optional<RelatorioDeConclusao> rltOpt = repo.findById(rlt.getId().toString());
+            Optional<RelatorioDeConclusao> rltOpt = repo.findById(rlt.getId());
             if (!rltOpt.isPresent()) {
                 throw new Exception("Criação do relatório não foi realizada com sucesso");
             }
@@ -73,13 +73,13 @@ public class RelatorioDeConclusaoREST {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RelatorioDeConclusaoDTO> alterarRelatorio(@PathVariable("id") String id, @RequestBody RelatorioDeConclusao relatorio) {
+    public ResponseEntity<RelatorioDeConclusaoDTO> alterarRelatorio(@PathVariable("id") Long id, @RequestBody RelatorioDeConclusao relatorio) {
         Optional<RelatorioDeConclusao> rlt = repo.findById(id);
 
-        if (rlt.isEmpty()) {
+        if (!rlt.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
-            relatorio.setId(Long.parseLong(id));
+            relatorio.setId(id);
             repo.save(mapper.map(relatorio, RelatorioDeConclusao.class));
             rlt = repo.findById(id);
             return ResponseEntity.status(HttpStatus.OK).body(mapper.map(rlt.get(), RelatorioDeConclusaoDTO.class));
@@ -87,10 +87,10 @@ public class RelatorioDeConclusaoREST {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerRelatorio(@PathVariable("id") String id) {
+    public ResponseEntity<?> removerRelatorio(@PathVariable("id") Long id) {
 
         Optional<RelatorioDeConclusao> relatorio = repo.findById(id);
-        if (relatorio.isEmpty()) {
+        if (!relatorio.isPresent()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else {
             repo.delete(relatorio.get());

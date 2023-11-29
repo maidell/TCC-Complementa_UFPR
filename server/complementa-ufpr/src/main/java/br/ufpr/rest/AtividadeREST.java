@@ -204,11 +204,29 @@ public class AtividadeREST {
 				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
 	}
 	
+	@GetMapping("/candidaturas/alunos/{id}")
+	public ResponseEntity<List<AtividadeSimplesDTO>> obterAtividadesCandidatadasPorAluno(@PathVariable("id") Long id) {
+	    Optional<Aluno> aluno = repoAlu.findById(id);
+
+	    if (!aluno.isPresent()) {
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+	    }
+
+	    List<Atividade> lista = repo.findAllByAlunoId(aluno.get().getId());
+
+	    if (lista.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+	    }
+
+	    return ResponseEntity.status(HttpStatus.OK)
+	            .body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<AtividadeDTO> buscaPorId(@PathVariable Long id) {
 
 		Optional<Atividade> atividade = repo.findById(id);
-		if (atividade.isEmpty()) {
+		if (!atividade.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(atividade, AtividadeDTO.class));
@@ -236,7 +254,7 @@ public class AtividadeREST {
 	public ResponseEntity<AtividadeDTO> alterarAtividade(@PathVariable("id") long id, @RequestBody Atividade atividade) {
 		Optional<Atividade> atv = repo.findById(id);
 
-		if (atv.isEmpty()) {
+		if (!atv.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			atividade.setId(id);
@@ -251,7 +269,7 @@ public class AtividadeREST {
 	public ResponseEntity<?> removerAtividade(@PathVariable("id") long id) {
 
 		Optional<Atividade> atividade = repo.findById(id);
-		if (atividade.isEmpty()) {
+		if (!atividade.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		} else {
 			repo.delete(mapper.map(atividade, Atividade.class));

@@ -1,6 +1,19 @@
 package br.ufpr.model;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "aluno", uniqueConstraints = { @UniqueConstraint(columnNames = { "grr_aluno" }) })
@@ -15,7 +28,14 @@ public class Aluno extends Usuario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_graduacao")
     private Graduacao graduacao;
-
+    
+    @ManyToMany
+    @JoinTable(
+        name = "aluno_atividade", 
+        joinColumns = @JoinColumn(name = "aluno_id"), 
+        inverseJoinColumns = @JoinColumn(name = "atividade_id"))
+    private List<Atividade> atividades = new ArrayList<>();
+    
     public Aluno() {
     }
 
@@ -41,10 +61,22 @@ public class Aluno extends Usuario {
     public void setGraduacao(Graduacao graduacao) {
         this.graduacao = graduacao;
     }
+    
+    public List<Atividade> getAtividades() {
+		return atividades;
+	}
 
-    @Override
+	public void setAtividades(List<Atividade> atividades) {
+		this.atividades = atividades;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
     public String toString() {
         return "Aluno [id=" + getId() + ", nome=" + getNome() + ", email=" + getEmail() + ", telefone=" + getTelefone()
-                + ", papel=" + getPapel() + ", grr=" + grr + ", graduacao=" + graduacao + "]";
+                + ", papel=" + getPapel() + ", grr=" + getGrr() + ", graduacao=" + getGraduacao() + ", atividades=" + getAtividades() + "]";
     }
 }

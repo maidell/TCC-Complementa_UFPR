@@ -14,23 +14,23 @@
 				<form [formGroup]="gradForm">
 					<div>
 					<div class="input-form">
-						<mat-form-field class="id">
-                            <mat-label>Id</mat-label>
-                            <input matInput formControlName="id" [formControl]="id" placeholder="Gerado Automaticamente" readonly>
-                          </mat-form-field>                          
-						<mat-form-field  class="nomeDoCurso">
+						<mat-form-field class="nomeDoCurso">
 							<mat-label>Nome do Curso</mat-label>
-							<input placeholder="Nome do Curso" matInput formControlName="nomeDoCurso" [formControl]="nome">
-						</mat-form-field>
-						<mat-form-field  class="coordenador">
+							<input placeholder="Nome do Curso" matInput formControlName="nomeDoCurso">
+						  </mat-form-field>
+						  <mat-form-field class="coordenador">
 							<mat-label>Coordenador</mat-label>
-							<input  matInput placeholder="Coordenador" formControlName="coordenador" [formControl]="coordenador">
-						</mat-form-field>
+							<mat-select placeholder="Coordenador" formControlName="coordenador" required>
+							  <mat-option *ngFor="let coordenador of coordenadores" [value]="coordenador">
+								{{ coordenador.nome }}
+							  </mat-option>
+							</mat-select>
+						  </mat-form-field>
 					</div>
 						<div class="buttons">
 							<button mat-flat-button class="save-button" (click)="saveGraduation()">Salvar</button>
-							<button mat-flat-button class="delete-button" (click)="deleteGraduation()">Excluir</button>
 							<button mat-flat-button mat-dialog-close class="cancel-button" (click)="cancel()">Cancelar</button>
+							<button mat-flat-button class="button" (click)="openDialog()">Excluir</button>
 						</div>
 					</div>
 				</form>

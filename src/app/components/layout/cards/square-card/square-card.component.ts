@@ -10,10 +10,11 @@ export class SquareCardComponent {
   @Input() description: string = '';
   @Input() imageUrl: string = '';
   @Input() buttonText: string = '';
+  @Input() btncolor!: string;
   @Output() buttonCallback = new EventEmitter<any>();
   onButtonClick() {
 
       this.buttonCallback.emit();
-    
+
   }
 }

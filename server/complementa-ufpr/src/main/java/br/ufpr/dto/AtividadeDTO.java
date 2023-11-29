@@ -27,6 +27,7 @@ public class AtividadeDTO implements Serializable {
 	private CertificadoDTO certificado;
 	private RelatorioDeConclusaoDTO relatorioDeConclusao;
 	private List<AnexoDTO> anexos = new ArrayList<>();
+	private List<AlunoDTO> candidatos;
 	private ContestacaoDTO contestacao;
 	private ContestacaoCargaHorariaDTO contestacaoCargaHoraria;
 	private List<GraduacaoSimplesDTO> graduacoes = new ArrayList<>();
@@ -38,7 +39,7 @@ public class AtividadeDTO implements Serializable {
 	public AtividadeDTO(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
 			Date dataConclusao, ProjetoDTO projeto, UsuarioDTO autor, AlunoDTO executor, CompetenciaDTO competencia,
 			ComplexidadeDTO complexidade, List<ComentarioDTO> comentarios, CertificadoDTO certificado,
-			RelatorioDeConclusaoDTO relatorioDeConclusao, List<AnexoDTO> anexos, ContestacaoDTO contestacao,
+			RelatorioDeConclusaoDTO relatorioDeConclusao, List<AnexoDTO> anexos, List<AlunoDTO> candidatos, ContestacaoDTO contestacao,
 			ContestacaoCargaHorariaDTO contestacaoCargaHoraria, List<GraduacaoSimplesDTO> graduacoes, Status status) {
 		super();
 		this.id = id;
@@ -56,6 +57,7 @@ public class AtividadeDTO implements Serializable {
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
 		this.anexos = anexos;
+		this.candidatos = candidatos;
 		this.contestacao = contestacao;
 		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
 		this.graduacoes = graduacoes;
@@ -181,6 +183,14 @@ public class AtividadeDTO implements Serializable {
 	public void setAnexos(List<AnexoDTO> anexos) {
 		this.anexos = anexos;
 	}
+	
+	public List<AlunoDTO> getCandidatos() {
+		return candidatos;
+	}
+
+	public void setCandidatos(List<AlunoDTO> candidatos) {
+		this.candidatos = candidatos;
+	}
 
 	public ContestacaoDTO getContestacao() {
 		return contestacao;
@@ -233,7 +243,8 @@ public class AtividadeDTO implements Serializable {
 				+ ", comentarios=" + getComentarios() 
 				+ ", certificado=" + getCertificado()
 				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao() 
-				+ ", anexos=" + getAnexos() 
+				+ ", anexos=" + getAnexos()
+				+ ", candidatos=" + getCandidatos()
 				+ ", contestacao=" + getContestacao() 
 				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria()
 				+ ", graduacoes=" + getGraduacoes() 
