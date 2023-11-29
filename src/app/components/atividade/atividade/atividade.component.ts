@@ -74,6 +74,7 @@ export class AtividadeComponent implements OnInit{
   activityNameLabel='Nome da Atividade';
 
   displayStatus = true;
+  isMultiple=true;
 
   statusButtonColor = '';
 
@@ -188,6 +189,8 @@ export class AtividadeComponent implements OnInit{
     if(data.atividade){
       this.atividade=data.atividade;
       this.complexidadeAtividade=data.atividade.complexidade;
+      this.graduacao=data.atividade.graduacoes;
+
     }
     if (data.projeto){
       this.project = data.projeto;
@@ -554,25 +557,20 @@ export class AtividadeComponent implements OnInit{
       //this.changeDetectorRef.detectChanges();
       console.log("chegou aqui");
     }
+    console.log(this.activityForm.get('complexities'));
   }
 
 
   syncGraduacoes() {
-    console.log("Entrou no sync graduacoes");
-  
     if (this.atividade.graduacoes) {
-      console.log(this.atividade.graduacoes);
-      const graduacoesSelecionadas = this.atividade.graduacoes.filter(grad => 
-        this.options.find(option => option.id === grad.id)
-      );
-  
-        console.log(graduacoesSelecionadas);
-      this.activityForm.get('courses')?.setValue(graduacoesSelecionadas);
-  
-      // Não é necessário chamar detectChanges manualmente na maioria dos casos
-      // this.changeDetectorRef.detectChanges();
+        const graduacoesSelecionadas = this.atividade.graduacoes.filter(grad => 
+            this.options.find(option => option.id === grad.id)
+        );
+
+        this.graduacao = graduacoesSelecionadas;
+        this.courses.setValue(this.graduacao);
     }
-  }
+}
 
   saveActivity() {
 
@@ -1190,7 +1188,9 @@ export class AtividadeComponent implements OnInit{
 
 
 
-
+  compareGraduacoes(g1: any, g2: any): boolean {
+    return g1 && g2 ? g1.id === g2.id : g1 === g2;
+}
 
 
   compareComplexidades(c1: any, c2: any): boolean {

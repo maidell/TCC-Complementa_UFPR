@@ -50,9 +50,9 @@
                 </div>
                 <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
 
-                    <mat-form-field class="competences" *ngIf="!fillingReport">
+                    <!-- <mat-form-field class="competences" *ngIf="!fillingReport">
                         <mat-label>Cursos</mat-label>
-                        <mat-select [(ngModel)]="graduacao" name="curso" formControlName="courses" [formControl]="courses" required multiple>
+                        <mat-select [(value)]="graduacao[0]" name="curso" formControlName="courses" required>
                           <mat-option *ngFor="let option of options" [value]="option">
                             {{ option.nome }}
                           </mat-option>
@@ -60,7 +60,18 @@
                         <mat-error *ngIf="courses.errors?.['required'] && courses.touched">
                           Seleção dos cursos é obrigatória!
                         </mat-error>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="competences" *ngIf="!fillingReport">
+                        <mat-label>Cursos</mat-label>
+                        <mat-select [(value)]="graduacao" name="curso" formControlName="courses" [formControl]="courses" required multiple [compareWith]="compareGraduacoes">
+                            <mat-option *ngFor="let option of options" [value]="option">
+                                {{ option.nome }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="courses.errors?.['required'] && courses.touched">
+                            Seleção dos cursos é obrigatória!
+                        </mat-error>
+                    </mat-form-field>
                     <mat-form-field class="competences" *ngIf="fillingReport">
                         <mat-label>Competências</mat-label>
                         <mat-select [(value)]="atividade.competencia" formControlName="competences" [formControl]="competences">
