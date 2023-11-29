@@ -12,6 +12,7 @@ import { ProjetoComponent } from './components/projeto/projeto.component';
 import { ListarAlunosComponent } from './components/layout/listar-alunos/listar-alunos.component';
 import { EditarUsuariosComponent } from './components/pages/editar-usuarios/editar-usuarios.component';
 import { ConfirmacaoComponent } from './components/pages/confirmacao/confirmacao.component';
+import { ListarUsuariosComponent } from './components/listar-usuarios/listar-usuarios.component';
 
 const routes: Routes = [
   {
@@ -126,6 +127,10 @@ const routes: Routes = [
   {
     path: 'confirmacao/:email',
     component: ConfirmacaoComponent
+  },
+  {
+    path: 'usuarios/listar',
+    component: ListarUsuariosComponent
   },
 
   ...LoginRoutes
