@@ -8,16 +8,16 @@
 			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obs | async) as atividades">
-			<ng-container *ngIf="atividades.length > 0">
+			<ng-container *ngIf="atividades.length > 0; else noActivities">
 				<app-rect-card *ngFor="let atividade of atividades"
 				 [nome]="(atividade.nome) ? atividade.nome.toString() : ''"
 				 [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
-					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[firstValueDate]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
 					[secondLabel]="dataLimiteCandidaturaLabel || ''"
-					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[secondValueDate]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
 					[thirdLabel]="dataConclusaoLabel || ''"
-					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[thirdValueDate]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
 					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
 
 				</app-rect-card>
@@ -38,11 +38,11 @@
 				<app-rect-card *ngFor="let atividade of atividadesDisponiveis"
 					[nome]="(atividade.nome) ? atividade.nome : '' " [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
-					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[firstValueDate]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
 					[secondLabel]="dataLimiteCandidaturaLabel || ''"
-					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[secondValueDate]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
 					[thirdLabel]="dataConclusaoLabel || ''"
-					[thirdValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[thirdValueDate]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
 					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
 				</app-rect-card>
 			</ng-container>
@@ -63,11 +63,11 @@
 				<app-rect-card *ngFor="let atividade of atividadesEmExecucao"
 					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
-					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[firstValueDate]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
 					[secondLabel]="dataLimiteCandidaturaLabel || ''"
-					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[secondValueDate]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
 					[thirdLabel]="dataConclusaoLabel || ''"
-					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[thirdValueDate]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
 					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
 				</app-rect-card>
 			</ng-container>
@@ -87,11 +87,11 @@
 				<app-rect-card *ngFor="let atividade of atividadesExecutadas"
 					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
-					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[firstValueDate]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
 					[secondLabel]="dataLimiteCandidaturaLabel || ''"
-					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[secondValueDate]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
 					[thirdLabel]="dataConclusaoLabel || ''"
-					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[thirdValueDate]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
 					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
 				</app-rect-card>
 			</ng-container>
@@ -114,11 +114,11 @@
 				<app-rect-card *ngFor="let atividade of atividadesOrientadas"
 					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
-					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[firstValueDate]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
 					[secondLabel]="dataLimiteCandidaturaLabel || ''"
-					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
+					[secondValueDate]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
 					[thirdLabel]="dataConclusaoLabel || ''"
-					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
+					[thirdValueDate]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
 					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
 				</app-rect-card>
 			</ng-container>
