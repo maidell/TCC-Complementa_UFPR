@@ -260,7 +260,7 @@ export class ProjetoComponent implements OnInit {
   novaAtividade() {       
     const dialogRef = this.dialog.open(AtividadeComponent, {
     maxWidth: this.dialogWidth(),
-    data: { atividade: new Atividade() }
+    data: { atividade: new Atividade(), projeto: this.projeto }
   }); 
 }
 

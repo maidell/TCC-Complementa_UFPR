@@ -583,6 +583,8 @@ export class AtividadeComponent implements OnInit{
       let novaAtividade = new Atividade();
       novaAtividade.status="ABERTA";
       novaAtividade.nome = this.activityName.value;
+      novaAtividade.projeto=this.project;
+      novaAtividade.autor=this.usuarioLogado;
       novaAtividade.descricao = this.description.value;
       novaAtividade.graduacoes = this.courses.value;
       novaAtividade.complexidade = this.activityForm.get('complexities')?.value;
