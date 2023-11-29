@@ -124,10 +124,10 @@ const routes: Routes = [
     component: ProjetoComponent
   },
   {
-    path: 'projetos/detalhes/:email',
+    path: 'confirmacao/:email',
     component: ConfirmacaoComponent
   },
-  
+
   ...LoginRoutes
 ];
 

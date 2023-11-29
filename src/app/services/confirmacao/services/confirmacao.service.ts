@@ -18,7 +18,7 @@ export class ConfirmacaoService {
   constructor(private httpClient: HttpClient) { }
 
   enviarConfirmacao(email: string): Observable<string> {
-    return this.httpClient.get<string>(this.BASE_URL + '/confirmacao/' + email, this.httpOptions);
+    return this.httpClient.get<string>(this.BASE_URL + 'confirmacao/' + email, this.httpOptions);
   }
 
 }
