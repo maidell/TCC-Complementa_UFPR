@@ -956,7 +956,7 @@ export class AtividadeComponent implements OnInit{
     this.descriptionLabel = "Relatório de Conclusão";
     this.firstHeaderButton = "Enviar Relatório";
     this.displaySecondHeaderButton = '';
-    this.secondHeaderButton = "Contestar Complexidade";
+    this.secondHeaderButton = "Contestar Carga Horária";
     this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)';
     this.displayStatus = false;
     this.fillingReport = true;
