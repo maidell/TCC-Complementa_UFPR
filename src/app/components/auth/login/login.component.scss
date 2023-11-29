@@ -1,5 +1,10 @@
+.login{
+    height: 100%!important;
+}
+
 .full-page {
     background-color: #eef5f9;
+    height: 100%;
 }
 
 @media (max-width: 576px) {
@@ -34,12 +39,12 @@
 }
 
 #submit-button {
-    width:200px;
+    width: 200px;
     min-height: 5vh;
     border-radius: 50px;
     margin: 3vh auto;
     color: white;
-    background-image: linear-gradient(#318b35,#297e42);
+    background-image: linear-gradient(#318b35, #297e42);
     border: 0px;
 }
 
@@ -47,7 +52,7 @@
     width: 150px;
     min-height: 5vh;
     border-radius: 50px;
-    background-image: linear-gradient(#46c8e4,#48a2e7);
+    background-image: linear-gradient(#46c8e4, #48a2e7);
     color: white;
 }
 
@@ -78,3 +83,14 @@
 }
 
 
+#dialog-button-cert {
+    background: linear-gradient(#CC6E00, #D95409);
+    width: 150px;
+    min-height: 5vh;
+    border-radius: 50px;
+    color: white;
+}
+.certificate{
+    padding: 0 auto;
+    margin-top: 20px;
+}

@@ -1,47 +1,52 @@
+<div class="login">
 <app-header id="header"></app-header>
 
 <mat-grid-list cols="12" [rowHeight]="fullHeight" class="full-page">
-    <mat-grid-tile [colspan]="leftColumn" (window:resize)="handleResize()" class="left-side">
-        <div class="login-side">
-            <img
-              src=""
-              src="./assets/plugins/images/logo_complementa.svg"
-              class="small-image"
-              alt="Login Image"/>
-              <form #formLogin="ngForm" (ngSubmit)="logar()">
-                <mat-form-field class="login-field">
-                  <mat-label>Email</mat-label>
-                  <input type="email" matInput [(ngModel)]="login.email" name="usuario" #usuario="ngModel" required email [pattern]="emailPattern">
-                  <mat-error *ngIf="usuario.errors?.['required']">
-                    Digite o usuário
-                  </mat-error>
-                  <mat-error *ngIf="usuario.errors?.['pattern']">
-                    O e-mail deve pertencer ao domínio ufpr.br
-                  </mat-error>
-                </mat-form-field>
-              
-                <mat-form-field class="login-field">
-                  <mat-label>Senha</mat-label>
-                  <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="login.senha" name="senha" #senha="ngModel" required>
-                  <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  <mat-error *ngIf="senha.errors?.['required']">
-                    Digite sua senha
-                  </mat-error>
-                </mat-form-field>
-              <button mat-button type="submit" id="submit-button">
-                Fazer login
-              </button>
-            </form>
-            <div class="no-account">
-              <p>Não tem conta?</p>
-              <button mat-button class="btn btn-success" id="dialog-button" (click)="openDialog()">Cadastre-se</button>
-            </div>
-          </div>
-    </mat-grid-tile>
+  <mat-grid-tile [colspan]="leftColumn" (window:resize)="handleResize()" class="left-side">
+    <div class="login-side">
+      <img src="" src="./assets/plugins/images/logo_complementa.svg" class="small-image" alt="Login Image" />
+      <form #formLogin="ngForm" (ngSubmit)="logar()">
+        <mat-form-field class="login-field">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput [(ngModel)]="login.email" name="usuario" #usuario="ngModel" required email
+            [pattern]="emailPattern">
+          <mat-error *ngIf="usuario.errors?.['required']">
+            Digite o usuário
+          </mat-error>
+          <mat-error *ngIf="usuario.errors?.['pattern']">
+            O e-mail deve pertencer ao domínio ufpr.br
+          </mat-error>
+        </mat-form-field>
 
-    <mat-grid-tile [colspan]="rightColumn" (window.resize)="handleResize()" class="right-side">
-            <div class="large-logo">
-              <img src="./assets/plugins/images/logo_complementa.svg" />
-            </div>
-    </mat-grid-tile>
-  </mat-grid-list>
+        <mat-form-field class="login-field">
+          <mat-label>Senha</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="login.senha" name="senha" #senha="ngModel"
+            required>
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="senha.errors?.['required']">
+            Digite sua senha
+          </mat-error>
+        </mat-form-field>
+        <button mat-button type="submit" id="submit-button">
+          Fazer login
+        </button>
+      </form>
+      <div class="no-account">
+        <p>Não tem conta?</p>
+        <button mat-button class="btn btn-success" id="dialog-button" (click)="openDialog()">Cadastre-se</button>
+      </div>
+      <div class="certificate">
+        <p>Deseja validar um certificado?</p>
+        <button mat-raised-button color="primary" class="button-cert" id="dialog-button-cert"
+          (click)="openDialogCheck()">Validar Certificado</button>
+      </div>
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="rightColumn" (window.resize)="handleResize()" class="right-side">
+    <div class="large-logo">
+      <img src="./assets/plugins/images/logo_complementa.svg" />
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+</div>
