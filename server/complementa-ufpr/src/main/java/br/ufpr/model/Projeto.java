@@ -3,6 +3,7 @@ package br.ufpr.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class Projeto {
     @JoinColumn(name = "id_orientador")
     private Orientador orientador;
     
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "projeto_aluno",
             joinColumns = @JoinColumn(name = "id_projeto"),
@@ -43,7 +44,7 @@ public class Projeto {
     )
     private List<Aluno> alunos;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "projeto_monitor",
             joinColumns = @JoinColumn(name = "id_projeto"),
