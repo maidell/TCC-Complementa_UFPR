@@ -1,5 +1,5 @@
 <div class="cards-atvs">
-	
+
 	<div class="let-of-cards" *ngIf="hasActivities() && usuarioLogado.papel === 'ADMIN'">
 		<h2>Todas as Atividades</h2>
 		<mat-form-field>
@@ -10,13 +10,13 @@
 		<ng-container *ngIf="(obs | async) as atividades">
 			<ng-container *ngIf="atividades.length > 0">
 				<app-rect-card *ngFor="let atividade of atividades"
-				 [nome]="(atividade.nome) ? atividade.nome.toString() : ''" 
+				 [nome]="(atividade.nome) ? atividade.nome.toString() : ''"
 				 [status]="atividade.status"
-					[firstLabel]="dataCriacaoLabel || ''" 
-					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''" 
-					[secondLabel]="dataLimiteCandidaturaLabel || ''" 
+					[firstLabel]="dataCriacaoLabel || ''"
+					[firstValue]="(atividade.dataCriacao) ? atividade.dataCriacao.toString() : ''"
+					[secondLabel]="dataLimiteCandidaturaLabel || ''"
 					[secondValue]="(atividade.dataLimiteCandidatura) ? atividade.dataLimiteCandidatura.toString() : ''"
-					[thirdLabel]="dataConclusaoLabel || ''" 
+					[thirdLabel]="dataConclusaoLabel || ''"
 					[thirdValue]="(atividade.dataConclusao) ? atividade.dataConclusao.toString() : ''"
 					[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(atividade)">
 
@@ -34,7 +34,7 @@
 			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obsDisp | async) as atividadesDisponiveis">
-			<ng-container *ngIf="atividadesDisponiveis.length > 0">
+			<ng-container *ngIf="atividadesDisponiveis.length > 0; else noActivitiesDisp">
 				<app-rect-card *ngFor="let atividade of atividadesDisponiveis"
 					[nome]="(atividade.nome) ? atividade.nome : '' " [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
@@ -59,7 +59,7 @@
 			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obsEmEx | async) as atividadesEmExecucao">
-			<ng-container *ngIf="atividadesEmExecucao.length > 0">
+			<ng-container *ngIf="atividadesEmExecucao.length > 0; else noActivitiesExEx">
 				<app-rect-card *ngFor="let atividade of atividadesEmExecucao"
 					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
@@ -83,7 +83,7 @@
 			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obsEx | async) as atividadesExecutadas">
-			<ng-container *ngIf="atividadesExecutadas.length > 0">
+			<ng-container *ngIf="atividadesExecutadas.length > 0; else noActivitiesEx">
 				<app-rect-card *ngFor="let atividade of atividadesExecutadas"
 					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
@@ -110,7 +110,7 @@
 			<mat-icon matSuffix>search</mat-icon>
 		</mat-form-field>
 		<ng-container *ngIf="(obsOri | async) as atividadesOrientadas">
-			<ng-container *ngIf="atividadesOrientadas.length > 0">
+			<ng-container *ngIf="atividadesOrientadas.length > 0; else noActivitiesOri">
 				<app-rect-card *ngFor="let atividade of atividadesOrientadas"
 					[nome]="(atividade.nome) ? atividade.nome : ''" [status]="atividade.status"
 					[firstLabel]="dataCriacaoLabel || ''"
@@ -132,6 +132,27 @@
 			<app-warning [Description]="'A atividade \'' + inputValue + '\' não foi encontrada'"></app-warning>
 		</div>
 	</ng-template>
+	<ng-template #noActivitiesDisp>
+		<div class="warning-card" *ngIf="inputValueDisp && inputValueDisp.length > 0">
+			<app-warning [Description]="'A atividade \'' + inputValueDisp + '\' não foi encontrada'"></app-warning>
+		</div>
+	</ng-template>
+	<ng-template #noActivitiesExEx>
+		<div class="warning-card" *ngIf="inputValueEmEx && inputValueEmEx.length > 0">
+			<app-warning [Description]="'A atividade \'' + inputValueEmEx + '\' não foi encontrada'"></app-warning>
+		</div>
+	</ng-template>
+	<ng-template #noActivitiesEx>
+		<div class="warning-card" *ngIf="inputValueEx && inputValueEx.length > 0">
+			<app-warning [Description]="'A atividade \'' + inputValueEx + '\' não foi encontrada'"></app-warning>
+		</div>
+	</ng-template>
+	<ng-template #noActivitiesOri>
+		<div class="warning-card" *ngIf="inputValueOri && inputValueOri.length > 0">
+			<app-warning [Description]="'A atividade \'' + inputValueOri + '\' não foi encontrada'"></app-warning>
+		</div>
+	</ng-template>
+
 	<div class="card-square">
 		<app-warn-card [TitleWarning]="TitleWarning" [Description]="Description" [Button]="Button"></app-warn-card>
 	</div>

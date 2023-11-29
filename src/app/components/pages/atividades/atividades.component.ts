@@ -134,7 +134,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
           || this.atividadesDisponiveis.length > 0
           || this.atividadesEmExecucao.length > 0
           || this.atividadesExecutadas.length > 0
-          || this.atividadesOrientadas.length > 0        
+          || this.atividadesOrientadas.length > 0
     ;
   }
 
@@ -161,6 +161,9 @@ export class AtividadesComponent implements OnInit, OnDestroy {
               if (atividadesDisponiveis) {
                 this.atividadesDisponiveis = atividadesDisponiveis;
                 this.dataSourceAtvDisp = new MatTableDataSource(this.atividadesDisponiveis);
+                this.changeDetectorRef.detectChanges();
+                this.dataSourceAtvDisp.paginator = this.paginator;
+                this.obsDisp = this.dataSourceAtvDisp.connect();
                 this.toastr.success("Atividades Disponíveis Carregadas");
                 console.log('Atividades Disponíveis:', atividadesDisponiveis);
               }
@@ -171,7 +174,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
               }
               this.separarPorStatus();
               this.changeDetectorRef.detectChanges();
-              
+
             }
             )
             },
@@ -189,6 +192,9 @@ export class AtividadesComponent implements OnInit, OnDestroy {
                 (res: Atividade[]) => {
                   this.atividadesOrientadas = res;
                   this.dataSourceAtvOri = new MatTableDataSource(this.atividadesOrientadas);
+                  this.changeDetectorRef.detectChanges();
+                  this.dataSourceAtvOri.paginator = this.paginator;
+                  this.obsOri = this.dataSourceAtvOri.connect();
                   this.toastr.success("Atividades Orientadas Carregadas");
                 }
             )
@@ -210,11 +216,17 @@ export class AtividadesComponent implements OnInit, OnDestroy {
               if (atividadesDisponiveis) {
                 this.atividadesDisponiveis = atividadesDisponiveis;
                 this.dataSourceAtvDisp = new MatTableDataSource(this.atividadesDisponiveis);
+                this.dataSourceAtvDisp.paginator = this.paginator;
+                this.changeDetectorRef.detectChanges();
+                this.obsDisp = this.dataSourceAtvDisp.connect();
                 this.toastr.success("Atividades Disponíveis Carregadas");
               }
               if (atividadesOrientadas) {
                 this.atividadesOrientadas = atividadesOrientadas;
                 this.dataSourceAtvOri = new MatTableDataSource(this.atividadesOrientadas);
+                this.dataSourceAtvOri.paginator = this.paginator;
+                this.changeDetectorRef.detectChanges();
+                this.obsOri = this.dataSourceAtvOri.connect();
                 this.toastr.success("Atividades Orientadas Carregadas");
               }
             }
@@ -226,12 +238,15 @@ export class AtividadesComponent implements OnInit, OnDestroy {
           });
         break;
       }
-      case 'ADMIN': 
+      case 'ADMIN':
       case 'SERVIDOR': {
         this.instanciarAtividades().subscribe(
           (res: Atividade[]) => {
             this.atividades = res;
             this.dataSource = new MatTableDataSource(this.atividades);
+            this.changeDetectorRef.detectChanges();
+            this.dataSource.paginator = this.paginator;
+            this.obs = this.dataSource.connect();
           },
           (error) => {
             console.log("Erro ao listar atividades", error);
