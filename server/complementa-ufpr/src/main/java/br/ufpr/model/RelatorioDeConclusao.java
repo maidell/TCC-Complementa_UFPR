@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -26,7 +28,7 @@ public class RelatorioDeConclusao implements Serializable{
     @Column(name = "descricao")
     private String descricao;
 
-    @OneToMany(mappedBy = "relatorioDeConclusao", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "relatorioDeConclusao")
     private List<Anexo> anexos;
     
     public RelatorioDeConclusao() {

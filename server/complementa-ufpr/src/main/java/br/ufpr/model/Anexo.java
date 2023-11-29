@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -31,13 +32,28 @@ public class Anexo implements Serializable {
 	private String fileType;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "relatorio_de_conclusao")
+    @JoinTable(name = "anexos_atividades")
+    private Atividade atividade;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "anexos_relatorio",
+               joinColumns = @JoinColumn(name = "anexos_id"),
+               inverseJoinColumns = @JoinColumn(name = "relatorio_id"))
     private RelatorioDeConclusao relatorioDeConclusao;
 
 	public Anexo() {
 		super();
 	}
 
+	public Anexo(Long id, String fileName, String filePath, String fileType, Atividade atividade) {
+		super();
+		this.id = id;
+		this.fileName = fileName;
+		this.filePath = filePath;
+		this.fileType = fileType;
+		this.atividade = atividade;
+	}
+	
 	public Anexo(Long id, String fileName, String filePath, String fileType, RelatorioDeConclusao relatorioDeConclusao) {
 		super();
 		this.id = id;
@@ -83,6 +99,14 @@ public class Anexo implements Serializable {
 		return serialVersionUID;
 	}
 
+	public Atividade getAtividade() {
+		return atividade;
+	}
+
+	public void setAtividade(Atividade atividade) {
+		this.atividade = atividade;
+	}
+
 	public RelatorioDeConclusao getRelatorioDeConclusao() {
 		return relatorioDeConclusao;
 	}
@@ -93,7 +117,12 @@ public class Anexo implements Serializable {
 
 	@Override
 	public String toString() {
-	    return "Anexo [id=" + getId() + ", fileName=" + getFileName() + ", filePath=" + getFilePath() + ", fileType=" + getFileType() + ", relatorioDeConclusao=" + getRelatorioDeConclusao() + "]";
+	    return "Anexo [id=" + getId() 
+	    + ", fileName=" + getFileName() 
+	    + ", filePath=" + getFilePath() 
+	    + ", fileType=" + getFileType()
+	    + ", atividade=" + getAtividade() 
+	    + ", relatorioDeConclusao=" + getRelatorioDeConclusao() + "]";
 	}
     
 }

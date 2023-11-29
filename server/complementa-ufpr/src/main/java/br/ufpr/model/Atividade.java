@@ -97,9 +97,20 @@ public class Atividade implements Serializable {
     )
 	private List<Graduacao> graduacoes = new ArrayList<>();
 	
-	@ManyToMany(mappedBy = "atividades", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "anexos_relatorio")
+    private List<Anexo> anexos;
+	
+    
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "aluno_atividade", 
+            joinColumns = @JoinColumn(name = "atividade_id"), 
+            inverseJoinColumns = @JoinColumn(name = "aluno_id"))
 	private List<Aluno> candidatos = new ArrayList<>();
 
+	
+	
 	public Atividade() {
 	}
 	
@@ -111,7 +122,7 @@ public class Atividade implements Serializable {
 	public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
 			Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor, Competencia competencia,
 			Complexidade complexidade, List<Comentario> comentarios, Certificado certificado,
-			RelatorioDeConclusao relatorioDeConclusao, List<Aluno> candidatos, Contestacao contestacao, ContestacaoCargaHoraria contestacaoCargaHoraria,
+			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, List<Aluno> candidatos, Contestacao contestacao, ContestacaoCargaHoraria contestacaoCargaHoraria,
 			Status status) {
 		super();
 		this.id = id;
@@ -128,6 +139,7 @@ public class Atividade implements Serializable {
 		this.comentarios = comentarios;
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
+		this.anexos = anexos;
 		this.candidatos = candidatos;
 		this.contestacao = contestacao;
 		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
@@ -246,6 +258,14 @@ public class Atividade implements Serializable {
 		this.relatorioDeConclusao = relatorioDeConclusao;
 	}
 
+	public List<Anexo> getAnexos() {
+		return anexos;
+	}
+
+	public void setAnexos(List<Anexo> anexos) {
+		this.anexos = anexos;
+	}
+
 	public List<Graduacao> getGraduacoes() {
 		return graduacoes;
 	}
@@ -305,7 +325,8 @@ public class Atividade implements Serializable {
 				+ ", complexidade=" + getComplexidade() 
 				+ ", comentarios=" + getComentarios() 
 				+ ", certificado=" + getCertificado()
-				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao() 
+				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao()
+				+ ", anexos=" + getAnexos() 
 				+ ", candidatos=" + getCandidatos() 
 				+ ", contestacao=" + getContestacao() 
 				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria() 
