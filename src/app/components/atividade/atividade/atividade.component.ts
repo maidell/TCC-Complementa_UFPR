@@ -364,7 +364,7 @@ export class AtividadeComponent implements OnInit{
   }
 
   setContent() {
-    console.log("entrou no set content");
+    console.log(this.atividade.status);
     switch (this.atividade.status) {
       case 'ABERTA': 
         this.activityForm.disable();
@@ -863,8 +863,7 @@ export class AtividadeComponent implements OnInit{
 
   //leitura e aprovação da contestação
   canApproveContest() {
-    if (this.usuarioLogado === this.atividade.projeto?.orientador ||
-      this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado)) {
+    if (this.usuarioLogado.id === this.atividade.projeto?.orientador?.id){
       return true;
     } else {
       return false;
