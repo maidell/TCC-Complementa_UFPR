@@ -79,9 +79,6 @@ public class Atividade implements Serializable {
 	@JoinColumn(name = "relatorio_de_conclusao")
 	private RelatorioDeConclusao relatorioDeConclusao;
 
-	@OneToMany(mappedBy = "atividade", fetch = FetchType.LAZY)
-	private List<Anexo> anexos = new ArrayList<>();
-
 	@OneToOne(fetch = FetchType.LAZY)
 	private Contestacao contestacao;
 	
@@ -108,7 +105,7 @@ public class Atividade implements Serializable {
 	public Atividade(Long id, String nome, String descricao, Date dataCriacao, Date dataLimiteCandidatura,
 			Date dataConclusao, Projeto projeto, Usuario autor, Aluno executor, Competencia competencia,
 			Complexidade complexidade, List<Comentario> comentarios, Certificado certificado,
-			RelatorioDeConclusao relatorioDeConclusao, List<Anexo> anexos, List<Aluno> candidatos, Contestacao contestacao, ContestacaoCargaHoraria contestacaoCargaHoraria,
+			RelatorioDeConclusao relatorioDeConclusao, List<Aluno> candidatos, Contestacao contestacao, ContestacaoCargaHoraria contestacaoCargaHoraria,
 			Status status) {
 		super();
 		this.id = id;
@@ -125,7 +122,6 @@ public class Atividade implements Serializable {
 		this.comentarios = comentarios;
 		this.certificado = certificado;
 		this.relatorioDeConclusao = relatorioDeConclusao;
-		this.anexos = anexos;
 		this.candidatos = candidatos;
 		this.contestacao = contestacao;
 		this.contestacaoCargaHoraria = contestacaoCargaHoraria;
@@ -260,14 +256,6 @@ public class Atividade implements Serializable {
 		this.candidatos = candidatos;
 	}
 
-	public List<Anexo> getAnexos() {
-		return anexos;
-	}
-
-	public void setAnexos(List<Anexo> anexos) {
-		this.anexos = anexos;
-	}
-
 	public Contestacao getContestacao() {
 		return contestacao;
 	}
@@ -312,7 +300,6 @@ public class Atividade implements Serializable {
 				+ ", comentarios=" + getComentarios() 
 				+ ", certificado=" + getCertificado()
 				+ ", relatorioDeConclusao=" + getRelatorioDeConclusao() 
-				+ ", anexos=" + getAnexos()
 				+ ", candidatos=" + getCandidatos() 
 				+ ", contestacao=" + getContestacao() 
 				+ ", contestacaoCargaHoraria=" + getContestacaoCargaHoraria() 

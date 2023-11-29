@@ -71,6 +71,6 @@ public class RelatorioDeConclusao implements Serializable{
 
     @Override
     public String toString() {
-        return "RelatorioDeConclusao [id=" + id + ", descricao=" + descricao + ", anexos=" + anexos + "]";
+        return "RelatorioDeConclusao [id=" + getId() + ", descricao=" + getDescricao() + ", anexos=" + getAnexos() + "]";
     }
 }

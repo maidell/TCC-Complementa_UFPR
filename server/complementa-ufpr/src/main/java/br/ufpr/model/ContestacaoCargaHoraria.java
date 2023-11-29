@@ -53,9 +53,14 @@ public class ContestacaoCargaHoraria extends Contestacao{
 	
 	@Override
 	public String toString() {
-	    return "Contestacao [id=" + getId() + "descricao=" + getDescricao() + "tipoContestacao=" + getTipoContestacao()
-	    	    + "dataContestacao=" + getDataContestacao() + "status=" + getStatus() + "autor=" + getAutor()
-	    	    + ", cargaHorariaOriginal=" + getCargaHorariaOriginal() + ", cargaHorariaNova=" + getCargaHorariaNova() + "]";
+	    return "Contestacao [id=" + getId() 
+	    		+ ", descricao=" + getDescricao() 
+	    		+ ", tipoContestacao=" + getTipoContestacao()
+	    	    + ", dataContestacao=" + getDataContestacao() 
+	    	    + ", status=" + getStatus() 
+	    	    + ", autor=" + getAutor()
+	    	    + ", cargaHorariaOriginal=" + getCargaHorariaOriginal() 
+	    	    + ", cargaHorariaNova=" + getCargaHorariaNova() + "]";
 	}
 
 	
