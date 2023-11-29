@@ -24,7 +24,7 @@ Rode: ```docker ps```
 
 1. Configure o arquivo `.env` usando o modelo fornecido em `.env.example`. Siga os passos:
 
-   - Navegue até o caminho: `poc_complementa_ufpr/api-gateway/
+   - Navegue até o caminho: `tcc-complementa/api-gateway/
    - Ctrl+c | Ctrl+v do arquivo `.env.example`.
    - Abra o arquivo `.env` e altere as seguintes variáveis:
 
@@ -32,11 +32,12 @@ Rode: ```docker ps```
      ACCESS_TOKEN_SECRET="<coloque qualquer coisa aqui entre aspas duplas>"
      REFRESH_TOKEN_SECRET="<coloque qualquer coisa aqui entre aspas duplas>"
      ```
-2. No caminho `poc_complementa_ufpr/server/complementa-ufpr/src/main/java/br/ufpr/`, siga estas etapas:
+2. No caminho `tcc-complementa/server/complementa-ufpr/src/main/java/br/ufpr/`, siga estas etapas:
 
 - Clique com o botão direito do mouse em `ComplementaUfprApplication.java`.
 - Selecione a opção "Run Java" para iniciar o servidor back-end.
-  #### * Se for rodar direto no terminal, seguindo o mesmo caminho é so rodar o comando:
+  ###### Se for rodar direto no terminal, seguindo o mesmo caminho é so rodar o comando:
+  ###### * pode não funcionar, a opção do 'run java' é mais confiavel
   ```
   /usr/bin/env /usr/lib/jvm/java-11-openjdk-amd64/bin/java @/tmp/cp_296p3sivn2c6de6izrvlaf1v2.argfile br.ufpr.ComplementaUfprApplication
   ```
