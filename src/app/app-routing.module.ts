@@ -99,7 +99,7 @@ const routes: Routes = [
     component: pages.ServidoresComponent
   },
   {
-    path: 'servidores/listar',
+    path: 'servidores/listar/:id',
     component: pages.ServidoresComponent
   },
   {
@@ -122,7 +122,7 @@ const routes: Routes = [
     path: 'projetos/detalhes/:id',
     component: ProjetoComponent
   },
-
+  
   ...LoginRoutes
 ];
 
