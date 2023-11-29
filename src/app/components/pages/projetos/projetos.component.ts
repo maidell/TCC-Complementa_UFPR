@@ -35,8 +35,8 @@ export class ProjetosComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private toastr: ToastrService,
     private orientadorService: OrientadorService
-  ) { 
-    
+  ) {
+
   }
 
   applyFilter(event: Event) {
@@ -75,10 +75,10 @@ export class ProjetosComponent implements OnInit, OnDestroy {
         (res: Projeto[]) => {
           console.log("dados recebidos da api", res)
           this.projetos = res;
-          this.dataSource = new MatTableDataSource<Projeto>();
+          this.dataSource = new MatTableDataSource(res);
           this.dataSource.paginator = this.paginator;
-          this.obs = this.dataSource.connect();
           this.changeDetectorRef.detectChanges();
+          this.obs = this.dataSource.connect();
         },
         (err: any) => {
           this.toastr.error("Erro ao instanciar Projetos");
@@ -121,7 +121,7 @@ export class ProjetosComponent implements OnInit, OnDestroy {
 
   abrirProjeto(projeto: Projeto) {
     if(projeto){
-      this.router.navigate([`/projetos/detalhes/${projeto.id}`]);  
+      this.router.navigate([`/projetos/detalhes/${projeto.id}`]);
     }
   }
 
