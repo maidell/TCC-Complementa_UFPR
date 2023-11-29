@@ -5,8 +5,9 @@ import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { LayoutModule } from '../layout/layout.module';
 import { MaterialStylesModule } from 'src/app/components/layout/material-styles/material-styles.module';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
 
-
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 @NgModule({
   declarations: [
     LoginComponent
@@ -16,7 +17,8 @@ import { MaterialStylesModule } from 'src/app/components/layout/material-styles/
     RouterModule,
     LayoutModule,
     MaterialStylesModule,
-    FormsModule
+    FormsModule,
+    NgxMaskModule.forRoot()
   ],
   exports: [
     LoginComponent

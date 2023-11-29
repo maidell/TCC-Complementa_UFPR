@@ -19,12 +19,14 @@ import { ProjetoService } from '../../projeto/services/projeto.service';
   templateUrl: './listar-alunos.component.html',
   styleUrls: ['./listar-alunos.component.scss']
 })
-export class ListarAlunosComponent implements OnInit {
+export class ListarAlunosComponent implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   projeto!: Projeto;
-  constructor(public toastr: ToastrService,
+  constructor(
+    private changeDetectorRefs: ChangeDetectorRef,
+    public toastr: ToastrService,
     private alunoService: AlunoService,
     private projetoService: ProjetoService,
     @Inject(DIALOG_DATA) public data: any) {
@@ -32,6 +34,7 @@ export class ListarAlunosComponent implements OnInit {
       this.projeto = data.projeto;
     }
   }
+  alunos: Aluno[] = [];
   ngOnInit(): void {
 
     this.listarAlunos();
@@ -42,13 +45,12 @@ export class ListarAlunosComponent implements OnInit {
     this.displayedColumns.push('button');
     console.log(this.displayedColumns);
     console.log(this.dataSource);
-
-  }
-  ngAfterViewInit() {
-
+    this.dataSource = new MatTableDataSource<Aluno>(this.alunos);
+    this.changeDetectorRefs.detectChanges();
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
   dataSource!: MatTableDataSource<Aluno>;
   buttonOne: string = 'Adicionar';
   buttonTwo: string = 'Remover';
@@ -76,6 +78,7 @@ export class ListarAlunosComponent implements OnInit {
     this.alunoService.listarTodosAlunos().subscribe(
       (alunos: Aluno[]) => {
         this.dataSource = new MatTableDataSource<Aluno>(alunos);
+        this.changeDetectorRefs.detectChanges();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 

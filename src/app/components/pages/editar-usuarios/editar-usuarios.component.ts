@@ -11,6 +11,7 @@ import { ServidorService } from '../../../services/servidor/services/servidor.se
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { ToastrService } from 'ngx-toastr';
 import { GraduacaoService } from '../../../services/graduacao/services/graduacao.service';
+import { TitleService } from 'src/app/services/title/title.service';
 
 @Component({
   selector: 'app-editar-usuarios',
@@ -63,7 +64,8 @@ export class EditarUsuariosComponent implements OnInit {
     public dialog: MatDialog,
     public toastr: ToastrService,
     public route: ActivatedRoute,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private title: TitleService
   ) { }
 
   ngOnInit(): void {
@@ -74,7 +76,7 @@ export class EditarUsuariosComponent implements OnInit {
     this.idUsuario = this.route.snapshot.params['id'];
     if (this.usuarioLogado.papel !== "ADMIN") {
       this.toastr.info(this.usuarioLogado.papel);
-      if (String(this.usuarioLogado.id) !== String(this.idUsuario)) { 
+      if (String(this.usuarioLogado.id) !== String(this.idUsuario)) {
         this.router.navigate([""]); // está entrando nessa condição mesmo que o usuarioLogado.id seja o mesmo do query param
       } else {
         this.instanciarDetalhes(this.idUsuario);
@@ -84,6 +86,7 @@ export class EditarUsuariosComponent implements OnInit {
       this.mostrarValidacaoSenha = false;
       this.senhaAtualValida = true;
     }
+    this.title.setTitle('Editar Usuário');
   }
 
   atualizarUsuario(formUsuario: NgForm): void {
@@ -381,7 +384,7 @@ export class EditarUsuariosComponent implements OnInit {
         }
         break;
       }
-      case 'COORDENADOR': 
+      case 'COORDENADOR':
       case 'ORIENTADOR': {
         if (this.senhaValida) {
           this.orientador.senha = this.senha;

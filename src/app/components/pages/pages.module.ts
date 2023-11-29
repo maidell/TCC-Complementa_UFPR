@@ -14,12 +14,13 @@ import { CardsModule } from '../layout/cards/cards.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
-import { IConfig } from 'ngx-mask';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { AutocadastroComponent } from '../pages/autocadastro/autocadastro.component';
 import { EditarAlunoComponent } from '../pages/editar-aluno/editar-aluno.component';
 import { CadastroDeUsuariosComponent } from './cadastro-de-usuarios/cadastro-de-usuarios.component';
 import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
 import { EditarUsuariosComponent } from './editar-usuarios/editar-usuarios.component';
+import { ValidaCertificadoComponent } from './valida-certificado/valida-certificado.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -39,6 +40,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     CadastroDeUsuariosComponent,
     ConfirmacaoComponent,
     EditarUsuariosComponent,
+    ValidaCertificadoComponent,
   ],
   imports: [
     CommonModule,
@@ -46,7 +48,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     LayoutModule,
     FormsModule,
     RouterModule,
-    CardsModule
+    CardsModule,
+    NgxMaskModule.forRoot()
   ],
   exports: [
     DashboardComponent,
@@ -60,7 +63,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     CompetenciasComponent,
     AutocadastroComponent,
     EditarAlunoComponent,
-    CadastroDeUsuariosComponent
+    CadastroDeUsuariosComponent,
+    ValidaCertificadoComponent,
   ]
 })
 export class PagesModule { }
