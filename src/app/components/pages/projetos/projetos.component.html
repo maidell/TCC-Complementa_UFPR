@@ -1,5 +1,5 @@
 <div class="cards-projects">
-	<div class="let-of-cards" *ngIf="hasProjects() || usuarioLogado.papel === 'ORIENTADOR' || usuarioLogado.papel === 'COORDENADOR'">
+	<div class="let-of-cards" *ngIf="usuarioLogado.papel === 'ORIENTADOR' || usuarioLogado.papel === 'COORDENADOR' || usuarioLogado.papel === 'ALUNO'; else noActivities">
 		<div class="table-header" *ngIf="usuarioLogado.papel === 'ORIENTADOR' || usuarioLogado.papel === 'COORDENADOR'">
 			<button mat-raised-button color="primary" (click)="adicionarProjeto()" class="button custom-button">
 				{{buttonNew}}
@@ -19,14 +19,14 @@
 				[id]="projeto.id!"
 
 				[firstValue]="projeto.tipo!"
-				
+
 				[thirdLabel]="orientadorLabel"
 				[thirdValue]="projeto.orientador!.nome"
 
 				[nameButtonRect]="buttonOne"
 				[buttonColor]="'btn-green'"
 				(clickButtonRect)="abrirProjeto(projeto)"
-				
+
 				[showSecondButton]="false"
 
 				>

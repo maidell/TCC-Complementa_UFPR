@@ -1,6 +1,9 @@
-<div class="cardGeral">
-        <h1>{{response}}</h1>
+<div class="card-container">
+	<mat-card class="card" (click)="resetTimer()">
+		<h1>{{ response }}</h1>
+		<p *ngIf="remainingTime > 0">Redirecionando para o login em {{ remainingTime }} segundos...</p>
 		<div class="buttons">
 			<button mat-raised-button color="primary" (click)="irParaLogin()">Ir para login</button>
 		</div>
+	</mat-card>
 </div>

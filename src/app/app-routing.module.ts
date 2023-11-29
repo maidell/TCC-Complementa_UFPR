@@ -127,7 +127,7 @@ const routes: Routes = [
     path: 'confirmacao/:email',
     component: ConfirmacaoComponent
   },
-  
+
   ...LoginRoutes
 ];
 
