@@ -3,6 +3,7 @@ package br.ufpr.rest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,26 +62,25 @@ public class AnexoREST {
 	
 	@PostMapping("/atividades/upload/{atividadeId}")
 	public ResponseEntity<AnexoDTO> uploadAnexoAtividade(@PathVariable Long atividadeId, @RequestParam("file") MultipartFile file) {
-	    try {
-	        String fileName = file.getOriginalFilename() + generateRandom();
+			String fileName = generateRandom() + "-" + file.getOriginalFilename();
 	        String fileType = file.getContentType();
 	        Path path = Paths.get(UPLOAD_DIRECTORY + fileName);
-	        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-	        Anexo anexo = new Anexo();
-	        anexo.setFileName(fileName);
-	        anexo.setFilePath(path.toString());
-	        anexo.setFileType(fileType);
 	        
-	        Optional<Atividade> atividade = atRepo.findById(atividadeId);
-			if (!atividade.isPresent()) {
-				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-			} else {
-	        anexo.setRelatorioDeConclusao(new RelatorioDeConclusao((long) 1));
-	        Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
-	        System.gc();
-	        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
-			}
+	        try (InputStream inputStream = file.getInputStream()) {
+	            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+		        Anexo anexo = new Anexo();
+		        anexo.setFileName(fileName);
+		        anexo.setFilePath(path.toString());
+		        anexo.setFileType(fileType);
+		        Optional<Atividade> atividade = atRepo.findById(atividadeId);
+				if (!atividade.isPresent()) {
+					return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+				} else {
+				anexo.setAtividade(atividade.get());
+		        Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
+		        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
+				}
+	        
 	    } catch (IOException e) {
 	    	System.err.println(e);
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -89,24 +89,23 @@ public class AnexoREST {
 	
 	@PostMapping("/relatorios/upload/{relatorioId}")
 	public ResponseEntity<AnexoDTO> uploadAnexoRelatorioDeConclusao(@PathVariable Long relatorioId, @RequestParam("file") MultipartFile file) {
-	    try {
-	    	String fileName = file.getOriginalFilename() + generateRandom();
+	    	String fileName = generateRandom() + "-" + file.getOriginalFilename();
 	        String fileType = file.getContentType();
 	        Path path = Paths.get(UPLOAD_DIRECTORY + fileName);
-	        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-	        Anexo anexo = new Anexo();
-	        anexo.setFileName(fileName);
-	        anexo.setFilePath(path.toString());
-	        anexo.setFileType(fileType);
+	        try (InputStream inputStream = file.getInputStream()) {
+	            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+		        Anexo anexo = new Anexo();
+		        anexo.setFileName(fileName);
+		        anexo.setFilePath(path.toString());
+		        anexo.setFileType(fileType);
 	        
 	        Optional<RelatorioDeConclusao> relatorio = rcRepo.findById(relatorioId);
 			if (!relatorio.isPresent()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 			} else {
-	        anexo.setRelatorioDeConclusao(new RelatorioDeConclusao(relatorioId));
+	        anexo.setRelatorioDeConclusao(relatorio.get());
 	        Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
-	        System.gc();
+	        
 	        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
 			}
 	    } catch (IOException e) {
@@ -130,7 +129,10 @@ public class AnexoREST {
             }
 
             String contentType = Files.probeContentType(path);
-            MediaType mediaType = MediaType.parseMediaType(contentType);
+            MediaType mediaType = MediaType.parseMediaType(anexo.getFileType());
+            if(mediaType == null) {
+            	mediaType = MediaType.parseMediaType(contentType);
+            }
             File file = path.toFile();
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
@@ -172,4 +174,6 @@ public class AnexoREST {
         RANDOM.nextBytes(salt);
         return Base64.getEncoder().encodeToString(salt);
     }
+    
+    
 }
