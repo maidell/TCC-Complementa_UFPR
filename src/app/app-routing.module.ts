@@ -95,6 +95,10 @@ const routes: Routes = [
     component: AtividadeComponent
   },
   {
+    path: 'projetos/novo',
+    component: ProjetoComponent
+  },
+  {
     path: 'projetos/detalhes/:id',
     component: ProjetoComponent
   },

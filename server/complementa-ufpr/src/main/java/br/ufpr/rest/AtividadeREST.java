@@ -204,6 +204,24 @@ public class AtividadeREST {
 				.body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
 	}
 	
+	@GetMapping("/candidaturas/alunos/{id}")
+	public ResponseEntity<List<AtividadeSimplesDTO>> obterAtividadesCandidatadasPorAluno(@PathVariable("id") Long id) {
+	    Optional<Aluno> aluno = repoAlu.findById(id);
+
+	    if (!aluno.isPresent()) {
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+	    }
+
+	    List<Atividade> lista = repo.findAllByAlunoId(aluno.get().getId());
+
+	    if (lista.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+	    }
+
+	    return ResponseEntity.status(HttpStatus.OK)
+	            .body(lista.stream().map(e -> mapper.map(e, AtividadeSimplesDTO.class)).collect(Collectors.toList()));
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<AtividadeDTO> buscaPorId(@PathVariable Long id) {
 
