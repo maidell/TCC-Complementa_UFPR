@@ -12,7 +12,7 @@ import { ComentarioService } from '../../../services/comentario/services/comenta
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { Anexo } from 'src/app/shared/models/anexo.model';
 import { AnexoService } from '../../../services/anexo/services/anexo.service';
-import { Atividade, Comentario, Competencia, Complexidade, Contestacao, Graduacao, Orientador, Projeto, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Certificado, Comentario, Competencia, Complexidade, Contestacao, Graduacao, Orientador, Projeto, Usuario } from 'src/app/shared';
 import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
 import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
 import { Router } from '@angular/router';
@@ -22,6 +22,8 @@ import { ComplexidadeService } from 'src/app/services/complexidade/services/comp
 import { RelatorioDeConclusaoService } from 'src/app/services/relatorio-de-conclusao/services/relatorio-de-conclusao.service';
 import { ContestacaoCargaHorariaService } from 'src/app/services/contestacao-carga-horaria/services/contestacao-carga-horaria.service';
 import { ContestacaoService } from 'src/app/services/contestacao/services/contestacao.service';
+import { AlunoService } from 'src/app/services/aluno/services/aluno.service';
+import { CertificadoService } from 'src/app/services/certificado/services/certificado.service';
 
 
 @Component({
@@ -172,6 +174,8 @@ export class AtividadeComponent implements OnInit{
     public complexidadeService: ComplexidadeService,
     public relatoriodeConclusaoService: RelatorioDeConclusaoService,
     public contestacaoCargaHorariaService: ContestacaoCargaHorariaService,
+    public certificadoService: CertificadoService,
+    public alunoService: AlunoService,
     public contestacaoExecucaoService: ContestacaoService,
     public atividadeService: AtividadeService,
     private graduacaoService: GraduacaoService,
@@ -521,7 +525,7 @@ export class AtividadeComponent implements OnInit{
         break;
       case "FINALIZADA":
         if (this.usuarioLogado === this.atividade.executor) {
-          this.generateCerticate();
+          this.generateCerticatePdf();
         }
         break;
     }
@@ -1052,11 +1056,42 @@ export class AtividadeComponent implements OnInit{
       }
     )
 
+    this.generateCertificate();
+
+
 
   }
 
   /** CERTIFICADO */
-  generateCerticate() {
+  
+  generateCertificate(){
+    let certificado = new Certificado();
+    if(this.atividade.projeto){
+      certificado.projeto=this.atividade.projeto.nome;
+    }
+    if (this.atividade.complexidade){
+     certificado.horas=this.atividade.complexidade?.cargaHorariaMaxima
+    }
+    if (this.atividade.projeto?.orientador){
+      certificado.orientador=this.atividade.projeto?.orientador.nome;
+    }
+    
+
+
+  }
+
+  generateCerticatePdf() {
+    if(this.usuarioLogado.id===this.atividade.executor?.id){
+      let aluno: Aluno = new Aluno();
+      this.alunoService.buscarAlunoPorId(this.atividade.executor.id).subscribe(
+        (res: Aluno)=>{
+          aluno = res;
+
+        }
+      )
+
+      }
+
     let grr = 20193878;
     let fullGrr = "GRR" + grr;
 
