@@ -1,1 +1,19 @@
-<p>listar-usuarios works!</p>
+<div class="let-of-cards" *ngIf="usuarioLogado.papel === 'ADMIN'">
+	<h2>Todas as Atividades</h2>
+	<mat-form-field>
+		<mat-label>Pesquisar</mat-label>
+		<input matInput #input (keyup)="applyFilter($event)">
+		<mat-icon matSuffix>search</mat-icon>
+	</mat-form-field>
+
+	<ng-container *ngIf="(obs | async) as usuarios">
+		<ng-container *ngIf="usuarios.length > 0">
+			<app-rect-card *ngFor="let usuario of usuarios" [nome]="usuario.nome ? usuario.nome.toString() : ''"
+				[firstLabel]="'Nome'" [firstValue]="usuario.nome" [secondLabel]="'Papel'" [secondValue]="usuario.papel"
+				[nameButtonRect]="buttonOne" [showSecondButton]="false" (clickButtonRect)="openDialog(usuario)">
+			</app-rect-card>
+		</ng-container>
+	</ng-container>
+
+	<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" [length]="usuarios.length || 0"></mat-paginator>
+</div>
