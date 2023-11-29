@@ -43,36 +43,46 @@ export class ProjetoComponent implements OnInit {
   ) {
 
   }
-  openDialogMonitor(){
-    try {
-      const dialogRef = this.dialog.open(InsertMonitorComponent, {
-        width: this.getDialogWidth(),
-        data: {
-          projeto: this.projeto
-        }
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-      });
-    } catch (error) {
-      console.error('Erro ao abrir o diálogo:', error);
+  openDialogMonitor() {
+    if (!this.projeto.id) {
+      this.toastr.warning("Você precisa salvar o projeto antes de adicionar monitores");
+    }
+    else if (this.projeto.id) {
+      try {
+        const dialogRef = this.dialog.open(InsertMonitorComponent, {
+          width: this.getDialogWidth(),
+          data: {
+            projeto: this.projeto
+          }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(`Dialog result: ${result}`);
+        });
+      } catch (error) {
+        console.error('Erro ao abrir o diálogo:', error);
+      }
     }
   }
 
   openDialogAluno() {
-
-    try {
-      const dialogRef = this.dialog.open(ListarAlunosComponent, {
-        width: this.getDialogWidth(),
-        data: {
-          projeto: this.projeto
-        }
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-      });
-    } catch (error) {
-      console.error('Erro ao abrir o diálogo:', error);
+    //se o projeto não tiver id, não pode adicionar alunos
+    if (!this.projeto.id) {
+      this.toastr.warning("Você precisa salvar o projeto antes de adicionar alunos");
+    }
+    else if (this.projeto.id) {
+      try {
+        const dialogRef = this.dialog.open(ListarAlunosComponent, {
+          width: this.getDialogWidth(),
+          data: {
+            projeto: this.projeto
+          }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(`Dialog result: ${result}`);
+        });
+      } catch (error) {
+        console.error('Erro ao abrir o diálogo:', error);
+      }
     }
   }
 
@@ -106,12 +116,15 @@ export class ProjetoComponent implements OnInit {
     }
     this.usuarioLogado = this.loginService.usuarioLogado;
     this.idParam = +this.route.snapshot.params['id'];
-    this.instanciarProjeto();
-    this.setContent();
-    this.title.setTitle("Detalhes do projeto");
-    this.instanciarAtividades();
+    //se NÃO for projeto novo, instancia o projeto e suas atividade, se for novo, instancia um projeto vazio
+    if (this.idParam) {
+      this.instanciarProjeto();
+      this.instanciarAtividades();
+    } else {
+      this.projeto = new Projeto();
+    }
+    this.title.setTitle('Detalhes do Projeto');
   }
-
 
   projectForm = new FormGroup({
     id: new FormControl(this.projeto?.id ?? ''),
@@ -129,6 +142,36 @@ export class ProjetoComponent implements OnInit {
   instanciarProjeto() {
     this.idParam = +this.route.snapshot.params['id'];
 
+    this.projetoService.buscarProjetoPorId(this.idParam).subscribe(
+      (res: Projeto) => {
+        this.projeto = res;
+        this.toastr.success(res.nome);
+        console.log("Projeto instanciado com sucesso", res);
+
+        // Criar FormGroup e definir FormControl após obter os dados do projeto
+        this.projectForm = new FormGroup({
+          id: new FormControl(this.projeto?.id ?? ''),
+          nome: new FormControl(this.projeto?.nome ?? ''),
+          status: new FormControl(this.projeto?.status ?? ''),
+          tipo: new FormControl(this.projeto?.tipo ?? ''),
+          objetivoGeral: new FormControl(this.projeto?.objetivoGeral ?? ''),
+          objetivosEspecificos: new FormControl(this.projeto?.objetivosEspecificos ?? ''),
+          orientador: new FormControl(this.projeto?.orientador ?? ''),
+          alunos: new FormControl(this.projeto?.alunos ?? ''),
+          monitores: new FormControl(this.projeto?.monitores ?? '')
+        });
+
+        // Definir os valores dos FormControl após criar o FormGroup
+        this.setContent();
+      },
+      (err) => {
+        console.log("Erro ao instanciar projeto", err);
+        this.toastr.error("Erro ao instanciar projeto");
+      }
+    );
+  }
+
+  instanciarOrientador(){
     this.projetoService.buscarProjetoPorId(this.idParam).subscribe(
       (res: Projeto) => {
         this.projeto = res;
@@ -194,19 +237,34 @@ export class ProjetoComponent implements OnInit {
   }
 
 
-  salvar() { }
-  cancelar() { }
+
+  salvarProjeto(){
+    this.projetoService.inserirProjeto(this.orientador).subscribe(
+      (res: Projeto) => {
+        this.projeto = res;
+        this.toastr.success("Projeto salvo com sucesso!");
+        console.log("Projeto salvo com sucesso!", res);
+      },
+      (err) => {
+        this.toastr.error("Erro ao salvar projeto");
+        console.log("Erro ao salvar projeto", err);
+      }
+    );
+  }
+  cancelar() {
+    this.router.navigate([`/projetos/listar`]);
+  }
   criarAtividade() { }
   editarAtividade() { }
   novaAtividade() { }
 
 
   adicionarAlunosEMonitores(alunosDoProjeto: Aluno[]) {
-    let alunos : Aluno[] = [];
-    let monitores : Aluno[] = [];
+    let alunos: Aluno[] = [];
+    let monitores: Aluno[] = [];
 
-      alunos = alunosDoProjeto.filter(aluno => aluno.papel !== "Monitor");
-      monitores = alunosDoProjeto.filter(aluno => aluno.papel === "Monitor");
+    alunos = alunosDoProjeto.filter(aluno => aluno.papel !== "Monitor");
+    monitores = alunosDoProjeto.filter(aluno => aluno.papel === "Monitor");
 
     this.projeto.alunos = alunos;
     this.projeto.monitores = monitores;
