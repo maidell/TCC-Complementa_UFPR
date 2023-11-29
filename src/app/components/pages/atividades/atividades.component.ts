@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TitleService } from '../../../services/title/title.service';
-import { Aluno, Atividade, Orientador, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Orientador, Projeto, Usuario } from 'src/app/shared';
 import { MatPaginator } from '@angular/material/paginator';
 import { Observable, forkJoin } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
@@ -35,6 +35,8 @@ export class AtividadesComponent implements OnInit, OnDestroy {
   atividadesEmExecucao: Atividade[] = [];
   atividadesExecutadas: Atividade[] = [];
   atividadesOrientadas: Atividade[] = [];
+  atividade?: Atividade;
+  projeto?: Projeto;
 
   datePipe!: DatePipe;
 
@@ -131,11 +133,11 @@ export class AtividadesComponent implements OnInit, OnDestroy {
 
   hasActivities(): boolean {
     return this.atividades.length > 0
-          || this.atividadesDisponiveis.length > 0
-          || this.atividadesEmExecucao.length > 0
-          || this.atividadesExecutadas.length > 0
-          || this.atividadesOrientadas.length > 0
-    ;
+      || this.atividadesDisponiveis.length > 0
+      || this.atividadesEmExecucao.length > 0
+      || this.atividadesExecutadas.length > 0
+      || this.atividadesOrientadas.length > 0
+      ;
   }
 
   buttonOne: string = "Detalhes!";
@@ -177,34 +179,34 @@ export class AtividadesComponent implements OnInit, OnDestroy {
 
             }
             )
-            },
+          },
           (error: any) => {
             console.log("Erro ao instanciar aluno", error);
             this.toastr.error("Erro ao instanciar aluno");
           });
         break;
       };
-      case 'ORIENTADOR':{
+      case 'ORIENTADOR': {
         this.instanciarOrientador(usuario.id).subscribe(
           (res: Orientador) => {
             this.orientador = res;
             this.instanciarAtividadesPorOrientador(res.id).subscribe(
-                (res: Atividade[]) => {
-                  this.atividadesOrientadas = res;
-                  this.dataSourceAtvOri = new MatTableDataSource(this.atividadesOrientadas);
-                  this.changeDetectorRef.detectChanges();
-                  this.dataSourceAtvOri.paginator = this.paginator;
-                  this.obsOri = this.dataSourceAtvOri.connect();
-                  this.toastr.success("Atividades Orientadas Carregadas");
-                }
+              (res: Atividade[]) => {
+                this.atividadesOrientadas = res;
+                this.dataSourceAtvOri = new MatTableDataSource(this.atividadesOrientadas);
+                this.changeDetectorRef.detectChanges();
+                this.dataSourceAtvOri.paginator = this.paginator;
+                this.obsOri = this.dataSourceAtvOri.connect();
+                this.toastr.success("Atividades Orientadas Carregadas");
+              }
             )
-            },
+          },
           (error: any) => {
             console.log("Erro ao instanciar coordenador", error);
             this.toastr.error("Erro ao instanciar coordenador");
           });
-          break;
-        }
+        break;
+      }
       case 'COORDENADOR': {
         this.instanciarOrientador(usuario.id).subscribe(
           (res: Orientador) => {
@@ -231,7 +233,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
               }
             }
             )
-            },
+          },
           (error: any) => {
             console.log("Erro ao instanciar coordenador", error);
             this.toastr.error("Erro ao instanciar coordenador");
@@ -258,7 +260,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     }
   }
 
-  separarPorStatus(){
+  separarPorStatus() {
     for (const atividade of this.atividadesExecutante) {
       if (atividade.status === 'FINALIZADA') {
         this.atividadesExecutadas.push(atividade);
@@ -300,18 +302,34 @@ export class AtividadesComponent implements OnInit, OnDestroy {
     return this.orientadorService.buscarOrientadorPorId(id);
   }
 
-  openDialog(atividade: Atividade) {
-    const dialogRef = this.dialog.open(AtividadeComponent, {
-      maxWidth: this.dialogWidth(),
-      data: atividade
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
+  instanciarAtividade(id: number): Observable<Atividade> {
+    return this.atividadeService.buscarAtividadePorId(id);
+  };
 
-  formatarData(data: Date): string {
-    return new Intl.DateTimeFormat('pt-BR').format(data);
+
+
+  openDialog(atividade: Atividade) {
+    if (atividade.id) {
+      this.instanciarAtividade(atividade.id).subscribe(
+        (res: Atividade) => {
+          const dialogRef = this.dialog.open(AtividadeComponent, {
+            maxWidth: this.dialogWidth(),
+            data: { atividade: res, projeto: res.projeto }
+          });
+        },
+        (error: any) => {
+          console.log('Erro ao carregar dados', error);
+        }
+      );
+    }
+
+    // else {
+    //   const dialogRef = this.dialog.open(AtividadeComponent, {
+    //     maxWidth: this.dialogWidth(),
+    //     data: { atividade: new Atividade() }
+    //   });
+    // }
+
   }
 
   dialogWidth() {

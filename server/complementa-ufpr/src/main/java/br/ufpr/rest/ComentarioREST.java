@@ -75,9 +75,9 @@ public class ComentarioREST {
 			if (!atv.isPresent() && !usu.isPresent()) {
 				throw new Exception("Criação do comentário não foi realizada com sucesso");
 			}
-			Comentario cmt = mapper.map(comentario, Comentario.class);
-			cmt.setAtividade(atv.get());
-			cmt = repo.save(mapper.map(cmt, Comentario.class));
+			Comentario newCmt = mapper.map(comentario, Comentario.class);
+			newCmt.setAtividade(atv.get());
+			Comentario cmt = repo.save(mapper.map(newCmt, Comentario.class));
 			Optional<Comentario> cmtOpt = repo.findById(cmt.getId());
 			if (!cmtOpt.isPresent()) {
 				throw new Exception("Criação do comentário não foi realizada com sucesso");
