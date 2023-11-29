@@ -11,6 +11,7 @@ import { DashboardComponent } from './components/pages';
 import { ProjetoComponent } from './components/projeto/projeto.component';
 import { ListarAlunosComponent } from './components/layout/listar-alunos/listar-alunos.component';
 import { EditarUsuariosComponent } from './components/pages/editar-usuarios/editar-usuarios.component';
+import { ConfirmacaoComponent } from './components/pages/confirmacao/confirmacao.component';
 
 const routes: Routes = [
   {
@@ -27,8 +28,24 @@ const routes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'aluno/editar',
-    component: EditarAlunoComponent
+    path: 'aluno/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'servidor/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'coordenador/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'orientador/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'admin/editar/:id',
+    component: EditarUsuariosComponent
   },
   {
     path: 'autocadastro',
@@ -45,6 +62,10 @@ const routes: Routes = [
   {
     path: 'admin/cadastro/usuarios',
     component: CadastroDeUsuariosComponent
+  },
+  {
+    path: 'admin/editar/:id',
+    component: EditarUsuariosComponent
   },
   {
     path: 'dashboard',
@@ -79,7 +100,7 @@ const routes: Routes = [
     component: pages.ServidoresComponent
   },
   {
-    path: 'servidores/listar',
+    path: 'servidores/listar/:id',
     component: pages.ServidoresComponent
   },
   {
@@ -103,10 +124,10 @@ const routes: Routes = [
     component: ProjetoComponent
   },
   {
-    path: 'admin/editar/:id',
-    component: EditarUsuariosComponent
+    path: 'projetos/detalhes/:email',
+    component: ConfirmacaoComponent
   },
-
+  
   ...LoginRoutes
 ];
 

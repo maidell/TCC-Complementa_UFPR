@@ -36,6 +36,6 @@ public class AlunoDTO extends UsuarioDTO {
 	@Override
 	public String toString() {
 		return "AlunoDTO [id=" + getId() + ", nome=" + getNome() + ", email=" + getEmail() + ", telefone="
-				+ getTelefone() + ", papel=" + getPapel() + ", grr=" + grr + ", graduacao=" + graduacao + "]";
+				+ getTelefone() + ", papel=" + getPapel() + ", grr=" + getGrr() + ", graduacao=" + getGraduacao() + "]";
 	}
 }

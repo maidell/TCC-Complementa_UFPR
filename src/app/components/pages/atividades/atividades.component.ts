@@ -213,7 +213,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
             this.orientador = res;
             forkJoin({
               atividadesDisponiveis: this.instanciarAtividadesPorGraduacao(res.graduacao.id),
-              atividadesOrientadas: this.instanciarAtividadesPorExecutor(res.id)
+              atividadesOrientadas: this.instanciarAtividadesPorOrientador(res.id)
             }).subscribe(({ atividadesDisponiveis, atividadesOrientadas }) => {
               if (atividadesDisponiveis) {
                 this.atividadesDisponiveis = atividadesDisponiveis;

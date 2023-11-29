@@ -20,7 +20,7 @@ public class ContestacaoCargaHorariaDTO extends ContestacaoDTO {
 		public ContestacaoCargaHorariaDTO(Long id, String descricao, TipoContestacao tipoContestacao, Date dataContestacao,
 				Status status, Usuario autor, Atividade atividade, double cargaHorariaOriginal,
 				double cargaHorariaNova) {
-			super(id, descricao, tipoContestacao, dataContestacao, status, autor, atividade);
+			super(id, descricao, tipoContestacao, dataContestacao, status);
 			this.cargaHorariaOriginal = cargaHorariaOriginal;
 			this.cargaHorariaNova = cargaHorariaNova;
 		}
@@ -43,8 +43,12 @@ public class ContestacaoCargaHorariaDTO extends ContestacaoDTO {
 
 		@Override
 		public String toString() {
-		    return "Contestacao [id=" + getId() + "descricao=" + getDescricao() + "tipoContestacao=" + getTipoContestacao()
-		    	    + "dataContestacao=" + getDataContestacao() + "status=" + getStatus() + "autor=" + getAutor()
-		    	    + "atividade=" + getAtividade() + ", cargaHorariaOriginal=" + getCargaHorariaOriginal() + ", cargaHorariaNova=" + getCargaHorariaNova() + "]";
+		    return "Contestacao [id=" + getId() 
+		    + ", descricao=" + getDescricao() 
+		    + ", tipoContestacao=" + getTipoContestacao()
+		    + ", dataContestacao=" + getDataContestacao() 
+		    + ", status=" + getStatus()  
+		    + ", cargaHorariaOriginal=" + getCargaHorariaOriginal() 
+		    + ", cargaHorariaNova=" + getCargaHorariaNova() + "]";
 		}
 }

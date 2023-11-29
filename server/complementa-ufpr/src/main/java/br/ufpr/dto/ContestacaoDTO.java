@@ -17,23 +17,19 @@ public class ContestacaoDTO implements Serializable{
     private TipoContestacao tipoContestacao;
     private Date dataContestacao;
     private Status status;
-    private Usuario autor;
-    private Atividade atividade;
-
+    
 	public ContestacaoDTO() {
 		super();
 	}
 
-	public ContestacaoDTO(Long id, String descricao, TipoContestacao tipoContestacao, Date dataContestacao, Status status,
-			Usuario autor, Atividade atividade) {
+	public ContestacaoDTO(Long id, String descricao, TipoContestacao tipoContestacao, Date dataContestacao, Status status) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
 		this.tipoContestacao = tipoContestacao;
 		this.dataContestacao = dataContestacao;
 		this.status = status;
-		this.autor = autor;
-		this.atividade = atividade;
+		
 	}
 
 	public Long getId() {
@@ -68,14 +64,6 @@ public class ContestacaoDTO implements Serializable{
 		this.status = status;
 	}
 
-	public Usuario getAutor() {
-		return autor;
-	}
-
-	public void setAutor(Usuario autor) {
-		this.autor = autor;
-	}
-
 	public Date getDataContestacao() {
 		return dataContestacao;
 	}
@@ -84,23 +72,13 @@ public class ContestacaoDTO implements Serializable{
 		this.dataContestacao = dataContestacao;
 	}
 
-	public Atividade getAtividade() {
-		return atividade;
-	}
-
-	public void setAtividade(Atividade atividade) {
-		this.atividade = atividade;
-	}
-
 	@Override
 	public String toString() {
-	    return "Contestacao [id=" + id 
-	    		+ "descricao=" + descricao
-	    	    + "tipoContestacao=" + tipoContestacao
-	    	    + "dataContestacao=" + dataContestacao
-	    	    + "status=" + status
-	    	    + "autor=" + autor
-	    	    + "atividade=" + atividade + "]";
+	    return "Contestacao [id=" + getId() 
+	    		+ ", descricao=" + getDescricao()
+	    	    + ", tipoContestacao=" + getTipoContestacao()
+	    	    + ", dataContestacao=" + getDataContestacao()
+	    	    + ", status=" + getStatus() + "]";
 	}
 
 

@@ -192,7 +192,7 @@ export class AtividadeComponent implements OnInit{
     if (data.projeto){
       this.project = data.projeto;
     }
-    
+
   }
 
 
@@ -210,13 +210,17 @@ export class AtividadeComponent implements OnInit{
         console.log("populou as complexidades");
         this.syncComplexidade();
         console.log("saiu do sync complexidade");
+        this.setHeaderContent();
+        console.log("saiu do set header");
+        this.setContent();
         //this.syncGraduacoes();
+
     });
 
     this.usuarioLogado = this.loginService.usuarioLogado;
     console.log("graduacoes:" + this.atividade.graduacoes);
-    this.setHeaderContent();
-    this.setContent();
+
+
 
     console.log(this.atividade);
     console.log(this.project);
@@ -245,6 +249,7 @@ export class AtividadeComponent implements OnInit{
 
   //controle de dados do header e do conteudo
   setHeaderContent() {
+    console.log("entrou no set header");
     switch (this.atividade.status) {
       case '':  // tela de criação de atividades
         this.statusButtonColor = 'linear-gradient(#3473a3,#5b7ba5)';
@@ -282,12 +287,13 @@ export class AtividadeComponent implements OnInit{
 
         break;
       case 'EM_EXECUCAO':
+        console.log(this.atividade.relatorioDeConclusao);
         this.statusButtonColor = 'linear-gradient(#DEB345, #C99614)';
 
         if (this.canUserEdit()) {
 
 
-          if (this.atividade.relatorioDeConclusao != null) {
+          if (this.atividade.relatorioDeConclusao) {
             this.showInfoToastr("Essa atividade possui um relatório de Conclusão. Clique em \"Finalizar\" para visualizar");
             this.firstButtonWidth = '100%';
             this.firstHeaderButton = 'Finalizar';
@@ -301,7 +307,7 @@ export class AtividadeComponent implements OnInit{
 
         } else {
 
-          if (this.atividade.relatorioDeConclusao != null) {
+          if (this.atividade.relatorioDeConclusao) {
             this.displayFirstHeaderButton = 'none';
             this.displaySecondHeaderButton = 'none';
 
@@ -362,17 +368,14 @@ export class AtividadeComponent implements OnInit{
   }
 
   setContent() {
+    console.log(this.atividade.status);
     switch (this.atividade.status) {
-      case '':
-        this.activityForm.enabled;
-        this.isDisabled = false;
-        break;
       case 'ABERTA':
         this.activityForm.disable();
         this.activityName.setValue(this.atividade.nome);
         this.description.setValue(this.atividade.descricao);
         this.competences.setValue(this.atividade.competencia);
-        
+
         console.log(this.atividade.complexidade?.nome);
 
 
@@ -381,11 +384,8 @@ export class AtividadeComponent implements OnInit{
         this.contestDate.setValue(this.atividade.contestacao?.dataContestacao);
 
         this.displayComments = 'none';
-
-
         break;
       case 'EM_EXECUCAO':
-
         this.displayComments = '';
         this.description.setValue(this.atividade.descricao);
         this.competences.setValue(this.atividade.competencia?.nome);
@@ -406,11 +406,20 @@ export class AtividadeComponent implements OnInit{
         }
 
         break;
-      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA':
+      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA': {
         this.activityForm.disable();
         this.displayComments = '';
         break;
+      }
+      default:{
+        this.activityForm.enabled;
+      this.isDisabled = false;
+      break;
+      }
+
     }
+
+
 
   }
 
@@ -458,13 +467,13 @@ export class AtividadeComponent implements OnInit{
 
           if (this.atividade.relatorioDeConclusao != null) {
 
-            if (this.isReadingReport) {
+            if (this.isReadingReport && !this.disputingExecution) {
               this.approveReport(); //testar
-              if (this.disputingExecution) {
+            } else if (this.isReadingReport && this.disputingExecution){
                 this.sendExecutionDispute(); //testar
-              }
-            } else {
-              this.readConclusionReport(); 
+
+            } else  {
+              this.readConclusionReport();
             }
 
           } else {
@@ -537,7 +546,8 @@ export class AtividadeComponent implements OnInit{
     const matchedComplexidade = this.complexidades.find(cp => cp.id === this.atividade.complexidade?.id);
     if (matchedComplexidade) {
       this.complexidadeAtividade = matchedComplexidade;
-      this.changeDetectorRef.detectChanges();
+      //this.changeDetectorRef.detectChanges();
+      console.log("chegou aqui");
     }
   }
 
@@ -552,7 +562,7 @@ export class AtividadeComponent implements OnInit{
           this.graduacao.push(novaGraduacao);
         }
         this.changeDetectorRef.detectChanges();
-      } 
+      }
 
     }
   }
@@ -599,8 +609,8 @@ export class AtividadeComponent implements OnInit{
         anexo.fileName=this.file_store[i].name;
         anexo.
       }*/
-      
-      
+
+
     }
     //let newActivity: Atividade = new Atividade(undefined,"atividade teste", "descricao teste",new Date("2023-11-27"),new Date("2023-12-01"), new Date("2023-12-31"),this.project );
     //this.atividadeService.inserirAtividade()
@@ -622,9 +632,9 @@ export class AtividadeComponent implements OnInit{
 
     var commentContent: string = f.value.commentInput;
     let idAtividade = this.atividade.id;
-    
+
     console.log(idAtividade, commentContent);
-    
+
     if (commentContent != '' && idAtividade) {
       let comentario = new Comentario();
       comentario.usuario = this.usuarioLogado;
@@ -743,19 +753,39 @@ export class AtividadeComponent implements OnInit{
 
   canUserEdit() {
 
-
     // Verifica se this.usuarioLogado é igual ao autor, orientador, servidoresOrientadores ou monitores
-   /** if (
-      this.usuarioLogado === this.atividade.autor ||
-      this.usuarioLogado === this.atividade.projeto?.orientador ||
-      this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado) ||
-      this.atividade.projeto?.monitores?.some(monitor => monitor === this.usuarioLogado)
-    ) {
-      return true;
-    } else {
-      return false;
-    }*/
+    let usuarioLogado = this.usuarioLogado;
+    let autor = this.atividade.autor;
+    let orientador = this.atividade.projeto?.orientador;
+    var monitores = [] ;
+    if(this.atividade.projeto?.monitores){
+      for (let i = 0; i< this.atividade.projeto?.monitores?.length; i++){
+        monitores.push(this.atividade.projeto?.monitores[i].id);
+      }
+   }
+
+
+   if (usuarioLogado.id===autor?.id || usuarioLogado.id === orientador?.id || monitores.some(monitor => monitor === usuarioLogado.id)){
+    console.log("true");
     return true;
+   } else {
+    console.log("false");
+    return false;
+   }
+
+
+    // if (
+    //   this.usuarioLogado === this.atividade.autor ||
+    //   this.usuarioLogado === this.atividade.projeto?.orientador ||
+    //   this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado) ||
+    //   this.atividade.projeto?.monitores?.some(monitor => monitor === this.usuarioLogado)
+    // ) {
+    //   console.log("retornou true");
+    //   return true;
+    // } else {
+    //   console.log("retornou false");
+    //   return false;
+    // }
   }
 
   // Carga Horária
@@ -770,7 +800,7 @@ export class AtividadeComponent implements OnInit{
     this.setHeaderContent();
   }
 
-  sendHoursDispute() { 
+  sendHoursDispute() {
     if(this.atividade.complexidade === this.activityForm.get('complexitiesContest')?.value){
       this.showErrorToastr("Complexidade Proposta não pode ser igual a complexidade original!");
     } else {
@@ -839,8 +869,7 @@ export class AtividadeComponent implements OnInit{
 
   //leitura e aprovação da contestação
   canApproveContest() {
-    if (this.usuarioLogado === this.atividade.projeto?.orientador ||
-      this.atividade.projeto?.orientador?.graduacao.servidoresCoordenadores.some(servidor => servidor === this.usuarioLogado)) {
+    if (this.usuarioLogado.id === this.atividade.projeto?.orientador?.id){
       return true;
     } else {
       return false;
@@ -998,7 +1027,7 @@ export class AtividadeComponent implements OnInit{
       description: "",
       courses:[""],
       competences: [""],
-      complexities: "",
+      complexities: "Simples (4h - 6h)",
       candidatureDate: "",
       submitDate: "",
       contestDate: "",
@@ -1006,6 +1035,7 @@ export class AtividadeComponent implements OnInit{
       proposedHours: "",
       complexitiesContest:""
     });
+    this.description.setValue(this.atividade.relatorioDeConclusao?.descricao);
 
 
   }
@@ -1070,7 +1100,7 @@ export class AtividadeComponent implements OnInit{
   }
 
   /** CERTIFICADO */
-  
+
   generateCertificate(){
     let certificado = new Certificado();
     if(this.atividade.projeto){
@@ -1082,7 +1112,7 @@ export class AtividadeComponent implements OnInit{
     if (this.atividade.projeto?.orientador){
       certificado.orientador=this.atividade.projeto?.orientador.nome;
     }
-    
+
 
 
   }
@@ -1150,5 +1180,3 @@ export class AtividadeComponent implements OnInit{
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }
-
-

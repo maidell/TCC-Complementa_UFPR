@@ -76,7 +76,6 @@ public class AnexoREST {
 			if (!atividade.isPresent()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 			} else {
-	        anexo.setAtividade(new Atividade(atividadeId));
 	        anexo.setRelatorioDeConclusao(new RelatorioDeConclusao((long) 1));
 	        Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
 	        System.gc();
@@ -106,7 +105,6 @@ public class AnexoREST {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 			} else {
 	        anexo.setRelatorioDeConclusao(new RelatorioDeConclusao(relatorioId));
-	        anexo.setAtividade(new Atividade((long) 2));
 	        Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
 	        System.gc();
 	        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));

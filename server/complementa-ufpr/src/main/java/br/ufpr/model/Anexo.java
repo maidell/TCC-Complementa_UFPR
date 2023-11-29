@@ -31,10 +31,6 @@ public class Anexo implements Serializable {
 	private String fileType;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atividade_id")
-    private Atividade atividade;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "relatorio_de_conclusao")
     private RelatorioDeConclusao relatorioDeConclusao;
 
@@ -42,13 +38,12 @@ public class Anexo implements Serializable {
 		super();
 	}
 
-	public Anexo(Long id, String fileName, String filePath, String fileType, Atividade atividade, RelatorioDeConclusao relatorioDeConclusao) {
+	public Anexo(Long id, String fileName, String filePath, String fileType, RelatorioDeConclusao relatorioDeConclusao) {
 		super();
 		this.id = id;
 		this.fileName = fileName;
 		this.filePath = filePath;
 		this.fileType = fileType;
-		this.atividade = atividade;
 		this.relatorioDeConclusao = relatorioDeConclusao;
 	}
 
@@ -88,14 +83,6 @@ public class Anexo implements Serializable {
 		return serialVersionUID;
 	}
 
-	public Atividade getAtividade() {
-		return atividade;
-	}
-
-	public void setAtividade(Atividade atividade) {
-		this.atividade = atividade;
-	}
-
 	public RelatorioDeConclusao getRelatorioDeConclusao() {
 		return relatorioDeConclusao;
 	}
@@ -106,7 +93,7 @@ public class Anexo implements Serializable {
 
 	@Override
 	public String toString() {
-	    return "Anexo [id=" + getId() + ", fileName=" + getFileName() + ", filePath=" + getFilePath() + ", fileType=" + getFileType() + ", atividade=" + getAtividade() + ", relatorioDeConclusao=" + getRelatorioDeConclusao() + "]";
+	    return "Anexo [id=" + getId() + ", fileName=" + getFileName() + ", filePath=" + getFilePath() + ", fileType=" + getFileType() + ", relatorioDeConclusao=" + getRelatorioDeConclusao() + "]";
 	}
     
 }

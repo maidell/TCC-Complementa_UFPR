@@ -110,11 +110,11 @@ public class Contestacao implements Serializable{
 	@Override
 	public String toString() {
 	    return "Contestacao [id=" + getId() 
-	    		+ "descricao=" + getDescricao()
-	    	    + "tipoContestacao=" + getTipoContestacao()
-	    	    + "dataContestacao=" + getDataContestacao()
-	    	    + "status=" + getStatus()
-	    	    + "autor=" + getAutor() + "]";
+	    		+ ", descricao=" + getDescricao()
+	    	    + ", tipoContestacao=" + getTipoContestacao()
+	    	    + ", dataContestacao=" + getDataContestacao()
+	    	    + ", status=" + getStatus()
+	    	    + ", autor=" + getAutor() + "]";
 	}
 
 
