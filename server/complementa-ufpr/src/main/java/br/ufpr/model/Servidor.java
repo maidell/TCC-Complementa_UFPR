@@ -39,6 +39,6 @@ public class Servidor extends Usuario {
     @Override
     public String toString() {
         return "Servidor [id=" + getId() + ", nome=" + getNome() + ", email=" + getEmail() + ", telefone=" + getTelefone()
-                + ", senha=" + getSenha() + ", papel=" + getPapel() + ", matricula=" + matricula + "]";
+                + ", senha=" + getSenha() + ", papel=" + getPapel() + ", matricula=" + getMatricula() + "]";
     }
 }

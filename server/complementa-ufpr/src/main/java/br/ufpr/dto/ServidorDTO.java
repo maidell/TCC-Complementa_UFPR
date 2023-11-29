@@ -27,6 +27,6 @@ public class ServidorDTO extends UsuarioDTO implements Serializable {
     @Override
     public String toString() {
         return "ServidorDTO [id=" + getId() + ", nome=" + getNome() + ", email=" + getEmail() + ", telefone="
-                + getTelefone() + ", papel=" + getPapel() + ", matricula=" + matricula + "]";
+                + getTelefone() + ", papel=" + getPapel() + ", matricula=" + getMatricula() + "]";
     }
 }
