@@ -27,8 +27,24 @@ const routes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'aluno/editar',
-    component: EditarAlunoComponent
+    path: 'aluno/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'servidor/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'coordenador/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'orientador/editar/:id',
+    component: EditarUsuariosComponent
+  },
+  {
+    path: 'admin/editar/:id',
+    component: EditarUsuariosComponent
   },
   {
     path: 'autocadastro',
@@ -45,6 +61,10 @@ const routes: Routes = [
   {
     path: 'admin/cadastro/usuarios',
     component: CadastroDeUsuariosComponent
+  },
+  {
+    path: 'admin/editar/:id',
+    component: EditarUsuariosComponent
   },
   {
     path: 'dashboard',
@@ -101,10 +121,6 @@ const routes: Routes = [
   {
     path: 'projetos/detalhes/:id',
     component: ProjetoComponent
-  },
-  {
-    path: 'admin/editar/:id',
-    component: EditarUsuariosComponent
   },
 
   ...LoginRoutes

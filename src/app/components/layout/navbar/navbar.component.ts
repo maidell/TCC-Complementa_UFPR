@@ -18,6 +18,7 @@ export class NavbarComponent {
   userRole: string = ''; // Altere para o perfil do usuário logado:
   // 'ALUNO' | 'SERVIDOR' | 'MONITOR' | 'ORIENTADOR' | 'COORDENADOR' | 'SERVIDOR_COORDENADOR' |'ADMIN';
   graduacao!: Graduacao;
+  usuarioLogado: Usuario = new Usuario();
 
   constructor(
     public dialog: MatDialog,
@@ -39,6 +40,7 @@ export class NavbarComponent {
     if (this.loginService.usuarioLogado) {
       this.userRole = this.loginService.usuarioLogado.papel;
       this.exibir = true;
+      this.usuarioLogado = this.loginService.usuarioLogado;
     } else {
       this.loginService.usuarioLogado$.subscribe(usuario => {
         if (usuario) {
