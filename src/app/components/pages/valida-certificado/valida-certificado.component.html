@@ -1,0 +1,19 @@
+<div class="certificado">
+	<mat-card>
+		<mat-form-field>
+			<input matInput placeholder="Digite o hash do certificado" [(ngModel)]="hash">
+		</mat-form-field>
+		<button mat-raised-button color="primary" (click)="validarCertificado()">Validar</button>
+	</mat-card>
+	<div *ngIf="validacaoStatus" class="validacao">
+		<p>{{ validacaoStatus }}</p>
+		<div *ngIf="certificado">
+			<h3>Detalhes do Certificado</h3>
+			<p>Nome: {{ certificado.nome }}</p>
+			<p>Orientador: {{ certificado.orientador }}</p>
+			<p>Projeto: {{ certificado.projeto }}</p>
+			<p>Horas: {{ certificado.horas }}</p>
+			<!-- Adicione outros detalhes conforme necessário -->
+		</div>
+	</div>
+</div>
