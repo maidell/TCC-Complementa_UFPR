@@ -16,6 +16,7 @@ import { GraduacoesTableComponent } from './graduacoes-table/graduacoes-table.co
 import { GraduacoesDialogComponent } from './graduacoes-dialog/graduacoes-dialog.component';
 import { WarningComponent } from './warning/warning.component';
 import { InsertMonitorComponent } from './insert-monitor/insert-monitor.component';
+import { VerificarCandidaturasComponent } from './verificar-candidaturas/verificar-candidaturas.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { InsertMonitorComponent } from './insert-monitor/insert-monitor.componen
     GraduacoesTableComponent,
     GraduacoesDialogComponent,
     WarningComponent,
-    InsertMonitorComponent
+    InsertMonitorComponent,
+    VerificarCandidaturasComponent
   ],
   imports: [
     CommonModule,
@@ -53,6 +55,7 @@ import { InsertMonitorComponent } from './insert-monitor/insert-monitor.componen
     GraduacoesTableComponent,
     GraduacoesDialogComponent,
     WarningComponent,
+    VerificarCandidaturasComponent
   ]
 })
 export class CardsModule { }

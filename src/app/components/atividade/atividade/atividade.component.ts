@@ -12,7 +12,7 @@ import { ComentarioService } from '../../../services/comentario/services/comenta
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { Anexo } from 'src/app/shared/models/anexo.model';
 import { AnexoService } from '../../../services/anexo/services/anexo.service';
-import { Atividade, Comentario, Competencia, Complexidade, Contestacao, Graduacao, Orientador, Projeto, Usuario } from 'src/app/shared';
+import { Aluno, Atividade, Certificado, Comentario, Competencia, Complexidade, Contestacao, Graduacao, Orientador, Projeto, Usuario } from 'src/app/shared';
 import { ContestacaoCargaHoraria } from 'src/app/shared/models/contestacao-carga-horaria.model';
 import { RelatorioDeConclusao } from 'src/app/shared/models/relatorio-de-conclusao.model';
 import { Router } from '@angular/router';
@@ -22,6 +22,8 @@ import { ComplexidadeService } from 'src/app/services/complexidade/services/comp
 import { RelatorioDeConclusaoService } from 'src/app/services/relatorio-de-conclusao/services/relatorio-de-conclusao.service';
 import { ContestacaoCargaHorariaService } from 'src/app/services/contestacao-carga-horaria/services/contestacao-carga-horaria.service';
 import { ContestacaoService } from 'src/app/services/contestacao/services/contestacao.service';
+import { AlunoService } from 'src/app/services/aluno/services/aluno.service';
+import { CertificadoService } from 'src/app/services/certificado/services/certificado.service';
 
 
 @Component({
@@ -172,6 +174,8 @@ export class AtividadeComponent implements OnInit{
     public complexidadeService: ComplexidadeService,
     public relatoriodeConclusaoService: RelatorioDeConclusaoService,
     public contestacaoCargaHorariaService: ContestacaoCargaHorariaService,
+    public certificadoService: CertificadoService,
+    public alunoService: AlunoService,
     public contestacaoExecucaoService: ContestacaoService,
     public atividadeService: AtividadeService,
     private graduacaoService: GraduacaoService,
@@ -188,7 +192,7 @@ export class AtividadeComponent implements OnInit{
     if (data.projeto){
       this.project = data.projeto;
     }
-    
+
   }
 
 
@@ -366,12 +370,12 @@ export class AtividadeComponent implements OnInit{
   setContent() {
     console.log(this.atividade.status);
     switch (this.atividade.status) {
-      case 'ABERTA': 
+      case 'ABERTA':
         this.activityForm.disable();
         this.activityName.setValue(this.atividade.nome);
         this.description.setValue(this.atividade.descricao);
         this.competences.setValue(this.atividade.competencia);
-        
+
         console.log(this.atividade.complexidade?.nome);
 
 
@@ -412,10 +416,10 @@ export class AtividadeComponent implements OnInit{
       this.isDisabled = false;
       break;
       }
-      
+
     }
-    
-      
+
+
 
   }
 
@@ -469,7 +473,7 @@ export class AtividadeComponent implements OnInit{
                 this.sendExecutionDispute(); //testar
 
             } else  {
-              this.readConclusionReport(); 
+              this.readConclusionReport();
             }
 
           } else {
@@ -530,7 +534,7 @@ export class AtividadeComponent implements OnInit{
         break;
       case "FINALIZADA":
         if (this.usuarioLogado === this.atividade.executor) {
-          this.generateCerticate();
+          this.generateCerticatePdf();
         }
         break;
     }
@@ -558,7 +562,7 @@ export class AtividadeComponent implements OnInit{
           this.graduacao.push(novaGraduacao);
         }
         this.changeDetectorRef.detectChanges();
-      } 
+      }
 
     }
   }
@@ -605,8 +609,8 @@ export class AtividadeComponent implements OnInit{
         anexo.fileName=this.file_store[i].name;
         anexo.
       }*/
-      
-      
+
+
     }
     //let newActivity: Atividade = new Atividade(undefined,"atividade teste", "descricao teste",new Date("2023-11-27"),new Date("2023-12-01"), new Date("2023-12-31"),this.project );
     //this.atividadeService.inserirAtividade()
@@ -628,9 +632,9 @@ export class AtividadeComponent implements OnInit{
 
     var commentContent: string = f.value.commentInput;
     let idAtividade = this.atividade.id;
-    
+
     console.log(idAtividade, commentContent);
-    
+
     if (commentContent != '' && idAtividade) {
       let comentario = new Comentario();
       comentario.usuario = this.usuarioLogado;
@@ -760,7 +764,7 @@ export class AtividadeComponent implements OnInit{
       }
    }
 
-   
+
    if (usuarioLogado.id===autor?.id || usuarioLogado.id === orientador?.id || monitores.some(monitor => monitor === usuarioLogado.id)){
     console.log("true");
     return true;
@@ -768,7 +772,7 @@ export class AtividadeComponent implements OnInit{
     console.log("false");
     return false;
    }
-    
+
 
     // if (
     //   this.usuarioLogado === this.atividade.autor ||
@@ -796,7 +800,7 @@ export class AtividadeComponent implements OnInit{
     this.setHeaderContent();
   }
 
-  sendHoursDispute() { //falar com guibor sobre mudar model e DTO
+  sendHoursDispute() {
     if(this.atividade.complexidade === this.activityForm.get('complexitiesContest')?.value){
       this.showErrorToastr("Complexidade Proposta não pode ser igual a complexidade original!");
     } else {
@@ -806,7 +810,9 @@ export class AtividadeComponent implements OnInit{
       contestacaoHoras.dataContestacao=new Date();
       contestacaoHoras.tipoContestacao="CARGA_HORARIA";
       contestacaoHoras.status='ABERTA';
-      //contestacaoHoras.cargaHorariaOriginal=this.atividade.complexidade?.cargaHorariaMinima;
+      if(this.atividade.complexidade?.cargaHorariaMaxima){
+        contestacaoHoras.cargaHorariaOriginal=this.atividade.complexidade?.cargaHorariaMaxima;
+      }
       /**this.contestacaoCargaHorariaService.inserirContestacaoCargaHoraria(contestacaoHoras, undefined).subscribe( //guibor
         (res: ContestacaoCargaHoraria) => {
           this.atividade.contestacaoCargaHoraria=res;
@@ -819,8 +825,8 @@ export class AtividadeComponent implements OnInit{
             }
           )
         }
-      )*/
-
+      )
+*/
     }
 
 
@@ -979,7 +985,7 @@ export class AtividadeComponent implements OnInit{
     this.descriptionLabel = "Relatório de Conclusão";
     this.firstHeaderButton = "Enviar Relatório";
     this.displaySecondHeaderButton = '';
-    this.secondHeaderButton = "Contestar Complexidade";
+    this.secondHeaderButton = "Contestar Carga Horária";
     this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)';
     this.displayStatus = false;
     this.fillingReport = true;
@@ -1087,11 +1093,42 @@ export class AtividadeComponent implements OnInit{
       }
     )
 
+    this.generateCertificate();
+
+
 
   }
 
   /** CERTIFICADO */
-  generateCerticate() {
+
+  generateCertificate(){
+    let certificado = new Certificado();
+    if(this.atividade.projeto){
+      certificado.projeto=this.atividade.projeto.nome;
+    }
+    if (this.atividade.complexidade){
+     certificado.horas=this.atividade.complexidade?.cargaHorariaMaxima
+    }
+    if (this.atividade.projeto?.orientador){
+      certificado.orientador=this.atividade.projeto?.orientador.nome;
+    }
+
+
+
+  }
+
+  generateCerticatePdf() {
+    if(this.usuarioLogado.id===this.atividade.executor?.id){
+      let aluno: Aluno = new Aluno();
+      this.alunoService.buscarAlunoPorId(this.atividade.executor.id).subscribe(
+        (res: Aluno)=>{
+          aluno = res;
+
+        }
+      )
+
+      }
+
     let grr = 20193878;
     let fullGrr = "GRR" + grr;
 
@@ -1143,5 +1180,3 @@ export class AtividadeComponent implements OnInit{
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }
-
-

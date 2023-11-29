@@ -1,21 +1,16 @@
-.grid-container {
-  margin: 20px;
-}
+.cardsDash{
+  display: flex;
+  flex-direction: row;
 
-.dashboard-card {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-}
+  flex-wrap: wrap;
+margin-left: 15px;
+  &>*{  padding-right:  15px;
+  margin-bottom: 20px;
 
-.more-button {
-  position: absolute;
-  top: 5px;
-  right: 10px;
+  }
 }
-
-.dashboard-card-content {
-  text-align: center;
+mat-toolbar {
+  background: transparent!important;
+  font-weight: bold;
+  margin: 5px;
 }
