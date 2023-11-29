@@ -10,8 +10,8 @@ const helmet = require('helmet');
 
 //Configuração da porta
 const PORT = process.env.PORT;
-const API_HOST = 'https://complementa-ufpr-f6abf4461f5d.herokuapp.com';
-//const API_HOST = 'http://localhost:5000'
+// const API_HOST = 'https://complementa-ufpr-f6abf4461f5d.herokuapp.com';
+const API_HOST = 'http://localhost:5000'
 const app = express();
 
 app.use(cors());
@@ -304,8 +304,9 @@ app.delete('/certificados/:id', verifyJWT, (req, res, next) => {
 //===============================================================================================================================
 console.log(`Configurando rotas de Comentario`)
 
-app.post('/comentarios', verifyJWT, (req, res, next) => {
-  console.log(`Roteando POST de http://localhost:${PORT}/comentarios para ${API_HOST}/comentarios`);
+app.post('/comentarios/:id', verifyJWT, (req, res, next) => {
+  const atividadeId = req.params.id;
+  console.log(`Roteando POST de http://localhost:${PORT}/comentarios/${atividadeId} para ${API_HOST}/comentarios/${atividadeId}`);
   servicesProxy(req, res, next);
 })
 
