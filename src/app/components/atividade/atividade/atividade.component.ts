@@ -747,7 +747,7 @@ export class AtividadeComponent implements OnInit{
     } else {
       return false;
     }*/
-    return false;
+    return true;
   }
 
   // Carga Horária
@@ -762,7 +762,7 @@ export class AtividadeComponent implements OnInit{
     this.setHeaderContent();
   }
 
-  sendHoursDispute() { //falar com guibor sobre mudar model e DTO
+  sendHoursDispute() { 
     if(this.atividade.complexidade === this.activityForm.get('complexitiesContest')?.value){
       this.showErrorToastr("Complexidade Proposta não pode ser igual a complexidade original!");
     } else {
@@ -772,7 +772,9 @@ export class AtividadeComponent implements OnInit{
       contestacaoHoras.dataContestacao=new Date();
       contestacaoHoras.tipoContestacao="CARGA_HORARIA";
       contestacaoHoras.status='ABERTA';
-      //contestacaoHoras.cargaHorariaOriginal=this.atividade.complexidade?.cargaHorariaMinima;
+      if(this.atividade.complexidade?.cargaHorariaMaxima){
+        contestacaoHoras.cargaHorariaOriginal=this.atividade.complexidade?.cargaHorariaMaxima;
+      }
       /**this.contestacaoCargaHorariaService.inserirContestacaoCargaHoraria(contestacaoHoras, undefined).subscribe( //guibor
         (res: ContestacaoCargaHoraria) => {
           this.atividade.contestacaoCargaHoraria=res;
@@ -785,8 +787,8 @@ export class AtividadeComponent implements OnInit{
             }
           )
         }
-      )*/
-
+      )
+*/
     }
 
 
