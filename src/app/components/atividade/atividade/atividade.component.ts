@@ -365,11 +365,15 @@ export class AtividadeComponent implements OnInit{
         this.secondButtonColor = 'linear-gradient(#559958, #418856)';
         break;
     }
+    console.log("saiu do set Header");
   }
 
   setContent() {
-    console.log(this.atividade.status);
+    console.log("entrou no set content");
     switch (this.atividade.status) {
+      case '':
+
+        break;   
       case 'ABERTA':
         this.activityForm.disable();
         this.activityName.setValue(this.atividade.nome);
@@ -406,19 +410,15 @@ export class AtividadeComponent implements OnInit{
         }
 
         break;
-      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA': {
+      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA': 
         this.activityForm.disable();
         this.displayComments = '';
         break;
-      }
-      default:{
-        this.activityForm.enabled;
-      this.isDisabled = false;
-      break;
-      }
+      
+
 
     }
-
+    console.log("saiu do set content");
 
 
   }
@@ -485,9 +485,12 @@ export class AtividadeComponent implements OnInit{
       case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA':
 
         if (this.canApproveContest()) {
+          console.log("o usuario pode aprovar contestação");
           if (!this.isReadingContest) {
+            console.log("o usuario não está lendo a contestação");
             this.readContest(); // testar
           } else {
+            console.log("o usuario esta lendo a contestação");
             this.approveContest(); //testar
           }
         }
@@ -878,6 +881,7 @@ export class AtividadeComponent implements OnInit{
   }
 
   readContest() {
+    console.log(this.atividade.contestacao?.descricao);
     this.projectName = "Contestação";
     this.descriptionLabel = "Descrição da Contestação";
     this.displayComments = 'none';
@@ -887,10 +891,16 @@ export class AtividadeComponent implements OnInit{
     if (this.estado === 'Carga Horária Contestada') {
       this.readingHoursDispute = true;
     }
+    if (this.atividade.contestacao?.descricao){
+      this.description.setValue(this.atividade.contestacao?.descricao);
+    }
     this.setHeaderContent();
+
   }
 
   approveContest() {
+    console.log("entrou no approve contest");
+    console.log("status: " + this.atividade.status);
     if(this.atividade.status==='CARGA_HORARIA_CONTESTADA'){
       let contestacao=this.atividade.contestacaoCargaHoraria;
       this.contestacao.status='DEFERIDA';
@@ -911,7 +921,8 @@ export class AtividadeComponent implements OnInit{
       }
 
     } else if (this.atividade.status==='EXECUCAO_CONTESTADA'){
-      let contestacao=this.atividade.contestacaoCargaHoraria;
+      console.log("entrou no else if");
+      let contestacao=this.atividade.contestacao;
       this.contestacao.status='DEFERIDA';
       if(contestacao){
         this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
@@ -955,8 +966,8 @@ export class AtividadeComponent implements OnInit{
       }
 
     } else if (this.atividade.status==='EXECUCAO_CONTESTADA'){
-      let contestacao=this.atividade.contestacaoCargaHoraria;
-      this.contestacao.status='DEFERIDA';
+      let contestacao=this.atividade.contestacao;
+      this.contestacao.status='INDEFERIDA';
       if(contestacao){
         this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
           (res: Contestacao) => {
