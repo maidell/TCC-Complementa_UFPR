@@ -273,11 +273,12 @@ export class AtividadeComponent implements OnInit{
           this.secondButtonColor = 'linear-gradient(#CC6E00,#D95409)';
 
         } else {
-          if (this.usuarioLogado.papel === 'ALUNO' && this.usuarioLogado.id!=this.atividade.autor?.id) {
+          if (this.usuarioLogado.papel === 'ALUNO' && this.usuarioLogado.id!=this.atividade.autor?.id && !this.isCandidate()) {
             this.firstHeaderButton = 'Candidatar-se';
             this.firstButtonWidth = '100%';
             this.displaySecondHeaderButton = 'none';
           } else {
+            this.showInfoToastr("Você já se candidatou nesta atividade. Aguarde até que ela seja aceita!");
             this.displayFirstHeaderButton = 'none';
             this.displaySecondHeaderButton = 'none';
           }
@@ -602,11 +603,11 @@ export class AtividadeComponent implements OnInit{
           novaAtividade=res;
           let id = novaAtividade.id;
           console.log(id);
-          if (res.id){
-            for(let i=0;i< this.file_store.length;i++){
-              this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id).subscribe;
-            }
-          }
+          // if (res.id){
+          //   for(let i=0;i< this.file_store.length;i++){
+          //     this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id).subscribe;
+          //   }
+          // }
           this.showSuccessToastr("Atividade criada com Sucesso!");
           this.onNoClick();
         }
@@ -632,6 +633,19 @@ export class AtividadeComponent implements OnInit{
 
   viewCandidates(){
 
+  }
+
+  isCandidate(){
+    console.log("USUARIO LOGADO: " + this.usuarioLogado.nome);
+    console.log("CANDIDATOS: " + this.atividade.candidatos);
+
+    if(this.atividade.candidatos?.some(u=> u.id === this.usuarioLogado.id)){
+      console.log("aluno é candidato");
+      return true;
+    } else {
+      console.log("aluno não é candidato");
+      return false;
+    }
   }
 
   registerCandidature() {
