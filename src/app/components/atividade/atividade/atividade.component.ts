@@ -848,7 +848,7 @@ export class AtividadeComponent implements OnInit{
     this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)';
   }
 
-  sendExecutionDispute() { // ver tipo
+  sendExecutionDispute() { 
     let contestacaoExecucao = new Contestacao();
     contestacaoExecucao.autor=this.usuarioLogado;
     contestacaoExecucao.dataContestacao=new Date();
@@ -899,8 +899,7 @@ export class AtividadeComponent implements OnInit{
   }
 
   approveContest() {
-    console.log("entrou no approve contest");
-    console.log("status: " + this.atividade.status);
+
     if(this.atividade.status==='CARGA_HORARIA_CONTESTADA'){
       let contestacao=this.atividade.contestacaoCargaHoraria;
       this.contestacao.status='DEFERIDA';
@@ -921,7 +920,6 @@ export class AtividadeComponent implements OnInit{
       }
 
     } else if (this.atividade.status==='EXECUCAO_CONTESTADA'){
-      console.log("entrou no else if");
       let contestacao=this.atividade.contestacao;
       this.contestacao.status='DEFERIDA';
       if(contestacao){
