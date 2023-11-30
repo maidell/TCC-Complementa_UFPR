@@ -116,11 +116,11 @@ public class Certificado implements Serializable{
 	@Override
     public String toString() {
         return "Certificado [id=" + getId() 
-        + "nome=" + getNome()
-        + "orientador=" + getOrientador()
-        + "projeto=" + getProjeto()
-        + "horas=" + getHoras()
-        + "hash=" + getHash()
+        + ", nome=" + getNome()
+        + ", orientador=" + getOrientador()
+        + ", projeto=" + getProjeto()
+        + ", horas=" + getHoras()
+        + ", hash=" + getHash()
         + "]";
     }
 }
