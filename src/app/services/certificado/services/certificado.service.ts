@@ -23,8 +23,8 @@ export class CertificadoService {
     return this.httpClient.get<Certificado[]>(this.BASE_URL + 'certificados/', this.httpOptions);
   }
 
-  inserirCertificado(certificado: Certificado, id: number): Observable<Certificado> {
-    return this.httpClient.post<Certificado>(this.BASE_URL + 'certificados/' + id, JSON.stringify(certificado), this.httpOptions);
+  inserirCertificado(certificado: Certificado): Observable<Certificado> {
+    return this.httpClient.post<Certificado>(this.BASE_URL + 'certificados/', JSON.stringify(certificado), this.httpOptions);
   }
 
   buscarCertificadoPorId(id: number): Observable<Certificado> {

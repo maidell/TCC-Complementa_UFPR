@@ -52,6 +52,7 @@ export class AtividadeComponent implements OnInit {
   comentarios: Comentario[] = [];
   complexidades: Complexidade[] = [];
   competencias: Competencia[] = [];
+  complexidadeContestacao = new Complexidade()
 
 
   usuarioSistema: Usuario = new Usuario(undefined, "Admin", undefined, undefined, undefined, undefined);
@@ -140,14 +141,15 @@ export class AtividadeComponent implements OnInit {
 
   activityName: FormControl = new FormControl();
 
-  disputedHoursValue: FormControl = new FormControl("");
-  proposedHours: FormControl = new FormControl();
+ 
+
 
   creationDate!: Date;
   datePipe!: DatePipe;
 
   fillingReport = false;
   isReadingReport = false;
+  showActivityFieldDispute='';
 
   file_store!: FileList;
   file_list: Array<string> = [];
@@ -179,7 +181,10 @@ export class AtividadeComponent implements OnInit {
       this.atividade = data.atividade;
       this.complexidadeAtividade = data.atividade.complexidade;
       this.graduacao = data.atividade.graduacoes;
-      this.comentarios = data.atividade.comentarios.reverse();
+      if(data.atividade.comentarios){
+        this.comentarios = data.atividade.comentarios.reverse();
+      }
+
 
     }
     if (data.projeto) {
@@ -301,14 +306,27 @@ export class AtividadeComponent implements OnInit {
             this.displaySecondHeaderButton = 'none';
 
           } else {
-            this.firstHeaderButton = 'Concluir';
-            this.secondHeaderButton = "Contestar Carga Horária";
-            this.secondHeaderButton = "Contestar Carga Horária";
-            this.firstButtonColor = 'linear-gradient(#2494D3,#0076D0)';
-            this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)';
+
             if (this.disputingHours) {
               this.firstHeaderButton = "Contestar Carga Horária";
+              this.secondHeaderButton= "Cancelar";
               this.firstButtonColor = 'linear-gradient(#CC6E00,#D95409)';
+              this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)'; //vermelho
+              this.displayComments='none';
+              this.displayStatus=false;
+            } else {
+              if(this.fillingReport){
+                this.firstHeaderButton = 'Concluir';
+                this.secondHeaderButton = "Cancelar";
+                this.firstButtonColor = 'linear-gradient(#2494D3,#0076D0)';
+                this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)'; 
+              } else {
+                this.firstHeaderButton = 'Concluir';
+                this.secondHeaderButton = "Contestar Carga Horária";
+                this.firstButtonColor = 'linear-gradient(#2494D3,#0076D0)';
+                this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)'; 
+              }
+
             }
           }
 
@@ -382,24 +400,32 @@ export class AtividadeComponent implements OnInit {
         this.displayComments = 'none';
         break;
       case 'EM_EXECUCAO':
-        this.displayComments = '';
-        this.activityName!.setValue(this.atividade.nome);
-        this.activityForm.get('description')!.setValue(this.atividade.descricao);
+        if(!this.disputingHours){
+          this.displayComments = '';
+          this.activityName!.setValue(this.atividade.nome);
+          this.activityForm.get('description')!.setValue(this.atividade.descricao);
+  
+          if (this.atividade.complexidade?.nome != undefined) {
+            this.activityForm.get('complexities')?.setValue(this.atividade.complexidade.nome);
+          }
+  
+          this.activityForm.get('candidatureDate')!.setValue(this.atividade.dataLimiteCandidatura);
+          this.activityForm.get('submitDate')!.setValue(this.atividade.dataConclusao);
+          this.activityForm.get('contestDate')!.setValue(this.atividade.contestacao?.dataContestacao);
+  
+          this.activityForm.disable();
+  
+          if (this.canUserEdit() && this.atividade.relatorioDeConclusao != null) {
+            this.comentarioSistema.comentario = "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais";
+            this.comentarios.push();
+          }
+        } else {
+          console.log("entrou no else do setContent");
+          this.displayComments='none';
 
-        if (this.atividade.complexidade?.nome != undefined) {
-          this.activityForm.get('complexities')?.setValue(this.atividade.complexidade.nome);
+          this.activityForm.enable;
         }
 
-        this.activityForm.get('candidatureDate')!.setValue(this.atividade.dataLimiteCandidatura);
-        this.activityForm.get('submitDate')!.setValue(this.atividade.dataConclusao);
-        this.activityForm.get('contestDate')!.setValue(this.atividade.contestacao?.dataContestacao);
-
-        this.activityForm.disable();
-
-        if (this.canUserEdit() && this.atividade.relatorioDeConclusao != null) {
-          this.comentarioSistema.comentario = "Essa atividade já possui um relatório de conclusão. Clique em \"Finalizar\" para saber mais";
-          this.comentarios.push();
-        }
 
         break;
       case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA':
@@ -448,16 +474,19 @@ export class AtividadeComponent implements OnInit {
 
 
         if (!this.canUserEdit()) {
+          console.log("entrou no !this can user edit do primeiro botão");
 
-          if (!this.fillingReport) {
-            this.fillReport(); //ok
-          } else {
             if (this.disputingHours) {
-              this.sendHoursDispute(); //testar com guibor
+              console.log("entrou no  if (this.disputingHours)")
+              this.sendHoursDispute();
             } else {
-              this.sendFinalReport(); //testar com guibor
+              if(!this.fillingReport){
+                this.fillReport();
+              } else {
+                this.sendFinalReport(); 
+              }
             }
-          }
+          
 
         } else {
 
@@ -512,9 +541,25 @@ export class AtividadeComponent implements OnInit {
         break;
       case "EM_EXECUCAO":
 
-        if(!this.canUserEdit){
-          this.disputeHours();
+        if(!this.canUserEdit()){
+          console.log("entrou no !canuseredit");
+          if(!this.disputingHours){
+            console.log("entrou no !this.disputinghours");
+            this.disputeHours();
+          } else {
+          
+            if(this.disputingHours || this.fillingReport){
+              console.log("entrou no disputinghours=true");
+              this.disputingHours=false;
+              this.showActivityFieldDispute='';
+              this.setContent();
+              this.setHeaderContent();
+            }
+ 
+          }
+
         } else {
+          console.log("entrou no canuser edit");
           if (this.disputingExecution) {
             !this.disputingExecution;
             this.setContent();
@@ -532,7 +577,7 @@ export class AtividadeComponent implements OnInit {
 
         break;
       case "FINALIZADA":
-        if (this.usuarioLogado === this.atividade.executor) {
+        if (this.usuarioLogado.id === this.atividade.executor!.id) {
           this.generateCerticatePdf();
         }
         break;
@@ -841,7 +886,7 @@ export class AtividadeComponent implements OnInit {
       console.log("true");
       return true;
     } else {
-      console.log("false");
+      console.log("esse usuario não pode editar");
       return false;
     }
 
@@ -863,18 +908,25 @@ export class AtividadeComponent implements OnInit {
   // Carga Horária
   disputeHours() {
     console.log("entrou na função de contestar carga horária");
-    this.showInfoToastr("ATENÇÂO: Preencha a contestação com todos os dados da conclusão da atividade também!");
-    this.disputingHours = true;
 
+    this.disputingHours = true;
+    this.activityForm.enable();
+    this.showActivityFieldDispute='none';
+    this.setContent();
+    this.setHeaderContent();
     this.projectName = "Contestação de Carga Horária";
     this.descriptionLabel = "Descrição da Contestação de Carga Horária";
-    this.disputedHoursValue.setValue(this.atividade.complexidade?.nome + " (" + this.atividade.complexidade?.cargaHorariaMinima + "h - " + this.atividade.complexidade?.cargaHorariaMaxima + "h)");
+    this.activityForm.get('disputedHoursValue')!.setValue(this.atividade.complexidade?.nome + " (" + this.atividade.complexidade?.cargaHorariaMinima + "h - " + this.atividade.complexidade?.cargaHorariaMaxima + "h)");
 
-    this.setHeaderContent();
+
   }
 
   sendHoursDispute() {
-    if (this.atividade.complexidade === this.activityForm.get('complexitiesContest')?.value) {
+    console.log("entrou no sendhoursdispute");
+    console.log(this.atividade.complexidade?.id);
+    console.log(this.activityForm.get('complexitiesContest')?.value);
+    let complexidade = this.activityForm.get('complexitiesContest')?.value;
+    if (this.atividade.complexidade?.id === complexidade?.id) {
       this.showErrorToastr("Complexidade Proposta não pode ser igual a complexidade original!");
     } else {
       let contestacaoHoras = new ContestacaoCargaHoraria();
@@ -886,20 +938,22 @@ export class AtividadeComponent implements OnInit {
       if (this.atividade.complexidade?.cargaHorariaMaxima) {
         contestacaoHoras.cargaHorariaOriginal = this.atividade.complexidade?.cargaHorariaMaxima;
       }
-      /**this.contestacaoCargaHorariaService.inserirContestacaoCargaHoraria(contestacaoHoras, undefined).subscribe( //guibor
-        (res: ContestacaoCargaHoraria) => {
-          this.atividade.contestacaoCargaHoraria=res;
-          this.atividade.status='CARGA_HORARIA_CONTESTADA';
-          this.atividadeService.atualizarAtividade(this.atividade).subscribe(
-            (res: Atividade) => {
-              this.disputingHours = false;
-              this.toastr.success("Contestação de Complexidade Realizada com sucesso!");
-              this.onNoClick();
-            }
-          )
-        }
-      )
-*/
+      contestacaoHoras.cargaHorariaNova=this.activityForm.get('complexitiesContest')?.value;
+      console.log(contestacaoHoras);
+      // this.contestacaoCargaHorariaService.inserirContestacaoCargaHoraria(contestacaoHoras, undefined).subscribe( //guibor
+      //   (res: ContestacaoCargaHoraria) => {
+      //     this.atividade.contestacaoCargaHoraria=res;
+      //     this.atividade.status='CARGA_HORARIA_CONTESTADA';
+      //     this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+      //       (res: Atividade) => {
+      //         this.disputingHours = false;
+      //         this.toastr.success("Contestação de Complexidade Realizada com sucesso!");
+      //         this.onNoClick();
+      //       }
+      //     )
+      //   }
+      // )
+
     }
 
 
@@ -1140,14 +1194,24 @@ export class AtividadeComponent implements OnInit {
 
     let relatorio = new RelatorioDeConclusao();
     relatorio.descricao = this.activityForm.get('description')?.value;
+    console.log(this.activityForm.get('description')?.value);
 
     this.relatoriodeConclusaoService.inserirRelatorioDeConclusao(relatorio).subscribe(
       (res: RelatorioDeConclusao) => {
         let reportId = res.id;
-        if (reportId) {
-          for (let i = 0; i < this.file_store.length; i++) {
-            this.anexoService.inserirAnexoRelatorio(this.file_store[i], reportId).subscribe;
-          }
+        // if (res.id && this.file_store?.length != 0) {
+        //   for (let i = 0; i < this.file_store.length; i++) {
+        //     console.log(this.file_store[i]);
+        //     let file!: File;
+        //     file = this.file_store[i];
+        //     this.anexoService.inserirAnexoRelatorio(file, res.id).subscribe(
+        //       (res: Anexo) => {
+        //         this.atividade.anexos?.push(res);
+        //         console.log(res);
+        //         this.showInfoToastr("Anexo salvo");
+        //       }
+        //     );
+        //   }
           this.atividade.relatorioDeConclusao = res;
           console.log("Relatorio de conclusao BS", this.atividade)
           this.atividadeService.atualizarAtividade(this.atividade).subscribe(
@@ -1155,15 +1219,13 @@ export class AtividadeComponent implements OnInit {
               this.atividade = res;
               console.log("Relatorio de conclusao AS", this.atividade)
               this.showSuccessToastr("Relatório de Conclusão Enviado com Sucesso!");
+              this.onNoClick();
             }
           );
-        }
+        
       }
     )
 
-
-    this.toastr.success("Relatório de Conclusão Enviado!");
-    this.onNoClick();
   }
 
   approveReport() {
@@ -1175,7 +1237,7 @@ export class AtividadeComponent implements OnInit {
       }
     )
 
-    this.generateCertificate();
+
 
 
 
@@ -1200,31 +1262,45 @@ export class AtividadeComponent implements OnInit {
   }
 
   generateCerticatePdf() {
+    console.log("entrou na função de gerar certificado");
     if (this.usuarioLogado.id === this.atividade.executor?.id) {
       let aluno: Aluno = new Aluno();
       this.alunoService.buscarAlunoPorId(this.atividade.executor.id).subscribe(
         (res: Aluno) => {
           aluno = res;
+          let grr = "GRR"+ aluno.grr;
+          this.doc.addImage('../assets/plugins/images/Certificado.jpg', "JPG", 0, 0, 297, 210);
+          this.doc.setFontSize(18);
+          this.doc.text(aluno.nome, 150, 100, { align: "center" });
+          this.doc.setFontSize(12);
+          this.doc.text(grr, 150, 110, { align: "center" });
+          this.doc.setFontSize(18);
+          this.doc.text("Por sua participação e conclusão da atividade " + this.atividade.nome + " contribuindo para o desenvolvimento do projeto " + this.atividade.projeto?.nome + " disponível na plataforma Complementa UFPR, tendo duração de" + this.atividade.complexidade?.cargaHorariaMaxima +  " horas", 150, 130, { align: "center", maxWidth: 180 });
+          this.doc.text(this.atividade.projeto!.orientador!.nome, 150, 174, { align: "center" });
+          let certificado = new Certificado();
+          certificado.nome=aluno.nome;
+          certificado.orientador = this.atividade.projeto!.orientador!.nome;
+          certificado.horas = this.atividade.complexidade!.cargaHorariaMaxima;
+          certificado.projeto = this.atividade.projeto!.nome;
+
+          this.certificadoService.inserirCertificado(certificado,). subscribe(
+            (res: Certificado) => {
+              this.doc.text(res.hash, 150, 10, { align: "center" });
+              this.doc.save("certificado.pdf");
+            }
+          )
+
+
+
 
         }
       )
 
     }
-
-    let grr = 20193878;
-    let fullGrr = "GRR" + grr;
+    
 
 
-    this.doc.addImage('../assets/plugins/images/Certificado.jpg', "JPG", 0, 0, 297, 210);
-    this.doc.setFontSize(18);
-    this.doc.text("Leonardo Hortmann", 150, 100, { align: "center" });
-    this.doc.setFontSize(12);
-    this.doc.text(fullGrr, 150, 110, { align: "center" });
-    this.doc.setFontSize(18);
-    this.doc.text("Por sua participação e conclusão da atividade " + this.atividade.executor + " contribuindo para o desenvolvimento do projeto " + this.projectName + " disponível na plataforma Complementa UFPR, tendo duração de 12 horas", 150, 130, { align: "center", maxWidth: 180 });
-    this.doc.text("Nome do Orientador", 150, 174, { align: "center" });
 
-    this.doc.save("certificado.pdf");
     //Por sua participação e conclusão na atividade [nome da atividade]
     //contribuindo para o desenvolvimento do projeto
     //[nome do projeto] disponível na plataforma Complementa UFPR, tendo duração de [xx] horas.
