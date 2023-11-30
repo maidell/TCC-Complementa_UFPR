@@ -190,6 +190,7 @@ export class AtividadeComponent implements OnInit{
       this.atividade=data.atividade;
       this.complexidadeAtividade=data.atividade.complexidade;
       this.graduacao=data.atividade.graduacoes;
+      this.comentarios=data.atividade.comentarios;
 
     }
     if (data.projeto){
@@ -198,6 +199,7 @@ export class AtividadeComponent implements OnInit{
 
 
   }
+
 
 
   ngOnInit() {
@@ -212,14 +214,14 @@ export class AtividadeComponent implements OnInit{
         console.log("entrou no subscribe");
         this.complexidades=complexidades;
         console.log("populou as complexidades");
-
+        this.syncGraduacoes();
+        this.syncComplexidade();
         this.setHeaderContent();
         this.setContent();
     });
 
     this.usuarioLogado = this.loginService.usuarioLogado;
     console.log("graduacoes:" + this.atividade.graduacoes);
-
 
 
     console.log(this.atividade);
@@ -385,8 +387,7 @@ export class AtividadeComponent implements OnInit{
         this.competences.setValue(this.atividade.competencia);
 
         console.log(this.atividade.complexidade?.nome);
-        this.syncGraduacoes();
-        this.syncComplexidade();
+
 
 
         this.candidatureDate.setValue(this.atividade.dataLimiteCandidatura);
@@ -603,11 +604,18 @@ export class AtividadeComponent implements OnInit{
           novaAtividade=res;
           let id = novaAtividade.id;
           console.log(id);
-          // if (res.id){
-          //   for(let i=0;i< this.file_store.length;i++){
-          //     this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id).subscribe;
-          //   }
-          // }
+          if (res.id){
+            for(let i=0;i< this.file_store.length;i++){
+              console.log(this.file_store[i]);
+              this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id).subscribe(
+                (res: Anexo) => {
+                  this.atividade.anexos?.push(res);
+                  console.log(res);
+                  this.showInfoToastr("Anexo salvo");
+                }
+              );
+            }
+          }
           this.showSuccessToastr("Atividade criada com Sucesso!");
           this.onNoClick();
         }
@@ -617,18 +625,8 @@ export class AtividadeComponent implements OnInit{
 
 
 
-      /**
-      for(let i=0;i<this.file_store.length;i++){
-        let anexo: Anexo = new Anexo();
-        anexo.atividade=this.atividade;
-        anexo.fileName=this.file_store[i].name;
-        anexo.
-      }*/
-
-
     }
-    //let newActivity: Atividade = new Atividade(undefined,"atividade teste", "descricao teste",new Date("2023-11-27"),new Date("2023-12-01"), new Date("2023-12-31"),this.project );
-    //this.atividadeService.inserirAtividade()
+
   }
 
   viewCandidates(){
@@ -823,6 +821,7 @@ export class AtividadeComponent implements OnInit{
   // Carga Horária
   disputeHours() {
     console.log("entrou na função de contestar carga horária");
+    this.showInfoToastr("ATENÇÂO: Preencha a contestação com todos os dados da conclusão da atividade também!");
     this.disputingHours = true;
 
     this.projectName = "Contestação de Carga Horária";
