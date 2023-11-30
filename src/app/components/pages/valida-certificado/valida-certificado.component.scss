@@ -3,13 +3,14 @@
 
 	margin-left: 20px;
 
-	height: 100%;
+	height: 400px;
 }
 mat-card{
 	margin-right: 20px;
 }
 .validacao{
 	margin-left: 20px;
+		height: 40rem;
 }
 
 div, .certificado, mat-card{
@@ -20,3 +21,8 @@ button{
 	margin-top: -22px;
 	background: linear-gradient(#CC6E00,#D95409);
 }
+
+.showdetd{
+	height: 40rem;
+}
+

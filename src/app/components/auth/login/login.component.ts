@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit {
   openDialogCheck(){
     const dialogRef = this.dialog.open(ValidaCertificadoComponent, {
       width: '40rem',
-      height: '10rem'
+
     });
 
     dialogRef.afterClosed().subscribe(result => {
