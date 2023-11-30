@@ -606,10 +606,12 @@ export class AtividadeComponent implements OnInit{
           novaAtividade=res;
           let id = novaAtividade.id;
           console.log(id);
-          if (res.id){
+          if (res.id && this.file_store.length!=0){
             for(let i=0;i< this.file_store.length;i++){
               console.log(this.file_store[i]);
-              this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id).subscribe(
+              let file!: File;
+              file=this.file_store[i];
+              this.anexoService.inserirAnexoAtividade(file, res.id).subscribe(
                 (res: Anexo) => {
                   this.atividade.anexos?.push(res);
                   console.log(res);
