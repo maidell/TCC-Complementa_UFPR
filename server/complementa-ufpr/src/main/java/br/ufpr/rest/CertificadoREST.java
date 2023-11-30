@@ -1,5 +1,7 @@
 package br.ufpr.rest;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,7 +61,7 @@ public class CertificadoREST {
 	
 	@GetMapping("/consultas/{hash}")
 	public ResponseEntity<CertificadoDTO> buscaPorHash(@PathVariable String hash) {
-
+		hash = hexToString(hash);
 		Optional<Certificado> certificado = repo.findByHash(hash);
 		if (!certificado.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
@@ -79,6 +81,8 @@ public class CertificadoREST {
 			if (!crtOpt.isPresent()) {
 				throw new Exception("Criação do certificado não foi realizada com sucesso");
 			}
+			crt = crtOpt.get();
+			crt.setHash(stringToHex(crt.getHash()));
 			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(crtOpt.get(), CertificadoDTO.class));
 		} catch (Exception e) {
 			System.err.println(e);
@@ -111,4 +115,16 @@ public class CertificadoREST {
 			return ResponseEntity.status(HttpStatus.OK).body(null);
 		}
 	}
+	
+	private static String stringToHex(String input) {
+        byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
+        BigInteger bigInt = new BigInteger(1, bytes);
+        return bigInt.toString(16);
+    }
+
+    private static String hexToString(String hex) {
+        BigInteger bigInt = new BigInteger(hex, 16);
+        byte[] bytes = bigInt.toByteArray();
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
 }

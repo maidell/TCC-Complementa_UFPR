@@ -14,7 +14,7 @@ import br.ufpr.dto.LoginDTO;
 import br.ufpr.dto.UsuarioDTO;
 import br.ufpr.model.Usuario;
 import br.ufpr.repository.UsuarioRepository;
-import br.ufpr.helper.PasswordUtils; // Import da classe PasswordUtils
+import br.ufpr.helper.PasswordUtils;
 
 @RestController
 public class AuthREST {

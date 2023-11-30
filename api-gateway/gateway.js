@@ -7,6 +7,9 @@ const httpProxy = require('express-http-proxy')
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser')
 const helmet = require('helmet');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 //Configuração da porta
 const PORT = process.env.PORT;
@@ -145,14 +148,46 @@ app.delete('/alunos/:id', verifyJWT, (req, res, next) => {
 //===============================================================================================================================
 console.log(`Configurando rotas de Anexo`)
 
-app.post('/anexos/atividades/upload/:atividadeId', verifyJWT, (req, res, next) => {
-  const atividadeId = req.params.id;
-  console.log(`Roteando POST de http://localhost:${PORT}/anexos/atividades/upload/${atividadeId} para ${API_HOST}/anexos/atividades/upload/${atividadeId}`);
-  servicesProxy(req, res, next);
-})
+// app.post('/anexos/atividades/upload/:atividadeId', verifyJWT, (req, res, next) => {
+//   const atividadeId = req.params.id;
+//   console.log(`Roteando POST de http://localhost:${PORT}/anexos/atividades/upload/${atividadeId} para ${API_HOST}/anexos/atividades/upload/${atividadeId}`);
+//   servicesProxy(req, res, next);
+// })
 
-app.post('/anexos/relatorios/upload/:relatorioId', verifyJWT, (req, res, next) => {
-  const relatorioId = req.params.id;
+// app.post('/anexos/relatorios/upload/:relatorioId', verifyJWT, (req, res, next) => {
+//   const relatorioId = req.params.id;
+//   console.log(`Roteando POST de http://localhost:${PORT}/anexos/relatorios/upload/${relatorioId} para ${API_HOST}/anexos/relatorios/upload/${relatorioId}`);
+//   servicesProxy(req, res, next);
+// })
+
+app.post('/anexos/atividades/upload/:atividadeId', verifyJWT, upload.single('file'), (req, res, next) => {
+  const atividadeId = req.params.atividadeId;
+  const arquivo = req.file;
+  console.log(`Roteando POST de http://localhost:${PORT}/anexos/atividades/upload/${atividadeId} para ${API_HOST}/anexos/atividades/upload/${atividadeId}`);
+  
+  if (!arquivo) {
+    return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
+  }
+
+  const formData = new FormData();
+  formData.append('file', arquivo.buffer, { filename: arquivo.originalname });
+  console.log(req.file, req.body);
+  axios.post(`${API_HOST}/atividades/upload/${atividadeId}`, formData, {
+    headers: {
+      ...formData.getHeaders(),
+      'x-access-token': req.headers['x-access-token'],
+    },
+  })
+  .then(response => {
+    return res.status(response.status).json(response.data);
+  })
+  .catch(error => {
+    return res.status(error.response.status).json(error.response.data);
+  });
+});
+
+app.post('/anexos/relatorios/upload/:relatorioId', verifyJWT, upload.single('file'), (req, res, next) => {
+  const relatorioId = req.params.relatorioId;
   console.log(`Roteando POST de http://localhost:${PORT}/anexos/relatorios/upload/${relatorioId} para ${API_HOST}/anexos/relatorios/upload/${relatorioId}`);
   servicesProxy(req, res, next);
 })
@@ -281,8 +316,8 @@ app.get('/certificados/:id', verifyJWT, (req, res, next) => {
   servicesProxy(req, res, next);
 })
 
-app.get('/certificados/consultas/:hash', verifyJWT, (req, res, next) => {
-  const certificadoHash = req.params.id;
+app.get('/certificados/consultas/:hash', (req, res, next) => {
+  const certificadoHash = req.params.hash;
   console.log(`Roteando GET de http://localhost:${PORT}/certificados/consultas/${certificadoHash} para ${API_HOST}/certificados/consultas/${certificadoHash}`);
   servicesProxy(req, res, next);
 })
