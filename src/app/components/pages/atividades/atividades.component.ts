@@ -166,12 +166,12 @@ export class AtividadesComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 this.dataSourceAtvDisp.paginator = this.paginator;
                 this.obsDisp = this.dataSourceAtvDisp.connect();
-                this.toastr.success("Atividades Disponíveis Carregadas");
+
                 console.log('Atividades Disponíveis:', atividadesDisponiveis);
               }
               if (atividadesExecutante) {
                 this.atividadesExecutante = atividadesExecutante;
-                this.toastr.success("Atividades Executante Carregadas");
+
                 console.log('Atividades Executante:', atividadesExecutante);
               }
               this.separarPorStatus();
@@ -197,7 +197,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 this.dataSourceAtvOri.paginator = this.paginator;
                 this.obsOri = this.dataSourceAtvOri.connect();
-                this.toastr.success("Atividades Orientadas Carregadas");
+
               }
             )
           },
@@ -221,7 +221,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
                 this.dataSourceAtvDisp.paginator = this.paginator;
                 this.changeDetectorRef.detectChanges();
                 this.obsDisp = this.dataSourceAtvDisp.connect();
-                this.toastr.success("Atividades Disponíveis Carregadas");
+
               }
               if (atividadesOrientadas) {
                 this.atividadesOrientadas = atividadesOrientadas;
@@ -229,7 +229,7 @@ export class AtividadesComponent implements OnInit, OnDestroy {
                 this.dataSourceAtvOri.paginator = this.paginator;
                 this.changeDetectorRef.detectChanges();
                 this.obsOri = this.dataSourceAtvOri.connect();
-                this.toastr.success("Atividades Orientadas Carregadas");
+
               }
             }
             )
@@ -269,9 +269,9 @@ export class AtividadesComponent implements OnInit, OnDestroy {
       }
     }
     this.dataSourceAtvEx = new MatTableDataSource(this.atividadesExecutadas);
-    this.toastr.success("Atividades Executadas Carregadas");
+
     this.dataSourceAtvEmEx = new MatTableDataSource(this.atividadesEmExecucao);
-    this.toastr.success("Atividades Em Execução Carregadas");
+
   }
 
   instanciarAtividades(): Observable<Atividade[]> {

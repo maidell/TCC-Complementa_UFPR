@@ -75,10 +75,10 @@ export class LoginComponent implements OnInit {
             this.toastr.success("Bem-vindo " + usu.nome + "!");
             this.loginService.usuarioLogado = usu;
             this.loading = false;
-            this.router.navigate([`${usu.papel}`.toLowerCase()]);
+            this.router.navigate([`${usu.papel}`]);
           } else {
             this.message = 'Usuário/Senha inválidos.';
-            this.toastr.success("Usuário ou Senha inválidos");
+            this.toastr.error("Usuário ou Senha inválidos");
           }
         });
     }
