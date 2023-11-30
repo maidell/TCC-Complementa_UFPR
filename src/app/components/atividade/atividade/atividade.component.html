@@ -42,10 +42,7 @@
                     <mat-form-field class="description">
                         <mat-label>{{descriptionLabel}}</mat-label>
                         <textarea matInput class="description-field" rows="15"
-                            formControlName="description" [formControl]="description" required></textarea>
-                        <mat-error *ngIf="description.errors?.['required']  && description.touched">
-                            A descrição é obrigatória!
-                        </mat-error>
+                            formControlName="description"  required></textarea>
                     </mat-form-field>
                 </div>
                 <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
