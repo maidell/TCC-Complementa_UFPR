@@ -193,7 +193,7 @@ export class AtividadeComponent implements OnInit{
       this.atividade=data.atividade;
       this.complexidadeAtividade=data.atividade.complexidade;
       this.graduacao=data.atividade.graduacoes;
-      this.comentarios=data.atividade.comentarios;
+      this.comentarios=data.atividade.comentarios.reverse();
 
     }
     if (data.projeto){
