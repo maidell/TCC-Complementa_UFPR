@@ -107,9 +107,7 @@ public class Atividade implements Serializable {
             name = "aluno_atividade", 
             joinColumns = @JoinColumn(name = "atividade_id"), 
             inverseJoinColumns = @JoinColumn(name = "aluno_id"))
-	private List<Aluno> candidatos = new ArrayList<>();
-
-	
+	private List<Aluno> candidatos = new ArrayList<>();	
 	
 	public Atividade() {
 	}
