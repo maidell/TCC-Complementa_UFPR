@@ -47,24 +47,24 @@
 						</mat-select>
 					</mat-form-field> -->
 					<mat-form-field>
-					<mat-label>Orientador</mat-label>
-					<mat-select formControlName="orientador" multiple>
-						<mat-option [value]="projeto.orientador?.id">
-							{{projeto.orientador?.nome}}
-						</mat-option>
-					</mat-select>
+						<mat-label>Orientador</mat-label>
+						<mat-select formControlName="orientador" multiple>
+							<mat-option [value]="projeto.orientador?.id">
+								{{projeto.orientador?.nome}}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<!-- <div class="form-inside-right"> -->
-						<!-- <mat-form-field>
+					<!-- <mat-form-field>
 							<mat-label>Orientador</mat-label>
 							<input matInput [(ngModel)]="orientador.nome" formControlName="orientador"
 								placeholder="Orientador">
 						</mat-form-field> -->
 
-						<mat-form-field>
-							<mat-label>Tipo</mat-label>
-							<input matInput formControlName="tipo" placeholder="Tipo">
-						</mat-form-field>
+					<mat-form-field>
+						<mat-label>Tipo</mat-label>
+						<input matInput formControlName="tipo" placeholder="Tipo">
+					</mat-form-field>
 					<!-- </div> -->
 
 				</div>
@@ -101,17 +101,17 @@
 				<h1>Atividades</h1>
 				<button mat-raised-button color="primary" (click)="novaAtividade()">Nova Atividade</button>
 			</div>
-			<div class="atividades">
-				<div class="atividade" *ngFor="let atividade of atividades" (click)="editarAtividade()">
-					<app-square-card [title]="atividade.nome!" [description]="atividade.status!"
-						[buttonText]="buttonText" [imageUrl]="imgAtv"></app-square-card>
-				</div>
-
-			</div>
 		</div>
 	</div>
 
 	<!-- ngIf botoes só aparecem se for na tela de edição do projeto ou criação do projeto -->
 
+
+</div>
+<div class="atividades">
+	<div class="atividade" *ngFor="let atividade of atividades" (click)="editarAtividade()">
+		<app-square-card [title]="atividade.nome!" [description]="atividade.status!" [buttonText]="buttonText"
+			[imageUrl]="imgAtv"></app-square-card>
+	</div>
 
 </div>
