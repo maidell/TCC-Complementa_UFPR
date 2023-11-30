@@ -23,8 +23,8 @@ export class ContestacaoCargaHorariaService {
     return this.httpClient.get<ContestacaoCargaHoraria[]>(this.BASE_URL + 'contestacoes-carga-horaria/', this.httpOptions);
   }
 
-  inserirContestacaoCargaHoraria(contestacaoCargaHoraria: ContestacaoCargaHoraria, id: number): Observable<ContestacaoCargaHoraria> {
-    return this.httpClient.post<ContestacaoCargaHoraria>(this.BASE_URL + 'contestacoes-carga-horaria/' + id, JSON.stringify(contestacaoCargaHoraria), this.httpOptions);
+  inserirContestacaoCargaHoraria(contestacaoCargaHoraria: ContestacaoCargaHoraria): Observable<ContestacaoCargaHoraria> {
+    return this.httpClient.post<ContestacaoCargaHoraria>(this.BASE_URL + 'contestacoes-carga-horaria/', JSON.stringify(contestacaoCargaHoraria), this.httpOptions);
   }
 
   buscarContestacaoCargaHorariaPorId(id: number): Observable<ContestacaoCargaHoraria> {
