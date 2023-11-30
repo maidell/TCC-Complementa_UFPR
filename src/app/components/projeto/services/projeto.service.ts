@@ -26,16 +26,16 @@ export class ProjetoService {
     return this.httpClient.get<Projeto[]>(this.BASE_URL + 'projetos/usuarios/' + id, this.httpOptions);
   }
 
-  inserirProjeto(orientador: Projeto): Observable<Projeto> {
-    return this.httpClient.post<Projeto>(this.BASE_URL + 'projetos/', JSON.stringify(orientador), this.httpOptions);
+  inserirProjeto(projeto: Projeto): Observable<Projeto> {
+    return this.httpClient.post<Projeto>(this.BASE_URL + 'projetos/', JSON.stringify(projeto), this.httpOptions);
   }
 
   buscarProjetoPorId(id: number): Observable<Projeto> {
     return this.httpClient.get<Projeto>(this.BASE_URL + 'projetos/' + id, this.httpOptions);
   }
 
-  atualizarProjeto(orientador: Projeto): Observable<Projeto> {
-    return this.httpClient.put<Projeto>(this.BASE_URL + 'projetos/' + orientador.id, JSON.stringify(orientador), this.httpOptions);
+  atualizarProjeto(projeto: Projeto): Observable<Projeto> {
+    return this.httpClient.put<Projeto>(this.BASE_URL + 'projetos/' + projeto.id, JSON.stringify(projeto), this.httpOptions);
   }
 
   removerProjeto(id: number): Observable<Projeto> {

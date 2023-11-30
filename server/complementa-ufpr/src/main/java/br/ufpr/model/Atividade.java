@@ -98,7 +98,7 @@ public class Atividade implements Serializable {
 	private List<Graduacao> graduacoes = new ArrayList<>();
 	
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "anexos_relatorio")
+    @JoinTable(name = "anexos_atividade")
     private List<Anexo> anexos;
 	
     

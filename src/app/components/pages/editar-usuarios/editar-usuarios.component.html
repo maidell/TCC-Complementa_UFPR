@@ -59,16 +59,10 @@
             </mat-error>
         </mat-form-field>
 
-        <!-- Graduação - Mostrado para 'Aluno' e 'Orientador e 'Coordenador' -->
-        <mat-form-field class="full-input-field" *ngIf="papel === 'ALUNO' || papel === 'ORIENTADOR' || papel === 'COORDENADOR'">
-            <mat-label>Curso</mat-label>
-            <input matInput type="text" [(ngModel)]="graduacao.nome" name="curso" #cursoField="ngModel">
-        </mat-form-field>
-
-                <!-- Graduação - Mostrado para 'Aluno' e 'Orientador e 'Coordenador' -->
-                <mat-form-field class="full-input-field" *ngIf="papel === 'ADMIN'">
+                <!-- Graduação - Mostrado para 'Administrador' e 'Aluno' e 'Orientador e 'Coordenador' -->
+                <mat-form-field class="full-input-field" *ngIf="papel !== 'SERVIDOR'">
                     <mat-label>Curso</mat-label>
-                    <mat-select [(ngModel)]="graduacao" name="curso" #cursoField="ngModel">
+                    <mat-select [(ngModel)]="graduacao" name="curso" #cursoField="ngModel" [ariaReadOnly]="papel !== 'ADMIN'" >
                         <mat-option *ngFor="let option of options" [value]="option">
                             {{ option.nome }}
                         </mat-option>
