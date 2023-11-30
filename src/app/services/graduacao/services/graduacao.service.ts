@@ -33,6 +33,10 @@ export class GraduacaoService {
     return this.httpClient.get<Graduacao>(this.BASE_URL + 'graduacoes/' + id, this.httpOptions);
   }
 
+  buscarGraduacaoPorIdCoordenador(id: number): Observable<Graduacao> {
+    return this.httpClient.get<Graduacao>(this.BASE_URL + 'graduacoes/coordenadores/' + id, this.httpOptions);
+  }
+
   atualizarGraduacao(graduacao: Graduacao): Observable<Graduacao> {
     return this.httpClient.put<Graduacao>(this.BASE_URL + 'graduacoes/' + graduacao.id, JSON.stringify(graduacao), this.httpOptions);
   }

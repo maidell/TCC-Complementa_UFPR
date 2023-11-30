@@ -21,95 +21,124 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufpr.dto.GraduacaoDTO;
 import br.ufpr.dto.GraduacaoSimplesDTO;
 import br.ufpr.model.Graduacao;
+import br.ufpr.model.Orientador;
+import br.ufpr.model.Papel;
 import br.ufpr.repository.GraduacaoRepository;
+import br.ufpr.repository.OrientadorRepository;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "graduacoes")
 public class GraduacaoREST {
 
-    @Autowired
-    private GraduacaoRepository repo;
+	@Autowired
+	private GraduacaoRepository repo;
 
-    @Autowired
-    private ModelMapper mapper;
+	@Autowired
+	private OrientadorRepository repoOri;
 
-    @GetMapping
-    public ResponseEntity<List<GraduacaoDTO>> obterTodasGraduacoes() {
+	@Autowired
+	private ModelMapper mapper;
 
-        List<Graduacao> lista = repo.findAll();
+	@GetMapping
+	public ResponseEntity<List<GraduacaoDTO>> obterTodasGraduacoes() {
 
-        if (lista.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-        		.body(lista.stream().map(e -> mapper.map(e, GraduacaoDTO.class)).collect(Collectors.toList()));
-    }
-    
-    @GetMapping("/autocadastro")
-    public ResponseEntity<List<GraduacaoSimplesDTO>> obterTodasGraduacoesSimples() {
+		List<Graduacao> lista = repo.findAll();
 
-        List<Graduacao> lista = repo.findAll();
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, GraduacaoDTO.class)).collect(Collectors.toList()));
+	}
 
-        if (lista.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-        		.body(lista.stream().map(e -> mapper.map(e, GraduacaoSimplesDTO.class)).collect(Collectors.toList()));
-    }
+	@GetMapping("/autocadastro")
+	public ResponseEntity<List<GraduacaoSimplesDTO>> obterTodasGraduacoesSimples() {
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GraduacaoDTO> buscaPorId(@PathVariable Long id) {
+		List<Graduacao> lista = repo.findAll();
 
-        Optional<Graduacao> graduacao = repo.findById(id);
-        if (!graduacao.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-        	Graduacao grad = graduacao.get();
-        	return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad, GraduacaoDTO.class));
-        }
-    }
+		if (lista.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(lista.stream().map(e -> mapper.map(e, GraduacaoSimplesDTO.class)).collect(Collectors.toList()));
+	}
 
-    @PostMapping
-    public ResponseEntity<GraduacaoDTO> inserirGraduacao(@RequestBody Graduacao graduacao) {
-    	
-        try {
-            Graduacao grad = repo.save(mapper.map(graduacao, Graduacao.class));
-            Optional<Graduacao> gradOpt = repo.findById(grad.getId());
-            if (!gradOpt.isPresent()) {
-                throw new Exception("Criação da graduação não foi realizada com sucesso");
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(gradOpt.get(), GraduacaoDTO.class));
-        } catch (Exception e) {
-        	System.err.println(e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+	@GetMapping("/coordenadores/{id}")
+	public ResponseEntity<GraduacaoDTO> buscaPorIdCoordenador(@PathVariable Long id) {
 
-    @PutMapping("/{id}")
-    public ResponseEntity<GraduacaoDTO> alterarGraduacao(@PathVariable("id") Long id, @RequestBody Graduacao graduacao) {
-        Optional<Graduacao> grad = repo.findById(id);
+		Optional<Orientador> optCoord = repoOri.findById(id);
+		if (!optCoord.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			if (optCoord.get().getPapel() == Papel.COORDENADOR) {
+				Optional<Graduacao> graduacao = repo.findByCoordenadorId(id);
+				if (!graduacao.isPresent()) {
+					return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+				} else {
+					Graduacao grad = graduacao.get();
+					return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad, GraduacaoDTO.class));
+				}
+			} else {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			}
 
-        if (!grad.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            graduacao.setId(id);
-            repo.save(mapper.map(graduacao, Graduacao.class));
-            grad = repo.findById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad.get(), GraduacaoDTO.class));
-        }
-    }
+		}
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> removerGraduacao(@PathVariable("id") Long id) {
+	@GetMapping("/{id}")
+	public ResponseEntity<GraduacaoDTO> buscaPorId(@PathVariable Long id) {
 
-        Optional<Graduacao> graduacao = repo.findById(id);
-        if (!graduacao.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        } else {
-            repo.delete(graduacao.get());
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
-    }
-    
+		Optional<Graduacao> graduacao = repo.findById(id);
+		if (!graduacao.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			Graduacao grad = graduacao.get();
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad, GraduacaoDTO.class));
+		}
+	}
+
+	@PostMapping
+	public ResponseEntity<GraduacaoDTO> inserirGraduacao(@RequestBody Graduacao graduacao) {
+
+		try {
+			Graduacao grad = repo.save(mapper.map(graduacao, Graduacao.class));
+			Optional<Graduacao> gradOpt = repo.findById(grad.getId());
+			if (!gradOpt.isPresent()) {
+				throw new Exception("Criação da graduação não foi realizada com sucesso");
+			}
+			return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(gradOpt.get(), GraduacaoDTO.class));
+		} catch (Exception e) {
+			System.err.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<GraduacaoDTO> alterarGraduacao(@PathVariable("id") Long id,
+			@RequestBody Graduacao graduacao) {
+		Optional<Graduacao> grad = repo.findById(id);
+
+		if (!grad.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			graduacao.setId(id);
+			repo.save(mapper.map(graduacao, Graduacao.class));
+			grad = repo.findById(id);
+			return ResponseEntity.status(HttpStatus.OK).body(mapper.map(grad.get(), GraduacaoDTO.class));
+		}
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> removerGraduacao(@PathVariable("id") Long id) {
+
+		Optional<Graduacao> graduacao = repo.findById(id);
+		if (!graduacao.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		} else {
+			repo.delete(graduacao.get());
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+	}
+
 }

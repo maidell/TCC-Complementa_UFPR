@@ -487,6 +487,13 @@ app.get('/graduacoes/:id', verifyJWT, (req, res, next) => {
     servicesProxy(req, res, next);
   })
 
+  app.get('/graduacoes/coordenadores/:id', verifyJWT, (req, res, next) => {
+    const coordenadorId = req.params.id;
+    console.log(coordenadorId);
+    console.log(`Roteando GET de http://localhost:${PORT}/graduacoes/coordenadores/${coordenadorId} para ${API_HOST}/graduacoes/coordenadores/${coordenadorId}`);
+    servicesProxy(req, res, next);
+  })
+
 app.put('/graduacoes/:id', verifyJWT, (req, res, next) => {
   const graduacaoId = req.params.id;
   console.log(`Roteando PUT de http://localhost:${PORT}/graduacoes/${graduacaoId} para ${API_HOST}/graduacoes/${graduacaoId}`);
