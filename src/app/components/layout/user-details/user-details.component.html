@@ -4,6 +4,6 @@
 
 </button>
 <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="aluno/editar">Editar Perfil</button>
+    <button mat-menu-item [routerLink]="'aluno/editar/' + usuarioLogado.id">Editar Perfil</button>
     <button mat-menu-item (click)="logout()">Sair</button>
 </mat-menu>
