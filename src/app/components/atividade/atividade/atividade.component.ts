@@ -3,7 +3,7 @@ import { Form, FormControl, FormGroup } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { DownloadService } from '../download.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { jsPDF } from "jspdf";
 import { AtividadeService } from '../services/atividade.service';
@@ -25,6 +25,7 @@ import { ContestacaoService } from 'src/app/services/contestacao/services/contes
 import { AlunoService } from 'src/app/services/aluno/services/aluno.service';
 import { CertificadoService } from 'src/app/services/certificado/services/certificado.service';
 import * as saveAs from 'file-saver';
+import { VerificarCandidaturasComponent } from '../../layout/cards/verificar-candidaturas/verificar-candidaturas.component';
 
 
 @Component({
@@ -32,7 +33,7 @@ import * as saveAs from 'file-saver';
   templateUrl: './atividade.component.html',
   styleUrls: ['./atividade.component.scss']
 })
-export class AtividadeComponent implements OnInit{
+export class AtividadeComponent implements OnInit {
 
   doc = new jsPDF({
     orientation: "landscape",
@@ -72,10 +73,10 @@ export class AtividadeComponent implements OnInit{
   disputingExecution = false;
   readingHoursDispute = false;
   displayActivityHeaderData = false;
-  activityNameLabel='Nome da Atividade';
+  activityNameLabel = 'Nome da Atividade';
 
   displayStatus = true;
-  isMultiple=true;
+  isMultiple = true;
 
   statusButtonColor = '';
 
@@ -137,19 +138,7 @@ export class AtividadeComponent implements OnInit{
     uploadFile: new FormControl()
   });
 
-  // FormControl pra poder acessar o valor digitado no input
   activityName: FormControl = new FormControl();
-  // description: FormControl = new FormControl();
-  // courses: FormControl = new FormControl([]);
-  // competences: FormControl = new FormControl();
-  // complexities: FormControl = new FormControl();
-  // complexityName: FormControl = new FormControl();
-  // candidatureDate: FormControl = new FormControl();
-  // submitDate: FormControl = new FormControl();
-  // contestDate: FormControl = new FormControl();
-  // uploadFile: FormControl = new FormControl();
-  // complexitiesContest: FormControl = new FormControl();
-
 
   disputedHoursValue: FormControl = new FormControl("");
   proposedHours: FormControl = new FormControl();
@@ -157,17 +146,13 @@ export class AtividadeComponent implements OnInit{
   creationDate!: Date;
   datePipe!: DatePipe;
 
-
   fillingReport = false;
   isReadingReport = false;
-
-
 
   file_store!: FileList;
   file_list: Array<string> = [];
 
   options: Graduacao[] = [];
-
 
   constructor(
     private router: Router,
@@ -187,23 +172,20 @@ export class AtividadeComponent implements OnInit{
     public comentarioService: ComentarioService,
     public orientadorService: OrientadorService,
     public anexoService: AnexoService,
+    public openDialogo: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    if(data.atividade){
-      this.atividade=data.atividade;
-      this.complexidadeAtividade=data.atividade.complexidade;
-      this.graduacao=data.atividade.graduacoes;
-      this.comentarios=data.atividade.comentarios.reverse();
+    if (data.atividade) {
+      this.atividade = data.atividade;
+      this.complexidadeAtividade = data.atividade.complexidade;
+      this.graduacao = data.atividade.graduacoes;
+      this.comentarios = data.atividade.comentarios.reverse();
 
     }
-    if (data.projeto){
+    if (data.projeto) {
       this.project = data.projeto;
     }
-
-
   }
-
-
 
   ngOnInit() {
     if (!this.loginService.usuarioLogado) {
@@ -212,15 +194,15 @@ export class AtividadeComponent implements OnInit{
     forkJoin({
       cursos: this.listarCursos(),
       complexidades: this.listarComplexidades(),
-    }).subscribe(({cursos, complexidades}) => {
-        this.options=cursos;
-        console.log("entrou no subscribe");
-        this.complexidades=complexidades;
-        console.log("populou as complexidades");
-        this.syncGraduacoes();
-        this.syncComplexidade();
-        this.setHeaderContent();
-        this.setContent();
+    }).subscribe(({ cursos, complexidades }) => {
+      this.options = cursos;
+      console.log("entrou no subscribe");
+      this.complexidades = complexidades;
+      console.log("populou as complexidades");
+      this.syncGraduacoes();
+      this.syncComplexidade();
+      this.setHeaderContent();
+      this.setContent();
     });
 
     this.usuarioLogado = this.loginService.usuarioLogado;
@@ -229,7 +211,6 @@ export class AtividadeComponent implements OnInit{
 
     console.log(this.atividade);
     console.log(this.project);
-
 
 
   }
@@ -261,7 +242,7 @@ export class AtividadeComponent implements OnInit{
       case '':  // tela de criação de atividades
         this.statusButtonColor = 'linear-gradient(#3473a3,#5b7ba5)';
         this.displayStatus = false;
-        this.displayActivityHeaderData=true;
+        this.displayActivityHeaderData = true;
         this.buttonsMarginTop = '3%';
         this.firstHeaderButton = 'Salvar';
         this.firstButtonColor = 'linear-gradient(#559958, #418856)';
@@ -278,7 +259,7 @@ export class AtividadeComponent implements OnInit{
           this.secondButtonColor = 'linear-gradient(#CC6E00,#D95409)';
 
         } else {
-          if (this.usuarioLogado.papel === 'ALUNO' && this.usuarioLogado.id!=this.atividade.autor?.id && !this.isCandidate()) {
+          if (this.usuarioLogado.papel === 'ALUNO' && this.usuarioLogado.id != this.atividade.autor?.id && !this.isCandidate()) {
             this.firstHeaderButton = 'Candidatar-se';
             this.firstButtonWidth = '100%';
             this.displaySecondHeaderButton = 'none';
@@ -321,6 +302,7 @@ export class AtividadeComponent implements OnInit{
 
           } else {
             this.firstHeaderButton = 'Concluir';
+            this.secondHeaderButton = "Contestar Carga Horária";
             this.secondHeaderButton = "Contestar Carga Horária";
             this.firstButtonColor = 'linear-gradient(#2494D3,#0076D0)';
             this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)';
@@ -381,8 +363,8 @@ export class AtividadeComponent implements OnInit{
     switch (this.atividade.status) {
       case '':
         this.activityForm.enable();
-        this.isDisabled=false;
-        break;   
+        this.isDisabled = false;
+        break;
       case 'ABERTA':
         this.activityForm.disable();
         this.activityName!.setValue(this.atividade.nome);
@@ -420,11 +402,11 @@ export class AtividadeComponent implements OnInit{
         }
 
         break;
-      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA': 
+      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA':
         this.activityForm.disable();
         this.displayComments = '';
         break;
-      
+
 
 
     }
@@ -483,10 +465,10 @@ export class AtividadeComponent implements OnInit{
 
             if (this.isReadingReport && !this.disputingExecution) {
               this.approveReport(); //testar
-            } else if (this.isReadingReport && this.disputingExecution){
-                this.sendExecutionDispute(); //testar
+            } else if (this.isReadingReport && this.disputingExecution) {
+              this.sendExecutionDispute(); //testar
 
-            } else  {
+            } else {
               this.readConclusionReport();
             }
 
@@ -522,7 +504,7 @@ export class AtividadeComponent implements OnInit{
             this.editActivity();
           } else {
             this.isEditing = false;
-            this.displayActivityHeaderData=false;
+            this.displayActivityHeaderData = false;
             this.setHeaderContent();
             this.setContent();
           }
@@ -572,26 +554,26 @@ export class AtividadeComponent implements OnInit{
 
   syncGraduacoes() {
     if (this.atividade.graduacoes) {
-        const graduacoesSelecionadas = this.atividade.graduacoes.filter(grad => 
-            this.options.find(option => option.id === grad.id)
-        );
+      const graduacoesSelecionadas = this.atividade.graduacoes.filter(grad =>
+        this.options.find(option => option.id === grad.id)
+      );
 
-        this.graduacao = graduacoesSelecionadas;
-        this.activityForm.get('courses')?.setValue(this.graduacao);
+      this.graduacao = graduacoesSelecionadas;
+      this.activityForm.get('courses')?.setValue(this.graduacao);
     }
-}
+  }
 
   saveActivity() {
 
-    if(this.activityForm.get('description')?.value===null || this.activityForm.get('courses')?.value === null || this.activityForm.get('complexities')?.value===null || this.activityForm.get('candidatureDate')?.value===null || this.activityForm.get('submitDate')?.value===null){
+    if (this.activityForm.get('description')?.value === null || this.activityForm.get('courses')?.value === null || this.activityForm.get('complexities')?.value === null || this.activityForm.get('candidatureDate')?.value === null || this.activityForm.get('submitDate')?.value === null) {
       console.log(this.file_store);
       this.showErrorToastr("Preencha todos os campos antes de salvar!");
     } else {
       let novaAtividade = new Atividade();
-      novaAtividade.status="ABERTA";
+      novaAtividade.status = "ABERTA";
       novaAtividade.nome = this.activityName!.value;
-      novaAtividade.projeto=this.project;
-      novaAtividade.autor=this.usuarioLogado;
+      novaAtividade.projeto = this.project;
+      novaAtividade.autor = this.usuarioLogado;
       novaAtividade.descricao = this.activityForm.get('description')!.value;
       novaAtividade.graduacoes = this.activityForm.get('courses')!.value;
       novaAtividade.complexidade = this.activityForm.get('complexities')?.value;
@@ -604,14 +586,14 @@ export class AtividadeComponent implements OnInit{
 
       this.atividadeService.inserirAtividade(novaAtividade).subscribe(
         (res: Atividade) => {
-          novaAtividade=res;
+          novaAtividade = res;
           let id = novaAtividade.id;
           console.log(id);
-          if (res.id && this.file_store.length!=0){
-            for(let i=0;i< this.file_store.length;i++){
+          if (res.id && this.file_store.length != 0) {
+            for (let i = 0; i < this.file_store.length; i++) {
               console.log(this.file_store[i]);
               let file!: File;
-              file=this.file_store[i];
+              file = this.file_store[i];
               this.anexoService.inserirAnexoAtividade(file, res.id).subscribe(
                 (res: Anexo) => {
                   this.atividade.anexos?.push(res);
@@ -634,15 +616,31 @@ export class AtividadeComponent implements OnInit{
 
   }
 
-  viewCandidates(){
+  viewCandidates() {
+    if (!this.atividade) {
+      this.showErrorToastr("Erro ao abrir tela de candidaturas");
+    }
+    else if (this.atividade.id) {
 
+      try {
+        const dialogRef = this.openDialogo.open(VerificarCandidaturasComponent, {
+          width: '700px',
+          height: '500px',
+          data: this.atividade.candidatos
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('Dialog result: ${result}');
+        });
+      } catch (error) {
+        this.showErrorToastr("Erro ao abrir tela de candidaturas");
+      }
+    }
   }
-
-  isCandidate(){
+  isCandidate() {
     console.log("USUARIO LOGADO: " + this.usuarioLogado.nome);
     console.log("CANDIDATOS: " + this.atividade.candidatos);
 
-    if(this.atividade.candidatos?.some(u=> u.id === this.usuarioLogado.id)){
+    if (this.atividade.candidatos?.some(u => u.id === this.usuarioLogado.id)) {
       console.log("aluno é candidato");
       return true;
     } else {
@@ -673,8 +671,8 @@ export class AtividadeComponent implements OnInit{
       let comentario = new Comentario();
       comentario.usuario = this.usuarioLogado;
       comentario.comentario = commentContent;
-      this.comentarioService.inserirComentario(comentario,idAtividade).subscribe(
-        (res: Comentario)=> {
+      this.comentarioService.inserirComentario(comentario, idAtividade).subscribe(
+        (res: Comentario) => {
           this.showSuccessToastr("comentario inserido");
           this.comentarios.push(res);
           this.commentValue = '';
@@ -710,16 +708,16 @@ export class AtividadeComponent implements OnInit{
     this.anexoService.downloadAnexoPorId(id).subscribe(
       (blob: Blob | MediaSource) => {
         const url = window.URL.createObjectURL(blob);
-  
+
         const a = document.createElement('a');
         a.href = url;
         a.download = anexo.fileName;
-  
+
         // Disparar o clique programaticamente para iniciar o download
         a.click();
-  
+
         window.URL.revokeObjectURL(url);
-  
+
         // Remover o elemento após o download
         if (a.remove) {
           a.remove();
@@ -750,20 +748,20 @@ export class AtividadeComponent implements OnInit{
   //Edição
   editActivity() {
     this.isEditing = true;
-    this.displayActivityHeaderData=true;
+    this.displayActivityHeaderData = true;
     this.setContent();
     this.showWarningToastr("ATENÇÃO: Fechar esta janela apagará todas as suas alterações");
-      this.isDisabled = false;
-      this.activityForm.enable();
-      this.firstHeaderButton = 'Salvar';
-      this.firstButtonColor = 'linear-gradient(#559958, #418856)';
-      this.secondHeaderButton = "Cancelar";
-      this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)';
+    this.isDisabled = false;
+    this.activityForm.enable();
+    this.firstHeaderButton = 'Salvar';
+    this.firstButtonColor = 'linear-gradient(#559958, #418856)';
+    this.secondHeaderButton = "Cancelar";
+    this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)';
 
   }
 
   saveEdit() {
-    if(this.activityForm.get('description')?.value===null || this.activityForm.get('courses')?.value === null || this.activityForm.get('complexities')?.value===null || this.activityForm.get('candidatureDate')?.value===null || this.activityForm.get('submitDate')?.value===null){
+    if (this.activityForm.get('description')?.value === null || this.activityForm.get('courses')?.value === null || this.activityForm.get('complexities')?.value === null || this.activityForm.get('candidatureDate')?.value === null || this.activityForm.get('submitDate')?.value === null) {
       console.log(this.file_store);
       this.showErrorToastr("Preencha todos os campos antes de salvar!");
     } else {
@@ -781,17 +779,17 @@ export class AtividadeComponent implements OnInit{
         (response: Atividade) => {
           console.log('Atividade salva com sucesso', response);
           this.showSuccessToastr("Atividade salva!");
-      },
-      (error: any) => {
-        console.error('Erro ao enviar arquivo', error);
-      }
-    );
+        },
+        (error: any) => {
+          console.error('Erro ao enviar arquivo', error);
+        }
+      );
 
-    this.isEditing = false;
-    this.displayActivityHeaderData=false;
-    this.setContent(); // essa sai também
+      this.isEditing = false;
+      this.displayActivityHeaderData = false;
+      this.setContent(); // essa sai também
 
-    this.setHeaderContent(); // essa fica
+      this.setHeaderContent(); // essa fica
 
     }
   }
@@ -802,21 +800,21 @@ export class AtividadeComponent implements OnInit{
     let usuarioLogado = this.usuarioLogado;
     let autor = this.atividade.autor;
     let orientador = this.atividade.projeto?.orientador;
-    var monitores = [] ;
-    if(this.atividade.projeto?.monitores){
-      for (let i = 0; i< this.atividade.projeto?.monitores?.length; i++){
+    var monitores = [];
+    if (this.atividade.projeto?.monitores) {
+      for (let i = 0; i < this.atividade.projeto?.monitores?.length; i++) {
         monitores.push(this.atividade.projeto?.monitores[i].id);
       }
-   }
+    }
 
 
-   if (usuarioLogado.id===autor?.id || usuarioLogado.id === orientador?.id || monitores.some(monitor => monitor === usuarioLogado.id)){
-    console.log("true");
-    return true;
-   } else {
-    console.log("false");
-    return false;
-   }
+    if (usuarioLogado.id === autor?.id || usuarioLogado.id === orientador?.id || monitores.some(monitor => monitor === usuarioLogado.id)) {
+      console.log("true");
+      return true;
+    } else {
+      console.log("false");
+      return false;
+    }
 
 
     // if (
@@ -847,17 +845,17 @@ export class AtividadeComponent implements OnInit{
   }
 
   sendHoursDispute() {
-    if(this.atividade.complexidade === this.activityForm.get('complexitiesContest')?.value){
+    if (this.atividade.complexidade === this.activityForm.get('complexitiesContest')?.value) {
       this.showErrorToastr("Complexidade Proposta não pode ser igual a complexidade original!");
     } else {
       let contestacaoHoras = new ContestacaoCargaHoraria();
-      contestacaoHoras.autor= this.usuarioLogado;
+      contestacaoHoras.autor = this.usuarioLogado;
       contestacaoHoras.descricao = this.activityForm.get('description')?.value;
-      contestacaoHoras.dataContestacao=new Date();
-      contestacaoHoras.tipoContestacao="CARGA_HORARIA";
-      contestacaoHoras.status='ABERTA';
-      if(this.atividade.complexidade?.cargaHorariaMaxima){
-        contestacaoHoras.cargaHorariaOriginal=this.atividade.complexidade?.cargaHorariaMaxima;
+      contestacaoHoras.dataContestacao = new Date();
+      contestacaoHoras.tipoContestacao = "CARGA_HORARIA";
+      contestacaoHoras.status = 'ABERTA';
+      if (this.atividade.complexidade?.cargaHorariaMaxima) {
+        contestacaoHoras.cargaHorariaOriginal = this.atividade.complexidade?.cargaHorariaMaxima;
       }
       /**this.contestacaoCargaHorariaService.inserirContestacaoCargaHoraria(contestacaoHoras, undefined).subscribe( //guibor
         (res: ContestacaoCargaHoraria) => {
@@ -891,17 +889,17 @@ export class AtividadeComponent implements OnInit{
     this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)';
   }
 
-  sendExecutionDispute() { 
+  sendExecutionDispute() {
     let contestacaoExecucao = new Contestacao();
-    contestacaoExecucao.autor=this.usuarioLogado;
-    contestacaoExecucao.dataContestacao=new Date();
-    contestacaoExecucao.descricao=this.activityForm.get('description')?.value;
-    contestacaoExecucao.tipoContestacao='EXECUCAO';
-    contestacaoExecucao.status='ABERTA';
+    contestacaoExecucao.autor = this.usuarioLogado;
+    contestacaoExecucao.dataContestacao = new Date();
+    contestacaoExecucao.descricao = this.activityForm.get('description')?.value;
+    contestacaoExecucao.tipoContestacao = 'EXECUCAO';
+    contestacaoExecucao.status = 'ABERTA';
     this.contestacaoExecucaoService.inserirContestacao(contestacaoExecucao).subscribe(
       (res: Contestacao) => {
-        this.atividade.status="EXECUCAO_CONTESTADA";
-        this.atividade.contestacao=res;
+        this.atividade.status = "EXECUCAO_CONTESTADA";
+        this.atividade.contestacao = res;
         this.atividadeService.atualizarAtividade(this.atividade).subscribe(
           (res: Atividade) => {
             this.toastr.warning("Contestação de Execução enviada");
@@ -915,7 +913,7 @@ export class AtividadeComponent implements OnInit{
 
   //leitura e aprovação da contestação
   canApproveContest() {
-    if (this.usuarioLogado.id === this.atividade.projeto?.orientador?.id){
+    if (this.usuarioLogado.id === this.atividade.projeto?.orientador?.id) {
       return true;
     } else {
       return false;
@@ -934,7 +932,7 @@ export class AtividadeComponent implements OnInit{
     if (this.estado === 'Carga Horária Contestada') {
       this.readingHoursDispute = true;
     }
-    if (this.atividade.contestacao?.descricao){
+    if (this.atividade.contestacao?.descricao) {
       this.activityForm.get('description')!.setValue(this.atividade.contestacao?.descricao);
     }
     this.setHeaderContent();
@@ -943,10 +941,10 @@ export class AtividadeComponent implements OnInit{
 
   approveContest() {
 
-    if(this.atividade.status==='CARGA_HORARIA_CONTESTADA'){
-      let contestacao=this.atividade.contestacaoCargaHoraria;
-      this.contestacao.status='DEFERIDA';
-      if(contestacao){
+    if (this.atividade.status === 'CARGA_HORARIA_CONTESTADA') {
+      let contestacao = this.atividade.contestacaoCargaHoraria;
+      this.contestacao.status = 'DEFERIDA';
+      if (contestacao) {
         this.contestacaoCargaHorariaService.atualizarContestacaoCargaHoraria(contestacao).subscribe(
           (res: ContestacaoCargaHoraria) => {
             this.atividade.contestacaoCargaHoraria=res;
@@ -962,40 +960,60 @@ export class AtividadeComponent implements OnInit{
         )
       }
 
-    } else if (this.atividade.status==='EXECUCAO_CONTESTADA'){
-      let contestacao=this.atividade.contestacao;
-      this.contestacao.status='DEFERIDA';
-      if(contestacao){
+    } else if (this.atividade.status === 'EXECUCAO_CONTESTADA') {
+      let contestacao = this.atividade.contestacao;
+      this.contestacao.status = 'DEFERIDA';
+      if (contestacao) {
+        this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
+          (res: Contestacao) => {
+            this.atividade.contestacao = res;
+            this.atividade.status = 'FINALIZADA';
+            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+              (res: Atividade) => {
+                this.toastr.success("Contestação Aprovada!");
+                this.onNoClick();
+                this.isReadingContest = false;
+
+              }
+            )
+          }
+        )
+      }
+
+    }
+  }
+
+  refuseContest() {
+    if (this.atividade.status === 'CARGA_HORARIA_CONTESTADA') {
+      let contestacao = this.atividade.contestacaoCargaHoraria;
+      this.contestacao.status = 'INDEFERIDA';
+      if (contestacao) {
+        this.contestacaoCargaHorariaService.atualizarContestacaoCargaHoraria(contestacao).subscribe(
+          (res: ContestacaoCargaHoraria) => {
+            this.atividade.contestacaoCargaHoraria=res;
+            this.atividade.status='FINALIZADA';
+            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+              (res: Atividade) => {
+                this.toastr.warning("Contestação Recusada!");
+                this.onNoClick();
+                this.isReadingContest = false;
+
+              }
+            )
+          }
+        )
+      }
+
+    } else if (this.atividade.status === 'EXECUCAO_CONTESTADA') {
+      let contestacao = this.atividade.contestacao;
+      this.contestacao.status = 'INDEFERIDA';
+      if (contestacao) {
         this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
           (res: Contestacao) => {
             this.atividade.contestacao=res;
             this.atividade.status='FINALIZADA';
             this.atividadeService.atualizarAtividade(this.atividade).subscribe(
               (res: Atividade) => {
-                this.toastr.success("Contestação Aprovada!");
-                this.onNoClick();
-                this.isReadingContest = false;
-
-              }
-            )
-          }
-        )
-    }
-
-    }
-}
-
-  refuseContest() {
-    if(this.atividade.status==='CARGA_HORARIA_CONTESTADA'){
-      let contestacao=this.atividade.contestacaoCargaHoraria;
-      this.contestacao.status='INDEFERIDA';
-      if(contestacao){
-        this.contestacaoCargaHorariaService.atualizarContestacaoCargaHoraria(contestacao).subscribe(
-          (res: ContestacaoCargaHoraria) => {
-            this.atividade.contestacaoCargaHoraria=res;
-            this.atividade.status='EM_EXECUCAO';
-            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
-              (res: Atividade) => {
                 this.toastr.warning("Contestação Recusada!");
                 this.onNoClick();
                 this.isReadingContest = false;
@@ -1005,26 +1023,6 @@ export class AtividadeComponent implements OnInit{
           }
         )
       }
-
-    } else if (this.atividade.status==='EXECUCAO_CONTESTADA'){
-      let contestacao=this.atividade.contestacao;
-      this.contestacao.status='INDEFERIDA';
-      if(contestacao){
-        this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
-          (res: Contestacao) => {
-            this.atividade.contestacao=res;
-            this.atividade.status='EM_EXECUCAO';
-            this.atividadeService.atualizarAtividade(this.atividade).subscribe(
-              (res: Atividade) => {
-                this.toastr.warning("Contestação Recusada!");
-                this.onNoClick();
-                this.isReadingContest = false;
-
-              }
-            )
-          }
-        )
-    }
     }
   }
 
@@ -1047,7 +1045,7 @@ export class AtividadeComponent implements OnInit{
     this.activityForm.setValue({
       //activityName: "",
       description: "",
-      courses:[""],
+      courses: [""],
       competences: [""],
       complexities: "",
       candidatureDate: "",
@@ -1079,7 +1077,7 @@ export class AtividadeComponent implements OnInit{
     this.activityForm.setValue({
       //activityName: "",
       description: "",
-      courses:[""],
+      courses: [""],
       competences: [""],
       complexities: "",
       candidatureDate: "",
@@ -1112,16 +1110,16 @@ export class AtividadeComponent implements OnInit{
     // }
 
     let relatorio = new RelatorioDeConclusao();
-    relatorio.descricao=this.activityForm.get('description')?.value;
+    relatorio.descricao = this.activityForm.get('description')?.value;
 
     this.relatoriodeConclusaoService.inserirRelatorioDeConclusao(relatorio).subscribe(
       (res: RelatorioDeConclusao) => {
-        let reportId= res.id;
-        if(reportId){
-          for(let i = 0; i< this.file_store.length;i++){
-            this.anexoService.inserirAnexoRelatorio(this.file_store[i],reportId).subscribe;
+        let reportId = res.id;
+        if (reportId) {
+          for (let i = 0; i < this.file_store.length; i++) {
+            this.anexoService.inserirAnexoRelatorio(this.file_store[i], reportId).subscribe;
           }
-          this.atividade.relatorioDeConclusao=res;
+          this.atividade.relatorioDeConclusao = res;
           console.log("Relatorio de conclusao BS", this.atividade)
           this.atividadeService.atualizarAtividade(this.atividade).subscribe(
             (res: Atividade) => {
@@ -1140,7 +1138,7 @@ export class AtividadeComponent implements OnInit{
   }
 
   approveReport() {
-    this.atividade.status='FINALIZADA';
+    this.atividade.status = 'FINALIZADA';
     this.atividadeService.atualizarAtividade(this.atividade).subscribe(
       (res: Atividade) => {
         this.toastr.success("Atividade Concluída!");
@@ -1156,16 +1154,16 @@ export class AtividadeComponent implements OnInit{
 
   /** CERTIFICADO */
 
-  generateCertificate(){
+  generateCertificate() {
     let certificado = new Certificado();
-    if(this.atividade.projeto){
-      certificado.projeto=this.atividade.projeto.nome;
+    if (this.atividade.projeto) {
+      certificado.projeto = this.atividade.projeto.nome;
     }
-    if (this.atividade.complexidade){
-     certificado.horas=this.atividade.complexidade?.cargaHorariaMaxima
+    if (this.atividade.complexidade) {
+      certificado.horas = this.atividade.complexidade?.cargaHorariaMaxima
     }
-    if (this.atividade.projeto?.orientador){
-      certificado.orientador=this.atividade.projeto?.orientador.nome;
+    if (this.atividade.projeto?.orientador) {
+      certificado.orientador = this.atividade.projeto?.orientador.nome;
     }
 
 
@@ -1173,16 +1171,16 @@ export class AtividadeComponent implements OnInit{
   }
 
   generateCerticatePdf() {
-    if(this.usuarioLogado.id===this.atividade.executor?.id){
+    if (this.usuarioLogado.id === this.atividade.executor?.id) {
       let aluno: Aluno = new Aluno();
       this.alunoService.buscarAlunoPorId(this.atividade.executor.id).subscribe(
-        (res: Aluno)=>{
+        (res: Aluno) => {
           aluno = res;
 
         }
       )
 
-      }
+    }
 
     let grr = 20193878;
     let fullGrr = "GRR" + grr;
@@ -1229,7 +1227,7 @@ export class AtividadeComponent implements OnInit{
 
   compareGraduacoes(g1: any, g2: any): boolean {
     return g1 && g2 ? g1.id === g2.id : g1 === g2;
-}
+  }
 
 
   compareComplexidades(c1: any, c2: any): boolean {

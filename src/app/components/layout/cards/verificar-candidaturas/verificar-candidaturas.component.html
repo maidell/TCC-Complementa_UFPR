@@ -16,17 +16,16 @@
 				<mat-cell *matCellDef="let row" class="combined-content">{{row[column.key]}} <span
 						class="suffix">{{row[column.suffix]}}</span></mat-cell>
 			</ng-container>
-
-
-			<!-- botão dinamico adicionar/remover aluno do projeto. utiliza a função isIncluido para apresentar os botões as funções adicionarAoProjeto e removerDoProjeto. se ja tiver adicionado aparece "remover" se não "adicionar"-->
 			<ng-container matColumnDef="button">
 				<mat-header-cell *matHeaderCellDef mat-sort-header> </mat-header-cell>
 				<mat-cell *matCellDef="let row">
-					<button *ngIf="!isIncluido(row)" (click)="removerMonitor(row)" mat-raised-button
-						class="custom-buttonTwo {{colorButtonTwo}}"><mat-icon>delete</mat-icon>
+					<!-- botão aprovar candidatura -->
+					<button mat-raised-button class="button custom-button"
+						(click)="aprovar(row)">{{buttonOne}}
 					</button>
-					<button *ngIf="isIncluido(row)" (click)="tornarMonitor(row)" mat-raised-button
-						class="custom-button {{colorButtonOne}}"><mat-icon>person_add</mat-icon>
+					<!-- botão recusar candidatura -->
+					<button mat-raised-button class="button custom-buttonTwo"
+						(click)="recusar(row)"><mat-icon>delete</mat-icon>
 					</button>
 				</mat-cell>
 			</ng-container>
