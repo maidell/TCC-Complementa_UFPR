@@ -17,7 +17,7 @@
 h1,
 .close-button {
 	margin: 10px;
-    
+
 }
 
 .input-form {
@@ -25,10 +25,12 @@ h1,
     padding-top: 10px;
 	mat-form-field {
 		margin-left: 15px;
-		width: 12rem;
+		width: 20rem;
 	}
 }
-
+mat-form-field{
+	flex:1;
+}
 
 mat-card-content {
 	background: #EEF5F9;
@@ -46,8 +48,8 @@ mat-card-content {
 	border-radius: 20px;
 }
 
-.delete-button {
-	background: linear-gradient(#C7433F, #C7241F);
+.buttonServ {
+	background: linear-gradient(#46c8e4, #48a2e7);
 	color: white;
 	margin: 5px;
 	border-radius: 20px;
