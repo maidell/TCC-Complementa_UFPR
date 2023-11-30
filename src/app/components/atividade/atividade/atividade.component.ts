@@ -628,9 +628,15 @@ export class AtividadeComponent implements OnInit {
           height: '500px',
           data: this.atividade.candidatos
         });
-        dialogRef.afterClosed().subscribe(result => {
-          console.log('Dialog result: ${result}');
-        });
+        dialogRef.componentInstance.usuarioAprovado.subscribe((aluno: Aluno) => {
+          this.approveCandidature(aluno);
+          console.log(aluno);
+       });
+       dialogRef.componentInstance.usuarioRemovido.subscribe((aluno: Aluno) => {
+        this.removeCandidature(aluno);
+        console.log(aluno);
+     });
+
       } catch (error) {
         this.showErrorToastr("Erro ao abrir tela de candidaturas");
       }
@@ -655,6 +661,29 @@ export class AtividadeComponent implements OnInit {
       (res: Atividade) => {
         this.toastr.success("Candidatura registrada com sucesso!");
         this.onNoClick();
+      }
+    )
+  }
+
+  approveCandidature(aluno: Aluno){
+    let index = this.atividade.candidatos!.indexOf(aluno);
+    this.atividade.candidatos?.splice(index,1);
+    this.atividade.executor=aluno;
+    this.atividade.status='EM_EXECUCAO';
+    this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+      (res: Atividade) => {
+        this.showSuccessToastr("Candidatura Aceita!");
+        this.onNoClick();
+      }
+    )
+  }
+
+  removeCandidature(aluno: Aluno){
+    let index = this.atividade.candidatos!.indexOf(aluno);
+    this.atividade.candidatos = []
+    this.atividadeService.atualizarAtividade(this.atividade).subscribe(
+      (res: Atividade)=>{
+        this.showInfoToastr("Candidato Removido!");
       }
     )
   }
