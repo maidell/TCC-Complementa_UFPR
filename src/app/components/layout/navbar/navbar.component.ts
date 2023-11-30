@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../auth/services/login.service';
 import { ServidoresComponent } from 'src/app/components/pages';
 import { MatDialog } from '@angular/material/dialog';
 import { Graduacao, Orientador, Usuario } from 'src/app/shared';
 import { OrientadorService } from 'src/app/services/orientador/services/orientador.service';
-import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
 
 
 @Component({
@@ -18,24 +17,33 @@ export class NavbarComponent {
   exibir: boolean = true;
   userRole: string = ''; // Altere para o perfil do usuário logado:
   // 'ALUNO' | 'SERVIDOR' | 'MONITOR' | 'ORIENTADOR' | 'COORDENADOR' | 'SERVIDOR_COORDENADOR' |'ADMIN';
-  graduacao!: Graduacao;
+  graduacao: Graduacao = new Graduacao();
   usuarioLogado: Usuario = new Usuario();
-  
+
   constructor(
     public dialog: MatDialog,
     private router: Router,
     private loginService: LoginService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private orientadorService: OrientadorService,
-    private graduacaoService: GraduacaoService
-  ) {
-    }
+    private orientadorService: OrientadorService
+  ) { }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(ServidoresComponent, {
+      minWidth: '50%',
+      data: { idGrad: this.graduacao.id, idCoord: this.usuarioLogado.id },
+
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    })
+  }
 
   ngOnInit(): void {
     if (this.loginService.usuarioLogado) {
       this.userRole = this.loginService.usuarioLogado.papel;
       this.exibir = true;
       this.usuarioLogado = this.loginService.usuarioLogado;
+      this.instanciarGraduacao(this.usuarioLogado);
     } else {
       this.loginService.usuarioLogado$.subscribe(usuario => {
         if (usuario) {
@@ -51,18 +59,9 @@ export class NavbarComponent {
     this.orientadorService.buscarOrientadorPorId(user.id).subscribe(
       (res: Orientador) => {
         this.graduacao = res.graduacao;
-        this.changeDetectorRef.detectChanges();
       },
-      (err) => {console.log(err);}
+      (err) => {}
     );
-  }
-
-  openDialog(){
-    this.router.navigate([`servidor/listar/${this.graduacao.id}`])
-  }
-
-  meuPefilEditar(){
-    this.router.navigate([`/${this.userRole.toLowerCase()}/editar/${this.usuarioLogado.id}`]);
   }
 
   checkRole(role: string): boolean {

@@ -7,7 +7,7 @@ import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { LoginService } from '../../auth/services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { ServidorService } from '../../../services/servidor/services/servidor.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { OrientadorService } from '../../../services/orientador/services/orientador.service';
 import { ServidorCoordenador } from 'src/app/shared/models/servidor-coordenador.model';
 import { GraduacaoService } from 'src/app/services/graduacao/services/graduacao.service';
@@ -34,19 +34,23 @@ export class ServidoresComponent implements OnInit, OnDestroy {
   obs!: Observable<any>;
   dataSource!: MatTableDataSource<Servidor>;
   constructor(
+    @Inject(DIALOG_DATA) public data: any,
     private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
     private loginService: LoginService,
     private servidorService: ServidorService,
     private orientadorService: OrientadorService,
     private graduacaoService: GraduacaoService,
-    public toastr: ToastrService,
-    private route: ActivatedRoute
+    public toastr: ToastrService
   ) {
     if (!this.loginService.usuarioLogado) {
       this.router.navigate([`login`]);
     }
-    this.idGrad = +route.snapshot.params['id'];
+    if(data){
+      this.idGrad = data.idGrad;
+      this.idCoord = data.idCoord;
+    }
+    this.dataSource = new MatTableDataSource(this.servidores);
   }
 
   ngOnInit(): void {
@@ -59,6 +63,7 @@ export class ServidoresComponent implements OnInit, OnDestroy {
       this.router.navigate([`${this.usuarioLogado.papel}`]);
     }
     forkJoin({
+
       graduacao: this.instanciarGraduacao(this.idGrad),
       coord: this.instanciarCoordenador(this.idCoord),
       servidores: this.listarServidores(),
