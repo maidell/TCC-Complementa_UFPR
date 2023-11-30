@@ -42,17 +42,14 @@
                     <mat-form-field class="description">
                         <mat-label>{{descriptionLabel}}</mat-label>
                         <textarea matInput class="description-field" rows="15"
-                            formControlName="description" [formControl]="description" required></textarea>
-                        <mat-error *ngIf="description.errors?.['required']  && description.touched">
-                            A descrição é obrigatória!
-                        </mat-error>    
+                            formControlName="description"  required></textarea>
                     </mat-form-field>
                 </div>
                 <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
 
-                    <mat-form-field class="competences" *ngIf="!fillingReport">
+                    <!-- <mat-form-field class="competences" *ngIf="!fillingReport">
                         <mat-label>Cursos</mat-label>
-                        <mat-select [(ngModel)]="graduacao" name="curso" formControlName="courses" [formControl]="courses" required multiple>
+                        <mat-select [(value)]="graduacao[0]" name="curso" formControlName="courses" required>
                           <mat-option *ngFor="let option of options" [value]="option">
                             {{ option.nome }}
                           </mat-option>
@@ -60,17 +57,26 @@
                         <mat-error *ngIf="courses.errors?.['required'] && courses.touched">
                           Seleção dos cursos é obrigatória!
                         </mat-error>
-                      </mat-form-field>
+                      </mat-form-field> -->
+                      <mat-form-field class="competences" *ngIf="!fillingReport">
+                        <mat-label>Cursos</mat-label>
+                        <mat-select [(value)]="graduacao" name="curso" formControlName="courses" required multiple [compareWith]="compareGraduacoes">
+                            <mat-option *ngFor="let option of options" [value]="option">
+                                {{ option.nome }}
+                            </mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
                     <mat-form-field class="competences" *ngIf="fillingReport">
                         <mat-label>Competências</mat-label>
-                        <mat-select [(value)]="atividade.competencia" formControlName="competences" [formControl]="competences">
+                        <mat-select [(value)]="atividade.competencia" formControlName="competences">
                             <mat-option *ngFor="let c of competencias" [value]="c">{{c.nome}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                         <mat-form-field class="complexities" >
                         <mat-label>Complexidade</mat-label>
-                        <mat-select [(value)]="complexidadeAtividade" formControlName="complexities" [formControl]="complexities" [compareWith]="compareComplexidades">
-                            <mat-option *ngFor="let c of complexidades" [value]="c" [formControl]="complexityName">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
+                        <mat-select [(value)]="complexidadeAtividade" formControlName="complexities" [compareWith]="compareComplexidades">
+                            <mat-option *ngFor="let c of complexidades" [value]="c">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
                         </mat-select>
 
                     </mat-form-field>
@@ -78,13 +84,13 @@
                 <div class="dates" [ngStyle]="{'display': displayDates}">
                     <mat-form-field class="date-picker" id="first">
                         <mat-label>Data Limite Candidatura</mat-label>
-                        <input matInput [matDatepicker]="picker1" formControlName="candidatureDate" [formControl]="candidatureDate">
+                        <input matInput [matDatepicker]="picker1" formControlName="candidatureDate">
                         <mat-datepicker-toggle matIconSuffix [for]="picker1" [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
                     </mat-form-field>
                     <mat-form-field class="date-picker" id="second">
                         <mat-label>Data da Entrega</mat-label>
-                        <input matInput [matDatepicker]="picker2" formControlName="submitDate" [formControl]="submitDate">
+                        <input matInput [matDatepicker]="picker2" formControlName="submitDate">
                         <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
@@ -99,7 +105,7 @@
                             <button mat-icon-button matSuffix (click)="f_input.click()">
                         <mat-icon>attach_file</mat-icon>
                         </button>
-                            <input type="text" readonly matInput [formControl]="uploadFile" />
+                            <input type="text" readonly matInput formControlName="uploadFile"/>
                             <input
                         type="file"
                         multiple
@@ -112,12 +118,12 @@
                 <div *ngIf="disputingHours || readingHoursDispute" class="dispute-hours">
                     <mat-form-field class="hours-field">
                         <mat-label>Complexidade Oferecida</mat-label>
-                        <input readonly [disabled]="true" matInput [formControl]="disputedHoursValue" formControlName="disputedHoursValue">
+                        <input readonly [disabled]="true" matInput formControlName="disputedHoursValue" formControlName="disputedHoursValue">
                     </mat-form-field>
                     <mat-form-field class="hours-field" >
                         <mat-label>Complexidade</mat-label>
-                        <mat-select formControlName="complexitiesContest" [formControl]="complexitiesContest">
-                            <mat-option *ngFor="let c of complexidades" [value]="c" [formControl]="complexityName">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
+                        <mat-select formControlName="complexitiesContest" formControlName="complexitiesContest">
+                            <mat-option *ngFor="let c of complexidades" [value]="c" formControlName="complexityName">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
                         </mat-select>
 
                     </mat-form-field>
@@ -128,7 +134,7 @@
                         <button mat-icon-button matSuffix (click)="f_input.click()">
                     <mat-icon>attach_file</mat-icon>
                   </button>
-                        <input type="text" readonly matInput [formControl]="uploadFile" />
+                        <input type="text" readonly matInput formControlName="uploadFile" />
                         <input
                     type="file"
                     multiple

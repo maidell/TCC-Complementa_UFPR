@@ -13,6 +13,7 @@ import { ServidoresComponent } from '../pages';
 import { ListarAlunosComponent } from '../layout/listar-alunos/listar-alunos.component';
 import { InsertMonitorComponent } from '../layout/cards/insert-monitor/insert-monitor.component';
 import { OrientadorService } from 'src/app/services/orientador/services/orientador.service';
+import { AtividadeComponent } from '../atividade/atividade/atividade.component';
 
 @Component({
   selector: 'app-projeto',
@@ -268,7 +269,22 @@ export class ProjetoComponent implements OnInit {
   }
   criarAtividade() { }
   editarAtividade() { }
-  novaAtividade() { }
+  novaAtividade() {       
+    const dialogRef = this.dialog.open(AtividadeComponent, {
+    maxWidth: this.dialogWidth(),
+    data: { atividade: new Atividade(), projeto: this.projeto }
+  }); 
+}
+
+
+
+  dialogWidth() {
+    if (window.innerWidth <= 768) {
+      return "100vw";
+    } else {
+      return "80vw";
+    }
+  }
 
 
   adicionarAlunosEMonitores(alunosDoProjeto: Aluno[]) {
