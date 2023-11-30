@@ -28,7 +28,8 @@ public class RelatorioDeConclusao implements Serializable{
     @Column(name = "descricao")
     private String descricao;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "relatorioDeConclusao")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "anexos_relatorio")
     private List<Anexo> anexos;
     
     public RelatorioDeConclusao() {

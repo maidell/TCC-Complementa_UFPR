@@ -84,6 +84,7 @@ export class ListarUsuariosComponent implements OnInit {
       }
     }
   }
-  openDialog(atividade: Usuario) {
+  openDialog(usuario: Usuario) {
+    this.router.navigate([`admin/editar/${usuario.id}`]);
   }
 }

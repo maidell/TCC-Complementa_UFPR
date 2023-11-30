@@ -83,6 +83,7 @@ export class EditarUsuariosComponent implements OnInit {
         this.mostrarValidacaoSenha = true;
       }
     } else {
+      this.instanciarDetalhes(this.idUsuario);
       this.mostrarValidacaoSenha = false;
       this.senhaAtualValida = true;
     }
