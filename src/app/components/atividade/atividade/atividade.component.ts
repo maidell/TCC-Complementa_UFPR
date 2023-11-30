@@ -179,7 +179,7 @@ export class AtividadeComponent implements OnInit {
       this.atividade = data.atividade;
       this.complexidadeAtividade = data.atividade.complexidade;
       this.graduacao = data.atividade.graduacoes;
-      this.comentarios = data.atividade.comentarios.reverse();
+      this.comentarios = data.atividade.comentarios;
 
     }
     if (data.projeto) {
@@ -521,7 +521,7 @@ export class AtividadeComponent implements OnInit {
             this.setHeaderContent();
           } else {
             this.disputeExecution();
-          }  
+          }
         }
         break;
       case "CARGA_HORARIA_CONTESTADA": case "EXECUCAO_CONTESTADA":
@@ -1063,7 +1063,7 @@ export class AtividadeComponent implements OnInit {
     this.projectName = 'Relatório de Conclusão';
     this.descriptionLabel = "Relatório de Conclusão";
     this.firstHeaderButton = "Enviar Relatório";
-  
+
 
     this.displayStatus = false;
     this.fillingReport = true;
