@@ -64,13 +64,21 @@ public class AnexoREST {
 	public ResponseEntity<AnexoDTO> uploadAnexoAtividade(@PathVariable Long atividadeId, @RequestParam("file") MultipartFile file) {
 			String fileName = generateRandom() + "-" + file.getOriginalFilename();
 	        String fileType = file.getContentType();
-	        Path path = Paths.get(UPLOAD_DIRECTORY + fileName);
+	        Path directoryPath = Paths.get(UPLOAD_DIRECTORY);
+	        if (Files.notExists(directoryPath)) {
+	            try {
+					Files.createDirectories(directoryPath);
+				} catch (IOException e) {
+					e.printStackTrace();
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+				}
+	        }
 	        
 	        try (InputStream inputStream = file.getInputStream()) {
-	            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+	            Files.copy(inputStream, directoryPath, StandardCopyOption.REPLACE_EXISTING);
 		        Anexo anexo = new Anexo();
 		        anexo.setFileName(fileName);
-		        anexo.setFilePath(path.toString());
+		        anexo.setFilePath(directoryPath.toString());
 		        anexo.setFileType(fileType);
 		        Optional<Atividade> atividade = atRepo.findById(atividadeId);
 				if (!atividade.isPresent()) {
@@ -91,12 +99,20 @@ public class AnexoREST {
 	public ResponseEntity<AnexoDTO> uploadAnexoRelatorioDeConclusao(@PathVariable Long relatorioId, @RequestParam("file") MultipartFile file) {
 	    	String fileName = generateRandom() + "-" + file.getOriginalFilename();
 	        String fileType = file.getContentType();
-	        Path path = Paths.get(UPLOAD_DIRECTORY + fileName);
+	        Path directoryPath = Paths.get(UPLOAD_DIRECTORY);
+	        if (Files.notExists(directoryPath)) {
+	            try {
+					Files.createDirectories(directoryPath);
+				} catch (IOException e) {
+					e.printStackTrace();
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+				}
+	        }
 	        try (InputStream inputStream = file.getInputStream()) {
-	            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+	            Files.copy(inputStream, directoryPath, StandardCopyOption.REPLACE_EXISTING);
 		        Anexo anexo = new Anexo();
 		        anexo.setFileName(fileName);
-		        anexo.setFilePath(path.toString());
+		        anexo.setFilePath(directoryPath.toString());
 		        anexo.setFileType(fileType);
 	        
 	        Optional<RelatorioDeConclusao> relatorio = rcRepo.findById(relatorioId);
