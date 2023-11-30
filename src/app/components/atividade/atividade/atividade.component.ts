@@ -321,9 +321,9 @@ export class AtividadeComponent implements OnInit{
 
           } else {
             this.firstHeaderButton = 'Concluir';
-            this.firstButtonWidth = '100%';
+            this.secondHeaderButton = "Contestar Carga Horária";
             this.firstButtonColor = 'linear-gradient(#2494D3,#0076D0)';
-            this.displaySecondHeaderButton = 'none';
+            this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)';
             if (this.disputingHours) {
               this.firstHeaderButton = "Contestar Carga Horária";
               this.firstButtonColor = 'linear-gradient(#CC6E00,#D95409)';
@@ -530,7 +530,7 @@ export class AtividadeComponent implements OnInit{
         break;
       case "EM_EXECUCAO":
 
-        if (this.fillingReport) {
+        if(!this.canUserEdit){
           this.disputeHours();
         } else {
           if (this.disputingExecution) {
@@ -539,7 +539,7 @@ export class AtividadeComponent implements OnInit{
             this.setHeaderContent();
           } else {
             this.disputeExecution();
-          }
+          }  
         }
         break;
       case "CARGA_HORARIA_CONTESTADA": case "EXECUCAO_CONTESTADA":
@@ -950,7 +950,7 @@ export class AtividadeComponent implements OnInit{
         this.contestacaoCargaHorariaService.atualizarContestacaoCargaHoraria(contestacao).subscribe(
           (res: ContestacaoCargaHoraria) => {
             this.atividade.contestacaoCargaHoraria=res;
-            this.atividade.status='FINALIZADA';
+            this.atividade.status='EM_EXECUCAO';
             this.atividadeService.atualizarAtividade(this.atividade).subscribe(
               (res: Atividade) => {
                 this.toastr.success("Contestação Aprovada!");
@@ -993,7 +993,7 @@ export class AtividadeComponent implements OnInit{
         this.contestacaoCargaHorariaService.atualizarContestacaoCargaHoraria(contestacao).subscribe(
           (res: ContestacaoCargaHoraria) => {
             this.atividade.contestacaoCargaHoraria=res;
-            this.atividade.status='FINALIZADA';
+            this.atividade.status='EM_EXECUCAO';
             this.atividadeService.atualizarAtividade(this.atividade).subscribe(
               (res: Atividade) => {
                 this.toastr.warning("Contestação Recusada!");
@@ -1013,7 +1013,7 @@ export class AtividadeComponent implements OnInit{
         this.contestacaoExecucaoService.atualizarContestacao(contestacao).subscribe(
           (res: Contestacao) => {
             this.atividade.contestacao=res;
-            this.atividade.status='FINALIZADA';
+            this.atividade.status='EM_EXECUCAO';
             this.atividadeService.atualizarAtividade(this.atividade).subscribe(
               (res: Atividade) => {
                 this.toastr.warning("Contestação Recusada!");
@@ -1036,9 +1036,8 @@ export class AtividadeComponent implements OnInit{
     this.projectName = 'Relatório de Conclusão';
     this.descriptionLabel = "Relatório de Conclusão";
     this.firstHeaderButton = "Enviar Relatório";
-    this.displaySecondHeaderButton = '';
-    this.secondHeaderButton = "Contestar Carga Horária";
-    this.secondButtonColor = 'linear-gradient(#CC6E00, #D95409)';
+  
+
     this.displayStatus = false;
     this.fillingReport = true;
     this.displaySecondLine = 'none';

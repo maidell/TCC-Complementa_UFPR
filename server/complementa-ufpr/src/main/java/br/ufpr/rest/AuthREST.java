@@ -44,7 +44,6 @@ public class AuthREST {
 			if (!senhaValida) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}
-			System.err.println("Sucesso no login:" + usu.toString());
 			return ResponseEntity.ok(mapper.map(usu, UsuarioDTO.class));
 			
 		} catch (Exception e) {
