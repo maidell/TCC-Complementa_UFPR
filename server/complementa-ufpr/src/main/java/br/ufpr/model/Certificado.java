@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "certificado", uniqueConstraints = { @UniqueConstraint(columnNames = { "hash" }) })
+@Table(name = "certificado" )
 public class Certificado implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class Certificado implements Serializable{
 	private String projeto;
 	
 	@Column(name = "horas")
-	private double horas;
+	private int horas;
 	
 	@Column(name = "hash")
 	private String hash;
@@ -43,7 +43,7 @@ public class Certificado implements Serializable{
 		super();
 	}
 	
-    public Certificado(Long id, String nome, String orientador, String projeto, double horas, String hash) {
+    public Certificado(Long id, String nome, String orientador, String projeto, int horas, String hash) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -85,11 +85,11 @@ public class Certificado implements Serializable{
 		this.projeto = projeto;
 	}
 
-	public double getHoras() {
+	public int getHoras() {
 		return horas;
 	}
 
-	public void setHoras(double horas) {
+	public void setHoras(int horas) {
 		this.horas = horas;
 	}
 
