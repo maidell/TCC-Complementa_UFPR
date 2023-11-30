@@ -7,7 +7,7 @@ import br.ufpr.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
-	Optional<Usuario> findById(String id);
+	Optional<Usuario> findById(Long id);
 	
 	Optional<Usuario> findByEmail(String email);
 	

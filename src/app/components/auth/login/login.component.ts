@@ -78,6 +78,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate([`${usu.papel}`.toLowerCase()]);
           } else {
             this.message = 'Usuário/Senha inválidos.';
+            this.toastr.success("Usuário ou Senha inválidos");
           }
         });
     }

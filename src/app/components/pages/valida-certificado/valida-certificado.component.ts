@@ -23,8 +23,9 @@ export class ValidaCertificadoComponent implements OnInit{
     ) { }
 
   validarCertificado() {
-    if (this.hash.trim() !== '') {
-      this.certificadoService.buscarCertificadoPorHash(this.hash.trim())
+    const encodedHash = encodeURIComponent(this.hash.trim());
+    if (encodedHash !== '') {
+      this.certificadoService.buscarCertificadoPorHash(encodedHash)
         .subscribe(
           (certificado: Certificado) => {
             if (certificado && certificado.id) {
