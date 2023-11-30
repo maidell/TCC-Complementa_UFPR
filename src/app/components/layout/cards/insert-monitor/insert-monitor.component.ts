@@ -74,11 +74,67 @@ export class InsertMonitorComponent implements OnInit {
       this.dataSource.sort = this.sort;
     }
   }
-  removerMonitor(monitor: Monitor){}
-  //muda o aluno para monitor no projeto
-  tornarMonitor(monitor: Aluno){
-
+  removerMonitor(monitor: Monitor) {
+    if (this.projeto.alunos == null) {
+      this.projeto.alunos = [];
+    }
+    if (this.projeto.alunos.some(aluno => aluno.id === monitor.id)) {
+      console.log('Monitor já está na lista de alunos');
+      return;
+    }
+    if(this.projeto.monitores){
+      this.removerAlunoDaLista(this.projeto.monitores, monitor);
+    }
+    
+    monitor.incluido = false;
+    this.projeto.alunos.push(monitor);
+  
+    this.projetoService.atualizarProjeto(this.projeto).subscribe(
+      (projeto: Projeto) => {
+        this.projeto = projeto;
+        this.toastr.success('Monitor removido com sucesso!', 'Sucesso!');
+      },
+      (err) => {
+        console.log(err);
+        this.toastr.error('Erro ao remover monitor!', 'Erro!');
+      }
+    );
   }
+
+  tornarMonitor(monitor: Aluno) {
+    if (this.projeto.monitores == null) {
+      this.projeto.monitores = [];
+    }
+    if (this.projeto.monitores.some(aluno => aluno.id === monitor.id)) {
+      console.log('Aluno já é monitor');
+      return;
+    }
+    if(this.projeto.alunos){
+      this.removerAlunoDaLista(this.projeto.alunos, monitor);
+    }
+    
+    monitor.incluido = true;
+    this.projeto.monitores.push(monitor);
+  
+    this.projetoService.atualizarProjeto(this.projeto).subscribe(
+      (projeto: Projeto) => {
+        this.projeto = projeto;
+        this.toastr.success('Monitor adicionado com sucesso!', 'Sucesso!');
+      },
+      (err) => {
+        console.log(err);
+        this.toastr.error('Erro ao adicionar aluno!', 'Erro!');
+      }
+    );
+  }
+  
+  removerAlunoDaLista(lista: Aluno[], aluno: Aluno) {
+    const index = lista.findIndex(a => a.id === aluno.id);
+    if (index !== -1) {
+      lista.splice(index, 1);
+    }
+  }
+
   isIncluido(aluno: Aluno) {
     if (this.projeto.alunos == null) {
       this.projeto.alunos = [];
