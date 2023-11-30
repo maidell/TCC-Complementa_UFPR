@@ -24,6 +24,7 @@ import { ContestacaoCargaHorariaService } from 'src/app/services/contestacao-car
 import { ContestacaoService } from 'src/app/services/contestacao/services/contestacao.service';
 import { AlunoService } from 'src/app/services/aluno/services/aluno.service';
 import { CertificadoService } from 'src/app/services/certificado/services/certificado.service';
+import * as saveAs from 'file-saver';
 
 
 @Component({
@@ -192,7 +193,7 @@ export class AtividadeComponent implements OnInit{
       this.atividade=data.atividade;
       this.complexidadeAtividade=data.atividade.complexidade;
       this.graduacao=data.atividade.graduacoes;
-      this.comentarios=data.atividade.comentarios;
+      this.comentarios=data.atividade.comentarios.reverse();
 
     }
     if (data.projeto){
@@ -606,10 +607,12 @@ export class AtividadeComponent implements OnInit{
           novaAtividade=res;
           let id = novaAtividade.id;
           console.log(id);
-          if (res.id){
+          if (res.id && this.file_store.length!=0){
             for(let i=0;i< this.file_store.length;i++){
               console.log(this.file_store[i]);
-              this.anexoService.inserirAnexoAtividade(this.file_store[i], res.id).subscribe(
+              let file!: File;
+              file=this.file_store[i];
+              this.anexoService.inserirAnexoAtividade(file, res.id).subscribe(
                 (res: Anexo) => {
                   this.atividade.anexos?.push(res);
                   console.log(res);
@@ -707,14 +710,22 @@ export class AtividadeComponent implements OnInit{
     this.anexoService.downloadAnexoPorId(id).subscribe(
       (blob: Blob | MediaSource) => {
         const url = window.URL.createObjectURL(blob);
-        window.open(url);
+  
         const a = document.createElement('a');
         a.href = url;
         a.download = anexo.fileName;
-        document.body.appendChild(a);
+  
+        // Disparar o clique programaticamente para iniciar o download
         a.click();
+  
         window.URL.revokeObjectURL(url);
-        a.remove();
+  
+        // Remover o elemento após o download
+        if (a.remove) {
+          a.remove();
+        } else if (a.parentNode) {
+          a.parentNode.removeChild(a);
+        }
       },
       (error: any) => {
         this.toastr.error('Erro ao baixar o arquivo');

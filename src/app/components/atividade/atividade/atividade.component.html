@@ -97,7 +97,7 @@
                         <button mat-flat-button color="primary" [matMenuTriggerFor]="attachments" class="attachments" *ngIf="atividade.status!=''">Ver Anexos</button>
                         <mat-menu #attachments="matMenu" yPosition="above">
                             <div *ngFor="let a of atividade.anexos">
-                                <button mat-menu-item (click)="download(a.filePath, a.fileName)">{{a.fileName}}</button>
+                                <button mat-menu-item (click)="downloadAnexo(a.id, a)">{{a.fileName}}</button>
                             </div>
                         </mat-menu>
                         <mat-form-field class="attachment-field" *ngIf="atividade.status===''">
