@@ -19,35 +19,35 @@ public class ContestacaoCargaHoraria extends Contestacao{
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name = "carga_horaria_original")
-	private double cargaHorariaOriginal;
+	private Integer cargaHorariaOriginal;
 	
 	@Column(name = "carga_horaria_nova")
-	private double cargaHorariaNova;
+	private Integer cargaHorariaNova;
 
 	public ContestacaoCargaHoraria() {
 		super();
 	}
 
 	public ContestacaoCargaHoraria(Long id, String descricao, TipoContestacao tipoContestacao, Date dataContestacao, Status status,
-			Usuario autor, Atividade atividade, double cargaHorariaOriginal, double cargaHorariaNova) {
+			Usuario autor, Integer cargaHorariaOriginal, Integer cargaHorariaNova) {
 		super(id, descricao, tipoContestacao, dataContestacao, status, autor);
 		this.cargaHorariaOriginal = cargaHorariaOriginal;
 		this.cargaHorariaNova = cargaHorariaNova;
 	}
 
-	public double getCargaHorariaOriginal() {
+	public Integer getCargaHorariaOriginal() {
 		return cargaHorariaOriginal;
 	}
 
-	public void setCargaHorariaOriginal(double cargaHorariaOriginal) {
+	public void setCargaHorariaOriginal(Integer cargaHorariaOriginal) {
 		this.cargaHorariaOriginal = cargaHorariaOriginal;
 	}
 
-	public double getCargaHorariaNova() {
+	public Integer getCargaHorariaNova() {
 		return cargaHorariaNova;
 	}
 
-	public void setCargaHorariaNova(double cargaHorariaNova) {
+	public void setCargaHorariaNova(Integer cargaHorariaNova) {
 		this.cargaHorariaNova = cargaHorariaNova;
 	}
 	

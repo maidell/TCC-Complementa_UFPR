@@ -13,7 +13,7 @@
             <div class="activity-header-data">
                 <div *ngIf="!displayActivityHeaderData">
                     <div class="project-name">{{project.nome}}</div>
-                    <div class="activity-name" *ngIf="!fillingReport">{{atividade.nome}}</div>
+                    <div class="activity-name" *ngIf="!fillingReport && !disputingHours">{{atividade.nome}}</div>
                     <div class="activity-name" *ngIf="fillingReport && !disputingHours">Relatório de Conclusão</div>
                     <div class="activity-name" *ngIf="disputingHours">Contestação</div>
                 </div>
@@ -45,85 +45,88 @@
                             formControlName="description"  required></textarea>
                     </mat-form-field>
                 </div>
-                <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
+                <div [ngStyle]="{'display': showActivityFieldDispute}">
+                    <div class="second-line" [ngStyle]="{'display': displaySecondLine}">
 
-                    <!-- <mat-form-field class="competences" *ngIf="!fillingReport">
-                        <mat-label>Cursos</mat-label>
-                        <mat-select [(value)]="graduacao[0]" name="curso" formControlName="courses" required>
-                          <mat-option *ngFor="let option of options" [value]="option">
-                            {{ option.nome }}
-                          </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="courses.errors?.['required'] && courses.touched">
-                          Seleção dos cursos é obrigatória!
-                        </mat-error>
-                      </mat-form-field> -->
-                      <mat-form-field class="competences" *ngIf="!fillingReport">
-                        <mat-label>Cursos</mat-label>
-                        <mat-select [(value)]="graduacao" name="curso" formControlName="courses" required multiple [compareWith]="compareGraduacoes">
-                            <mat-option *ngFor="let option of options" [value]="option">
+                        <!-- <mat-form-field class="competences" *ngIf="!fillingReport">
+                            <mat-label>Cursos</mat-label>
+                            <mat-select [(value)]="graduacao[0]" name="curso" formControlName="courses" required>
+                              <mat-option *ngFor="let option of options" [value]="option">
                                 {{ option.nome }}
-                            </mat-option>
-                        </mat-select>
-
-                    </mat-form-field>
-                    <mat-form-field class="competences" *ngIf="fillingReport">
-                        <mat-label>Competências</mat-label>
-                        <mat-select [(value)]="atividade.competencia" formControlName="competences">
-                            <mat-option *ngFor="let c of competencias" [value]="c">{{c.nome}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                        <mat-form-field class="complexities" >
-                        <mat-label>Complexidade</mat-label>
-                        <mat-select [(value)]="complexidadeAtividade" formControlName="complexities" [compareWith]="compareComplexidades">
-                            <mat-option *ngFor="let c of complexidades" [value]="c">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
-                        </mat-select>
-
-                    </mat-form-field>
-                </div>
-                <div class="dates" [ngStyle]="{'display': displayDates}">
-                    <mat-form-field class="date-picker" id="first">
-                        <mat-label>Data Limite Candidatura</mat-label>
-                        <input matInput [matDatepicker]="picker1" formControlName="candidatureDate">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker1" [disabled]="isDisabled"></mat-datepicker-toggle>
-                        <mat-datepicker #picker1></mat-datepicker>
-                    </mat-form-field>
-                    <mat-form-field class="date-picker" id="second">
-                        <mat-label>Data da Entrega</mat-label>
-                        <input matInput [matDatepicker]="picker2" formControlName="submitDate">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
-                        <mat-datepicker #picker2></mat-datepicker>
-                    </mat-form-field>
-                        <button mat-flat-button color="primary" [matMenuTriggerFor]="attachments" class="attachments" *ngIf="atividade.status!=''">Ver Anexos</button>
-                        <mat-menu #attachments="matMenu" yPosition="above">
-                            <div *ngFor="let a of atividade.anexos">
-                                <button mat-menu-item (click)="downloadAnexo(a.id, a)">{{a.fileName}}</button>
-                            </div>
-                        </mat-menu>
-                        <mat-form-field class="attachment-field" *ngIf="atividade.status===''">
-                            <mat-label>Anexar Arquivos</mat-label>
-                            <button mat-icon-button matSuffix (click)="f_input.click()">
-                        <mat-icon>attach_file</mat-icon>
-                        </button>
-                            <input type="text" readonly matInput formControlName="uploadFile"/>
-                            <input
-                        type="file"
-                        multiple
-                        hidden
-                        #f_input
-                        (change)="f_input.files && handleFileInputChange(f_input.files)"
-                        />
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="courses.errors?.['required'] && courses.touched">
+                              Seleção dos cursos é obrigatória!
+                            </mat-error>
+                          </mat-form-field> -->
+                          <mat-form-field class="competences" *ngIf="!fillingReport">
+                            <mat-label>Cursos</mat-label>
+                            <mat-select [(value)]="graduacao" name="curso" formControlName="courses" required multiple [compareWith]="compareGraduacoes">
+                                <mat-option *ngFor="let option of options" [value]="option">
+                                    {{ option.nome }}
+                                </mat-option>
+                            </mat-select>
+    
                         </mat-form-field>
+                        <mat-form-field class="competences" *ngIf="fillingReport">
+                            <mat-label>Competências</mat-label>
+                            <mat-select [(value)]="atividade.competencia" formControlName="competences">
+                                <mat-option *ngFor="let c of competencias" [value]="c">{{c.nome}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                            <mat-form-field class="complexities" >
+                            <mat-label>Complexidade</mat-label>
+                            <mat-select [(value)]="complexidadeAtividade" formControlName="complexities" [compareWith]="compareComplexidades">
+                                <mat-option *ngFor="let c of complexidades" [value]="c">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
+                            </mat-select>
+    
+                        </mat-form-field>
+                    </div>
+                    <div class="dates" [ngStyle]="{'display': displayDates}">
+                        <mat-form-field class="date-picker" id="first">
+                            <mat-label>Data Limite Candidatura</mat-label>
+                            <input matInput [matDatepicker]="picker1" formControlName="candidatureDate">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker1" [disabled]="isDisabled"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field class="date-picker" id="second">
+                            <mat-label>Data da Entrega</mat-label>
+                            <input matInput [matDatepicker]="picker2" formControlName="submitDate">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker2" [disabled]="isDisabled"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                            <button mat-flat-button color="primary" [matMenuTriggerFor]="attachments" class="attachments" *ngIf="atividade.status!=''">Ver Anexos</button>
+                            <mat-menu #attachments="matMenu" yPosition="above">
+                                <div *ngFor="let a of atividade.anexos">
+                                    <button mat-menu-item (click)="downloadAnexo(a.id, a)">{{a.fileName}}</button>
+                                </div>
+                            </mat-menu>
+                            <mat-form-field class="attachment-field" *ngIf="atividade.status===''">
+                                <mat-label>Anexar Arquivos</mat-label>
+                                <button mat-icon-button matSuffix (click)="f_input.click()">
+                            <mat-icon>attach_file</mat-icon>
+                            </button>
+                                <input type="text" readonly matInput formControlName="uploadFile"/>
+                                <input
+                            type="file"
+                            multiple
+                            hidden
+                            #f_input
+                            (change)="f_input.files && handleFileInputChange(f_input.files)"
+                            />
+                            </mat-form-field>
+                    </div>
                 </div>
+               
                 <div *ngIf="disputingHours || readingHoursDispute" class="dispute-hours">
                     <mat-form-field class="hours-field">
                         <mat-label>Complexidade Oferecida</mat-label>
-                        <input readonly [disabled]="true" matInput formControlName="disputedHoursValue" formControlName="disputedHoursValue">
+                        <input readonly [disabled]="true" matInput formControlName="disputedHoursValue">
                     </mat-form-field>
                     <mat-form-field class="hours-field" >
                         <mat-label>Complexidade</mat-label>
-                        <mat-select formControlName="complexitiesContest" formControlName="complexitiesContest">
-                            <mat-option *ngFor="let c of complexidades" [value]="c" formControlName="complexityName">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
+                        <mat-select [(value)]="complexidadeContestacao" formControlName="complexitiesContest" [compareWith]="compareComplexidades">
+                            <mat-option *ngFor="let c of complexidades" [value]="c">{{ c.nome }} ({{ c.cargaHorariaMinima }}h - {{ c.cargaHorariaMaxima }}h)</mat-option>
                         </mat-select>
 
                     </mat-form-field>
