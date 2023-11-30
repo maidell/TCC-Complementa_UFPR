@@ -1,5 +1,6 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,11 +18,15 @@ import { Aluno, Atividade, Monitor, Projeto } from 'src/app/shared';
 export class VerificarCandidaturasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @Output() usuarioAprovado = new EventEmitter<Aluno>();
+  @Output() usuarioRemovido = new EventEmitter<Aluno>();
 
   candidatos: Aluno[] = [];
   constructor(public toastr: ToastrService,
     private alunoService: AlunoService,
     private atividadeService: AtividadeService,
+    private changeDetectorRef: ChangeDetectorRef,
+    public dialog: MatDialogRef<VerificarCandidaturasComponent>,
     @Inject(DIALOG_DATA) public data: any) {
     if (data) {
       this.candidatos = data;
@@ -70,12 +75,20 @@ export class VerificarCandidaturasComponent implements OnInit {
   }
 
   aprovar(candidato: Aluno){
-    //remove da lista de candidatos e adiciona na lista de executores
-  }
-  recusar(candidato: Aluno){
-    //remove da lista de candidatos
+    this.usuarioAprovado.emit(candidato);
+    this.onNoClick();
   }
 
+  recusar(candidato: Aluno){
+    this.usuarioRemovido.emit(candidato);
+    let index = this.candidatos.indexOf(candidato);
+    this.candidatos.splice(index,1);
+    this.changeDetectorRef.detectChanges();
+  }
+
+  onNoClick(): void {
+    this.dialog.close();
+  }
 
 
 }
