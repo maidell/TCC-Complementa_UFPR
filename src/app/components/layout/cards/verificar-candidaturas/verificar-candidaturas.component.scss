@@ -1,0 +1,136 @@
+.close {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+.close-button {
+	border: none;
+	background-color: white;
+}
+
+.close-button-icon {
+	color: red;
+	font-weight: bold;
+}
+
+.let-of-cards {
+	display: flex;
+	flex-direction: column;
+	padding: 0 15px;
+}
+
+.title-card,
+.filter {
+	padding: 0 15+24px;
+}
+
+
+.custom-button {
+	background: linear-gradient(#318b35, #297e42);
+	color: white !important;
+	border-radius: 20px;
+}
+
+.custom-button:hover {
+	background: linear-gradient(#318b35, #297e42);
+	color: white;
+}
+
+mat-row:nth-child(even) {
+	background-color: #DCE6EC
+}
+
+.ng-container-button {
+	width: 100px;
+}
+
+mat-row:nth-child(odd) {
+	background-color: #C9D4DB
+}
+
+.mat-column-button {
+	align-items: center;
+	justify-content: flex-end;
+}
+
+mat-form-field {
+	width: 100%;
+
+}
+
+mat-cell {
+	//deixa a celula com o tamanho do texto
+	white-space: nowrap;
+
+}
+
+// //segunda celula da linha ocupa 50% da largura
+// mat-cell:nth-child(2) {
+// 	flex: 0 0 50%;
+// }
+// //terceira celula da linha ocupa 35% da largura
+// mat-cell:nth-child(3) {
+// 	flex: 0 0 35%;
+// }
+// //primeira celula da linha ocupa 15% da largura
+// mat-cell:nth-child(1) {
+// 	flex: 0 0 15%;
+// }
+/* Estilizando a célula para posicionar o sufixo */
+.combined-content {
+	display: flex;
+	align-items: center;
+}
+
+/* Estilizando o sufixo para ajustar o espaçamento */
+.suffix {
+	margin-left: 4px;
+	/* Altere conforme necessário para o espaçamento desejado */
+	color: #999;
+	/* Altere a cor conforme necessário */
+	font-style: italic;
+	/* Adicione estilos adicionais conforme desejado */
+}
+
+mat-paginator {
+	background: transparent !important;
+}
+
+mat-header-cell {
+	font-weight: 600;
+	color: #333333;
+	font-size: 16px;
+	padding: 10px 16px;
+	text-align: left;
+	border-bottom: 1px solid #E5E5E5;
+}
+
+.table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	color: #E5E5E5
+}
+
+.table-header button {
+	margin-left: 8px;
+	background-color: forestgreen;
+}
+
+.custom-buttonTwo {
+	background: linear-gradient(#9A2525, #A32121);
+	color: white !important;
+	border-radius: 20px;
+	margin-left: 15px;
+	width: fit-content;
+	padding: 0;
+	margin-left: 10px;
+}
+
+.custom-buttonTwo:hover {
+	background: linear-gradient(#9A2525, #A32121);
+	color: white;
+}

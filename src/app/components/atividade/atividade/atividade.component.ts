@@ -3,7 +3,7 @@ import { Form, FormControl, FormGroup } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { DownloadService } from '../download.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { jsPDF } from "jspdf";
 import { AtividadeService } from '../services/atividade.service';
@@ -25,6 +25,7 @@ import { ContestacaoService } from 'src/app/services/contestacao/services/contes
 import { AlunoService } from 'src/app/services/aluno/services/aluno.service';
 import { CertificadoService } from 'src/app/services/certificado/services/certificado.service';
 import * as saveAs from 'file-saver';
+import { VerificarCandidaturasComponent } from '../../layout/cards/verificar-candidaturas/verificar-candidaturas.component';
 
 
 @Component({
@@ -187,6 +188,7 @@ export class AtividadeComponent implements OnInit{
     public comentarioService: ComentarioService,
     public orientadorService: OrientadorService,
     public anexoService: AnexoService,
+    public openDialogo: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if(data.atividade){
@@ -382,7 +384,7 @@ export class AtividadeComponent implements OnInit{
       case '':
         this.activityForm.enable();
         this.isDisabled=false;
-        break;   
+        break;
       case 'ABERTA':
         this.activityForm.disable();
         this.activityName!.setValue(this.atividade.nome);
@@ -420,11 +422,11 @@ export class AtividadeComponent implements OnInit{
         }
 
         break;
-      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA': 
+      case 'CARGA_HORARIA_CONTESTADA': case 'EXECUCAO_CONTESTADA': case 'FINALIZADA':
         this.activityForm.disable();
         this.displayComments = '';
         break;
-      
+
 
 
     }
@@ -572,7 +574,7 @@ export class AtividadeComponent implements OnInit{
 
   syncGraduacoes() {
     if (this.atividade.graduacoes) {
-        const graduacoesSelecionadas = this.atividade.graduacoes.filter(grad => 
+        const graduacoesSelecionadas = this.atividade.graduacoes.filter(grad =>
             this.options.find(option => option.id === grad.id)
         );
 
@@ -633,11 +635,27 @@ export class AtividadeComponent implements OnInit{
     }
 
   }
-
-  viewCandidates(){
-
+//abre a tela para aprovar ou recusar a candidatura, envia o id da atividade para a tela de aprovar candidatura
+viewCandidates() {
+  if (!this.atividade){
+    this.showErrorToastr("Erro ao abrir tela de candidaturas");
   }
+  else if(this.atividade.id){
 
+    try{
+      const dialogRef = this.openDialogo.open(VerificarCandidaturasComponent, {
+        width: '700px',
+        height: '500px',
+        data: this.atividade.candidatos
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('Dialog result: ${result}');
+      });
+    } catch (error) {
+      this.showErrorToastr("Erro ao abrir tela de candidaturas");
+  }
+}
+}
   isCandidate(){
     console.log("USUARIO LOGADO: " + this.usuarioLogado.nome);
     console.log("CANDIDATOS: " + this.atividade.candidatos);
@@ -710,16 +728,16 @@ export class AtividadeComponent implements OnInit{
     this.anexoService.downloadAnexoPorId(id).subscribe(
       (blob: Blob | MediaSource) => {
         const url = window.URL.createObjectURL(blob);
-  
+
         const a = document.createElement('a');
         a.href = url;
         a.download = anexo.fileName;
-  
+
         // Disparar o clique programaticamente para iniciar o download
         a.click();
-  
+
         window.URL.revokeObjectURL(url);
-  
+
         // Remover o elemento após o download
         if (a.remove) {
           a.remove();
@@ -891,7 +909,7 @@ export class AtividadeComponent implements OnInit{
     this.secondButtonColor = 'linear-gradient(#C7433F, #C7241F)';
   }
 
-  sendExecutionDispute() { 
+  sendExecutionDispute() {
     let contestacaoExecucao = new Contestacao();
     contestacaoExecucao.autor=this.usuarioLogado;
     contestacaoExecucao.dataContestacao=new Date();

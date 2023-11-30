@@ -4,9 +4,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
+import { AtividadeService } from 'src/app/components/atividade/services/atividade.service';
 import { ProjetoService } from 'src/app/components/projeto/services/projeto.service';
 import { AlunoService } from 'src/app/services/aluno/services/aluno.service';
-import { Aluno, Monitor, Projeto } from 'src/app/shared';
+import { Aluno, Atividade, Monitor, Projeto } from 'src/app/shared';
 
 @Component({
   selector: 'app-verificar-candidaturas',
@@ -17,18 +18,20 @@ export class VerificarCandidaturasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  projeto!: Projeto;
+  candidatos: Aluno[] = [];
   constructor(public toastr: ToastrService,
     private alunoService: AlunoService,
-    private projetoService: ProjetoService,
+    private atividadeService: AtividadeService,
     @Inject(DIALOG_DATA) public data: any) {
-    if (data.projeto) {
-      this.projeto = data.projeto;
+    if (data) {
+      this.candidatos = data;
     }
   }
+  obs!: Aluno[];
+  dataSource!: MatTableDataSource<Aluno>;
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<Aluno>(this.candidatos);
 
-    this.listaDeAlunosNoProjeto();
     this.displayedColumns = [];
     for (let column of this.columns) {
       this.displayedColumns.push(column.key);
@@ -40,14 +43,15 @@ export class VerificarCandidaturasComponent implements OnInit {
   }
   ngAfterViewInit() {
 
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-  dataSource!: MatTableDataSource<Monitor>;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+
+
   buttonOne: string = 'Aprovar';
   buttonTwo: string = 'Recusar';
-  colorButtonOne: string = '';
-  colorButtonTwo: string = '';
+  colorButtonOne: string = 'colorButtonOne';
+  colorButtonTwo: string = 'colorButtonTwo';
 
   columns: { title: string, suffix: string, key: string }[] = [
 
@@ -64,31 +68,12 @@ export class VerificarCandidaturasComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  //lista todos os alunos que estão no projeto que a propriedade incluido é true
-  monitores: Monitor[] = [];
-  listaDeAlunosNoProjeto() {
-    if (this.projeto.alunos) {
-      this.monitores = this.projeto.alunos;
-      this.dataSource = new MatTableDataSource<Monitor>(this.monitores);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }
-  }
-  removerMonitor(monitor: Monitor) { }
-  //muda o aluno para monitor no projeto
-  tornarMonitor(monitor: Aluno) {
 
+  aprovar(candidato: Aluno){
+    //remove da lista de candidatos e adiciona na lista de executores
   }
-  isIncluido(aluno: Aluno) {
-    if (this.projeto.alunos == null) {
-      this.projeto.alunos = [];
-    }
-    if (this.projeto.alunos.find(alunoProjeto => alunoProjeto.id === aluno.id)) {
-      aluno.incluido = true;
-      return true;
-    }
-    aluno.incluido = false;
-    return false;
+  recusar(candidato: Aluno){
+    //remove da lista de candidatos
   }
 
 
