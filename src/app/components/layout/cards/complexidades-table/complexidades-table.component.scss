@@ -47,6 +47,7 @@ mat-header-cell {
 
 .table-header {
 	display: flex;
+	justify-content: flex-end;
 	flex: end;
 	align-items: center;
 	margin-bottom: 10px;

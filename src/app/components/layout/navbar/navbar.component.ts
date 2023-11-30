@@ -17,7 +17,7 @@ export class NavbarComponent {
   exibir: boolean = true;
   userRole: string = ''; // Altere para o perfil do usuário logado:
   // 'ALUNO' | 'SERVIDOR' | 'MONITOR' | 'ORIENTADOR' | 'COORDENADOR' | 'SERVIDOR_COORDENADOR' |'ADMIN';
-  graduacao!: Graduacao;
+  graduacao: Graduacao = new Graduacao();
   usuarioLogado: Usuario = new Usuario();
 
   constructor(
@@ -29,7 +29,9 @@ export class NavbarComponent {
 
   openDialog() {
     const dialogRef = this.dialog.open(ServidoresComponent, {
-      minWidth: '50%'
+      minWidth: '50%',
+      data: { idGrad: this.graduacao.id, idCoord: this.usuarioLogado.id },
+
     });
     dialogRef.afterClosed().subscribe(result => {
       this.ngOnInit();
@@ -41,6 +43,7 @@ export class NavbarComponent {
       this.userRole = this.loginService.usuarioLogado.papel;
       this.exibir = true;
       this.usuarioLogado = this.loginService.usuarioLogado;
+      this.instanciarGraduacao(this.usuarioLogado);
     } else {
       this.loginService.usuarioLogado$.subscribe(usuario => {
         if (usuario) {

@@ -81,9 +81,8 @@ export class VerificarCandidaturasComponent implements OnInit {
 
   recusar(candidato: Aluno){
     this.usuarioRemovido.emit(candidato);
-    let index = this.candidatos.indexOf(candidato);
-    this.candidatos.splice(index,1);
-    this.changeDetectorRef.detectChanges();
+    this.onNoClick();
+
   }
 
   onNoClick(): void {
