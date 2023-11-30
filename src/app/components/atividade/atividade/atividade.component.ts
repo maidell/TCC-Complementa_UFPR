@@ -1285,6 +1285,7 @@ export class AtividadeComponent implements OnInit {
 
           this.certificadoService.inserirCertificado(certificado,). subscribe(
             (res: Certificado) => {
+              this.doc.setFontSize(7);
               this.doc.text(res.hash, 150, 10, { align: "center" });
               this.doc.save("certificado.pdf");
             }
