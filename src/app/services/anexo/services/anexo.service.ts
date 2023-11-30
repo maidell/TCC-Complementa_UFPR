@@ -21,8 +21,9 @@ export class AnexoService {
 
   inserirAnexoAtividade(file: File, atividadeId: number): Observable<Anexo> {
     const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
-    return this.httpClient.post<Anexo>(this.BASE_URL + 'anexos/atividades/upload/' + atividadeId, formData);
+    formData.append('file', file);
+    //return this.httpClient.post<Anexo>(this.BASE_URL + 'anexos/atividades/upload/' + atividadeId, formData);
+    return this.httpClient.post<Anexo>('http://localhost:5000/' + 'anexos/atividades/upload/' + atividadeId, formData);
   }
 
   inserirAnexoRelatorio(file: File, relatorioId: number): Observable<Anexo> {

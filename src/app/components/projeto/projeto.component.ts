@@ -12,6 +12,7 @@ import { AtividadeService } from '../atividade/services/atividade.service';
 import { ServidoresComponent } from '../pages';
 import { ListarAlunosComponent } from '../layout/listar-alunos/listar-alunos.component';
 import { InsertMonitorComponent } from '../layout/cards/insert-monitor/insert-monitor.component';
+import { OrientadorService } from 'src/app/services/orientador/services/orientador.service';
 import { AtividadeComponent } from '../atividade/atividade/atividade.component';
 
 @Component({
@@ -31,6 +32,7 @@ export class ProjetoComponent implements OnInit {
   executor = "biding com nome do executor";
   atividades: Atividade[] = [];
   buttonText = "Detalhes";
+  tipos: String[] = ['EXTENSAO','TCC','MESTRADO', 'DOUTORADO', 'OUTROS'];
 
   constructor(
     private router: Router,
@@ -40,10 +42,29 @@ export class ProjetoComponent implements OnInit {
     private projetoService: ProjetoService,
     private route: ActivatedRoute,
     private title: TitleService,
-    private atividadeService: AtividadeService
+    private atividadeService: AtividadeService,
+    private orientadorService: OrientadorService
   ) {
 
   }
+
+  ngOnInit() {
+    if (!this.loginService.usuarioLogado) {
+      this.router.navigate([`/login`]);
+    }
+    this.usuarioLogado = this.loginService.usuarioLogado;
+    this.idParam = +this.route.snapshot.params['id'];
+    //se NÃO for projeto novo, instancia o projeto e suas atividade, se for novo, instancia um projeto vazio
+    if (this.idParam) {
+      this.instanciarProjeto();
+      this.instanciarAtividades();
+    } else {
+      this.criarInstanciaProjeto();
+      
+    }
+    this.title.setTitle('Detalhes do Projeto');
+  }
+
   openDialogMonitor() {
     if (!this.projeto.id) {
       this.toastr.warning("Você precisa salvar o projeto antes de adicionar monitores");
@@ -110,22 +131,6 @@ export class ProjetoComponent implements OnInit {
   usuarioLogado: Usuario = new Usuario();
   inputValue: string = '';
 
-
-  ngOnInit() {
-    if (!this.loginService.usuarioLogado) {
-      this.router.navigate([`/login`]);
-    }
-    this.usuarioLogado = this.loginService.usuarioLogado;
-    this.idParam = +this.route.snapshot.params['id'];
-    //se NÃO for projeto novo, instancia o projeto e suas atividade, se for novo, instancia um projeto vazio
-    if (this.idParam) {
-      this.instanciarProjeto();
-      this.instanciarAtividades();
-    } else {
-      this.projeto = new Projeto();
-    }
-    this.title.setTitle('Detalhes do Projeto');
-  }
 
   projectForm = new FormGroup({
     id: new FormControl(this.projeto?.id ?? ''),
@@ -240,11 +245,18 @@ export class ProjetoComponent implements OnInit {
 
 
   salvarProjeto(){
-    this.projetoService.inserirProjeto(this.orientador).subscribe(
+    this.projeto.nome = this.projectForm.get('nome')?.value ?? '';
+    this.projeto.status = this.projectForm.get('status')?.value ?? '';
+    this.projeto.tipo = this.projectForm.get('tipo')?.value ?? '';
+    this.projeto.objetivoGeral = this.projectForm.get('objetivoGeral')?.value ?? '';
+    this.projeto.objetivosEspecificos = this.projectForm.get('objetivosEspecificos')?.value ?? '';
+    
+    this.projetoService.inserirProjeto(this.projeto).subscribe(
       (res: Projeto) => {
         this.projeto = res;
         this.toastr.success("Projeto salvo com sucesso!");
         console.log("Projeto salvo com sucesso!", res);
+        this.router.navigate([`projetos/detalhes/${res.id}`]);
       },
       (err) => {
         this.toastr.error("Erro ao salvar projeto");
@@ -287,6 +299,19 @@ export class ProjetoComponent implements OnInit {
 
   }
 
+
+  criarInstanciaProjeto(){
+    this.orientadorService.buscarOrientadorPorId(this.usuarioLogado.id).subscribe(
+      (res: Orientador) => { 
+        this.orientador = res;
+        this.projeto = new Projeto();
+        this.projeto.orientador = res;
+      },
+      (err: any) => {
+        console.log("Erro ao instanciar orientador");
+      }
+    );
+  }
 }
 
 

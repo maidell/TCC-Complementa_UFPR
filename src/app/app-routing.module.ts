@@ -21,20 +21,33 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'aluno',
-    redirectTo: 'aluno/home'
+    path: 'autocadastro',
+    component: AutocadastroComponent
+  },
+  {
+    path: 'ALUNO',
+    redirectTo: 'aluno'
   },
   {
     path: 'aluno',
-    component: DashboardComponent
+    children: [
+      { path: '', redirectTo: 'aluno/home', pathMatch: 'full' },
+      { path: 'home', component: pages.DashboardComponent },
+      { path: 'editar/:id', component: EditarUsuariosComponent }
+    ]
   },
   {
-    path: 'aluno/editar/:id',
-    component: EditarUsuariosComponent
+    path: 'SERVIDOR',
+    redirectTo: 'servidor',
+    data: { role: ['SERVIDOR'] }
   },
   {
-    path: 'servidor/editar/:id',
-    component: EditarUsuariosComponent
+    path: 'servidor',
+    children: [
+      { path: '', component: pages.ServidoresComponent },
+      { path: 'listar/:id', component: pages.ServidoresComponent },
+      { path: 'editar/:id', component: EditarUsuariosComponent }
+    ]
   },
   {
     path: 'coordenador/editar/:id',
@@ -45,40 +58,37 @@ const routes: Routes = [
     component: EditarUsuariosComponent
   },
   {
-    path: 'admin/editar/:id',
-    component: EditarUsuariosComponent
-  },
-  {
-    path: 'autocadastro',
-    component: AutocadastroComponent
-  },
-  {
     path: 'ADMIN',
-    redirectTo: 'admin/home'
+    redirectTo: 'admin'
   },
   {
     path: 'admin',
-    redirectTo: 'admin/home'
-  },
-  {
-    path: 'admin/cadastro/usuarios',
-    component: CadastroDeUsuariosComponent
-  },
-  {
-    path: 'admin/editar/:id',
-    component: EditarUsuariosComponent
+    children: [
+      { path: '', redirectTo: 'admin/home', pathMatch: 'full' },
+      { path: 'home', component: pages.DashboardComponent },
+      { path: 'cadastro/usuarios', component: CadastroDeUsuariosComponent },
+      { path: 'editar/:id', component: EditarUsuariosComponent },
+      { path: 'usuarios/listar', component: ListarUsuariosComponent }
+    ]
   },
   {
     path: 'dashboard',
     component: pages.DashboardComponent
   },
   {
-    path: 'projetos/listar',
-    component: pages.ProjetosComponent
+    path: 'projetos',
+    children: [
+      { path: 'listar', component: pages.ProjetosComponent },
+      { path: 'novo', component: ProjetoComponent },
+      { path: 'detalhes/:id', component: ProjetoComponent }
+    ]
   },
   {
-    path: 'atividades/listar',
-    component: pages.AtividadesComponent
+    path: 'atividades',
+    children: [
+      { path: 'listar', component: pages.AtividadesComponent },
+      { path: 'detalhes', component: AtividadeComponent }
+    ]
   },
   {
     path: 'contestacoes/listar',
@@ -97,42 +107,14 @@ const routes: Routes = [
     component: pages.ComplexidadesComponent
   },
   {
-    path: 'servidores',
-    component: pages.ServidoresComponent
-  },
-  {
-    path: 'servidores/listar/:id',
-    component: pages.ServidoresComponent
-  },
-  {
-    path: 'meu-perfil',
-    component: pages.MeuPerfilComponent
-  },
-  {
     path: 'teste',
     component: ModifyCardComponent
-  },
-  {
-    path: 'atividade/detalhes',
-    component: AtividadeComponent
-  },
-  {
-    path: 'projetos/novo',
-    component: ProjetoComponent
-  },
-  {
-    path: 'projetos/detalhes/:id',
-    component: ProjetoComponent
   },
   {
     path: 'confirmacao/:email',
     component: ConfirmacaoComponent
   },
-  {
-    path: 'usuarios/listar',
-    component: ListarUsuariosComponent
-  },
-
+  
   ...LoginRoutes
 ];
 

@@ -47,12 +47,8 @@
 						</mat-select>
 					</mat-form-field> -->
 					<mat-form-field>
-						<mat-label>Orientador</mat-label>
-						<mat-select formControlName="orientador" multiple>
-							<mat-option [value]="projeto.orientador?.id">
-								{{projeto.orientador?.nome}}
-							</mat-option>
-						</mat-select>
+					<mat-label>Orientador</mat-label>
+					<input matInput formControlName="orientador" [value]="projeto.orientador?.nome">
 					</mat-form-field>
 					<!-- <div class="form-inside-right"> -->
 					<!-- <mat-form-field>
@@ -61,10 +57,13 @@
 								placeholder="Orientador">
 						</mat-form-field> -->
 
-					<mat-form-field>
-						<mat-label>Tipo</mat-label>
-						<input matInput formControlName="tipo" placeholder="Tipo">
-					</mat-form-field>
+						<mat-form-field>
+							<mat-select formControlName="tipo" placeholder="Tipo" required>
+								<mat-option *ngFor="let tipo of tipos" [value]="tipo">
+									{{tipo}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
 					<!-- </div> -->
 
 				</div>

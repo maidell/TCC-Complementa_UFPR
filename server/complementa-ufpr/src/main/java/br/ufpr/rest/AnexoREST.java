@@ -50,102 +50,121 @@ public class AnexoREST {
 
 	@Autowired
 	private AtividadeRepository atRepo;
-	
+
 	@Autowired
 	private RelatorioDeConclusaoRepository rcRepo;
-	
+
 	@Autowired
 	private ModelMapper mapper;
 
 	private static final String UPLOAD_DIRECTORY = "src/main/resources/binaries/";
 	private static final SecureRandom RANDOM = new SecureRandom();
-	
+
 	@PostMapping("/atividades/upload/{atividadeId}")
-	public ResponseEntity<AnexoDTO> uploadAnexoAtividade(@PathVariable Long atividadeId, @RequestParam("file") MultipartFile file) {
-			String fileName = generateRandom() + "-" + file.getOriginalFilename();
-	        String fileType = file.getContentType();
-	        Path path = Paths.get(UPLOAD_DIRECTORY + fileName);
-	        
-	        try (InputStream inputStream = file.getInputStream()) {
-	            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
-		        Anexo anexo = new Anexo();
-		        anexo.setFileName(fileName);
-		        anexo.setFilePath(path.toString());
-		        anexo.setFileType(fileType);
-		        Optional<Atividade> atividade = atRepo.findById(atividadeId);
-				if (!atividade.isPresent()) {
-					return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-				} else {
+	public ResponseEntity<AnexoDTO> uploadAnexoAtividade(@PathVariable Long atividadeId,
+			@RequestParam("file") MultipartFile file) {
+		String random = generateRandom();
+		String fileName = random + file.getOriginalFilename();
+		String fileType = file.getContentType();
+		Path directoryPath = Paths.get(UPLOAD_DIRECTORY);
+		if (Files.notExists(directoryPath)) {
+			try {
+				Files.createDirectories(directoryPath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
+		}
+
+		try (InputStream inputStream = file.getInputStream()) {
+			Files.copy(inputStream, directoryPath, StandardCopyOption.REPLACE_EXISTING);
+			Anexo anexo = new Anexo();
+			anexo.setFileName(fileName.replace(random, ""));
+			anexo.setFilePath(directoryPath.toString());
+			anexo.setFileType(fileType);
+			Optional<Atividade> atividade = atRepo.findById(atividadeId);
+			if (!atividade.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			} else {
 				anexo.setAtividade(atividade.get());
-		        Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
-		        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
-				}
-	        
-	    } catch (IOException e) {
-	    	System.err.println(e);
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	    }
+				Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
+				return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
+			}
+
+		} catch (IOException e) {
+			System.err.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
-	
+
 	@PostMapping("/relatorios/upload/{relatorioId}")
-	public ResponseEntity<AnexoDTO> uploadAnexoRelatorioDeConclusao(@PathVariable Long relatorioId, @RequestParam("file") MultipartFile file) {
-	    	String fileName = generateRandom() + "-" + file.getOriginalFilename();
-	        String fileType = file.getContentType();
-	        Path path = Paths.get(UPLOAD_DIRECTORY + fileName);
-	        try (InputStream inputStream = file.getInputStream()) {
-	            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
-		        Anexo anexo = new Anexo();
-		        anexo.setFileName(fileName);
-		        anexo.setFilePath(path.toString());
-		        anexo.setFileType(fileType);
-	        
-	        Optional<RelatorioDeConclusao> relatorio = rcRepo.findById(relatorioId);
+	public ResponseEntity<AnexoDTO> uploadAnexoRelatorioDeConclusao(@PathVariable Long relatorioId,
+			@RequestParam("file") MultipartFile file) {
+		String random = generateRandom();
+		String fileName = random + file.getOriginalFilename();
+		String fileType = file.getContentType();
+		Path directoryPath = Paths.get(UPLOAD_DIRECTORY);
+		if (Files.notExists(directoryPath)) {
+			try {
+				Files.createDirectories(directoryPath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
+		}
+		try (InputStream inputStream = file.getInputStream()) {
+			Files.copy(inputStream, directoryPath, StandardCopyOption.REPLACE_EXISTING);
+			Anexo anexo = new Anexo();
+			anexo.setFileName(fileName.replace(random, ""));
+			anexo.setFilePath(directoryPath.toString());
+			anexo.setFileType(fileType);
+
+			Optional<RelatorioDeConclusao> relatorio = rcRepo.findById(relatorioId);
 			if (!relatorio.isPresent()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 			} else {
-	        anexo.setRelatorioDeConclusao(relatorio.get());
-	        Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
-	        
-	        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
+				anexo.setRelatorioDeConclusao(relatorio.get());
+				Anexo savedAnexo = repo.save(mapper.map(anexo, Anexo.class));
+
+				return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(savedAnexo, AnexoDTO.class));
 			}
-	    } catch (IOException e) {
-	    	System.err.println(e);
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	    } 
+		} catch (IOException e) {
+			System.err.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
-	
+
 	@GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadAnexo(@PathVariable Long id, HttpServletResponse response) {
-        try {
-            Optional<Anexo> anexoOpt = repo.findById(id);
-            if (!anexoOpt.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
+	public ResponseEntity<Resource> downloadAnexo(@PathVariable Long id, HttpServletResponse response) {
+		try {
+			Optional<Anexo> anexoOpt = repo.findById(id);
+			if (!anexoOpt.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
 
-            Anexo anexo = anexoOpt.get();
-            Path path = Paths.get(anexo.getFilePath());
-            if (!Files.exists(path)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
+			Anexo anexo = anexoOpt.get();
+			Path path = Paths.get(anexo.getFilePath());
+			if (!Files.exists(path)) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
 
-            String contentType = Files.probeContentType(path);
-            MediaType mediaType = MediaType.parseMediaType(anexo.getFileType());
-            if(mediaType == null) {
-            	mediaType = MediaType.parseMediaType(contentType);
-            }
-            File file = path.toFile();
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			String contentType = Files.probeContentType(path);
+			MediaType mediaType = MediaType.parseMediaType(anexo.getFileType());
+			if (mediaType == null) {
+				mediaType = MediaType.parseMediaType(contentType);
+			}
+			File file = path.toFile();
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
-            return ResponseEntity.ok()
-                    .contentType(mediaType)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-                    .body(resource);
-        } catch (Exception e) {
-        	System.err.println(e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-	
+			return ResponseEntity.ok().contentType(mediaType)
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
+					.body(resource);
+		} catch (Exception e) {
+			System.err.println(e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<AnexoDTO> buscaPorId(@PathVariable Long id) {
 
@@ -168,12 +187,11 @@ public class AnexoREST {
 			return ResponseEntity.status(HttpStatus.OK).body(null);
 		}
 	}
-	
-    public static String generateRandom() {
-        byte[] salt = new byte[8];
-        RANDOM.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
-    }
-    
-    
+
+	public static String generateRandom() {
+		byte[] salt = new byte[8];
+		RANDOM.nextBytes(salt);
+		return Base64.getEncoder().encodeToString(salt);
+	}
+
 }

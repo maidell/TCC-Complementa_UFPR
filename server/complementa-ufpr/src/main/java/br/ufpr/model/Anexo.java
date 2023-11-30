@@ -32,13 +32,15 @@ public class Anexo implements Serializable {
 	private String fileType;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "anexos_atividades")
+    @JoinTable(name = "anexos_atividade",
+            joinColumns = @JoinColumn(name = "anexos_id"),
+            inverseJoinColumns = @JoinColumn(name = "atividade_id"))
     private Atividade atividade;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "anexos_relatorio",
                joinColumns = @JoinColumn(name = "anexos_id"),
-               inverseJoinColumns = @JoinColumn(name = "relatorio_id"))
+               inverseJoinColumns = @JoinColumn(name = "relatorio_de_conclusao_id"))
     private RelatorioDeConclusao relatorioDeConclusao;
 
 	public Anexo() {
