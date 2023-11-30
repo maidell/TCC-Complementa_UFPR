@@ -3,10 +3,10 @@
 	<button mat-raised-button color="primary" (click)="adicionarComplexidade()" class="button custom-button {{colorButtonOne}}">
 		{{buttonNew}}
 	</button>
-</div>	
+</div>
 <mat-form-field>
-	<mat-label>Filter</mat-label>
-	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+	Pesquisar
+	<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Aberto" #input>
 	<mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
 <div class="mat-elevation-z8">
@@ -25,7 +25,7 @@
 		</ng-container>
 
 		<tr class="mat-row" *matNoDataRow>
-			<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+			<td class="mat-cell" colspan="4">O valor "{{input.value}}" não foi encontrado</td>
 		</tr>
 
 		<mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

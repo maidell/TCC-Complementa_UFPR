@@ -20,6 +20,13 @@
 	color: white;
 }
 
+.table-header{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	margin-bottom: 15px;
+}
+
 mat-paginator {
 	background-color: transparent !important;
 }
